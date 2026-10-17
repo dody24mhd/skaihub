@@ -2334,3 +2334,63 @@ export function changeOwnPassword(token: string, payload: ChangePasswordPayload)
     body: JSON.stringify(payload),
   });
 }
+
+// L5-C
+export type PrintableRank = Pick<SportRank, "id" | "code" | "label" | "belt_color" | "stripe_color"> &
+  Partial<Pick<SportRank, "level_type" | "level_number">>;
+
+export type ScoreIndicator = "kurang" | "cukup" | "baik" | "sangat_baik";
+
+export type StudentReport = {
+  akademi: { name: string; logo_url: string | null; sport_type: string };
+  student: {
+    id: number;
+    name: string;
+    member_number: string;
+    gender: "male" | "female";
+    birth_date: string | null;
+    joined_date: string | null;
+    photo_url: string | null;
+    class_name: string | null;
+    training_place: string | null;
+    rank: PrintableRank | null;
+  };
+  period: Pick<EvaluationPeriod, "id" | "name" | "starts_at" | "ends_at" | "status">;
+  attendance: { total: number; present: number; sick: number; excused: number; absent: number; rate: number };
+  scores: {
+    aspect_id: number;
+    aspect: string;
+    category: string | null;
+    score: number | null;
+    indicator: ScoreIndicator | null;
+    notes: string | null;
+  }[];
+  average: number | null;
+  average_indicator: ScoreIndicator | null;
+  assessors: string[];
+  generated_at: string;
+};
+
+export type RankCertificate = {
+  certificate_number: string;
+  akademi: { name: string; logo_url: string | null; sport_type: string };
+  student: { id: number; name: string; member_number: string };
+  event: { id: number; name: string; event_date: string };
+  from_rank: PrintableRank | null;
+  to_rank: PrintableRank | null;
+  score: number | null;
+  assessor: string | null;
+  chair_name: string | null;
+};
+
+export function getAkademiStudentReport(token: string, studentId: number, periodId: number) {
+  return adminFetch<{ report: StudentReport }>(`/akademi/students/${studentId}/report?period_id=${periodId}`, token);
+}
+
+export function getAkademiRankCertificate(token: string, eventId: number, participantId: number) {
+  return adminFetch<{ certificate: RankCertificate }>(
+    `/akademi/rank-promotions/${eventId}/participants/${participantId}/certificate`,
+    token,
+  );
+}
+// end L5-C

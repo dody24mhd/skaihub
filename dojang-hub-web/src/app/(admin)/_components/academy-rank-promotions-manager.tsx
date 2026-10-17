@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { RankPromotionParticipant } from "../_lib/admin-api";
 import {
   AddParticipantModal,
@@ -99,6 +100,23 @@ export default function AcademyRankPromotionsManager() {
           {resultLabels[item.result]}
         </span>
       ),
+    },
+    {
+      key: "certificate",
+      header: "Sertifikat",
+      render: (item) =>
+        item.result === "passed" ? (
+          <Link
+            aria-label={`Sertifikat ${item.student?.name || "peserta"}`}
+            className="inline-flex min-h-11 items-center gap-1 text-xs font-bold text-primary underline-offset-2 hover:underline"
+            href={`/academy/rank-promotions/${item.rank_promotion_event_id}/certificates/${item.id}`}
+          >
+            <span aria-hidden="true" className="material-symbols-outlined text-[16px]">workspace_premium</span>
+            Sertifikat
+          </Link>
+        ) : (
+          <span className="text-xs text-muted">-</span>
+        ),
     },
     ...(canManage
       ? [
