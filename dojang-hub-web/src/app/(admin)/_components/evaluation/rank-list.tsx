@@ -1,6 +1,6 @@
 "use client";
 
-import { SportRank } from "../../_lib/admin-api";
+import { SportRank, SportRankLevelType } from "../../_lib/admin-api";
 import AcademyRankBeltBadge from "../academy-rank-belt-badge";
 import { ResponsiveColumn, ResponsiveList } from "../ui";
 import Icon from "../ui/icon";
@@ -10,6 +10,13 @@ type RankListProps = {
   builtinLabel: string;
   onEdit: (item: SportRank) => void;
   onDelete: (item: SportRank) => void;
+};
+
+const LEVEL_TYPE_LABELS: Record<SportRankLevelType, string> = {
+  geup: "Geup",
+  kyu: "Kyu",
+  poom: "Poom",
+  dan: "Dan",
 };
 
 export function isBuiltinRank(item: SportRank): boolean {
@@ -35,17 +42,16 @@ export default function RankList({ rows, builtinLabel, onEdit, onDelete }: RankL
       render: (item) => <span className="font-bold text-primary">{item.sequence}</span>,
     },
     {
-      key: "source",
-      header: "Asal",
+      key: "level",
+      header: "Jenis",
       render: (item) =>
         isBuiltinRank(item) ? (
-          <span className="inline-flex items-center gap-1 rounded-sm bg-surface-container px-2 py-0.5 text-xs font-bold text-muted">
-            <Icon name="lock" className="text-[14px]" />
-            {builtinLabel}
+          <span className="inline-flex items-center rounded-sm bg-surface-container px-2 py-0.5 text-xs font-bold text-primary">
+            {item.level_type ? LEVEL_TYPE_LABELS[item.level_type] : builtinLabel}
           </span>
         ) : (
-          <span className="inline-flex items-center rounded-sm bg-primary/5 px-2 py-0.5 text-xs font-bold text-primary">
-            Tambahan akademi
+          <span className="inline-flex items-center rounded-sm border border-secondary/40 bg-secondary/5 px-2 py-0.5 text-xs font-bold text-secondary">
+            Khusus akademi
           </span>
         ),
     },
@@ -53,9 +59,16 @@ export default function RankList({ rows, builtinLabel, onEdit, onDelete }: RankL
       key: "actions",
       header: "Aksi",
       className: "text-right",
+      headerClassName: "text-right",
       render: (item) =>
         isBuiltinRank(item) ? (
-          <span className="text-xs text-muted">Terkunci</span>
+          <span
+            className="inline-flex size-11 items-center justify-center text-muted"
+            title={`${builtinLabel}, tidak bisa diubah`}
+          >
+            <Icon name="lock" className="text-[18px]" />
+            <span className="sr-only">{builtinLabel}, terkunci</span>
+          </span>
         ) : (
           <div className="flex flex-wrap items-center justify-end gap-2">
             <button

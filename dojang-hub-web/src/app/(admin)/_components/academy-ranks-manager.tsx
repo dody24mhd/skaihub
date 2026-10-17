@@ -172,8 +172,8 @@ export default function AcademyRanksManager() {
             <p className="label-caps text-secondary">Master Data</p>
             <h2 className="font-heading text-xl font-bold text-primary">Sabuk / Tingkatan</h2>
             <p className="mt-1 text-sm text-muted">
-              Sistem {rankSystemLabel(rankSystem)}. Sabuk bawaan terkunci; tambahkan sabuk khusus
-              dengan urutan di sela-selanya.
+              Sistem {rankSystemLabel(rankSystem)}. Sabuk bertanda gembok adalah bawaan dan tidak bisa
+              diubah. Tambahkan sabuk khusus akademi dengan urutan di sela-selanya.
             </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">

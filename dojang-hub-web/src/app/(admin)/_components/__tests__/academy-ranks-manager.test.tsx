@@ -82,7 +82,7 @@ describe("AcademyRanksManager", () => {
 
     render(<AcademyRanksManager />);
 
-    expect(await screen.findAllByText("Bawaan Kukkiwon")).toHaveLength(2);
+    expect(await screen.findAllByText("Bawaan Kukkiwon, terkunci")).toHaveLength(2);
     expect(screen.getByText(/Sistem Taekwondo Kukkiwon/)).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Edit Geup 8 (Kuning Strip Hijau)" })).not.toBeInTheDocument();
     expect(screen.getAllByRole("button", { name: "Edit Putih" }).length).toBeGreaterThan(0);
