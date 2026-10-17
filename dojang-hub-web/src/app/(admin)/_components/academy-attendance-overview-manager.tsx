@@ -287,7 +287,7 @@ export default function AcademyAttendanceOverviewManager() {
         {/* Filter Input */}
         <div className="mt-5 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
           <input
-            className="min-h-11 w-full border border-border-strong bg-white px-3.5 text-sm text-primary placeholder:text-muted/60 focus:outline-hidden focus:ring-2 focus:ring-primary"
+            className="min-h-11 w-full border border-border-strong bg-white px-3.5 text-sm text-primary placeholder:text-muted/80 focus:outline-hidden focus:ring-2 focus:ring-primary"
             placeholder="Cari absensi"
             value={query}
             onChange={(e) => updateTableFilter(() => setQuery(e.target.value))}

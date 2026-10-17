@@ -112,7 +112,7 @@ export default function ProfileAchievementsSection({
               value={newDescription}
               onChange={(e) => setNewDescription(e.target.value)}
               placeholder="Rincian perolehan medali, kategori, atau nama atlet..."
-              className="w-full border border-border-strong bg-white p-3.5 text-base text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
+              className="w-full border border-border-strong bg-white p-3.5 text-base text-primary placeholder:text-muted/80 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
             />
           </div>
 

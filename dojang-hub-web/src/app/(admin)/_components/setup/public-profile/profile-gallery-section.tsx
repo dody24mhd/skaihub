@@ -104,7 +104,7 @@ export default function ProfileGallerySection({
 
         {galleryItems.length === 0 ? (
           <div className="mt-5 border-2 border-dashed border-border p-10 text-center text-sm font-medium text-muted">
-            <Icon name="photo_library" className="text-4xl text-muted/60" />
+            <Icon name="photo_library" className="text-4xl text-muted/80" />
             <p className="mt-2">Belum ada foto dalam galeri. Unggah foto pertama kegiatan akademi Anda.</p>
           </div>
         ) : (

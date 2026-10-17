@@ -100,7 +100,7 @@ export default function AcademyShell({ title, description, hasPageHeader = false
         <nav className="flex-1 space-y-6 p-4">
           {visibleNavSections.map((section) => (
             <div key={section.title} className="space-y-1">
-              <p className="px-3 pb-2 text-[11px] font-bold uppercase tracking-wide text-white/45">{section.title}</p>
+              <p className="px-3 pb-2 text-[11px] font-bold uppercase tracking-wide text-white/65">{section.title}</p>
               {section.items.map((item) => {
                 const isActive = pathname === item.href;
 

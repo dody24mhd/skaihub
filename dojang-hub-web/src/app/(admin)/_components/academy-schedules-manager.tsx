@@ -261,7 +261,7 @@ export default function AcademySchedulesManager() {
         {/* Filter Bar */}
         <div className="mb-5 grid gap-2.5 sm:grid-cols-3">
           <input
-            className="min-h-11 w-full border border-border-strong bg-white px-3.5 text-sm text-primary placeholder:text-muted/60 focus:outline-hidden focus:ring-2 focus:ring-primary"
+            className="min-h-11 w-full border border-border-strong bg-white px-3.5 text-sm text-primary placeholder:text-muted/80 focus:outline-hidden focus:ring-2 focus:ring-primary"
             placeholder="Cari jadwal"
             value={query}
             onChange={(e) => setQuery(e.target.value)}

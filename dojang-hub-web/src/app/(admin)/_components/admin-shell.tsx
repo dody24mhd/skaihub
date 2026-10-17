@@ -153,7 +153,7 @@ export default function AdminShell({
         <nav className="flex-1 space-y-6 p-4">
           {visibleNavSections.map((section) => (
             <div key={section.title}>
-              <p className="mb-2 px-3 text-xs font-bold uppercase text-white/40">
+              <p className="mb-2 px-3 text-xs font-bold uppercase text-white/65">
                 {section.title}
               </p>
               <div className="space-y-1">
@@ -270,7 +270,7 @@ export default function AdminShell({
         <div className="space-y-6">
           {visibleNavSections.map((section) => (
             <div key={section.title}>
-              <p className="mb-2 px-1 text-xs font-bold uppercase tracking-wider text-muted/70">
+              <p className="mb-2 px-1 text-xs font-bold uppercase tracking-wider text-muted/80">
                 {section.title}
               </p>
               <div className="space-y-1">

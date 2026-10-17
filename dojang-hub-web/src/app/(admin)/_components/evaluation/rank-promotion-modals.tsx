@@ -215,7 +215,7 @@ export function AddParticipantModal({
           <textarea
             id="modal-notes"
             rows={2}
-            className="min-h-20 w-full rounded-md border border-border-strong bg-white p-3 text-sm text-primary placeholder:text-muted/50 focus:border-primary"
+            className="min-h-20 w-full rounded-md border border-border-strong bg-white p-3 text-sm text-primary placeholder:text-muted/80 focus:border-primary"
             value={participantNotes}
             onChange={(e) => setParticipantNotes(e.target.value)}
             placeholder="Catatan penguji atau dewan sabuk"

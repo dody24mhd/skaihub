@@ -66,7 +66,7 @@ export default function SubscriptionPricePreview({
           <label htmlFor="extra-students" className="label-caps block text-muted">
             Siswa tambahan berbayar
           </label>
-          <p className="text-xs text-muted/70">{`Kelipatan ${EXTRA_BLOCK_SIZE} · opsional`}</p>
+          <p className="text-xs text-muted/80">{`Kelipatan ${EXTRA_BLOCK_SIZE} · opsional`}</p>
           <input
             id="extra-students"
             type="number"
@@ -104,7 +104,7 @@ export default function SubscriptionPricePreview({
         <label htmlFor="subscription-amount" className="label-caps block text-muted">
           Nominal tagihan (Rp)
         </label>
-        <p className="text-xs text-muted/70">Kosongkan untuk memakai harga otomatis.</p>
+        <p className="text-xs text-muted/80">Kosongkan untuk memakai harga otomatis.</p>
         <input
           id="subscription-amount"
           type="number"

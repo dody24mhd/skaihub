@@ -133,7 +133,7 @@ function EntitlementRow({ label, active }: { label: string; active: boolean }) {
           Aktif
         </span>
       ) : (
-        <span className="flex items-center gap-1 text-muted/60">
+        <span className="flex items-center gap-1 text-muted/80">
           <Icon name="cancel" className="text-[15px]" />
           Tidak aktif
         </span>
@@ -154,7 +154,7 @@ function FormField({
   return (
     <div className="space-y-1">
       <p className="label-caps text-muted">{label}</p>
-      {hint ? <p className="text-xs text-muted/70">{hint}</p> : null}
+      {hint ? <p className="text-xs text-muted/80">{hint}</p> : null}
       {children}
     </div>
   );

@@ -108,7 +108,7 @@ export default function BottomNav({
         <div className="space-y-6">
           {remainingSections.map((section) => (
             <div key={section.title} className="space-y-1">
-              <p className="px-1 pb-1.5 text-xs font-bold uppercase tracking-wider text-muted/70">
+              <p className="px-1 pb-1.5 text-xs font-bold uppercase tracking-wider text-muted/80">
                 {section.title}
               </p>
               <div className="divide-y divide-border/60">

@@ -103,7 +103,7 @@ export default function ProfileInfoSection({
                 value={whatsapp}
                 onChange={(e) => setWhatsapp(e.target.value.replace(/\D/g, ""))}
                 placeholder="81234567890"
-                className="min-h-11 min-w-0 flex-1 border border-border-strong bg-white px-3.5 py-2.5 text-base text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
+                className="min-h-11 min-w-0 flex-1 border border-border-strong bg-white px-3.5 py-2.5 text-base text-primary placeholder:text-muted/80 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
               />
             </div>
             <p className="mt-1 text-xs text-muted">Tanpa awalan 0 atau 62. Contoh: 81234567890</p>
@@ -140,7 +140,7 @@ export default function ProfileInfoSection({
             value={about}
             onChange={(e) => setAbout(e.target.value)}
             placeholder="Ceritakan profil, sejarah singkat, dan filosofi akademi kepada calon siswa..."
-            className="w-full border border-border-strong bg-white p-3.5 text-base text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
+            className="w-full border border-border-strong bg-white p-3.5 text-base text-primary placeholder:text-muted/80 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
           />
         </div>
 
@@ -154,7 +154,7 @@ export default function ProfileInfoSection({
             value={vision}
             onChange={(e) => setVision(e.target.value)}
             placeholder="Visi akademi ke depan..."
-            className="w-full border border-border-strong bg-white p-3.5 text-base text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
+            className="w-full border border-border-strong bg-white p-3.5 text-base text-primary placeholder:text-muted/80 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
           />
         </div>
 
@@ -168,7 +168,7 @@ export default function ProfileInfoSection({
             value={mission}
             onChange={(e) => setMission(e.target.value)}
             placeholder="Tulis poin-poin misi pembinaan akademi..."
-            className="w-full border border-border-strong bg-white p-3.5 text-base text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
+            className="w-full border border-border-strong bg-white p-3.5 text-base text-primary placeholder:text-muted/80 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
           />
         </div>
       </div>

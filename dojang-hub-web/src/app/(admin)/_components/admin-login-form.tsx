@@ -73,7 +73,7 @@ export default function AdminLoginForm() {
               setEmail(event.target.value);
               setError("");
             }}
-            className="h-12 w-full rounded-md border border-border-strong bg-white px-12 text-sm text-primary outline-none transition placeholder:text-muted/70 focus:border-primary focus:ring-2 focus:ring-primary"
+            className="h-12 w-full rounded-md border border-border-strong bg-white px-12 text-sm text-primary outline-none transition placeholder:text-muted/80 focus:border-primary focus:ring-2 focus:ring-primary"
             placeholder="admin@skaihub.com"
           />
         </div>
@@ -95,7 +95,7 @@ export default function AdminLoginForm() {
               setPassword(event.target.value);
               setError("");
             }}
-            className="h-12 w-full rounded-md border border-border-strong bg-white px-12 pr-14 text-sm text-primary outline-none transition placeholder:text-muted/70 focus:border-primary focus:ring-2 focus:ring-primary"
+            className="h-12 w-full rounded-md border border-border-strong bg-white px-12 pr-14 text-sm text-primary outline-none transition placeholder:text-muted/80 focus:border-primary focus:ring-2 focus:ring-primary"
             placeholder="Masukkan password admin"
           />
           <button
