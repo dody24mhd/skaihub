@@ -238,8 +238,8 @@ export type Student = {
   birth_date: string;
   joined_date: string;
   status: "active" | "inactive" | "alumni";
-  height_cm: number;
-  weight_kg: string;
+  height_cm: number | null;
+  weight_kg: string | null;
   student_phone: string | null;
   guardian_name: string | null;
   guardian_phone: string | null;
@@ -769,8 +769,8 @@ export function createAkademiStudent(
     gender: Student["gender"];
     birth_date: string;
     joined_date: string;
-    height_cm: number;
-    weight_kg: number;
+    height_cm: number | null;
+    weight_kg: number | null;
     primary_class_id?: number | null;
     current_rank_id?: number | null;
     student_phone?: string | null;
@@ -799,8 +799,8 @@ export function updateAkademiStudent(
     gender: Student["gender"];
     birth_date: string;
     joined_date: string;
-    height_cm: number;
-    weight_kg: number;
+    height_cm: number | null;
+    weight_kg: number | null;
     primary_class_id: number | null;
     current_rank_id: number | null;
     student_phone: string | null;
@@ -2121,4 +2121,13 @@ export type OperatorDashboard = {
 
 export function getOperatorDashboard(token: string) {
   return adminFetch<OperatorDashboard>("/super-admin/dashboard", token);
+}
+
+// L4-E
+export function copyAkademiEvaluationAspects(token: string, periodId: number, sourcePeriodId: number) {
+  return adminFetch<{ data: EvaluationAspect[]; copied_count: number }>(
+    `/akademi/evaluations/periods/${periodId}/aspects/copy-from/${sourcePeriodId}`,
+    token,
+    { method: "POST" },
+  );
 }

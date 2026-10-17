@@ -149,6 +149,9 @@ Route::prefix('akademi')
         Route::delete('evaluations/aspects/{aspect}', [AkademiEvaluationController::class, 'destroyAspect']);
         Route::get('evaluations/periods/{period}/scores', [AkademiEvaluationController::class, 'scores']);
         Route::post('evaluations/periods/{period}/scores', [AkademiEvaluationController::class, 'upsertScores']);
+        // L4-E
+        Route::post('evaluations/periods/{period}/aspects/copy-from/{source}', [AkademiEvaluationController::class, 'copyAspects']);
+        // end L4-E
         Route::get('rank-promotions', [AkademiRankPromotionController::class, 'index']);
         Route::post('rank-promotions', [AkademiRankPromotionController::class, 'store']);
         Route::get('rank-promotions/{rankPromotionEvent}', [AkademiRankPromotionController::class, 'show']);

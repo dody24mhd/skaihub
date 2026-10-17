@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Student } from "../../_lib/admin-api";
 import AcademyRankBeltBadge from "../academy-rank-belt-badge";
 import { ResponsiveColumn } from "../ui";
+import { physicalSummary } from "./format";
 import { studentStatusLabels, studentStatusStyles } from "./student-status";
 
 const actionClass =
@@ -59,7 +60,7 @@ export function buildStudentColumns({
       key: "physic",
       header: "Fisik",
       hideOnMobile: true,
-      render: (item) => <span className="text-muted">{item.height_cm} cm / {Number(item.weight_kg)} kg</span>,
+      render: (item) => <span className="text-muted">{physicalSummary(item)}</span>,
     },
     {
       key: "status",

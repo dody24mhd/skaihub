@@ -1,7 +1,13 @@
 import { ReactNode } from "react";
 import { SportRank, Student, TrainingClass } from "../../_lib/admin-api";
 import { FormField } from "../ui";
-import { StudentFieldSetter, StudentFormState } from "./student-form-model";
+import {
+  GUARDIAN_REQUIRED_UNDER_AGE,
+  StudentFieldSetter,
+  StudentFormErrors,
+  StudentFormState,
+  isGuardianRequired,
+} from "./student-form-model";
 
 const controlClass =
   "min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 sm:text-sm";
@@ -81,19 +87,26 @@ export function StudentTrainingSection({
           {ranks.map((rank) => <option key={rank.id} value={rank.id}>{rank.label}</option>)}
         </select>
       </FormField>
-      <FormField id="student-height" label="Tinggi badan (cm)" type="number" inputMode="numeric" min="0" required value={form.height_cm} onChange={(event) => setField("height_cm", event.target.value)} />
-      <FormField id="student-weight" label="Berat badan (kg)" type="number" inputMode="decimal" min="0" step="0.1" required value={form.weight_kg} onChange={(event) => setField("weight_kg", event.target.value)} />
+      <FormField id="student-height" label="Tinggi badan (cm)" hint="Opsional" type="number" inputMode="numeric" min="1" value={form.height_cm} onChange={(event) => setField("height_cm", event.target.value)} />
+      <FormField id="student-weight" label="Berat badan (kg)" hint="Opsional" type="number" inputMode="decimal" min="1" step="0.1" value={form.weight_kg} onChange={(event) => setField("weight_kg", event.target.value)} />
     </FormSection>
   );
 }
 
-export function StudentContactSection({ form, setField }: SectionProps) {
+const CONTACT_HINT = "Minimal satu: nomor siswa atau nomor wali.";
+
+export function StudentContactSection({ form, setField, errors }: SectionProps & { errors: StudentFormErrors }) {
+  const isGuardianNeeded = isGuardianRequired(form.birth_date);
+  const guardianHint = isGuardianNeeded
+    ? `Wajib untuk siswa di bawah ${GUARDIAN_REQUIRED_UNDER_AGE} tahun.`
+    : `Wajib bila siswa di bawah ${GUARDIAN_REQUIRED_UNDER_AGE} tahun.`;
+
   return (
     <FormSection eyebrow="Kontak Dan Sekolah">
-      <FormField id="student-phone" label="Nomor siswa" type="tel" inputMode="tel" autoComplete="tel" value={form.student_phone} onChange={(event) => setField("student_phone", event.target.value)} />
+      <FormField id="student-phone" label="Nomor siswa" hint={CONTACT_HINT} error={errors.student_phone} type="tel" inputMode="tel" autoComplete="tel" value={form.student_phone} onChange={(event) => setField("student_phone", event.target.value)} />
       <FormField id="student-shirt" label="Ukuran baju" value={form.shirt_size} onChange={(event) => setField("shirt_size", event.target.value)} />
-      <FormField id="student-guardian-name" label="Nama wali" value={form.guardian_name} onChange={(event) => setField("guardian_name", event.target.value)} />
-      <FormField id="student-guardian-phone" label="Nomor wali" type="tel" inputMode="tel" value={form.guardian_phone} onChange={(event) => setField("guardian_phone", event.target.value)} />
+      <FormField id="student-guardian-name" label="Nama wali" hint={guardianHint} error={errors.guardian_name} required={isGuardianNeeded} value={form.guardian_name} onChange={(event) => setField("guardian_name", event.target.value)} />
+      <FormField id="student-guardian-phone" label="Nomor wali" hint={CONTACT_HINT} error={errors.guardian_phone} required={isGuardianNeeded} type="tel" inputMode="tel" value={form.guardian_phone} onChange={(event) => setField("guardian_phone", event.target.value)} />
       <FormField id="student-school" label="Asal sekolah" value={form.school_name} onChange={(event) => setField("school_name", event.target.value)} />
       <FormField id="student-grade" label="Kelas sekolah" value={form.school_grade} onChange={(event) => setField("school_grade", event.target.value)} />
       <FormField id="student-address" label="Alamat" className="md:col-span-2">

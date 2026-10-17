@@ -72,6 +72,8 @@ class StudentQuotaTest extends TestCase
             'joined_date' => '2026-05-23',
             'height_cm' => 150,
             'weight_kg' => 45,
+            'guardian_name' => 'Wali Siswa',
+            'guardian_phone' => '081200000001',
             'status' => 'active',
         ], $overrides);
     }

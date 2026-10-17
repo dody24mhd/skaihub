@@ -14,6 +14,7 @@ import {
   getAkademiStudents,
 } from "../../_lib/admin-api";
 import {
+  submitCopyAspects,
   submitCreateAspect,
   submitCreatePeriod,
   submitDeleteAspect,
@@ -299,6 +300,17 @@ export function useEvaluationData() {
     });
   }
 
+  async function handleCopyAspects(source: EvaluationPeriod) {
+    return submitCopyAspects(source, {
+      token: tokenRef.current,
+      selectedPeriodId,
+      setIsSaving,
+      setError,
+      setMessage,
+      refreshAll,
+    });
+  }
+
   async function handleSaveScoreGrid(event: FormEvent<HTMLFormElement>) {
     await submitSaveScores(event, {
       token: tokenRef.current,
@@ -366,6 +378,7 @@ export function useEvaluationData() {
     cancelEditAspect,
     handleUpdateAspect,
     handleDeleteAspect,
+    handleCopyAspects,
     handleUpdatePeriodStatus,
     handleSaveScoreGrid,
   };

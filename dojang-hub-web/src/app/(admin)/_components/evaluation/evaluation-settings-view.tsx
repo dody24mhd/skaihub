@@ -3,7 +3,9 @@
 import { FormEvent, useState } from "react";
 import { EvaluationAspect, EvaluationPeriod } from "../../_lib/admin-api";
 import { ResponsiveColumn, ResponsiveList } from "../ui";
+import { buildAspectColumns } from "./evaluation-aspect-columns";
 import EvaluationAspectModal from "./evaluation-aspect-modal";
+import EvaluationCopyAspectsModal from "./evaluation-copy-aspects-modal";
 import EvaluationPeriodModal from "./evaluation-period-modal";
 import EvaluationSettingsAside from "./evaluation-settings-aside";
 import { shortDate, statusLabels, statusStyles } from "./evaluation-types";
@@ -42,6 +44,7 @@ export type EvaluationSettingsViewProps = {
   onCancelEditAspect: () => void;
   onUpdateAspect: (aspect: EvaluationAspect) => Promise<void>;
   onDeleteAspect: (aspect: EvaluationAspect) => Promise<void>;
+  onCopyAspects: (source: EvaluationPeriod) => Promise<boolean>;
 };
 
 export default function EvaluationSettingsView({
@@ -78,10 +81,12 @@ export default function EvaluationSettingsView({
   onCancelEditAspect,
   onUpdateAspect,
   onDeleteAspect,
+  onCopyAspects,
 }: EvaluationSettingsViewProps) {
   const [isAddPeriodModalOpen, setIsAddPeriodModalOpen] = useState(false);
   const [isAddAspectModalOpen, setIsAddAspectModalOpen] = useState(false);
   const [editingAspectModalItem, setEditingAspectModalItem] = useState<EvaluationAspect | null>(null);
+  const [isCopyModalOpen, setIsCopyModalOpen] = useState(false);
 
   const periodColumns: ResponsiveColumn<EvaluationPeriod>[] = [
     {
@@ -146,60 +151,14 @@ export default function EvaluationSettingsView({
     },
   ];
 
-  const aspectColumns: ResponsiveColumn<EvaluationAspect>[] = [
-    {
-      key: "name",
-      header: "Variabel",
-      primary: true,
-      render: (a) => (
-        <div>
-          <p className="font-bold text-primary">{a.name}</p>
-          <p className="text-xs text-muted">{a.category || "Tanpa kategori"}</p>
-        </div>
-      ),
+  const aspectColumns = buildAspectColumns({
+    isSaving,
+    onEdit: (aspect) => {
+      onStartEditAspect(aspect);
+      setEditingAspectModalItem(aspect);
     },
-    {
-      key: "status",
-      header: "Status",
-      render: (a) => (
-        <span
-          className={`inline-block rounded-full px-2.5 py-1 text-xs font-bold ${
-            a.is_active ? "bg-success/10 text-success" : "bg-muted/10 text-muted"
-          }`}
-        >
-          {a.is_active ? "Aktif" : "Nonaktif"}
-        </span>
-      ),
-    },
-    {
-      key: "actions",
-      header: "Aksi",
-      className: "text-right",
-      render: (a) => (
-        <div className="flex flex-wrap items-center justify-end gap-2">
-          <button
-            className="inline-flex min-h-11 items-center justify-center rounded-md border border-border px-3 text-xs font-bold text-primary transition hover:border-primary disabled:bg-muted"
-            disabled={isSaving}
-            onClick={() => {
-              onStartEditAspect(a);
-              setEditingAspectModalItem(a);
-            }}
-            type="button"
-          >
-            Edit
-          </button>
-          <button
-            className="inline-flex min-h-11 items-center justify-center rounded-md border border-secondary/30 px-3 text-xs font-bold text-secondary transition hover:bg-secondary/10 disabled:bg-muted"
-            disabled={isSaving}
-            onClick={() => onDeleteAspect(a)}
-            type="button"
-          >
-            Hapus
-          </button>
-        </div>
-      ),
-    },
-  ];
+    onDelete: onDeleteAspect,
+  });
 
   return (
     <div className="space-y-6">
@@ -251,6 +210,15 @@ export default function EvaluationSettingsView({
                     onClick={() => setIsAddAspectModalOpen(true)}
                   >
                     + Tambah Variabel
+                  </button>
+                ) : null}
+                {isPeriodDetailOpen && selectedPeriod ? (
+                  <button
+                    className="inline-flex min-h-11 w-full items-center justify-center rounded-md border border-border px-4 text-sm font-bold text-primary sm:w-auto"
+                    type="button"
+                    onClick={() => setIsCopyModalOpen(true)}
+                  >
+                    Salin dari periode sebelumnya
                   </button>
                 ) : null}
               </div>
@@ -393,6 +361,17 @@ export default function EvaluationSettingsView({
         onUpdateAspect={onUpdateAspect}
         isSaving={isSaving}
       />
+
+      {selectedPeriod ? (
+        <EvaluationCopyAspectsModal
+          isOpen={isCopyModalOpen}
+          onClose={() => setIsCopyModalOpen(false)}
+          periods={periods}
+          targetPeriod={selectedPeriod}
+          isSaving={isSaving}
+          onCopy={onCopyAspects}
+        />
+      ) : null}
     </div>
   );
 }

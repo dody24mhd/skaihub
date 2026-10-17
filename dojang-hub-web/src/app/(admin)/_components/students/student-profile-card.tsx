@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Student, StudentDetailSummary } from "../../_lib/admin-api";
 import AcademyRankBeltBadge from "../academy-rank-belt-badge";
-import { shortDate } from "./format";
+import { physicalSummary, shortDate } from "./format";
 import { studentStatusLabels, studentStatusStyles } from "./student-status";
 
 function ProfileItem({ label, children }: { label: string; children: ReactNode }) {
@@ -70,7 +70,7 @@ export default function StudentProfileCard({ student, summary }: { student: Stud
             <AcademyRankBeltBadge rank={student.current_rank} size="md" />
           </ProfileItem>
           <ProfileItem label="Bergabung">{shortDate(student.joined_date)}</ProfileItem>
-          <ProfileItem label="Fisik">{student.height_cm} cm / {Number(student.weight_kg)} kg</ProfileItem>
+          <ProfileItem label="Fisik">{physicalSummary(student)}</ProfileItem>
           <ProfileItem label="Kontak siswa">{student.student_phone ? <PhoneLink phone={student.student_phone} /> : "-"}</ProfileItem>
           <ProfileItem label="Wali">
             {student.guardian_name || "-"}
