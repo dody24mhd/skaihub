@@ -16,6 +16,7 @@ import {
   shortDate,
   statusLabels,
 } from "./evaluation-types";
+import StatusMessage from "../ui/status-message";
 
 export type EvaluationScoringViewProps = {
   periods: EvaluationPeriod[];
@@ -211,16 +212,8 @@ export default function EvaluationScoringView({
           </div>
         ) : null}
 
-        {message ? (
-          <p className="mt-4 rounded-md border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">
-            {message}
-          </p>
-        ) : null}
-        {error ? (
-          <p className="mt-4 rounded-md border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">
-            {error}
-          </p>
-        ) : null}
+        <StatusMessage tone="success" message={message} className="mt-4" />
+        <StatusMessage tone="error" message={error} className="mt-4" />
 
         {!selectedPeriodId || !activeAspects.length ? (
           <div className="mt-5 rounded-md border border-border bg-surface-container-low p-6 text-center text-sm text-muted">
@@ -295,7 +288,7 @@ export default function EvaluationScoringView({
                           <td key={aspect.id} className="py-3 pr-3">
                             <div className="space-y-1">
                               <input
-                                className="min-h-11 w-24 rounded-md border border-border px-3 text-sm font-semibold outline-none transition focus:border-primary focus:ring-1 focus:ring-primary"
+                                className="min-h-11 w-24 rounded-md border border-border-strong px-3 text-sm font-semibold outline-none transition focus:border-primary focus:ring-1 focus:ring-primary"
                                 type="number"
                                 inputMode="numeric"
                                 min="1"
@@ -318,7 +311,7 @@ export default function EvaluationScoringView({
                       })}
                       <td className="py-3">
                         <input
-                          className="min-h-11 w-full rounded-md border border-border px-3 text-sm outline-none transition focus:border-primary"
+                          className="min-h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none transition focus:border-primary"
                           value={draftNotes[student.id] || ""}
                           onChange={(e) =>
                             setDraftNotes((cur) => ({ ...cur, [student.id]: e.target.value }))

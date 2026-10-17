@@ -18,6 +18,7 @@ import {
 } from "../_lib/admin-api";
 import { defaultRankSystemForSport, rankSystemLabel } from "../_lib/rank-systems";
 import RankSystemSelect from "./akademi/rank-system-select";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -86,7 +87,7 @@ const sportOptions = [
 ];
 
 function statusClass(status: AkademiStatus) {
-  if (status === "active") return "bg-success/10 text-success";
+  if (status === "active") return "bg-success/10 text-success-strong";
   if (status === "suspended") return "bg-secondary/10 text-secondary";
   return "bg-surface-container text-muted";
 }
@@ -448,16 +449,14 @@ export default function AdminAkademiManager() {
                   {item.value}
                 </p>
               </div>
-              <span className="material-symbols-outlined text-[26px] text-secondary">
-                {item.icon}
-              </span>
+              <Icon name={item.icon} className="text-[26px] text-secondary" />
             </div>
           </article>
         ))}
       </div>
 
       {message ? (
-        <div className="mb-5 rounded-md bg-success/10 px-4 py-3 text-sm font-semibold text-success">
+        <div className="mb-5 rounded-md bg-success/10 px-4 py-3 text-sm font-semibold text-success-strong">
           {message}
         </div>
       ) : null}
@@ -477,13 +476,11 @@ export default function AdminAkademiManager() {
 
             <div className="flex flex-col gap-3 sm:flex-row">
               <div className="relative">
-                <span className="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-muted">
-                  search
-                </span>
+                <Icon name="search" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-muted" />
                 <input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  className="h-10 w-full rounded-md border border-border bg-white pl-10 pr-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 sm:w-64"
+                  className="h-10 w-full rounded-md border border-border-strong bg-white pl-10 pr-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary sm:w-64"
                   placeholder="Cari akademi"
                 />
               </div>
@@ -493,7 +490,7 @@ export default function AdminAkademiManager() {
                 onChange={(event) =>
                   setStatusFilter(event.target.value as "all" | AkademiStatus)
                 }
-                className="h-10 rounded-md border border-border bg-white px-3 text-sm font-semibold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-10 rounded-md border border-border-strong bg-white px-3 text-sm font-semibold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary"
               >
                 <option value="all">Semua status</option>
                 <option value="active">Aktif</option>
@@ -506,7 +503,7 @@ export default function AdminAkademiManager() {
                 onChange={(event) =>
                   setPlanFilter(event.target.value as "all" | AkademiPlan)
                 }
-                className="h-10 rounded-md border border-border bg-white px-3 text-sm font-semibold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-10 rounded-md border border-border-strong bg-white px-3 text-sm font-semibold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary"
               >
                 <option value="all">Semua paket</option>
                 <option value="starter">Starter</option>
@@ -519,7 +516,7 @@ export default function AdminAkademiManager() {
                 onClick={() => refreshList()}
                 className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-semibold text-primary transition hover:bg-surface-container-low"
               >
-                <span className="material-symbols-outlined text-[20px]">refresh</span>
+                <Icon name="refresh" className="text-[20px]" />
                 Refresh
               </button>
 
@@ -528,7 +525,7 @@ export default function AdminAkademiManager() {
                 onClick={() => setIsCreateOpen(true)}
                 className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-white transition hover:bg-primary-container"
               >
-                <span className="material-symbols-outlined text-[20px]">add_business</span>
+                <Icon name="add_business" className="text-[20px]" />
                 Tambah Akademi
               </button>
             </div>
@@ -587,29 +584,27 @@ export default function AdminAkademiManager() {
                         <button
                           type="button"
                           onClick={() => openDetail(item)}
-                          className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-success/10 hover:text-success"
+                          className="inline-flex size-11 items-center justify-center rounded-md text-muted transition hover:bg-success/10 hover:text-success-strong"
                           aria-label={`Detail ${item.name}`}
                           disabled={isLoadingDetail}
                         >
-                          <span className="material-symbols-outlined text-[20px]">
-                            visibility
-                          </span>
+                          <Icon name="visibility" className="text-[20px]" />
                         </button>
                         <button
                           type="button"
                           onClick={() => setEditTarget(item)}
-                          className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-primary/10 hover:text-primary"
+                          className="inline-flex size-11 items-center justify-center rounded-md text-muted transition hover:bg-primary/10 hover:text-primary"
                           aria-label={`Edit ${item.name}`}
                         >
-                          <span className="material-symbols-outlined text-[20px]">edit</span>
+                          <Icon name="edit" className="text-[20px]" />
                         </button>
                         <button
                           type="button"
                           onClick={() => setDeleteTarget(item)}
-                          className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-secondary/10 hover:text-secondary"
+                          className="inline-flex size-11 items-center justify-center rounded-md text-muted transition hover:bg-secondary/10 hover:text-secondary"
                           aria-label={`Hapus ${item.name}`}
                         >
-                          <span className="material-symbols-outlined text-[20px]">delete</span>
+                          <Icon name="delete" className="text-[20px]" />
                         </button>
                       </div>
                     </td>
@@ -620,9 +615,7 @@ export default function AdminAkademiManager() {
                   <td colSpan={7} className="px-5 py-8">
                     <div className="flex max-w-xl gap-4">
                       <div className="flex size-12 shrink-0 items-center justify-center rounded-md bg-primary text-white">
-                        <span className="material-symbols-outlined text-[26px]">
-                          domain_disabled
-                        </span>
+                        <Icon name="domain_disabled" className="text-[26px]" />
                       </div>
                       <div>
                         <h3 className="text-lg font-bold text-primary">
@@ -662,10 +655,10 @@ export default function AdminAkademiManager() {
               <button
                 type="button"
                 onClick={() => setIsCreateOpen(false)}
-                className="inline-flex size-10 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
+                className="inline-flex size-11 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
                 aria-label="Tutup"
               >
-                <span className="material-symbols-outlined text-[20px]">close</span>
+                <Icon name="close" className="text-[20px]" />
               </button>
             </div>
 
@@ -673,7 +666,7 @@ export default function AdminAkademiManager() {
               <input
                 value={createForm.name}
                 onChange={(event) => updateCreateForm("name", event.target.value)}
-                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 placeholder="Nama akademi"
               />
               <div className="rounded-md border border-border p-4">
@@ -687,18 +680,14 @@ export default function AdminAkademiManager() {
                         style={{ backgroundImage: `url(${createForm.logo_url})` }}
                       />
                     ) : (
-                      <span className="material-symbols-outlined text-[28px] text-muted">
-                        image
-                      </span>
+                      <Icon name="image" className="text-[28px] text-muted" />
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="label-caps mb-2 text-muted">Logo Akademi</p>
                     <div className="flex flex-wrap gap-2">
                       <label className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-md border border-border px-3 text-sm font-semibold text-primary transition hover:bg-surface-container-low">
-                        <span className="material-symbols-outlined text-[20px]">
-                          upload
-                        </span>
+                        <Icon name="upload" className="text-[20px]" />
                         {isUploadingCreateLogo ? "Mengunggah..." : "Upload logo"}
                         <input
                           type="file"
@@ -714,9 +703,7 @@ export default function AdminAkademiManager() {
                           onClick={() => updateCreateForm("logo_url", "")}
                           className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border px-3 text-sm font-semibold text-muted transition hover:bg-surface-container-low"
                         >
-                          <span className="material-symbols-outlined text-[20px]">
-                            delete
-                          </span>
+                          <Icon name="delete" className="text-[20px]" />
                           Hapus
                         </button>
                       ) : null}
@@ -733,7 +720,7 @@ export default function AdminAkademiManager() {
                   <select
                     value={createForm.sport_type}
                     onChange={(event) => updateCreateForm("sport_type", event.target.value)}
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   >
                     {sportOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -755,7 +742,7 @@ export default function AdminAkademiManager() {
                     onChange={(event) =>
                       updateCreateForm("duration_type", event.target.value as SubscriptionDuration)
                     }
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   >
                     {Object.entries(durationLabels).map(([value, label]) => (
                       <option key={value} value={value}>
@@ -774,7 +761,7 @@ export default function AdminAkademiManager() {
                     type="date"
                     value={createForm.plan_expires_at || ""}
                     onChange={(event) => updateCreateForm("plan_expires_at", event.target.value)}
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   />
                 </label>
               ) : null}
@@ -786,7 +773,7 @@ export default function AdminAkademiManager() {
                     onChange={(event) =>
                       updateCreateForm("plan", event.target.value as AkademiPlan)
                     }
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   >
                     <option value="starter">Starter</option>
                     <option value="pro">Pro</option>
@@ -798,7 +785,7 @@ export default function AdminAkademiManager() {
                     {selectedCreatePlan === "starter" ? "Kode Akademi" : "Subdomain Akademi"}
                   </span>
                   <div
-                    className={`flex h-11 items-center rounded-md border border-border px-3 text-sm outline-none focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10 ${
+                    className={`flex h-11 items-center rounded-md border border-border px-3 text-sm outline-none focus-within:border-primary focus-within:ring-2 focus-within:ring-primary ${
                       selectedCreatePlan === "starter" ? "bg-surface-container-low" : "bg-white"
                     }`}
                   >
@@ -838,21 +825,21 @@ export default function AdminAkademiManager() {
                   <input
                     value={createForm.ketua_name}
                     onChange={(event) => updateCreateForm("ketua_name", event.target.value)}
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                     placeholder="Nama ketua akademi"
                   />
                   <input
                     type="email"
                     value={createForm.ketua_email}
                     onChange={(event) => updateCreateForm("ketua_email", event.target.value)}
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                     placeholder="Email ketua"
                   />
                   <input
                     type="password"
                     value={createForm.ketua_password}
                     onChange={(event) => updateCreateForm("ketua_password", event.target.value)}
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                     placeholder="Password sementara minimal 8 karakter"
                   />
                 </div>
@@ -867,21 +854,21 @@ export default function AdminAkademiManager() {
                   <input
                     value={createForm.admin_name}
                     onChange={(event) => updateCreateForm("admin_name", event.target.value)}
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                     placeholder="Nama admin akademi"
                   />
                   <input
                     type="email"
                     value={createForm.admin_email}
                     onChange={(event) => updateCreateForm("admin_email", event.target.value)}
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                     placeholder="Email admin"
                   />
                   <input
                     type="password"
                     value={createForm.admin_password}
                     onChange={(event) => updateCreateForm("admin_password", event.target.value)}
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                     placeholder="Password admin minimal 8 karakter"
                   />
                 </div>
@@ -892,7 +879,7 @@ export default function AdminAkademiManager() {
                 disabled={!canCreate || isSaving || isUploadingCreateLogo}
                 className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-white transition hover:bg-primary-container disabled:cursor-not-allowed disabled:bg-muted"
               >
-                <span className="material-symbols-outlined text-[20px]">save</span>
+                <Icon name="save" className="text-[20px]" />
                 {isSaving ? "Menyimpan..." : "Buat Akademi"}
               </button>
             </form>
@@ -911,10 +898,10 @@ export default function AdminAkademiManager() {
               <button
                 type="button"
                 onClick={() => setEditTarget(null)}
-                className="inline-flex size-10 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
+                className="inline-flex size-11 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
                 aria-label="Tutup"
               >
-                <span className="material-symbols-outlined text-[20px]">close</span>
+                <Icon name="close" className="text-[20px]" />
               </button>
             </div>
 
@@ -924,7 +911,7 @@ export default function AdminAkademiManager() {
                 onChange={(event) =>
                   setEditTarget({ ...editTarget, name: event.target.value })
                 }
-                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
               />
               <div className="grid gap-3 sm:grid-cols-2">
                 <input
@@ -933,7 +920,7 @@ export default function AdminAkademiManager() {
                     setEditTarget({ ...editTarget, slug: makeSlug(event.target.value) })
                   }
                   readOnly={editTarget.plan === "starter"}
-                  className="h-11 rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                  className="h-11 rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 />
                 <select
                   value={editTarget.sport_type}
@@ -944,7 +931,7 @@ export default function AdminAkademiManager() {
                       rank_system: defaultRankSystemForSport(event.target.value),
                     })
                   }
-                  className="h-11 rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                  className="h-11 rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 >
                   {sportOptions.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -970,18 +957,14 @@ export default function AdminAkademiManager() {
                         style={{ backgroundImage: `url(${editTarget.logo_url})` }}
                       />
                     ) : (
-                      <span className="material-symbols-outlined text-[28px] text-muted">
-                        image
-                      </span>
+                      <Icon name="image" className="text-[28px] text-muted" />
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="label-caps mb-2 text-muted">Logo Akademi</p>
                     <div className="flex flex-wrap gap-2">
                       <label className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-md border border-border px-3 text-sm font-semibold text-primary transition hover:bg-surface-container-low">
-                        <span className="material-symbols-outlined text-[20px]">
-                          upload
-                        </span>
+                        <Icon name="upload" className="text-[20px]" />
                         {isUploadingEditLogo ? "Mengunggah..." : "Upload logo"}
                         <input
                           type="file"
@@ -997,9 +980,7 @@ export default function AdminAkademiManager() {
                           onClick={() => setEditTarget({ ...editTarget, logo_url: null })}
                           className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border px-3 text-sm font-semibold text-muted transition hover:bg-surface-container-low"
                         >
-                          <span className="material-symbols-outlined text-[20px]">
-                            delete
-                          </span>
+                          <Icon name="delete" className="text-[20px]" />
                           Hapus
                         </button>
                       ) : null}
@@ -1021,7 +1002,7 @@ export default function AdminAkademiManager() {
                         status: event.target.value as AkademiStatus,
                       })
                     }
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   >
                     <option value="active">Aktif</option>
                     <option value="inactive">Nonaktif</option>
@@ -1079,9 +1060,7 @@ export default function AdminAkademiManager() {
                       style={{ backgroundImage: `url(${detailTarget.akademi.logo_url})` }}
                     />
                   ) : (
-                    <span className="material-symbols-outlined text-[28px] text-muted">
-                      domain
-                    </span>
+                    <Icon name="domain" className="text-[28px] text-muted" />
                   )}
                 </div>
                 <div className="min-w-0">
@@ -1098,10 +1077,10 @@ export default function AdminAkademiManager() {
               <button
                 type="button"
                 onClick={() => setDetailTarget(null)}
-                className="inline-flex size-10 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
+                className="inline-flex size-11 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
                 aria-label="Tutup"
               >
-                <span className="material-symbols-outlined text-[20px]">close</span>
+                <Icon name="close" className="text-[20px]" />
               </button>
             </div>
 
@@ -1234,7 +1213,7 @@ export default function AdminAkademiManager() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-primary/35 px-5 backdrop-blur-sm">
           <section className="card-soft w-full max-w-[420px] rounded-lg bg-white p-5">
             <div className="mb-4 flex size-12 items-center justify-center rounded-md bg-secondary/10 text-secondary">
-              <span className="material-symbols-outlined text-[26px]">warning</span>
+              <Icon name="warning" className="text-[26px]" />
             </div>
             <h2 className="text-xl font-bold text-primary">Hapus akademi?</h2>
             <p className="mt-2 text-sm leading-6 text-muted">

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AcademyPublicProfile } from "../../../_lib/admin-api";
 import { FormField } from "../../ui";
+import Icon from "../../ui/icon";
 
 type ProfileInfoSectionProps = {
   profile: AcademyPublicProfile | null;
@@ -57,20 +58,23 @@ export default function ProfileInfoSection({
               hasPublicWebsite ? "cursor-pointer" : "cursor-not-allowed opacity-60"
             }`}
           >
-            <div
-              className={`relative h-6 w-11 rounded-full transition ${
-                isPublished ? "bg-secondary" : "bg-border"
+            <button
+              type="button"
+              role="switch"
+              aria-checked={isPublished}
+              aria-label="Publikasikan halaman publik"
+              disabled={!hasPublicWebsite}
+              className={`relative h-6 w-11 shrink-0 rounded-full transition focus:outline-hidden focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 disabled:cursor-not-allowed ${
+                isPublished ? "bg-secondary" : "bg-border-strong"
               }`}
-              onClick={() => {
-                if (hasPublicWebsite) setIsPublished((v) => !v);
-              }}
+              onClick={() => setIsPublished((v) => !v)}
             >
               <span
                 className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow-xs transition-all ${
                   isPublished ? "left-5" : "left-0.5"
                 }`}
               />
-            </div>
+            </button>
             <span className="text-sm font-semibold text-primary">
               {isPublished ? "Dipublikasikan" : "Disembunyikan"}
             </span>
@@ -99,7 +103,7 @@ export default function ProfileInfoSection({
                 value={whatsapp}
                 onChange={(e) => setWhatsapp(e.target.value.replace(/\D/g, ""))}
                 placeholder="81234567890"
-                className="min-h-11 min-w-0 flex-1 border border-border bg-white px-3.5 py-2.5 text-base text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:text-sm"
+                className="min-h-11 min-w-0 flex-1 border border-border-strong bg-white px-3.5 py-2.5 text-base text-primary placeholder:text-muted/80 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
               />
             </div>
             <p className="mt-1 text-xs text-muted">Tanpa awalan 0 atau 62. Contoh: 81234567890</p>
@@ -117,9 +121,9 @@ export default function ProfileInfoSection({
         <button
           type="submit"
           disabled={saving}
-          className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-6 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-secondary-dark disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-secondary/50 sm:w-auto"
+          className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-6 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-secondary-dark disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-secondary sm:w-auto"
         >
-          {saving && <span className="material-symbols-outlined animate-spin text-[18px]">refresh</span>}
+          {saving && <Icon name="refresh" className="animate-spin text-[18px]" />}
           {saving ? "Menyimpan..." : "Simpan Perubahan"}
         </button>
       </div>
@@ -136,7 +140,7 @@ export default function ProfileInfoSection({
             value={about}
             onChange={(e) => setAbout(e.target.value)}
             placeholder="Ceritakan profil, sejarah singkat, dan filosofi akademi kepada calon siswa..."
-            className="w-full border border-border bg-white p-3.5 text-base text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:text-sm"
+            className="w-full border border-border-strong bg-white p-3.5 text-base text-primary placeholder:text-muted/80 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
           />
         </div>
 
@@ -150,7 +154,7 @@ export default function ProfileInfoSection({
             value={vision}
             onChange={(e) => setVision(e.target.value)}
             placeholder="Visi akademi ke depan..."
-            className="w-full border border-border bg-white p-3.5 text-base text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:text-sm"
+            className="w-full border border-border-strong bg-white p-3.5 text-base text-primary placeholder:text-muted/80 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
           />
         </div>
 
@@ -164,7 +168,7 @@ export default function ProfileInfoSection({
             value={mission}
             onChange={(e) => setMission(e.target.value)}
             placeholder="Tulis poin-poin misi pembinaan akademi..."
-            className="w-full border border-border bg-white p-3.5 text-base text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:text-sm"
+            className="w-full border border-border-strong bg-white p-3.5 text-base text-primary placeholder:text-muted/80 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
           />
         </div>
       </div>

@@ -58,7 +58,7 @@ export default function AttendanceCalendarDesktop({
                   className={`text-xs font-black ${
                     sameMonth(date, calendarMonth)
                       ? "text-primary"
-                      : "text-muted/60"
+                      : "text-muted/80"
                   }`}
                 >
                   {date.getDate()}

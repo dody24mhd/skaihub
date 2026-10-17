@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Coach, TrainingSession } from "../../_lib/admin-api";
+import Icon from "../ui/icon";
 
 export type AttendanceSessionInfoProps = {
   selected: TrainingSession;
@@ -98,7 +99,7 @@ export default function AttendanceSessionInfo({
                   checked={selectedCoachIds.includes(String(c.id))}
                   onChange={() => onToggleCoach(c.id)}
                 />
-                <span className="material-symbols-outlined text-[18px]">sports_martial_arts</span>
+                <Icon name="sports_martial_arts" className="text-[18px]" />
                 {c.name}
               </label>
             ))}
@@ -127,7 +128,7 @@ export default function AttendanceSessionInfo({
               value={material}
               onChange={(e) => onMaterialChange(e.target.value)}
               placeholder="Contoh: Poomsae Taegeuk 1"
-              className="mt-1.5 min-h-11 w-full border border-border bg-white px-3.5 py-2 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="mt-1.5 min-h-11 w-full border border-border bg-white px-3.5 py-2 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             />
           </div>
           <div>
@@ -139,7 +140,7 @@ export default function AttendanceSessionInfo({
               value={extraName}
               onChange={(e) => onExtraNameChange(e.target.value)}
               placeholder="Nama peserta trial / pengganti"
-              className="mt-1.5 min-h-11 w-full border border-border bg-white px-3.5 py-2 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="mt-1.5 min-h-11 w-full border border-border bg-white px-3.5 py-2 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             />
           </div>
         </div>
@@ -153,7 +154,7 @@ export default function AttendanceSessionInfo({
             value={notes}
             onChange={(e) => onNotesChange(e.target.value)}
             placeholder="Catatan perkembangan atau kejadian saat latihan..."
-            className="mt-1.5 min-h-24 w-full border border-border bg-white p-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="mt-1.5 min-h-24 w-full border border-border bg-white p-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
           />
         </div>
 
@@ -164,7 +165,7 @@ export default function AttendanceSessionInfo({
           </label>
           <label className="mt-1.5 flex min-h-11 cursor-pointer items-center justify-between border-2 border-dashed border-border bg-surface-container-low/40 px-3.5 py-2 text-sm text-muted transition hover:border-primary hover:bg-white">
             <span className="inline-flex items-center gap-2 text-primary font-medium">
-              <span className="material-symbols-outlined text-[20px]">upload</span>
+              <Icon name="upload" className="text-[20px]" />
               Upload foto sesi latihan
             </span>
             <span className="text-xs font-bold text-secondary uppercase tracking-wider">
@@ -201,7 +202,7 @@ export default function AttendanceSessionInfo({
                   <button
                     type="button"
                     onClick={() => onRemovePhoto(url)}
-                    className="min-h-8 border border-border px-2 text-xs font-bold text-primary hover:bg-surface-container"
+                    className="min-h-11 border border-border px-2 text-xs font-bold text-primary hover:bg-surface-container"
                   >
                     Hapus
                   </button>

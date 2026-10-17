@@ -12,6 +12,8 @@ import AttendanceCalendarMobile from "./attendance/attendance-calendar-mobile";
 import AttendanceCalendarDesktop from "./attendance/attendance-calendar-desktop";
 import AttendanceHistoryList from "./attendance/attendance-history-list";
 import { useCanWrite } from "./ui/subscription-status";
+import Icon from "./ui/icon";
+import StatusMessage from "./ui/status-message";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -39,7 +41,7 @@ const sessionTypeLabels: Record<TrainingSession["session_type"], string> = {
 };
 
 const sessionTypeStyles: Record<TrainingSession["session_type"], string> = {
-  regular: "bg-success/10 text-success border-success/30",
+  regular: "bg-success/10 text-success-strong border-success/30",
   replacement: "bg-orange-100 text-orange-700 border-orange-300",
   extra: "bg-secondary/10 text-secondary border-secondary/30",
 };
@@ -263,7 +265,7 @@ export default function AcademyAttendanceOverviewManager() {
                 aria-label="Bulan sebelumnya"
                 className="min-h-11 flex size-11 items-center justify-center text-primary transition hover:bg-surface-container-low"
               >
-                <span className="material-symbols-outlined text-[20px]">chevron_left</span>
+                <Icon name="chevron_left" className="text-[20px]" />
               </button>
               <p className="min-w-32 px-2 text-center text-xs font-black uppercase tracking-wider text-primary sm:min-w-36 sm:text-sm">
                 {monthTitle(calendarMonth)}
@@ -274,28 +276,24 @@ export default function AcademyAttendanceOverviewManager() {
                 aria-label="Bulan berikutnya"
                 className="min-h-11 flex size-11 items-center justify-center text-primary transition hover:bg-surface-container-low"
               >
-                <span className="material-symbols-outlined text-[20px]">chevron_right</span>
+                <Icon name="chevron_right" className="text-[20px]" />
               </button>
             </div>
           </div>
         </div>
 
-        {error ? (
-          <p className="mt-4 border-2 border-secondary/30 bg-secondary/10 p-3 text-sm font-bold text-secondary">
-            {error}
-          </p>
-        ) : null}
+        <StatusMessage tone="error" message={error} className="mt-4" />
 
         {/* Filter Input */}
         <div className="mt-5 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
           <input
-            className="min-h-11 w-full border border-border bg-white px-3.5 text-sm text-primary placeholder:text-muted/60 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border-strong bg-white px-3.5 text-sm text-primary placeholder:text-muted/80 focus:outline-hidden focus:ring-2 focus:ring-primary"
             placeholder="Cari absensi"
             value={query}
             onChange={(e) => updateTableFilter(() => setQuery(e.target.value))}
           />
           <select
-            className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             value={classFilter}
             onChange={(e) => updateTableFilter(() => setClassFilter(e.target.value))}
           >
@@ -307,7 +305,7 @@ export default function AcademyAttendanceOverviewManager() {
             ))}
           </select>
           <select
-            className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             value={typeFilter}
             onChange={(e) => updateTableFilter(() => setTypeFilter(e.target.value))}
           >
@@ -317,7 +315,7 @@ export default function AcademyAttendanceOverviewManager() {
             <option value="extra">Tambahan</option>
           </select>
           <select
-            className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             value={statusFilter}
             onChange={(e) => updateTableFilter(() => setStatusFilter(e.target.value))}
           >

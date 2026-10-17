@@ -60,4 +60,30 @@ describe("FormField", () => {
     const input = screen.getByLabelText("Nominal SPP");
     expect(input).toHaveAttribute("inputmode", "numeric");
   });
+
+  it("forwards aria-invalid and aria-describedby to custom children", () => {
+    render(
+      <FormField id="class" label="Kelas" hint="Pilih kelas utama." error="Kelas wajib dipilih.">
+        <select id="class" aria-describedby="extra-note">
+          <option value="">Pilih</option>
+        </select>
+      </FormField>
+    );
+
+    const select = screen.getByLabelText("Kelas");
+    expect(select).toHaveAttribute("aria-invalid", "true");
+    expect(select).toHaveAttribute("aria-describedby", "class-error extra-note");
+  });
+
+  it("links the hint to custom children when there is no error", () => {
+    render(
+      <FormField id="notes" label="Catatan" hint="Opsional.">
+        <textarea id="notes" />
+      </FormField>
+    );
+
+    const textarea = screen.getByLabelText("Catatan");
+    expect(textarea).not.toHaveAttribute("aria-invalid");
+    expect(textarea).toHaveAttribute("aria-describedby", "notes-hint");
+  });
 });

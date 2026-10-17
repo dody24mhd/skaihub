@@ -7,7 +7,7 @@ import { FormField, SheetModal } from "../ui";
 import { remainingAmount } from "./spp-summary";
 
 const controlClass =
-  "min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 sm:text-sm";
+  "min-h-11 w-full border border-border-strong bg-white px-3.5 py-2.5 text-base text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary sm:text-sm";
 
 function today() {
   return new Date().toISOString().slice(0, 10);
@@ -108,7 +108,7 @@ export default function SppPaymentModal({
         <FormField id="spp-pay-notes" label="Catatan">
           <textarea id="spp-pay-notes" className={`${controlClass} min-h-20`} value={notes} onChange={(event) => setNotes(event.target.value)} />
         </FormField>
-        {message ? <p className="text-sm font-semibold text-success">{message}</p> : null}
+        {message ? <p className="text-sm font-semibold text-success-strong">{message}</p> : null}
         {error ? <p role="alert" className="border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">{error}</p> : null}
         <div className="flex flex-col gap-2 sm:flex-row">
           <button className="min-h-11 flex-1 bg-primary px-4 text-sm font-bold text-white disabled:bg-muted" disabled={isSaving || isUploading} type="submit">

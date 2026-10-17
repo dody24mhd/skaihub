@@ -21,7 +21,7 @@ type SubscriptionPricePreviewProps = {
 };
 
 const inputCls =
-  "h-11 w-full rounded-md border border-border bg-white px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10";
+  "h-11 w-full rounded-md border border-border-strong bg-white px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary";
 
 function formatCurrency(value: number): string {
   return `Rp ${value.toLocaleString("id-ID")}`;
@@ -66,7 +66,7 @@ export default function SubscriptionPricePreview({
           <label htmlFor="extra-students" className="label-caps block text-muted">
             Siswa tambahan berbayar
           </label>
-          <p className="text-xs text-muted/70">{`Kelipatan ${EXTRA_BLOCK_SIZE} · opsional`}</p>
+          <p className="text-xs text-muted/80">{`Kelipatan ${EXTRA_BLOCK_SIZE} · opsional`}</p>
           <input
             id="extra-students"
             type="number"
@@ -104,7 +104,7 @@ export default function SubscriptionPricePreview({
         <label htmlFor="subscription-amount" className="label-caps block text-muted">
           Nominal tagihan (Rp)
         </label>
-        <p className="text-xs text-muted/70">Kosongkan untuk memakai harga otomatis.</p>
+        <p className="text-xs text-muted/80">Kosongkan untuk memakai harga otomatis.</p>
         <input
           id="subscription-amount"
           type="number"

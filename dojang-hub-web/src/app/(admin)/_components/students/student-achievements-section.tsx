@@ -19,6 +19,7 @@ import AchievementFormModal from "./achievement-form-modal";
 import DetailSectionCard from "./detail-section-card";
 import { shortDate } from "./format";
 import { useStudentList } from "./use-student-list";
+import Icon from "../ui/icon";
 
 const itemButtonClass = "inline-flex min-h-11 items-center justify-center border bg-white px-3 text-xs font-bold";
 
@@ -100,7 +101,7 @@ export default function StudentAchievementsSection({
       onClick={() => openForm(null)}
       type="button"
     >
-      <span className="material-symbols-outlined text-[18px]">add</span>
+      <Icon name="add" className="text-[18px]" />
       Tambah Prestasi
     </button>
   ) : undefined;
@@ -115,7 +116,7 @@ export default function StudentAchievementsSection({
               <div className="flex items-start justify-between gap-3">
                 <p className="min-w-0 break-words font-bold text-primary">{item.title}</p>
                 {item.result_label ? (
-                  <span className="shrink-0 bg-success/10 px-2 py-1 text-xs font-bold text-success">{item.result_label}</span>
+                  <span className="shrink-0 bg-success/10 px-2 py-1 text-xs font-bold text-success-strong">{item.result_label}</span>
                 ) : null}
               </div>
               <p className="mt-1 text-xs text-muted">

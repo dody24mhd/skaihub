@@ -81,7 +81,7 @@ export function buildScheduleColumns({
         <span
           className={`inline-flex rounded-sm px-2 py-0.5 text-xs font-bold ${
             row.is_active
-              ? "bg-success/10 text-success border border-success/30"
+              ? "bg-success/10 text-success-strong border border-success/30"
               : "bg-surface-container text-muted"
           }`}
         >

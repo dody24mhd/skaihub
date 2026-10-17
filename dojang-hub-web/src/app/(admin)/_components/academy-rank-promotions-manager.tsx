@@ -14,6 +14,7 @@ import {
 } from "./evaluation/use-rank-promotions";
 import { shortDate } from "./evaluation/evaluation-types";
 import { ResponsiveColumn, ResponsiveList } from "./ui";
+import StatusMessage from "./ui/status-message";
 
 export default function AcademyRankPromotionsManager() {
   const {
@@ -93,7 +94,7 @@ export default function AcademyRankPromotionsManager() {
         <span
           className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-bold ${
             item.result === "passed"
-              ? "bg-success/10 text-success"
+              ? "bg-success/10 text-success-strong"
               : "bg-secondary/10 text-secondary"
           }`}
         >
@@ -166,7 +167,7 @@ export default function AcademyRankPromotionsManager() {
         </article>
         <article className="card-soft rounded-lg bg-white p-5">
           <p className="label-caps text-secondary">Lulus</p>
-          <p className="mt-2 text-2xl font-black text-success">
+          <p className="mt-2 text-2xl font-black text-success-strong">
             {participants.filter((item) => item.result === "passed").length}
           </p>
           <p className="text-sm text-muted">Otomatis update tingkatan</p>
@@ -249,16 +250,8 @@ export default function AcademyRankPromotionsManager() {
               </div>
             ) : null}
 
-            {message ? (
-              <p className="mt-4 rounded-md border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">
-                {message}
-              </p>
-            ) : null}
-            {error ? (
-              <p className="mt-4 rounded-md border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">
-                {error}
-              </p>
-            ) : null}
+            <StatusMessage tone="success" message={message} className="mt-4" />
+            <StatusMessage tone="error" message={error} className="mt-4" />
 
             <div className="mt-5">
               <ResponsiveList

@@ -190,6 +190,48 @@ describe("AcademyPublicProfileManager", () => {
     expect(screen.getByText("Juara Umum Kejurda 2025")).toBeInTheDocument();
   });
 
+  it("memakai semantik tablist/tab/tabpanel dan navigasi panah", async () => {
+    render(<AcademyPublicProfileManager />);
+
+    const tablist = await screen.findByRole("tablist", { name: "Bagian halaman publik" });
+    const profilTab = screen.getByRole("tab", { name: "Info & Publish" });
+    expect(profilTab).toHaveAttribute("aria-selected", "true");
+    expect(profilTab).toHaveAttribute("tabindex", "0");
+    expect(screen.getByRole("tab", { name: "Tampilan" })).toHaveAttribute("aria-selected", "false");
+    expect(screen.getByRole("tabpanel")).toHaveAttribute("aria-labelledby", profilTab.id);
+
+    fireEvent.keyDown(tablist, { key: "ArrowRight" });
+
+    const tampilanTab = screen.getByRole("tab", { name: "Tampilan" });
+    expect(tampilanTab).toHaveAttribute("aria-selected", "true");
+    expect(tampilanTab).toHaveFocus();
+    expect(screen.getByText("Palet Warna")).toBeInTheDocument();
+
+    fireEvent.keyDown(tablist, { key: "End" });
+    expect(screen.getByRole("tab", { name: "Prestasi" })).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("toggle publish dan pelatih publik memakai role switch dengan aria-checked", async () => {
+    render(<AcademyPublicProfileManager />);
+
+    const publishSwitch = await screen.findByRole("switch", { name: "Publikasikan halaman publik" });
+    expect(publishSwitch).toHaveAttribute("aria-checked", String(mockProfile.is_published));
+
+    fireEvent.click(screen.getByRole("tab", { name: "Pelatih" }));
+
+    const coachSwitch = screen.getByRole("switch", { name: `Tampilkan ${mockCoaches[0].name} di website` });
+    expect(coachSwitch).toHaveAttribute("aria-checked", String(mockCoaches[0].show_on_public));
+  });
+
+  it("memberi nama unik pada tombol hapus gambar hero dan foto galeri", async () => {
+    render(<AcademyPublicProfileManager />);
+
+    fireEvent.click(await screen.findByRole("tab", { name: "Hero & Galeri" }));
+
+    expect(screen.getByRole("button", { name: "Hapus gambar hero 1 (Latihan Poomsae)" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Hapus foto galeri 1 (Ujian Kenaikan Tingkat)" })).toBeInTheDocument();
+  });
+
   it("dapat membuka modal atur posisi hero dan modal tambah galeri", async () => {
     render(<AcademyPublicProfileManager />);
 

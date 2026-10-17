@@ -15,11 +15,11 @@ import {
 import { SPP_MONTH_LABELS } from "./spp-summary";
 
 const controlClass =
-  "min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 sm:text-sm";
+  "min-h-11 w-full border border-border-strong bg-white px-3.5 py-2.5 text-base text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary sm:text-sm";
 
 function GenerateResult({ summary, onClose }: { summary: SppGenerateSummary; onClose: () => void }) {
   const rows = [
-    { label: "Dibuat", value: summary.created, tone: "text-success" },
+    { label: "Dibuat", value: summary.created, tone: "text-success-strong" },
     { label: "Dilewati karena sudah ada", value: summary.alreadyExists, tone: "text-primary" },
     { label: "Dilewati karena nominal kosong", value: summary.missingAmount, tone: "text-secondary" },
   ];

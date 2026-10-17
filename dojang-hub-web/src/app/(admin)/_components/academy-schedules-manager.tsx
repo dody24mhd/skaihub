@@ -18,6 +18,7 @@ import {
 import ScheduleFormModal, { ScheduleFormData } from "./attendance/schedule-form-modal";
 import { buildScheduleColumns, dayLabels, shortTime } from "./attendance/schedule-columns";
 import { PageHeader, ResponsiveList } from "./ui";
+import StatusMessage from "./ui/status-message";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -254,27 +255,19 @@ export default function AcademySchedulesManager() {
           }
         />
 
-        {message ? (
-          <p className="mb-4 border-2 border-success/30 bg-success/10 p-3 text-sm font-bold text-success">
-            {message}
-          </p>
-        ) : null}
-        {error ? (
-          <p className="mb-4 border-2 border-secondary/30 bg-secondary/10 p-3 text-sm font-bold text-secondary">
-            {error}
-          </p>
-        ) : null}
+        <StatusMessage tone="success" message={message} className="mb-4" />
+        <StatusMessage tone="error" message={error} className="mb-4" />
 
         {/* Filter Bar */}
         <div className="mb-5 grid gap-2.5 sm:grid-cols-3">
           <input
-            className="min-h-11 w-full border border-border bg-white px-3.5 text-sm text-primary placeholder:text-muted/60 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border-strong bg-white px-3.5 text-sm text-primary placeholder:text-muted/80 focus:outline-hidden focus:ring-2 focus:ring-primary"
             placeholder="Cari jadwal"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
           <select
-            className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             value={dayFilter}
             onChange={(e) => setDayFilter(e.target.value)}
           >
@@ -286,7 +279,7 @@ export default function AcademySchedulesManager() {
             ))}
           </select>
           <select
-            className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             value={classFilter}
             onChange={(e) => setClassFilter(e.target.value)}
           >

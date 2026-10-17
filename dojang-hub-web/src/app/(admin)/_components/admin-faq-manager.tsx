@@ -9,6 +9,7 @@ import {
   updateAdminFaq,
   deleteAdminFaq,
 } from "../_lib/admin-api";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -165,13 +166,11 @@ export default function AdminFaqManager() {
 
             <div className="flex flex-col gap-3 sm:flex-row">
               <div className="relative">
-                <span className="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-muted">
-                  search
-                </span>
+                <Icon name="search" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-muted" />
                 <input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  className="h-10 w-full rounded-md border border-border bg-white pl-10 pr-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 sm:w-64"
+                  className="h-10 w-full rounded-md border border-border-strong bg-white pl-10 pr-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary sm:w-64"
                   placeholder="Cari FAQ..."
                 />
               </div>
@@ -181,7 +180,7 @@ export default function AdminFaqManager() {
                 onChange={(event) =>
                   setStatusFilter(event.target.value as "all" | "active" | "inactive")
                 }
-                className="h-10 rounded-md border border-border bg-white px-3 text-sm font-semibold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-10 rounded-md border border-border-strong bg-white px-3 text-sm font-semibold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary"
               >
                 <option value="all">Semua</option>
                 <option value="active">Ditampilkan</option>
@@ -193,7 +192,7 @@ export default function AdminFaqManager() {
                 onClick={refreshData}
                 className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-semibold text-primary transition hover:bg-surface-container-low"
               >
-                <span className="material-symbols-outlined text-[20px]">refresh</span>
+                <Icon name="refresh" className="text-[20px]" />
                 Refresh
               </button>
 
@@ -202,7 +201,7 @@ export default function AdminFaqManager() {
                 onClick={() => openForm()}
                 className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-white transition hover:bg-primary-container"
               >
-                <span className="material-symbols-outlined text-[20px]">add</span>
+                <Icon name="add" className="text-[20px]" />
                 Tambah FAQ
               </button>
             </div>
@@ -219,7 +218,7 @@ export default function AdminFaqManager() {
                   
                   <div>
                     <div className="mb-2 flex flex-wrap items-center gap-2">
-                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${item.is_active ? 'bg-success/10 text-success' : 'bg-surface-container text-muted'}`}>
+                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${item.is_active ? 'bg-success/10 text-success-strong' : 'bg-surface-container text-muted'}`}>
                         {item.is_active ? 'Ditampilkan' : 'Disembunyikan'}
                       </span>
                     </div>
@@ -240,18 +239,18 @@ export default function AdminFaqManager() {
                     <button
                       type="button"
                       onClick={() => openForm(item)}
-                      className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-primary/10 hover:text-primary"
+                      className="inline-flex size-11 items-center justify-center rounded-md text-muted transition hover:bg-primary/10 hover:text-primary"
                       aria-label={`Edit`}
                     >
-                      <span className="material-symbols-outlined text-[20px]">edit</span>
+                      <Icon name="edit" className="text-[20px]" />
                     </button>
                     <button
                       type="button"
                       onClick={() => setDeleteTarget(item)}
-                      className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-secondary/10 hover:text-secondary"
+                      className="inline-flex size-11 items-center justify-center rounded-md text-muted transition hover:bg-secondary/10 hover:text-secondary"
                       aria-label={`Hapus`}
                     >
-                      <span className="material-symbols-outlined text-[20px]">delete</span>
+                      <Icon name="delete" className="text-[20px]" />
                     </button>
                   </div>
                 </div>
@@ -261,7 +260,7 @@ export default function AdminFaqManager() {
             <div className="p-8">
               <div className="flex max-w-xl gap-4">
                 <div className="flex size-12 shrink-0 items-center justify-center rounded-md bg-primary text-white">
-                  <span className="material-symbols-outlined text-[26px]">help</span>
+                  <Icon name="help" className="text-[26px]" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-primary">Belum ada FAQ</h3>
@@ -273,7 +272,7 @@ export default function AdminFaqManager() {
                     onClick={() => setIsDrawerOpen(true)}
                     className="mt-4 inline-flex h-10 items-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-white transition hover:bg-primary-container"
                   >
-                    <span className="material-symbols-outlined text-[20px]">add</span>
+                    <Icon name="add" className="text-[20px]" />
                     Tambah FAQ
                   </button>
                 </div>
@@ -300,15 +299,15 @@ export default function AdminFaqManager() {
               <button
                 type="button"
                 onClick={() => setIsDrawerOpen(false)}
-                className="inline-flex size-10 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
+                className="inline-flex size-11 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
                 aria-label="Tutup"
               >
-                <span className="material-symbols-outlined text-[20px]">close</span>
+                <Icon name="close" className="text-[20px]" />
               </button>
             </div>
 
             {message ? (
-              <div className="mx-5 mt-5 rounded-md bg-success/10 px-4 py-3 text-sm font-semibold text-success">
+              <div className="mx-5 mt-5 rounded-md bg-success/10 px-4 py-3 text-sm font-semibold text-success-strong">
                 {message}
               </div>
             ) : null}
@@ -322,14 +321,14 @@ export default function AdminFaqManager() {
               <input
                 value={form.question}
                 onChange={(event) => setForm({ ...form, question: event.target.value })}
-                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 placeholder="Pertanyaan (Q)"
               />
               
               <textarea
                 value={form.answer}
                 onChange={(event) => setForm({ ...form, answer: event.target.value })}
-                className="min-h-32 w-full rounded-md border border-border px-3 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="min-h-32 w-full rounded-md border border-border-strong px-3 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 placeholder="Jawaban (A)"
               />
               
@@ -338,7 +337,7 @@ export default function AdminFaqManager() {
                   type="number"
                   value={form.sort_order}
                   onChange={(event) => setForm({ ...form, sort_order: parseInt(event.target.value) || 0 })}
-                  className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                  className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   placeholder="Urutan Tampil (contoh: 1)"
                 />
                 <label className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-3 text-sm font-semibold text-primary">
@@ -356,7 +355,7 @@ export default function AdminFaqManager() {
                 disabled={!canSubmit || isSaving}
                 className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-white transition hover:bg-primary-container disabled:cursor-not-allowed disabled:bg-muted"
               >
-                <span className="material-symbols-outlined text-[20px]">save</span>
+                <Icon name="save" className="text-[20px]" />
                 {isSaving ? "Menyimpan..." : "Simpan FAQ"}
               </button>
             </form>
@@ -368,7 +367,7 @@ export default function AdminFaqManager() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-primary/35 px-5 backdrop-blur-sm">
           <section className="card-soft w-full max-w-[420px] rounded-lg bg-white p-5">
             <div className="mb-4 flex size-12 items-center justify-center rounded-md bg-secondary/10 text-secondary">
-              <span className="material-symbols-outlined text-[26px]">warning</span>
+              <Icon name="warning" className="text-[26px]" />
             </div>
             <h2 className="text-xl font-bold text-primary">Hapus FAQ?</h2>
             <p className="mt-2 text-sm leading-6 text-muted">

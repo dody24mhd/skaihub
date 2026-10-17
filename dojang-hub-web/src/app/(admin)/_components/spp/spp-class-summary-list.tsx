@@ -39,7 +39,7 @@ export default function SppClassSummaryList({
             </div>
             <div className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-4 lg:min-w-[560px]">
               <Stat label="Tertagih" value={`${classBills.length} siswa`} />
-              <Stat label="Lunas" value={totals.paidCount} tone="text-success" />
+              <Stat label="Lunas" value={totals.paidCount} tone="text-success-strong" />
               <Stat label="Sebagian" value={totals.partialCount} />
               <Stat label="Tindak lanjut" value={totals.unpaidCount} tone="text-secondary" extra={totals.waivedCount ? `${totals.waivedCount} bebas` : undefined} />
             </div>

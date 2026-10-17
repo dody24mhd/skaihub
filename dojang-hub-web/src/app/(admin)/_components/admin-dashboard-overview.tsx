@@ -13,6 +13,7 @@ import {
 } from "../_lib/admin-api";
 import { PLAN_RULES } from "@/lib/plan-pricing";
 import OperatorDashboardPanel from "./operator-dashboard-panel";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -41,7 +42,7 @@ function statusLabel(status: AdminAkademi["status"]) {
 }
 
 function statusClass(status: AdminAkademi["status"]) {
-  if (status === "active") return "bg-success/10 text-success";
+  if (status === "active") return "bg-success/10 text-success-strong";
   if (status === "suspended") return "bg-secondary/10 text-secondary";
   return "bg-surface-container text-muted";
 }
@@ -132,7 +133,7 @@ export default function AdminDashboardOverview() {
       value: String(expiringSoonCount + unpaidCount),
       subtext: `${expiringSoonCount} expired - ${unpaidCount} belum lunas`,
       icon: "warning",
-      color: expiringSoonCount + unpaidCount > 0 ? "text-secondary" : "text-success",
+      color: expiringSoonCount + unpaidCount > 0 ? "text-secondary" : "text-success-strong",
       bg: expiringSoonCount + unpaidCount > 0 ? "bg-secondary/10" : "bg-success/10",
       trend: "Alert",
       trendUp: expiringSoonCount + unpaidCount === 0,
@@ -148,7 +149,7 @@ export default function AdminDashboardOverview() {
         {stats.map((s) => (
           <article key={s.label} className="card-soft flex items-center gap-4 rounded-lg bg-white p-5">
             <div className={`flex size-12 items-center justify-center rounded-md ${s.bg} ${s.color}`}>
-              <span className="material-symbols-outlined text-[24px]">{s.icon}</span>
+              <Icon name={s.icon} className="text-[24px]" />
             </div>
             <div className="flex-1">
               <p className="text-xs font-bold uppercase tracking-widest text-muted">{s.label}</p>
@@ -156,8 +157,8 @@ export default function AdminDashboardOverview() {
                 <p className={`font-heading text-2xl font-black ${s.color}`}>
                   {s.value}
                 </p>
-                <div className={`flex items-center text-[10px] font-bold ${s.trendUp ? "text-success" : "text-secondary"}`}>
-                  <span className="material-symbols-outlined text-[12px]">{s.trendUp ? "trending_up" : "trending_down"}</span>
+                <div className={`flex items-center text-[10px] font-bold ${s.trendUp ? "text-success-strong" : "text-secondary"}`}>
+                  <Icon name={s.trendUp ? "trending_up" : "trending_down"} className="text-[12px]" />
                   <span className="ml-0.5">{s.trend}</span>
                 </div>
               </div>
@@ -173,7 +174,7 @@ export default function AdminDashboardOverview() {
           {expiringSoonCount > 0 && (
             <section className="rounded-lg border border-warning/30 bg-warning/5 p-5">
               <div className="mb-3 flex items-center gap-2">
-                <span className="material-symbols-outlined text-[20px] text-warning">schedule</span>
+                <Icon name="schedule" className="text-[20px] text-warning" />
                 <h2 className="font-heading text-sm font-bold text-warning">
                   Akan Expired ({expiringSoonCount})
                 </h2>
@@ -216,7 +217,7 @@ export default function AdminDashboardOverview() {
           {unpaidCount > 0 && (
             <section className="rounded-lg border border-secondary/30 bg-secondary/5 p-5">
               <div className="mb-3 flex items-center gap-2">
-                <span className="material-symbols-outlined text-[20px] text-secondary">payments</span>
+                <Icon name="payments" className="text-[20px] text-secondary" />
                 <h2 className="font-heading text-sm font-bold text-secondary">
                   Belum Lunas ({unpaidCount})
                 </h2>
@@ -351,7 +352,7 @@ export default function AdminDashboardOverview() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Link href="/internal/akademi" className="card-soft flex items-start gap-4 rounded-lg bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-[0_12px_26px_rgba(15,23,42,0.08)]">
             <div className="flex size-10 shrink-0 items-center justify-center rounded bg-primary/10 text-primary">
-              <span className="material-symbols-outlined">domain</span>
+              <Icon name="domain" />
             </div>
             <div>
               <h3 className="font-bold text-primary">Akademi</h3>
@@ -361,7 +362,7 @@ export default function AdminDashboardOverview() {
 
           <Link href="/internal/subscription" className="card-soft flex items-start gap-4 rounded-lg bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-[0_12px_26px_rgba(15,23,42,0.08)]">
             <div className="relative flex size-10 shrink-0 items-center justify-center rounded bg-secondary/10 text-secondary">
-              <span className="material-symbols-outlined">payments</span>
+              <Icon name="payments" />
               {unpaidCount > 0 && (
                 <span className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-secondary text-[9px] font-black text-white">
                   {unpaidCount}
@@ -382,8 +383,8 @@ export default function AdminDashboardOverview() {
           </Link>
 
           <Link href="/internal/users" className="card-soft flex items-start gap-4 rounded-lg bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-[0_12px_26px_rgba(15,23,42,0.08)]">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded bg-success/10 text-success">
-              <span className="material-symbols-outlined">manage_accounts</span>
+            <div className="flex size-10 shrink-0 items-center justify-center rounded bg-success/10 text-success-strong">
+              <Icon name="manage_accounts" />
             </div>
             <div>
               <div className="flex items-center gap-2">

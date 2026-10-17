@@ -74,7 +74,7 @@ export default function AchievementFormModal({
         <FormField id="achievement-notes" label="Catatan">
           <textarea
             id="achievement-notes"
-            className="min-h-20 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 sm:text-sm"
+            className="min-h-20 w-full border border-border-strong bg-white px-3.5 py-2.5 text-base text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary sm:text-sm"
             value={form.notes}
             onChange={(event) => setField("notes", event.target.value)}
           />

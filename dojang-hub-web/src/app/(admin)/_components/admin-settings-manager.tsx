@@ -6,6 +6,7 @@ import {
   getAdminSettings,
   upsertAdminSetting,
 } from "../_lib/admin-api";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -92,7 +93,7 @@ export default function AdminSettingsManager() {
   return (
     <div className="space-y-6">
       {message ? (
-        <div className="rounded-md bg-success/10 px-4 py-3 text-sm font-semibold text-success">
+        <div className="rounded-md bg-success/10 px-4 py-3 text-sm font-semibold text-success-strong">
           {message}
         </div>
       ) : null}
@@ -120,7 +121,7 @@ export default function AdminSettingsManager() {
                 <div key={item.key} className="p-5">
                   <div className="flex items-start gap-4">
                     <div className="flex size-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
-                      <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
+                      <Icon name={item.icon} className="text-[20px]" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-4">
@@ -134,7 +135,7 @@ export default function AdminSettingsManager() {
                             onClick={() => startEdit(item.key)}
                             className="inline-flex h-9 shrink-0 items-center gap-2 rounded-md border border-border px-3 text-sm font-semibold text-primary transition hover:bg-surface-container-low"
                           >
-                            <span className="material-symbols-outlined text-[18px]">edit</span>
+                            <Icon name="edit" className="text-[18px]" />
                             {currentValue ? "Edit" : "Isi"}
                           </button>
                         )}
@@ -150,7 +151,7 @@ export default function AdminSettingsManager() {
                               if (e.key === "Enter") handleSave();
                               if (e.key === "Escape") setEditing(null);
                             }}
-                            className="h-10 flex-1 rounded-md border border-primary px-3 text-sm outline-none ring-2 ring-primary/10"
+                            className="h-10 flex-1 rounded-md border border-primary px-3 text-sm outline-none focus:ring-2 focus:ring-primary"
                             placeholder={`Masukkan ${item.label.toLowerCase()}`}
                           />
                           <button

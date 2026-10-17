@@ -8,6 +8,7 @@ import {
   updateAkademiPublicAchievement,
 } from "../../../_lib/admin-api";
 import { FormField } from "../../ui";
+import Icon from "../../ui/icon";
 
 type ProfileAchievementsSectionProps = {
   achievements: PublicAchievement[];
@@ -111,7 +112,7 @@ export default function ProfileAchievementsSection({
               value={newDescription}
               onChange={(e) => setNewDescription(e.target.value)}
               placeholder="Rincian perolehan medali, kategori, atau nama atlet..."
-              className="w-full border border-border bg-white p-3.5 text-base text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:text-sm"
+              className="w-full border border-border-strong bg-white p-3.5 text-base text-primary placeholder:text-muted/80 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
             />
           </div>
 
@@ -128,9 +129,9 @@ export default function ProfileAchievementsSection({
             <button
               type="submit"
               disabled={saving || !newTitle.trim()}
-              className="inline-flex min-h-11 items-center justify-center gap-2 bg-secondary px-6 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-secondary-dark disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-secondary/50"
+              className="inline-flex min-h-11 items-center justify-center gap-2 bg-secondary px-6 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-secondary-dark disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-secondary"
             >
-              <span className="material-symbols-outlined text-[20px]">add</span>
+              <Icon name="add" className="text-[20px]" />
               Tambah Prestasi
             </button>
           </div>
@@ -228,14 +229,14 @@ export default function ProfileAchievementsSection({
                       <button
                         type="button"
                         onClick={() => setEditingAchievement(item)}
-                        className="inline-flex min-h-11 items-center justify-center border border-border px-3.5 py-1.5 text-xs font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+                        className="inline-flex min-h-11 items-center justify-center border border-border px-3.5 py-1.5 text-xs font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary"
                       >
                         Edit
                       </button>
                       <button
                         type="button"
                         onClick={() => handleDelete(item)}
-                        className="inline-flex min-h-11 items-center justify-center border border-secondary/30 px-3.5 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary/10 focus:outline-hidden focus:ring-2 focus:ring-secondary/20"
+                        className="inline-flex min-h-11 items-center justify-center border border-secondary/30 px-3.5 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary/10 focus:outline-hidden focus:ring-2 focus:ring-secondary"
                       >
                         Hapus
                       </button>

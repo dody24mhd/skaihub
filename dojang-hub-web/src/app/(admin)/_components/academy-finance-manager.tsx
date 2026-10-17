@@ -10,6 +10,7 @@ import {
   getAkademiSppBills,
 } from "../_lib/admin-api";
 import { FinanceBillList, FinanceSummaryCards, monthLabels } from "./finance/finance-bill-list";
+import StatusMessage from "./ui/status-message";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -192,16 +193,8 @@ export default function AcademyFinanceManager() {
           </div>
         </div>
 
-        {message ? (
-          <p className="mt-4 rounded-md border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">
-            {message}
-          </p>
-        ) : null}
-        {error ? (
-          <p className="mt-4 rounded-md border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">
-            {error}
-          </p>
-        ) : null}
+        <StatusMessage tone="success" message={message} className="mt-4" />
+        <StatusMessage tone="error" message={error} className="mt-4" />
 
         <div className="mt-5">
           <FinanceBillList rows={visibleItems} />

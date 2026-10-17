@@ -17,7 +17,9 @@
   --secondary-foreground: #ffffff;
   --muted: #44474e;
   --border: #e2e8f0;
+  --border-strong: #828c9e;
   --success: #10b981;
+  --success-strong: #047857;
   --caution: #ea580c;
   --belt-blue: #2563eb;
   --belt-yellow: #facc15;
@@ -41,7 +43,9 @@
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
   --color-success: var(--success);
+  --color-success-strong: var(--success-strong);
   --color-caution: var(--caution);
   --color-belt-blue: var(--belt-blue);
   --color-belt-yellow: var(--belt-yellow);
@@ -104,6 +108,21 @@
 
   .label-caps {
     @apply text-xs font-semibold uppercase tracking-[0.05em];
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

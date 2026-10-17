@@ -2,6 +2,7 @@
 
 import { TodaySlot } from "../../_lib/admin-api";
 import { SLOT_STATUS_LABELS, SLOT_STATUS_STYLES, canOpenSlot } from "./today-utils";
+import Icon from "../ui/icon";
 
 const SESSION_TYPE_LABELS: Record<TodaySlot["session_type"], string> = {
   regular: "Reguler",
@@ -71,9 +72,9 @@ export default function TodaySlotCard({ slot, isBusy, onOpen, onMenu, canWrite =
               type="button"
               onClick={() => onMenu(slot)}
               aria-label={`Aksi sesi ${slot.class_name || "kelas"} ${slot.starts_at}`}
-              className="inline-flex size-11 items-center justify-center border border-border bg-white text-primary transition hover:bg-surface-container-low focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="inline-flex size-11 items-center justify-center border border-border bg-white text-primary transition hover:bg-surface-container-low focus:outline-hidden focus:ring-2 focus:ring-primary"
             >
-              <span className="material-symbols-outlined text-[20px]">more_horiz</span>
+              <Icon name="more_horiz" className="text-[20px]" />
             </button>
           ) : null}
         </div>

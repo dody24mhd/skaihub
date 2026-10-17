@@ -66,7 +66,7 @@ export default function AttendanceSessionCreate({
             value={activeDate}
             disabled={!canPickAnyDate}
             onChange={(e) => onDateChange(e.target.value)}
-            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary transition focus:outline-hidden focus:ring-2 focus:ring-primary/20 disabled:bg-surface-container sm:text-sm"
+            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary transition focus:outline-hidden focus:ring-2 focus:ring-primary disabled:bg-surface-container sm:text-sm"
           />
         </FormField>
 
@@ -79,7 +79,7 @@ export default function AttendanceSessionCreate({
                 e.target.value as TrainingSession["session_type"]
               )
             }
-            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary transition focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:text-sm"
+            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary transition focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
           >
             <option value="regular">Reguler</option>
             <option value="replacement">Pengganti</option>
@@ -92,7 +92,7 @@ export default function AttendanceSessionCreate({
             id="session-class"
             value={classId}
             onChange={(e) => onClassChange(e.target.value)}
-            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary transition focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:text-sm"
+            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary transition focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
           >
             <option value="">Pilih kelas</option>
             {classes.map((item) => (
@@ -109,7 +109,7 @@ export default function AttendanceSessionCreate({
             type="time"
             value={startsAt}
             onChange={(e) => onStartsAtChange(e.target.value)}
-            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary transition focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:text-sm"
+            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary transition focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
           />
         </FormField>
 
@@ -119,7 +119,7 @@ export default function AttendanceSessionCreate({
             type="time"
             value={endsAt}
             onChange={(e) => onEndsAtChange(e.target.value)}
-            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary transition focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:text-sm"
+            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary transition focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
           />
         </FormField>
       </div>

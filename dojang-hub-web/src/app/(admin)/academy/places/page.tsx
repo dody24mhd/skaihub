@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function AcademyPlacesPage() {
   return (
-    <AcademyShell title="Tempat Latihan" description="Kelola lokasi latihan yang dipakai oleh kelas atau unit akademi.">
+    <AcademyShell hasPageHeader title="Tempat Latihan" description="Kelola lokasi latihan yang dipakai oleh kelas atau unit akademi.">
       <AcademyPlacesManager />
     </AcademyShell>
   );

@@ -12,6 +12,8 @@ import {
   updateAkademiClass,
 } from "../_lib/admin-api";
 import { FormField, PageHeader, ResponsiveColumn, ResponsiveList, SheetModal } from "./ui";
+import Icon from "./ui/icon";
+import StatusMessage from "./ui/status-message";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -203,7 +205,7 @@ export default function AcademyClassesManager() {
       render: (item) => (
         <span
           className={`inline-flex items-center px-2 py-0.5 text-xs font-bold ${
-            item.is_active ? "bg-success/10 text-success" : "bg-surface-container text-muted"
+            item.is_active ? "bg-success/10 text-success-strong" : "bg-surface-container text-muted"
           }`}
         >
           {item.is_active ? "Aktif" : "Nonaktif"}
@@ -222,14 +224,14 @@ export default function AcademyClassesManager() {
                 <button
                   type="button"
                   onClick={() => startEdit(item)}
-                  className="inline-flex min-h-11 items-center justify-center border border-border px-3 py-1.5 text-xs font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+                  className="inline-flex min-h-11 items-center justify-center border border-border px-3 py-1.5 text-xs font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary"
                 >
                   Edit
                 </button>
                 <button
                   type="button"
                   onClick={() => handleDelete(item)}
-                  className="inline-flex min-h-11 items-center justify-center border border-secondary/30 px-3 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary/10 focus:outline-hidden focus:ring-2 focus:ring-secondary/20"
+                  className="inline-flex min-h-11 items-center justify-center border border-secondary/30 px-3 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary/10 focus:outline-hidden focus:ring-2 focus:ring-secondary"
                 >
                   Hapus
                 </button>
@@ -253,25 +255,17 @@ export default function AcademyClassesManager() {
             <button
               type="button"
               onClick={openCreateModal}
-              className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white shadow-xs transition hover:bg-secondary-dark focus:outline-hidden focus:ring-2 focus:ring-secondary/50 sm:w-auto"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white shadow-xs transition hover:bg-secondary-dark focus:outline-hidden focus:ring-2 focus:ring-secondary sm:w-auto"
             >
-              <span className="material-symbols-outlined text-[20px]">add</span>
+              <Icon name="add" className="text-[20px]" />
               Tambah Kelas
             </button>
           ) : undefined
         }
       />
 
-      {message ? (
-        <p className="border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">
-          {message}
-        </p>
-      ) : null}
-      {error ? (
-        <p className="border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">
-          {error}
-        </p>
-      ) : null}
+      <StatusMessage tone="success" message={message} />
+      <StatusMessage tone="error" message={error} />
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="w-full sm:max-w-xs">
@@ -280,7 +274,7 @@ export default function AcademyClassesManager() {
           </label>
           <input
             id="classes-search"
-            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-sm text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border-strong bg-white px-3.5 py-2.5 text-sm text-primary placeholder:text-muted/80 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             placeholder="Cari kelas atau tempat..."
             value={query}
             onChange={(event) => setQuery(event.target.value)}
@@ -322,7 +316,7 @@ export default function AcademyClassesManager() {
             </label>
             <select
               id="class-place"
-              className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:text-sm"
+              className="min-h-11 w-full border border-border-strong bg-white px-3.5 py-2.5 text-base text-primary transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
               value={form.training_place_id}
               onChange={(event) => setForm((current) => ({ ...current, training_place_id: event.target.value }))}
             >
@@ -363,7 +357,7 @@ export default function AcademyClassesManager() {
           <label className="flex items-center gap-3 text-sm font-semibold text-primary">
             <input
               type="checkbox"
-              className="size-4 rounded-xs border-border text-primary focus:ring-2 focus:ring-primary/20"
+              className="size-4 rounded-xs border-border text-primary focus:ring-2 focus:ring-primary"
               checked={form.is_active}
               onChange={(event) => setForm((current) => ({ ...current, is_active: event.target.checked }))}
             />
@@ -373,7 +367,7 @@ export default function AcademyClassesManager() {
           <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
             <button
               type="button"
-              className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary"
               onClick={resetForm}
               disabled={isSaving}
             >
@@ -381,7 +375,7 @@ export default function AcademyClassesManager() {
             </button>
             <button
               type="submit"
-              className="inline-flex min-h-11 items-center justify-center bg-primary px-6 text-sm font-bold text-white transition hover:bg-primary-container disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="inline-flex min-h-11 items-center justify-center bg-primary px-6 text-sm font-bold text-white transition hover:bg-primary-container disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-primary"
               disabled={isSaving}
             >
               {isSaving ? "Menyimpan..." : "Simpan"}

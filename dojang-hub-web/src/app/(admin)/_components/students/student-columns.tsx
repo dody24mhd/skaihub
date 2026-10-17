@@ -4,6 +4,7 @@ import AcademyRankBeltBadge from "../academy-rank-belt-badge";
 import { ResponsiveColumn } from "../ui";
 import { physicalSummary } from "./format";
 import { studentStatusLabels, studentStatusStyles } from "./student-status";
+import Icon from "../ui/icon";
 
 const actionClass =
   "inline-flex min-h-11 items-center justify-center border border-border bg-white px-3 text-xs font-bold text-primary transition hover:border-primary hover:bg-surface-container-low";
@@ -26,7 +27,7 @@ export function buildStudentColumns({
           <img src={item.photo_url} alt="" className="size-10 object-cover" />
         ) : (
           <div className="flex size-10 items-center justify-center bg-primary/10 text-primary">
-            <span className="material-symbols-outlined text-[20px]">person</span>
+            <Icon name="person" className="text-[20px]" />
           </div>
         ),
     },

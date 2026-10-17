@@ -126,7 +126,7 @@ function UserFormContent({
         {canManagePengurus && form.role !== "ketua_akademi" ? (
           <select
             id="user-role"
-            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:text-sm"
+            className="min-h-11 w-full border border-border-strong bg-white px-3.5 py-2.5 text-base text-primary transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
             value={form.role}
             onChange={(event) => {
               const nextRole = event.target.value as UserFormData["role"];
@@ -150,7 +150,7 @@ function UserFormContent({
       {form.role !== "pelatih" ? (
         <label className="flex items-start gap-3 border border-border bg-surface-container-low p-3 text-sm font-semibold text-primary">
           <input
-            className="mt-1 size-4 rounded-xs border-border text-primary focus:ring-2 focus:ring-primary/20"
+            className="mt-1 size-4 rounded-xs border-border text-primary focus:ring-2 focus:ring-primary"
             type="checkbox"
             checked={form.is_coach}
             onChange={(event) =>
@@ -169,7 +169,7 @@ function UserFormContent({
       <label className="flex items-center gap-3 text-sm font-semibold text-primary">
         <input
           type="checkbox"
-          className="size-4 rounded-xs border-border text-primary focus:ring-2 focus:ring-primary/20"
+          className="size-4 rounded-xs border-border text-primary focus:ring-2 focus:ring-primary"
           checked={form.is_active}
           disabled={editing?.id === currentUserId}
           onChange={(event) =>
@@ -187,7 +187,7 @@ function UserFormContent({
       <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         <button
           type="button"
-          className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+          className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary"
           onClick={onClose}
           disabled={isSaving}
         >
@@ -195,7 +195,7 @@ function UserFormContent({
         </button>
         <button
           type="submit"
-          className="inline-flex min-h-11 items-center justify-center bg-primary px-6 text-sm font-bold text-white transition hover:bg-primary-container disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+          className="inline-flex min-h-11 items-center justify-center bg-primary px-6 text-sm font-bold text-white transition hover:bg-primary-container disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-primary"
           disabled={isSaving}
         >
           {isSaving ? "Menyimpan..." : "Simpan"}

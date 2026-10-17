@@ -10,6 +10,7 @@ import {
 } from "./ui/academy-nav";
 import BottomNav from "./ui/bottom-nav";
 import SubscriptionBanner from "./ui/subscription-banner";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 const EMAIL_KEY = "skaihub_admin_email";
@@ -19,10 +20,13 @@ const ROLE_KEY = "skaihub_admin_role";
 type AcademyShellProps = {
   title: string;
   description?: string;
+  /** Halaman merender PageHeader (h1) sendiri; judul shell menjadi teks biasa. */
+  hasPageHeader?: boolean;
   children: ReactNode;
 };
 
-export default function AcademyShell({ title, description, children }: AcademyShellProps) {
+export default function AcademyShell({ title, description, hasPageHeader = false, children }: AcademyShellProps) {
+  const TitleTag = hasPageHeader ? "p" : "h1";
   const pathname = usePathname();
   const router = useRouter();
   const [role, setRole] = useState<AdminUser["role"] | "">("");
@@ -72,13 +76,19 @@ export default function AcademyShell({ title, description, children }: AcademySh
   }
 
   return (
-    <main className="min-h-screen bg-surface text-primary lg:grid lg:grid-cols-[260px_1fr]">
+    <div data-testid="app-shell" className="min-h-screen bg-surface text-primary lg:grid lg:grid-cols-[260px_1fr]">
+      <a
+        href="#konten"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-white focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-primary focus:ring-2 focus:ring-primary"
+      >
+        Lewati ke konten
+      </a>
       {/* Sidebar untuk Layar Besar (lg+) */}
       <aside className="hidden border-r border-border bg-primary text-white lg:flex lg:min-h-screen lg:flex-col">
         <div className="border-b border-white/10 p-5">
           <Link href="/academy" className="flex items-center gap-3">
             <div className="flex size-11 items-center justify-center rounded-md bg-white text-primary">
-              <span className="material-symbols-outlined text-[26px]">sports_martial_arts</span>
+              <Icon name="sports_martial_arts" className="text-[26px]" />
             </div>
             <div>
               <p className="text-sm font-semibold text-white/65">SKAIHUB</p>
@@ -90,7 +100,7 @@ export default function AcademyShell({ title, description, children }: AcademySh
         <nav className="flex-1 space-y-6 p-4">
           {visibleNavSections.map((section) => (
             <div key={section.title} className="space-y-1">
-              <p className="px-3 pb-2 text-[11px] font-bold uppercase tracking-wide text-white/45">{section.title}</p>
+              <p className="px-3 pb-2 text-[11px] font-bold uppercase tracking-wide text-white/65">{section.title}</p>
               {section.items.map((item) => {
                 const isActive = pathname === item.href;
 
@@ -98,11 +108,12 @@ export default function AcademyShell({ title, description, children }: AcademySh
                   <Link
                     key={item.title}
                     href={item.href}
+                    aria-current={isActive ? "page" : undefined}
                     className={`flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold transition ${
                       isActive ? "bg-white text-primary" : "text-white/72 hover:bg-white/10 hover:text-white"
                     }`}
                   >
-                    <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
+                    <Icon name={item.icon} className="text-[20px]" />
                     {item.title}
                   </Link>
                 );
@@ -117,8 +128,8 @@ export default function AcademyShell({ title, description, children }: AcademySh
             onClick={handleLogout}
             className="flex h-11 w-full items-center gap-3 rounded-md px-3 text-sm font-semibold text-white/72 transition hover:bg-secondary hover:text-white"
           >
-            <span className="material-symbols-outlined text-[20px]">logout</span>
-            Logout
+            <Icon name="logout" className="text-[20px]" />
+            Keluar
           </button>
         </div>
       </aside>
@@ -131,17 +142,17 @@ export default function AcademyShell({ title, description, children }: AcademySh
               <p className="truncate text-xs font-bold uppercase tracking-wider text-muted">
                 {academyName}
               </p>
-              <h1 className="truncate font-heading text-sm font-bold text-primary">
+              <TitleTag className="truncate font-heading text-sm font-bold text-primary">
                 {title}
-              </h1>
+              </TitleTag>
             </div>
             <button
               type="button"
               onClick={handleLogout}
-              className="inline-flex size-10 shrink-0 items-center justify-center rounded-md border border-border bg-white text-primary transition hover:bg-secondary/10 hover:text-secondary"
-              aria-label="Logout"
+              className="inline-flex size-11 shrink-0 items-center justify-center rounded-md border border-border bg-white text-primary transition hover:bg-secondary/10 hover:text-secondary"
+              aria-label="Keluar"
             >
-              <span className="material-symbols-outlined text-[20px]">logout</span>
+              <Icon name="logout" className="text-[20px]" />
             </button>
           </div>
 
@@ -149,15 +160,15 @@ export default function AcademyShell({ title, description, children }: AcademySh
           <div className="hidden lg:flex min-h-16 items-center justify-between gap-4 px-8">
             <div className="min-w-0">
               <p className="label-caps text-secondary">Operasional Akademi</p>
-              <h1 className="truncate text-xl font-bold text-primary sm:text-2xl">{title}</h1>
+              <TitleTag className="truncate font-heading text-xl font-bold text-primary sm:text-2xl">{title}</TitleTag>
             </div>
             <button
               type="button"
               onClick={handleLogout}
-              className="inline-flex size-10 items-center justify-center rounded-md border border-border bg-white text-primary transition hover:bg-secondary/10 hover:text-secondary"
-              aria-label="Logout"
+              className="inline-flex size-11 items-center justify-center rounded-md border border-border bg-white text-primary transition hover:bg-secondary/10 hover:text-secondary"
+              aria-label="Keluar"
             >
-              <span className="material-symbols-outlined text-[20px]">logout</span>
+              <Icon name="logout" className="text-[20px]" />
             </button>
           </div>
         </header>
@@ -165,14 +176,14 @@ export default function AcademyShell({ title, description, children }: AcademySh
         <SubscriptionBanner />
 
         {/* Konten halaman dengan pb-24 di bawah md untuk memberi ruang BottomNav */}
-        <div className="px-5 py-6 pb-24 md:pb-8 lg:px-8 lg:py-8">
+        <main id="konten" tabIndex={-1} className="px-5 py-6 pb-24 focus:outline-hidden md:pb-8 lg:px-8 lg:py-8">
           {description ? <p className="mb-6 max-w-3xl text-sm leading-6 text-muted">{description}</p> : null}
           {children}
-        </div>
+        </main>
       </section>
 
       {/* Navigasi Bawah di Mobile (< md) */}
       <BottomNav role={role} plan={plan} onLogout={handleLogout} />
-    </main>
+    </div>
   );
 }

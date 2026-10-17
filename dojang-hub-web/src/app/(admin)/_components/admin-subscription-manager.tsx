@@ -18,6 +18,7 @@ import {
 import AdminShell from "./admin-shell";
 import SubscriptionPricePreview, { extraStudentsToBlocks } from "./subscription-price-preview";
 import { EXTRA_BLOCK_SIZE, PLAN_RULES, effectiveStudentLimit } from "@/lib/plan-pricing";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -51,7 +52,7 @@ const paymentLabels: Record<SubscriptionPaymentStatus, string> = {
 
 const paymentStatusColors: Record<SubscriptionPaymentStatus, string> = {
   unpaid: "text-warning",
-  paid: "text-success",
+  paid: "text-success-strong",
   waived: "text-muted",
   refunded: "text-secondary",
 };
@@ -65,7 +66,7 @@ const statusLabels: Record<AdminSubscription["status"], string> = {
 };
 
 const statusColors: Record<AdminSubscription["status"], string> = {
-  active: "bg-success/10 text-success",
+  active: "bg-success/10 text-success-strong",
   trialing: "bg-secondary/10 text-secondary",
   past_due: "bg-warning/15 text-warning",
   expired: "bg-surface-container text-muted",
@@ -127,13 +128,13 @@ function EntitlementRow({ label, active }: { label: string; active: boolean }) {
     <div className="flex items-center justify-between py-2 text-sm">
       <span className="text-muted">{label}</span>
       {active ? (
-        <span className="flex items-center gap-1 font-medium text-success">
-          <span className="material-symbols-outlined text-[15px]">check_circle</span>
+        <span className="flex items-center gap-1 font-medium text-success-strong">
+          <Icon name="check_circle" className="text-[15px]" />
           Aktif
         </span>
       ) : (
-        <span className="flex items-center gap-1 text-muted/60">
-          <span className="material-symbols-outlined text-[15px]">cancel</span>
+        <span className="flex items-center gap-1 text-muted/80">
+          <Icon name="cancel" className="text-[15px]" />
           Tidak aktif
         </span>
       )}
@@ -153,14 +154,14 @@ function FormField({
   return (
     <div className="space-y-1">
       <p className="label-caps text-muted">{label}</p>
-      {hint ? <p className="text-xs text-muted/70">{hint}</p> : null}
+      {hint ? <p className="text-xs text-muted/80">{hint}</p> : null}
       {children}
     </div>
   );
 }
 
 const inputCls =
-  "h-11 w-full rounded-md border border-border bg-white px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10 disabled:bg-surface disabled:text-muted";
+  "h-11 w-full rounded-md border border-border-strong bg-white px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary disabled:bg-surface disabled:text-muted";
 
 export default function AdminSubscriptionManager() {
   const [token, setToken] = useState("");
@@ -440,7 +441,7 @@ export default function AdminSubscriptionManager() {
               </div>
             ) : null}
             {message ? (
-              <div className="mt-4 rounded-lg border border-success/20 bg-success/10 px-4 py-3 text-sm font-medium text-success">
+              <div className="mt-4 rounded-lg border border-success/20 bg-success/10 px-4 py-3 text-sm font-medium text-success-strong">
                 {message}
               </div>
             ) : null}
@@ -536,7 +537,7 @@ export default function AdminSubscriptionManager() {
                                 rel="noreferrer"
                                 className="mt-0.5 inline-flex items-center gap-1 text-xs text-primary hover:underline"
                               >
-                                <span className="material-symbols-outlined text-[13px]">receipt_long</span>
+                                <Icon name="receipt_long" className="text-[13px]" />
                                 Bukti
                               </a>
                             ) : null}
@@ -665,7 +666,7 @@ export default function AdminSubscriptionManager() {
                     <div className="space-y-2">
                       {paymentForm.payment_proof_url ? (
                         <div className="flex items-center gap-2 rounded-lg border border-success/30 bg-success/5 px-3 py-2">
-                          <span className="material-symbols-outlined text-[18px] text-success">check_circle</span>
+                          <Icon name="check_circle" className="text-[18px] text-success-strong" />
                           <a
                             href={paymentForm.payment_proof_url}
                             target="_blank"
@@ -676,18 +677,19 @@ export default function AdminSubscriptionManager() {
                           </a>
                           <button
                             type="button"
+                            aria-label="Hapus bukti pembayaran"
                             onClick={() => {
                               setPaymentForm((cur) => ({ ...cur, payment_proof_url: "" }));
                               if (fileInputRef.current) fileInputRef.current.value = "";
                             }}
                             className="text-muted hover:text-secondary"
                           >
-                            <span className="material-symbols-outlined text-[18px]">close</span>
+                            <Icon name="close" className="text-[18px]" />
                           </button>
                         </div>
                       ) : null}
                       <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-border px-4 py-3 text-sm text-muted transition hover:border-primary hover:text-primary">
-                        <span className="material-symbols-outlined text-[20px]">upload_file</span>
+                        <Icon name="upload_file" className="text-[20px]" />
                         <span>{isUploading ? "Mengupload..." : "Upload / ganti bukti"}</span>
                         <input
                           ref={fileInputRef}
@@ -709,7 +711,7 @@ export default function AdminSubscriptionManager() {
                       value={paymentForm.notes}
                       onChange={(e) => setPaymentForm((cur) => ({ ...cur, notes: e.target.value }))}
                       rows={3}
-                      className="w-full rounded-md border border-border px-3 py-2.5 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
+                      className="w-full rounded-md border border-border-strong px-3 py-2.5 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary"
                     />
                   </FormField>
 
@@ -718,7 +720,7 @@ export default function AdminSubscriptionManager() {
                     disabled={isSaving || isUploading}
                     className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    <span className="material-symbols-outlined text-[18px]">receipt_long</span>
+                    <Icon name="receipt_long" className="text-[18px]" />
                     {isSaving ? "Menyimpan..." : "Simpan Pembayaran"}
                   </button>
                 </form>
@@ -835,7 +837,7 @@ export default function AdminSubscriptionManager() {
                 <div className="space-y-2">
                   {form.payment_proof_url ? (
                     <div className="flex items-center gap-2 rounded-lg border border-success/30 bg-success/5 px-3 py-2">
-                      <span className="material-symbols-outlined text-[18px] text-success">check_circle</span>
+                      <Icon name="check_circle" className="text-[18px] text-success-strong" />
                       <a
                         href={form.payment_proof_url}
                         target="_blank"
@@ -846,19 +848,20 @@ export default function AdminSubscriptionManager() {
                       </a>
                       <button
                         type="button"
+                        aria-label="Hapus bukti pembayaran"
                         onClick={() => {
                           setForm((cur) => ({ ...cur, payment_proof_url: "" }));
                           if (fileInputRef.current) fileInputRef.current.value = "";
                         }}
                         className="text-muted hover:text-secondary"
                       >
-                        <span className="material-symbols-outlined text-[18px]">close</span>
+                        <Icon name="close" className="text-[18px]" />
                       </button>
                     </div>
                   ) : null}
 
                   <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-border px-4 py-3 text-sm text-muted transition hover:border-primary hover:text-primary">
-                    <span className="material-symbols-outlined text-[20px]">upload_file</span>
+                    <Icon name="upload_file" className="text-[20px]" />
                     <span>{isUploading ? "Mengupload..." : form.payment_proof_url ? "Ganti bukti" : "Upload bukti bayar"}</span>
                     <input
                       ref={fileInputRef}
@@ -883,7 +886,7 @@ export default function AdminSubscriptionManager() {
                   onChange={(e) => setForm((cur) => ({ ...cur, notes: e.target.value }))}
                   rows={3}
                   placeholder="Deal khusus, alasan perubahan, dsb."
-                  className="w-full rounded-md border border-border px-3 py-2.5 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
+                  className="w-full rounded-md border border-border-strong px-3 py-2.5 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary"
                 />
               </FormField>
 
@@ -898,7 +901,7 @@ export default function AdminSubscriptionManager() {
                 disabled={!selectedAkademiId || isSaving || isUploading}
                 className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                <span className="material-symbols-outlined text-[18px]">payments</span>
+                <Icon name="payments" className="text-[18px]" />
                 {isSaving ? "Menyimpan..." : "Simpan Langganan"}
               </button>
             </form>

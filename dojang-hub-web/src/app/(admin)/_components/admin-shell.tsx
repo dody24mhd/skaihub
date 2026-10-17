@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 import SheetModal from "./ui/sheet-modal";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 const EMAIL_KEY = "skaihub_admin_email";
@@ -23,11 +24,13 @@ const navSections = [
         title: "Akademi",
         href: "/internal/akademi",
         icon: "domain",
+        superAdminOnly: true,
       },
       {
         title: "Subscription",
         href: "/internal/subscription",
         icon: "payments",
+        superAdminOnly: true,
       },
       {
         title: "Staf Platform",
@@ -83,6 +86,8 @@ type AdminShellProps = {
   title: string;
   eyebrow?: string;
   description?: string;
+  /** Halaman merender PageHeader (h1) sendiri; judul shell menjadi teks biasa. */
+  hasPageHeader?: boolean;
   children: ReactNode;
 };
 
@@ -90,8 +95,10 @@ export default function AdminShell({
   title,
   eyebrow = "Admin CMS",
   description,
+  hasPageHeader = false,
   children,
 }: AdminShellProps) {
+  const TitleTag = hasPageHeader ? "p" : "h1";
   const pathname = usePathname();
   const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -122,15 +129,19 @@ export default function AdminShell({
   }
 
   return (
-    <main className="min-h-screen bg-surface text-primary lg:grid lg:grid-cols-[280px_1fr]">
+    <div data-testid="app-shell" className="min-h-screen bg-surface text-primary lg:grid lg:grid-cols-[280px_1fr]">
+      <a
+        href="#konten"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-white focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-primary focus:ring-2 focus:ring-primary"
+      >
+        Lewati ke konten
+      </a>
       {/* Sidebar untuk Layar Besar (lg+) */}
       <aside className="hidden border-r border-border bg-primary text-white lg:flex lg:min-h-screen lg:flex-col">
         <div className="border-b border-white/10 p-5">
           <Link href="/internal" className="flex items-center gap-3">
             <div className="flex size-11 items-center justify-center rounded-md bg-white text-primary">
-              <span className="material-symbols-outlined text-[26px]">
-                sports_martial_arts
-              </span>
+              <Icon name="sports_martial_arts" className="text-[26px]" />
             </div>
             <div>
               <p className="text-sm font-semibold text-white/65">SKAIHUB</p>
@@ -144,7 +155,7 @@ export default function AdminShell({
         <nav className="flex-1 space-y-6 p-4">
           {visibleNavSections.map((section) => (
             <div key={section.title}>
-              <p className="mb-2 px-3 text-xs font-bold uppercase text-white/40">
+              <p className="mb-2 px-3 text-xs font-bold uppercase text-white/65">
                 {section.title}
               </p>
               <div className="space-y-1">
@@ -158,15 +169,14 @@ export default function AdminShell({
                     <Link
                       key={item.title}
                       href={item.href}
+                      aria-current={isActive ? "page" : undefined}
                       className={`flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold transition ${
                         isActive
                           ? "bg-white text-primary"
                           : "text-white/72 hover:bg-white/10 hover:text-white"
                       }`}
                     >
-                      <span className="material-symbols-outlined text-[20px]">
-                        {item.icon}
-                      </span>
+                      <Icon name={item.icon} className="text-[20px]" />
                       {item.title}
                     </Link>
                   );
@@ -179,20 +189,21 @@ export default function AdminShell({
         <div className="space-y-3 border-t border-white/10 p-4">
           <Link
             href="/internal/account"
+            aria-current={pathname === "/internal/account" ? "page" : undefined}
             className={`flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold transition ${
               pathname === "/internal/account"
                 ? "bg-white text-primary"
                 : "text-white/72 hover:bg-white/10 hover:text-white"
             }`}
           >
-            <span className="material-symbols-outlined text-[20px]">lock_reset</span>
+            <Icon name="lock_reset" className="text-[20px]" />
             Ganti Password
           </Link>
           <Link
             href="https://skaihub.com"
             className="flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold text-white/72 transition hover:bg-white/10 hover:text-white"
           >
-            <span className="material-symbols-outlined text-[20px]">home</span>
+            <Icon name="home" className="text-[20px]" />
             Lihat Web
           </Link>
           <button
@@ -200,8 +211,8 @@ export default function AdminShell({
             onClick={handleLogout}
             className="flex h-11 w-full items-center gap-3 rounded-md px-3 text-sm font-semibold text-white/72 transition hover:bg-secondary hover:text-white"
           >
-            <span className="material-symbols-outlined text-[20px]">logout</span>
-            Logout
+            <Icon name="logout" className="text-[20px]" />
+            Keluar
           </button>
         </div>
       </aside>
@@ -217,16 +228,14 @@ export default function AdminShell({
                 className="inline-flex size-11 items-center justify-center rounded-md border border-border bg-white text-primary transition hover:bg-surface-container-low lg:hidden"
                 aria-label="Buka menu"
               >
-                <span className="material-symbols-outlined text-[24px]">
-                  menu
-                </span>
+                <Icon name="menu" className="text-[24px]" />
               </button>
 
               <div className="min-w-0">
                 <p className="label-caps text-secondary">{eyebrow}</p>
-                <h1 className="truncate text-xl font-bold text-primary sm:text-2xl">
+                <TitleTag className="truncate font-heading text-xl font-bold text-primary sm:text-2xl">
                   {title}
-                </h1>
+                </TitleTag>
               </div>
             </div>
 
@@ -234,25 +243,23 @@ export default function AdminShell({
               <button
                 type="button"
                 onClick={handleLogout}
-                className="inline-flex size-10 items-center justify-center rounded-md border border-border bg-white text-primary transition hover:bg-secondary/10 hover:text-secondary"
-                aria-label="Logout"
+                className="inline-flex size-11 items-center justify-center rounded-md border border-border bg-white text-primary transition hover:bg-secondary/10 hover:text-secondary"
+                aria-label="Keluar"
               >
-                <span className="material-symbols-outlined text-[20px]">
-                  logout
-                </span>
+                <Icon name="logout" className="text-[20px]" />
               </button>
             </div>
           </div>
         </header>
 
-        <div className="px-5 py-6 lg:px-8 lg:py-8">
+        <main id="konten" tabIndex={-1} className="px-5 py-6 focus:outline-hidden lg:px-8 lg:py-8">
           {description ? (
             <p className="mb-6 max-w-3xl text-sm leading-6 text-muted">
               {description}
             </p>
           ) : null}
           {children}
-        </div>
+        </main>
       </section>
 
       {/* Drawer menu kiri di bawah lg */}
@@ -265,7 +272,7 @@ export default function AdminShell({
         <div className="space-y-6">
           {visibleNavSections.map((section) => (
             <div key={section.title}>
-              <p className="mb-2 px-1 text-xs font-bold uppercase tracking-wider text-muted/70">
+              <p className="mb-2 px-1 text-xs font-bold uppercase tracking-wider text-muted/80">
                 {section.title}
               </p>
               <div className="space-y-1">
@@ -279,6 +286,7 @@ export default function AdminShell({
                     <Link
                       key={item.title}
                       href={item.href}
+                      aria-current={isActive ? "page" : undefined}
                       onClick={() => setIsDrawerOpen(false)}
                       className={`flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold transition ${
                         isActive
@@ -286,9 +294,7 @@ export default function AdminShell({
                           : "text-primary hover:bg-surface-container-low"
                       }`}
                     >
-                      <span className="material-symbols-outlined text-[20px]">
-                        {item.icon}
-                      </span>
+                      <Icon name={item.icon} className="text-[20px]" />
                       {item.title}
                     </Link>
                   );
@@ -300,17 +306,18 @@ export default function AdminShell({
           <div className="space-y-2 border-t border-border pt-4">
             <Link
               href="/internal/account"
+              aria-current={pathname === "/internal/account" ? "page" : undefined}
               onClick={() => setIsDrawerOpen(false)}
               className="flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold text-primary hover:bg-surface-container-low"
             >
-              <span className="material-symbols-outlined text-[20px]">lock_reset</span>
+              <Icon name="lock_reset" className="text-[20px]" />
               Ganti Password
             </Link>
             <Link
               href="https://skaihub.com"
               className="flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold text-primary hover:bg-surface-container-low"
             >
-              <span className="material-symbols-outlined text-[20px]">home</span>
+              <Icon name="home" className="text-[20px]" />
               Lihat Web
             </Link>
             <button
@@ -321,12 +328,12 @@ export default function AdminShell({
               }}
               className="flex h-11 w-full items-center gap-3 rounded-md px-3 text-sm font-semibold text-secondary hover:bg-secondary/10"
             >
-              <span className="material-symbols-outlined text-[20px]">logout</span>
-              Logout
+              <Icon name="logout" className="text-[20px]" />
+              Keluar
             </button>
           </div>
         </div>
       </SheetModal>
-    </main>
+    </div>
   );
 }

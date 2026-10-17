@@ -11,6 +11,7 @@ use App\Http\Middleware\EnsureSuperAdmin;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Middleware\HandleCors;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -37,5 +38,13 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (ThrottleRequestsException $e) {
+            $retryAfter = (int) ($e->getHeaders()['Retry-After'] ?? 60);
+
+            return response()->json(
+                ['message' => "Terlalu banyak percobaan. Coba lagi dalam {$retryAfter} detik."],
+                429,
+                $e->getHeaders(),
+            );
+        });
     })->create();

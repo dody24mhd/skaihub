@@ -10,6 +10,7 @@ import {
   getAdminEvents,
   getAdminInquiries,
 } from "../_lib/admin-api";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -51,7 +52,7 @@ export default function AdminCmsDashboard() {
     { label: "Pesan Baru", value: String(unreadInquiries), icon: "mark_email_unread", color: "text-secondary", bg: "bg-secondary/10", trend: "+3", trendUp: true, trendLabel: "dari kemarin" },
     { label: "Total Artikel", value: String(blogs.length), icon: "article", color: "text-primary", bg: "bg-primary/10", trend: "+12%", trendUp: true, trendLabel: "bulan ini" },
     { label: "Agenda Aktif", value: String(events.length), icon: "event", color: "text-primary", bg: "bg-primary/10", trend: "+2", trendUp: true, trendLabel: "minggu ini" },
-    { label: "Total Views", value: String(totalViews), icon: "visibility", color: "text-success", bg: "bg-success/10", trend: "+45%", trendUp: true, trendLabel: "pertumbuhan" },
+    { label: "Total Views", value: String(totalViews), icon: "visibility", color: "text-success-strong", bg: "bg-success/10", trend: "+45%", trendUp: true, trendLabel: "pertumbuhan" },
   ];
 
   const topBlogsData = [...publishedBlogs]
@@ -78,7 +79,7 @@ export default function AdminCmsDashboard() {
         {stats.map((s) => (
           <article key={s.label} className="card-soft flex items-center gap-4 rounded-lg bg-white p-5">
             <div className={`flex size-12 items-center justify-center rounded-md ${s.bg} ${s.color}`}>
-              <span className="material-symbols-outlined text-[24px]">{s.icon}</span>
+              <Icon name={s.icon} className="text-[24px]" />
             </div>
             <div className="flex-1">
               <p className="text-xs font-bold uppercase tracking-widest text-muted">{s.label}</p>
@@ -87,10 +88,8 @@ export default function AdminCmsDashboard() {
                   {s.value}
                 </p>
                 {/* Trend Indicator */}
-                <div className={`flex items-center text-[10px] font-bold ${s.trendUp ? "text-success" : "text-secondary"}`}>
-                  <span className="material-symbols-outlined text-[14px]">
-                    {s.trendUp ? "trending_up" : "trending_down"}
-                  </span>
+                <div className={`flex items-center text-[10px] font-bold ${s.trendUp ? "text-success-strong" : "text-secondary"}`}>
+                  <Icon name={s.trendUp ? "trending_up" : "trending_down"} className="text-[14px]" />
                   <span className="ml-0.5">{s.trend}</span>
                 </div>
               </div>

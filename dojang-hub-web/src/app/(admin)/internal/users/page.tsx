@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function AdminUsersPage() {
   return (
-    <AdminShell title="Staf Platform" eyebrow="Platform">
+    <AdminShell hasPageHeader title="Staf Platform" eyebrow="Platform">
       <PlatformUsersManager />
     </AdminShell>
   );

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AdminLoginForm from "../_components/admin-login-form";
+import Icon from "../_components/ui/icon";
 
 export const metadata: Metadata = {
   title: "Login SKAIHUB",
@@ -30,7 +31,7 @@ export default function LoginPage() {
       <aside className="hidden min-h-screen bg-primary p-10 text-white lg:flex lg:flex-col lg:justify-between">
         <div className="flex items-center gap-3">
           <div className="flex size-12 items-center justify-center rounded-md bg-white text-primary">
-            <span className="material-symbols-outlined text-[28px]">sports_martial_arts</span>
+            <Icon name="sports_martial_arts" className="text-[28px]" />
           </div>
           <div>
             <p className="text-sm font-semibold text-white/65">SKAIHUB</p>

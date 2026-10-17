@@ -39,7 +39,7 @@ describe("AcademyShell Logout", () => {
       </AcademyShell>
     );
 
-    const logoutButtons = screen.getAllByRole("button", { name: /logout/i });
+    const logoutButtons = screen.getAllByRole("button", { name: /keluar/i });
     expect(logoutButtons.length).toBeGreaterThan(0);
 
     fireEvent.click(logoutButtons[0]);

@@ -45,7 +45,7 @@ export function buildSppBillColumns({
       header: "Status",
       render: (item) => (
         <span className="inline-flex flex-wrap gap-1">
-          <span className={`inline-flex px-2 py-1 text-xs font-bold ${item.status === "paid" ? "bg-success/10 text-success" : "bg-secondary/10 text-secondary"}`}>
+          <span className={`inline-flex px-2 py-1 text-xs font-bold ${item.status === "paid" ? "bg-success/10 text-success-strong" : "bg-secondary/10 text-secondary"}`}>
             {sppStatusLabels[item.status]}
           </span>
           {item.is_overdue ? (

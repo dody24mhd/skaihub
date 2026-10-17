@@ -10,6 +10,7 @@ import {
   filterNavSectionsByRole,
 } from "./academy-nav";
 import SheetModal from "./sheet-modal";
+import Icon from "./icon";
 
 export type BottomNavProps = {
   role: AdminUser["role"] | string | null;
@@ -58,12 +59,10 @@ export default function BottomNav({
                   key={item.title}
                   type="button"
                   onClick={() => setIsMoreOpen(true)}
-                  className="flex min-h-[56px] flex-col items-center justify-center gap-1 py-1 text-center text-muted transition hover:text-primary active:bg-surface-container-low focus:outline-hidden"
+                  className="flex min-h-[56px] flex-col items-center justify-center gap-1 py-1 text-center text-muted transition hover:text-primary active:bg-surface-container-low focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
                   aria-label="Lainnya"
                 >
-                  <span className="material-symbols-outlined text-[22px]">
-                    {item.icon}
-                  </span>
+                  <Icon name={item.icon} className="text-[22px]" />
                   <span className="text-[10px] font-bold leading-tight">
                     {item.title}
                   </span>
@@ -81,20 +80,16 @@ export default function BottomNav({
                 key={item.title}
                 href={item.href}
                 aria-current={isActive ? "page" : undefined}
-                className={`flex min-h-[56px] flex-col items-center justify-center gap-1 py-1 text-center transition active:bg-surface-container-low focus:outline-hidden ${
+                className={`flex min-h-[56px] flex-col items-center justify-center gap-1 py-1 text-center transition active:bg-surface-container-low focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary ${
                   isActive
                     ? "text-secondary font-bold"
                     : "text-muted hover:text-primary"
                 }`}
               >
-                <span
-                  className="material-symbols-outlined text-[22px]"
-                  style={
-                    isActive ? { fontVariationSettings: "'FILL' 1" } : undefined
-                  }
-                >
-                  {item.icon}
-                </span>
+                <Icon
+                  name={item.icon}
+                  className={isActive ? "text-[22px] [font-variation-settings:'FILL'_1]" : "text-[22px]"}
+                />
                 <span className="text-[10px] font-bold leading-tight">
                   {item.title}
                 </span>
@@ -113,7 +108,7 @@ export default function BottomNav({
         <div className="space-y-6">
           {remainingSections.map((section) => (
             <div key={section.title} className="space-y-1">
-              <p className="px-1 pb-1.5 text-xs font-bold uppercase tracking-wider text-muted/70">
+              <p className="px-1 pb-1.5 text-xs font-bold uppercase tracking-wider text-muted/80">
                 {section.title}
               </p>
               <div className="divide-y divide-border/60">
@@ -127,6 +122,7 @@ export default function BottomNav({
                     <Link
                       key={item.title}
                       href={item.href}
+                      aria-current={isActive ? "page" : undefined}
                       onClick={() => setIsMoreOpen(false)}
                       className={`flex min-h-11 items-center gap-3 px-2 py-2 text-sm font-semibold transition ${
                         isActive
@@ -134,9 +130,7 @@ export default function BottomNav({
                           : "text-primary hover:bg-surface-container-low"
                       }`}
                     >
-                      <span className="material-symbols-outlined text-[20px]">
-                        {item.icon}
-                      </span>
+                      <Icon name={item.icon} className="text-[20px]" />
                       {item.title}
                     </Link>
                   );
@@ -154,7 +148,7 @@ export default function BottomNav({
               }}
               className="flex min-h-11 w-full items-center justify-center gap-2 border-2 border-secondary bg-secondary/5 text-sm font-bold uppercase tracking-wider text-secondary transition hover:bg-secondary hover:text-white"
             >
-              <span className="material-symbols-outlined text-[20px]">logout</span>
+              <Icon name="logout" className="text-[20px]" />
               Keluar
             </button>
           </div>

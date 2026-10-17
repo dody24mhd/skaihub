@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AcademyPublicProfile } from "../../../_lib/admin-api";
+import Icon from "../../ui/icon";
 
 const fontOptions = ["Inter", "Montserrat", "Poppins", "Roboto", "Lato", "Open Sans"];
 
@@ -143,9 +144,9 @@ export default function ProfileAppearanceSection({
         <button
           type="submit"
           disabled={saving}
-          className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-6 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-secondary-dark disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-secondary/50 sm:w-auto"
+          className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-6 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-secondary-dark disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-secondary sm:w-auto"
         >
-          {saving && <span className="material-symbols-outlined animate-spin text-[18px]">refresh</span>}
+          {saving && <Icon name="refresh" className="animate-spin text-[18px]" />}
           {saving ? "Menyimpan..." : "Simpan Tampilan"}
         </button>
       </div>

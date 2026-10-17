@@ -147,7 +147,7 @@ export function AddParticipantModal({
           </label>
           <select
             id="modal-student-select"
-            className="min-h-11 w-full rounded-md border border-border bg-white px-3 text-base text-primary focus:border-primary sm:text-sm"
+            className="min-h-11 w-full rounded-md border border-border-strong bg-white px-3 text-base text-primary focus:border-primary sm:text-sm"
             value={studentId}
             onChange={(e) => setStudentId(e.target.value)}
             required
@@ -180,7 +180,7 @@ export function AddParticipantModal({
             </label>
             <select
               id="modal-result-select"
-              className="min-h-11 w-full rounded-md border border-border bg-white px-3 text-base text-primary focus:border-primary sm:text-sm"
+              className="min-h-11 w-full rounded-md border border-border-strong bg-white px-3 text-base text-primary focus:border-primary sm:text-sm"
               value={participantResult}
               onChange={(e) =>
                 setParticipantResult(e.target.value as RankPromotionParticipant["result"])
@@ -215,7 +215,7 @@ export function AddParticipantModal({
           <textarea
             id="modal-notes"
             rows={2}
-            className="min-h-20 w-full rounded-md border border-border bg-white p-3 text-sm text-primary placeholder:text-muted/50 focus:border-primary"
+            className="min-h-20 w-full rounded-md border border-border-strong bg-white p-3 text-sm text-primary placeholder:text-muted/80 focus:border-primary"
             value={participantNotes}
             onChange={(e) => setParticipantNotes(e.target.value)}
             placeholder="Catatan penguji atau dewan sabuk"

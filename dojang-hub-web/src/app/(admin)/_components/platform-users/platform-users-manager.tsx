@@ -12,6 +12,7 @@ import {
 } from "../../_lib/admin-api";
 import { PageHeader, ResponsiveColumn, ResponsiveList } from "../ui";
 import PlatformUserFormModal from "./platform-user-form-modal";
+import Icon from "../ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -150,7 +151,7 @@ export default function PlatformUsersManager() {
       render: (item) => (
         <span
           className={`inline-flex items-center px-2 py-0.5 text-xs font-bold ${
-            item.is_active ? "bg-success/10 text-success" : "bg-secondary/10 text-secondary"
+            item.is_active ? "bg-success/10 text-success-strong" : "bg-secondary/10 text-secondary"
           }`}
         >
           {item.is_active ? "Aktif" : "Nonaktif"}
@@ -170,7 +171,7 @@ export default function PlatformUsersManager() {
               onClick={() => openModal(item)}
               disabled={isSaving}
               aria-label={`Edit ${item.name}`}
-              className="inline-flex min-h-11 items-center justify-center border border-border px-3 py-1.5 text-xs font-bold text-primary transition hover:bg-surface-container-low focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="inline-flex min-h-11 items-center justify-center border border-border px-3 py-1.5 text-xs font-bold text-primary transition hover:bg-surface-container-low focus:outline-hidden focus:ring-2 focus:ring-primary"
             >
               Edit
             </button>
@@ -180,7 +181,7 @@ export default function PlatformUsersManager() {
                 onClick={() => handleDeactivate(item)}
                 disabled={isSaving}
                 aria-label={`Nonaktifkan ${item.name}`}
-                className="inline-flex min-h-11 items-center justify-center border border-secondary/30 px-3 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary/10 focus:outline-hidden focus:ring-2 focus:ring-secondary/20"
+                className="inline-flex min-h-11 items-center justify-center border border-secondary/30 px-3 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary/10 focus:outline-hidden focus:ring-2 focus:ring-secondary"
               >
                 Nonaktifkan
               </button>
@@ -219,16 +220,16 @@ export default function PlatformUsersManager() {
           <button
             type="button"
             onClick={() => openModal(null)}
-            className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-secondary-dark focus:outline-hidden focus:ring-2 focus:ring-secondary/50 sm:w-auto"
+            className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-secondary-dark focus:outline-hidden focus:ring-2 focus:ring-secondary sm:w-auto"
           >
-            <span className="material-symbols-outlined text-[20px]" aria-hidden="true">person_add</span>
+            <Icon name="person_add" className="text-[20px]" />
             Tambah Staf
           </button>
         }
       />
 
       {message ? (
-        <p role="status" className="border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">
+        <p role="status" className="border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success-strong">
           {message}
         </p>
       ) : null}

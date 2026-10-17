@@ -11,6 +11,7 @@ import {
 } from "../../_lib/admin-api";
 import { FormField, SheetModal } from "../ui";
 import { resolveSlotSessionId } from "./today-utils";
+import Icon from "../ui/icon";
 
 export type SessionAction = "menu" | "reschedule" | "cancel" | "coach";
 
@@ -23,7 +24,7 @@ export type SessionActionSheetsProps = {
 };
 
 const inputClass =
-  "min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:text-sm";
+  "min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm";
 const primaryButtonClass =
   "inline-flex min-h-11 w-full items-center justify-center border-2 border-primary bg-primary px-4 text-sm font-bold text-white transition hover:bg-primary-container disabled:cursor-not-allowed disabled:bg-surface-container disabled:text-muted";
 const menuButtonClass =
@@ -99,15 +100,15 @@ export default function SessionActionSheets({ token, slot, action, onActionChang
       <SheetModal isOpen={action === "menu"} onClose={close} title="Aksi Sesi" description={title}>
         <div className="space-y-2">
           <button type="button" className={menuButtonClass} onClick={() => onActionChange("reschedule")}>
-            <span className="material-symbols-outlined text-[20px]" aria-hidden="true">event_repeat</span>
+            <Icon name="event_repeat" className="text-[20px]" />
             Pindah Jadwal
           </button>
           <button type="button" className={menuButtonClass} onClick={() => onActionChange("cancel")}>
-            <span className="material-symbols-outlined text-[20px]" aria-hidden="true">event_busy</span>
+            <Icon name="event_busy" className="text-[20px]" />
             Batalkan
           </button>
           <button type="button" className={menuButtonClass} onClick={() => onActionChange("coach")}>
-            <span className="material-symbols-outlined text-[20px]" aria-hidden="true">sports</span>
+            <Icon name="sports" className="text-[20px]" />
             Ganti Pelatih
           </button>
         </div>

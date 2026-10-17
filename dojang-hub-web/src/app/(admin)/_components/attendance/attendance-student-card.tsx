@@ -21,7 +21,7 @@ const STATUS_CONFIG: Array<{
   {
     status: "present",
     label: "Hadir",
-    activeClass: "bg-success text-white border-success shadow-sm",
+    activeClass: "bg-success-strong text-white border-success-strong shadow-sm",
   },
   {
     status: "excused",
@@ -31,7 +31,7 @@ const STATUS_CONFIG: Array<{
   {
     status: "sick",
     label: "Sakit",
-    activeClass: "bg-amber-500 text-white border-amber-500 shadow-sm",
+    activeClass: "bg-amber-700 text-white border-amber-700 shadow-sm",
   },
   {
     status: "absent",
@@ -83,7 +83,7 @@ export default function AttendanceStudentCard({
               aria-pressed={isActive}
               aria-label={`${item.label} - ${studentName}`}
               onClick={() => onStatusChange(attendanceId, item.status)}
-              className={`min-h-11 flex w-full items-center justify-center border text-xs sm:text-sm font-bold transition focus:outline-hidden focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50 ${
+              className={`min-h-11 flex w-full items-center justify-center border text-xs sm:text-sm font-bold transition focus:outline-hidden focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-50 ${
                 isActive
                   ? item.activeClass
                   : "border-border bg-surface-container-low/40 text-primary hover:border-primary/40 hover:bg-white active:bg-surface-container"

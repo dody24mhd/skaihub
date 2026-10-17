@@ -8,6 +8,8 @@ import { useCanWrite } from "../ui/subscription-status";
 import TodaySlotCard from "./today-slot-card";
 import { addDays, canManageSlot, dateBounds, dateLabel, formatLocalDate, isAdminRole } from "./today-utils";
 import { useAdminSession, useOpenSlot, useTodaySlots } from "./use-today-slots";
+import Icon from "../ui/icon";
+import StatusMessage from "../ui/status-message";
 
 const navButtonClass =
   "inline-flex size-11 items-center justify-center border-2 border-border bg-white text-primary transition hover:bg-surface-container-low disabled:cursor-not-allowed disabled:text-muted/50";
@@ -75,7 +77,7 @@ export default function TodayClasses() {
 
       <div className="mt-4 flex items-center gap-2">
         <button type="button" aria-label="Hari sebelumnya" disabled={!canGoBack} onClick={() => changeDate(addDays(date, -1))} className={navButtonClass}>
-          <span className="material-symbols-outlined text-[20px]" aria-hidden="true">chevron_left</span>
+          <Icon name="chevron_left" className="text-[20px]" />
         </button>
         <label htmlFor="today-classes-date" className="sr-only">Tanggal latihan</label>
         <input
@@ -85,10 +87,10 @@ export default function TodayClasses() {
           min={bounds.min}
           max={bounds.max}
           onChange={(event) => changeDate(event.target.value)}
-          className="min-h-11 min-w-0 flex-1 border-2 border-border bg-white px-3 text-base text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:max-w-56 sm:text-sm"
+          className="min-h-11 min-w-0 flex-1 border-2 border-border bg-white px-3 text-base text-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:max-w-56 sm:text-sm"
         />
         <button type="button" aria-label="Hari berikutnya" disabled={!canGoForward} onClick={() => changeDate(addDays(date, 1))} className={navButtonClass}>
-          <span className="material-symbols-outlined text-[20px]" aria-hidden="true">chevron_right</span>
+          <Icon name="chevron_right" className="text-[20px]" />
         </button>
         {date !== todayKey ? (
           <button type="button" onClick={() => changeDate(todayKey)} className="min-h-11 border-2 border-border px-3 text-sm font-bold text-primary hover:bg-surface-container-low">
@@ -100,19 +102,14 @@ export default function TodayClasses() {
         <p className="mt-2 text-xs text-muted">Pelatih bisa mengisi absensi hingga {backfillDays} hari ke belakang.</p>
       ) : null}
 
-      {message ? (
-        <p role="status" className="mt-4 border-2 border-success/30 bg-success/10 p-3 text-sm font-bold text-success">{message}</p>
-      ) : null}
-      {error || openError ? (
-        <div role="alert" className="mt-4 flex flex-col gap-2 border-2 border-secondary/30 bg-secondary/10 p-3 text-sm font-bold text-secondary sm:flex-row sm:items-center sm:justify-between">
-          <span>{error || openError}</span>
-          {error ? (
-            <button type="button" onClick={() => void reload()} className="min-h-11 border-2 border-secondary bg-white px-4 text-secondary">
-              Coba lagi
-            </button>
-          ) : null}
-        </div>
-      ) : null}
+      <StatusMessage tone="success" message={message} className="mt-4" />
+      <StatusMessage tone="error" message={error || openError} className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        {error ? (
+          <button type="button" onClick={() => void reload()} className="min-h-11 border-2 border-secondary bg-white px-4 text-secondary">
+            Coba lagi
+          </button>
+        ) : null}
+      </StatusMessage>
 
       {isLoading ? (
         <p className="mt-6 text-sm font-medium text-muted">Memuat kelas...</p>

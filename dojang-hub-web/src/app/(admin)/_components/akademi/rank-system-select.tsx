@@ -23,7 +23,7 @@ export default function RankSystemSelect({ id, sportType, value, onChange }: Ran
           value={value ?? ""}
           onChange={(event) => onChange(event.target.value)}
           required
-          className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+          className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
         >
           {options.map((option) => (
             <option key={option.value} value={option.value}>

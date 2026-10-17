@@ -16,7 +16,7 @@ const sessionTypeLabels: Record<TrainingSession["session_type"], string> = {
 };
 
 const sessionTypeStyles: Record<TrainingSession["session_type"], string> = {
-  regular: "bg-success/10 text-success border-success/30",
+  regular: "bg-success/10 text-success-strong border-success/30",
   replacement: "bg-orange-100 text-orange-700 border-orange-300",
   extra: "bg-secondary/10 text-secondary border-secondary/30",
 };

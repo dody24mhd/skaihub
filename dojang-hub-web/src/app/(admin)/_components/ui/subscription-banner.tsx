@@ -2,6 +2,7 @@
 
 import { SubscriptionLifecycleState } from "../../_lib/admin-api";
 import { SubscriptionStatus, useSubscriptionStatus } from "./subscription-status";
+import Icon from "./icon";
 
 type BannerState = Exclude<SubscriptionLifecycleState, "active">;
 
@@ -58,9 +59,7 @@ export default function SubscriptionBanner() {
       data-state={status.state}
       className={`flex items-start gap-3 border-l-4 px-4 py-3 text-sm text-primary lg:px-8 ${style.container}`}
     >
-      <span aria-hidden="true" className={`material-symbols-outlined mt-0.5 text-[20px] ${style.icon}`}>
-        {style.iconName}
-      </span>
+      <Icon name={style.iconName} className={`mt-0.5 text-[20px] ${style.icon}`} />
       <p className="min-w-0 leading-6">
         <span className="font-bold">{style.title}. </span>
         {bannerMessage(status)}

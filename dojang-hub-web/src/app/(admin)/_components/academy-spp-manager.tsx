@@ -21,6 +21,8 @@ import SppSettingsModal from "./spp/spp-settings-modal";
 import SppWaiveModal from "./spp/spp-waive-modal";
 import { SPP_MONTH_LABELS, billsForClass, summarizeBills } from "./spp/spp-summary";
 import { useCanWrite } from "./ui/subscription-status";
+import Icon from "./ui/icon";
+import StatusMessage from "./ui/status-message";
 
 const TOKEN_KEY = "skaihub_admin_token";
 const DEFAULT_SPP_SETTINGS: SppSettings = { default_monthly_amount: null, due_day: 10 };
@@ -34,7 +36,7 @@ const SPP_VIEWS: { value: SppView; label: string }[] = [
 ];
 
 const filterClass =
-  "min-h-11 w-full border border-border bg-white px-3 text-base text-primary outline-none focus:border-primary sm:text-sm";
+  "min-h-11 w-full border border-border-strong bg-white px-3 text-base text-primary outline-none focus:border-primary sm:text-sm";
 
 async function fetchSppData(
   activeToken: string,
@@ -175,7 +177,7 @@ export default function AcademySppManager() {
       <section className="space-y-5 sm:space-y-6">
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
           <StatCard label="Siswa Tertagih" value={items.length} caption={`${SPP_MONTH_LABELS[month - 1]} ${year}`} tone="text-primary" />
-          <StatCard label="Lunas" value={summary.paidCount} caption={`${summary.waivedCount} dibebaskan`} tone="text-success" />
+          <StatCard label="Lunas" value={summary.paidCount} caption={`${summary.waivedCount} dibebaskan`} tone="text-success-strong" />
           <div className="col-span-2 sm:col-span-1">
             <StatCard label="Perlu Ditindaklanjuti" value={summary.unpaidCount} caption={`${summary.partialCount} pembayaran sebagian`} tone="text-secondary" />
           </div>
@@ -195,7 +197,7 @@ export default function AcademySppManager() {
                     onClick={() => setIsGenerateOpen(true)}
                     type="button"
                   >
-                    <span className="material-symbols-outlined text-[18px]">receipt_long</span>
+                    <Icon name="receipt_long" className="text-[18px]" />
                     Buat Tagihan Bulan Ini
                   </button>
                   <button
@@ -205,7 +207,7 @@ export default function AcademySppManager() {
                     title="Pengaturan SPP"
                     type="button"
                   >
-                    <span aria-hidden="true" className="material-symbols-outlined text-[20px]">settings</span>
+                    <Icon name="settings" className="text-[20px]" />
                   </button>
                 </div>
               ) : null}
@@ -262,17 +264,14 @@ export default function AcademySppManager() {
             </div>
           ) : null}
 
-          {message ? (
-            <p className="mt-4 flex flex-wrap items-center justify-between gap-2 border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">
-              {message}
-              {receiptPaymentId ? (
-                <Link className="inline-flex min-h-11 items-center font-bold text-primary underline underline-offset-2" href={`/academy/spp/receipts/${receiptPaymentId}`}>
-                  Lihat kwitansi
-                </Link>
-              ) : null}
-            </p>
-          ) : null}
-          {error ? <p className="mt-4 border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">{error}</p> : null}
+          <StatusMessage tone="success" message={message} className="mt-4 flex flex-wrap items-center justify-between gap-2">
+            {receiptPaymentId ? (
+              <Link className="inline-flex min-h-11 items-center font-bold text-primary underline underline-offset-2" href={`/academy/spp/receipts/${receiptPaymentId}`}>
+                Lihat kwitansi
+              </Link>
+            ) : null}
+          </StatusMessage>
+          <StatusMessage tone="error" message={error} className="mt-4" />
 
           {view === "arrears" ? (
             <SppArrearsSection token={token} />

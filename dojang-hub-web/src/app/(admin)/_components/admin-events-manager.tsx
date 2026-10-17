@@ -11,6 +11,7 @@ import {
   updateAdminEvent,
 } from "../_lib/admin-api";
 import { RichTextEditor } from "./rich-text-editor";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -43,7 +44,7 @@ function formatEventRange(start: string, end?: string | null) {
 }
 
 function statusClass(status: AdminEvent["status"]) {
-  if (status === "published") return "bg-success/10 text-success";
+  if (status === "published") return "bg-success/10 text-success-strong";
   if (status === "cancelled") return "bg-secondary/10 text-secondary";
   return "bg-surface-container text-muted";
 }
@@ -261,9 +262,7 @@ export default function AdminEventsManager() {
                   {item.value}
                 </p>
               </div>
-              <span className="material-symbols-outlined text-[26px] text-secondary">
-                {item.icon}
-              </span>
+              <Icon name={item.icon} className="text-[26px] text-secondary" />
             </div>
           </article>
         ))}
@@ -279,13 +278,11 @@ export default function AdminEventsManager() {
 
             <div className="flex flex-col gap-3 sm:flex-row">
               <div className="relative">
-                <span className="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-muted">
-                  search
-                </span>
+                <Icon name="search" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-muted" />
                 <input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  className="h-10 w-full rounded-md border border-border bg-white pl-10 pr-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 sm:w-64"
+                  className="h-10 w-full rounded-md border border-border-strong bg-white pl-10 pr-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary sm:w-64"
                   placeholder="Cari event"
                 />
               </div>
@@ -295,7 +292,7 @@ export default function AdminEventsManager() {
                 onChange={(event) =>
                   setStatusFilter(event.target.value as "all" | AdminEvent["status"])
                 }
-                className="h-10 rounded-md border border-border bg-white px-3 text-sm font-semibold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-10 rounded-md border border-border-strong bg-white px-3 text-sm font-semibold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary"
               >
                 <option value="all">Semua status</option>
                 <option value="published">Published</option>
@@ -308,7 +305,7 @@ export default function AdminEventsManager() {
                 onClick={refreshEvents}
                 className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-semibold text-primary transition hover:bg-surface-container-low"
               >
-                <span className="material-symbols-outlined text-[20px]">refresh</span>
+                <Icon name="refresh" className="text-[20px]" />
                 Refresh
               </button>
 
@@ -317,7 +314,7 @@ export default function AdminEventsManager() {
                 onClick={() => openForm()}
                 className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-white transition hover:bg-primary-container"
               >
-                <span className="material-symbols-outlined text-[20px]">add</span>
+                <Icon name="add" className="text-[20px]" />
                 Tambah Event
               </button>
             </div>
@@ -365,9 +362,9 @@ export default function AdminEventsManager() {
                     <p className="mt-1 text-muted">Penyelenggara</p>
                   </div>
 
-                  <div className="text-sm text-success flex flex-col gap-1">
+                  <div className="text-sm text-success-strong flex flex-col gap-1">
                     <div className="flex items-center gap-1.5 font-bold">
-                      <span className="material-symbols-outlined text-[18px]">visibility</span>
+                      <Icon name="visibility" className="text-[18px]" />
                       {event.views_count || 0}
                     </div>
                     <p className="text-muted text-xs font-semibold uppercase tracking-widest">Views</p>
@@ -377,18 +374,18 @@ export default function AdminEventsManager() {
                     <button
                       type="button"
                       onClick={() => openForm(event)}
-                      className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-primary/10 hover:text-primary"
+                      className="inline-flex size-11 items-center justify-center rounded-md text-muted transition hover:bg-primary/10 hover:text-primary"
                       aria-label={`Edit ${event.title}`}
                     >
-                      <span className="material-symbols-outlined text-[20px]">edit</span>
+                      <Icon name="edit" className="text-[20px]" />
                     </button>
                     <button
                       type="button"
                       onClick={() => setDeleteTarget(event)}
-                      className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-secondary/10 hover:text-secondary"
+                      className="inline-flex size-11 items-center justify-center rounded-md text-muted transition hover:bg-secondary/10 hover:text-secondary"
                       aria-label={`Hapus ${event.title}`}
                     >
-                      <span className="material-symbols-outlined text-[20px]">delete</span>
+                      <Icon name="delete" className="text-[20px]" />
                     </button>
                   </div>
                 </div>
@@ -398,7 +395,7 @@ export default function AdminEventsManager() {
             <div className="p-8">
               <div className="flex max-w-xl gap-4">
                 <div className="flex size-12 shrink-0 items-center justify-center rounded-md bg-primary text-white">
-                  <span className="material-symbols-outlined text-[26px]">event_busy</span>
+                  <Icon name="event_busy" className="text-[26px]" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-primary">Belum ada event</h3>
@@ -411,7 +408,7 @@ export default function AdminEventsManager() {
                     onClick={() => setIsDrawerOpen(true)}
                     className="mt-4 inline-flex h-10 items-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-white transition hover:bg-primary-container"
                   >
-                    <span className="material-symbols-outlined text-[20px]">add</span>
+                    <Icon name="add" className="text-[20px]" />
                     Tambah Event
                   </button>
                 </div>
@@ -438,15 +435,15 @@ export default function AdminEventsManager() {
               <button
                 type="button"
                 onClick={() => setIsDrawerOpen(false)}
-                className="inline-flex size-10 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
+                className="inline-flex size-11 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
                 aria-label="Tutup"
               >
-                <span className="material-symbols-outlined text-[20px]">close</span>
+                <Icon name="close" className="text-[20px]" />
               </button>
             </div>
 
             {message ? (
-              <div className="mx-5 mt-5 rounded-md bg-success/10 px-4 py-3 text-sm font-semibold text-success">
+              <div className="mx-5 mt-5 rounded-md bg-success/10 px-4 py-3 text-sm font-semibold text-success-strong">
                 {message}
               </div>
             ) : null}
@@ -460,13 +457,13 @@ export default function AdminEventsManager() {
               <input
                 value={form.title}
                 onChange={(event) => setForm({ ...form, title: event.target.value })}
-                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 placeholder="Judul event"
               />
               <input
                 value={form.excerpt}
                 onChange={(event) => setForm({ ...form, excerpt: event.target.value })}
-                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 placeholder="Label / Ringkasan Singkat"
               />
               <div className="grid gap-3 sm:grid-cols-2">
@@ -476,7 +473,7 @@ export default function AdminEventsManager() {
                     type="date"
                     value={form.starts_at}
                     onChange={(event) => setForm({ ...form, starts_at: event.target.value })}
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   />
                 </div>
                 <div>
@@ -485,26 +482,26 @@ export default function AdminEventsManager() {
                     type="date"
                     value={form.ends_at}
                     onChange={(event) => setForm({ ...form, ends_at: event.target.value })}
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   />
                 </div>
               </div>
               <input
                 value={form.location}
                 onChange={(event) => setForm({ ...form, location: event.target.value })}
-                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 placeholder="Lokasi"
               />
               <input
                 value={form.organizer_name}
                 onChange={(event) => setForm({ ...form, organizer_name: event.target.value })}
-                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 placeholder="Penyelenggara"
               />
               <input
                 value={form.registration_url}
                 onChange={(event) => setForm({ ...form, registration_url: event.target.value })}
-                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 placeholder="Link pendaftaran / proposal (opsional)"
               />
               <div className="rounded-md border border-border p-3">
@@ -517,10 +514,11 @@ export default function AdminEventsManager() {
                     <img src={form.cover_image_url} alt="Poster" className="w-full object-cover" />
                     <button
                       type="button"
+                      aria-label="Hapus poster"
                       onClick={() => setForm({ ...form, cover_image_url: "" })}
-                      className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-md bg-white text-secondary opacity-0 shadow transition group-hover:opacity-100 hover:bg-secondary/10"
+                      className="absolute right-2 top-2 flex size-11 items-center justify-center rounded-md bg-white text-secondary opacity-0 shadow transition group-hover:opacity-100 focus-visible:opacity-100 hover:bg-secondary/10"
                     >
-                      <span className="material-symbols-outlined text-[18px]">delete</span>
+                      <Icon name="delete" className="text-[18px]" />
                     </button>
                   </div>
                 ) : null}
@@ -535,7 +533,7 @@ export default function AdminEventsManager() {
                   {isUploading && <span className="text-sm text-muted">Mengunggah...</span>}
                 </div>
               </div>
-              <div className="w-full overflow-hidden rounded-md border border-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10">
+              <div className="w-full overflow-hidden rounded-md border border-border-strong focus-within:border-primary focus-within:ring-2 focus-within:ring-primary">
                 <RichTextEditor
                   value={form.description}
                   onChange={(val) => setForm({ ...form, description: val })}
@@ -547,7 +545,7 @@ export default function AdminEventsManager() {
                   <select
                     value={form.category}
                     onChange={(event) => setForm({ ...form, category: event.target.value })}
-                    className="h-11 rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    className="h-11 rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   >
                     <option value="Umum">Umum</option>
                     <option value="Taekwondo">Taekwondo</option>
@@ -558,7 +556,7 @@ export default function AdminEventsManager() {
                     onChange={(event) =>
                       setForm({ ...form, status: event.target.value as EventPayload["status"] })
                     }
-                    className="h-11 rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    className="h-11 rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   >
                     <option value="draft">Draft</option>
                     <option value="published">Published</option>
@@ -579,7 +577,7 @@ export default function AdminEventsManager() {
                 disabled={!canSubmit || isSaving || isUploading}
                 className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-white transition hover:bg-primary-container disabled:cursor-not-allowed disabled:bg-muted"
               >
-                <span className="material-symbols-outlined text-[20px]">save</span>
+                <Icon name="save" className="text-[20px]" />
                 {isSaving ? "Menyimpan..." : "Simpan Event"}
               </button>
             </form>
@@ -591,7 +589,7 @@ export default function AdminEventsManager() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-primary/35 px-5 backdrop-blur-sm">
           <section className="card-soft w-full max-w-[420px] rounded-lg bg-white p-5">
             <div className="mb-4 flex size-12 items-center justify-center rounded-md bg-secondary/10 text-secondary">
-              <span className="material-symbols-outlined text-[26px]">warning</span>
+              <Icon name="warning" className="text-[26px]" />
             </div>
             <h2 className="text-xl font-bold text-primary">Hapus event?</h2>
             <p className="mt-2 text-sm leading-6 text-muted">

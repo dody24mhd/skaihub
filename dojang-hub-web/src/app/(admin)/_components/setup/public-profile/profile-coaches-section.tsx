@@ -2,6 +2,7 @@
 "use client";
 
 import { PublicProfileCoach } from "../../../_lib/admin-api";
+import Icon from "../../ui/icon";
 
 type ProfileCoachesSectionProps = {
   coaches: PublicProfileCoach[];
@@ -42,7 +43,7 @@ export default function ProfileCoachesSection({
                     />
                   ) : (
                     <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-surface-container border border-border">
-                      <span className="material-symbols-outlined text-[20px] text-muted">person</span>
+                      <Icon name="person" className="text-[20px] text-muted" />
                     </div>
                   )}
                   <div>
@@ -59,10 +60,12 @@ export default function ProfileCoachesSection({
                   </span>
                   <button
                     type="button"
+                    role="switch"
+                    aria-checked={coach.show_on_public}
                     onClick={() => onToggleCoach(coach)}
-                    aria-label={`Ubah status tampilkan ${coach.name}`}
-                    className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full transition-colors focus:outline-hidden focus:ring-2 focus:ring-secondary/20 ${
-                      coach.show_on_public ? "bg-secondary" : "bg-border"
+                    aria-label={`Tampilkan ${coach.name} di website`}
+                    className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full transition-colors focus:outline-hidden focus:ring-2 focus:ring-secondary ${
+                      coach.show_on_public ? "bg-secondary" : "bg-border-strong"
                     }`}
                   >
                     <span

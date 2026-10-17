@@ -29,7 +29,7 @@ export default function AttendanceSummaryBar({
         {/* Ringkasan Jumlah per Status */}
         <div className="grid grid-cols-4 gap-2 text-center sm:flex sm:items-center sm:gap-4 sm:text-left">
           <div className="border border-border/80 bg-surface-container-low/40 p-2 sm:border-0 sm:bg-transparent sm:p-0">
-            <span className="block text-[11px] font-bold uppercase tracking-wider text-success">
+            <span className="block text-[11px] font-bold uppercase tracking-wider text-success-strong">
               Hadir
             </span>
             <span className="font-heading text-lg font-black text-primary">

@@ -7,6 +7,7 @@ import {
   setDismissedAt,
   shouldShowInstallPrompt,
 } from "@/lib/pwa/install-prompt-logic";
+import Icon from "../ui/icon";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
@@ -85,9 +86,7 @@ export default function InstallPrompt() {
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
           <div className="flex size-10 shrink-0 items-center justify-center rounded-md bg-primary text-white">
-            <span className="material-symbols-outlined text-[20px]">
-              add_to_home_screen
-            </span>
+            <Icon name="add_to_home_screen" className="text-[20px]" />
           </div>
           <div className="min-w-0">
             <p className="truncate text-sm font-bold text-primary">
@@ -118,7 +117,7 @@ export default function InstallPrompt() {
             aria-label="Tutup saran instalasi"
             className="inline-flex size-11 items-center justify-center rounded-md border border-border bg-surface text-muted transition hover:bg-surface-container hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary"
           >
-            <span className="material-symbols-outlined text-[20px]">close</span>
+            <Icon name="close" className="text-[20px]" />
           </button>
         </div>
       </div>
@@ -126,10 +125,10 @@ export default function InstallPrompt() {
       {isIOS && (
         <div className="mt-2 flex items-center gap-2 rounded bg-surface-container-low px-3 py-2 text-xs text-primary">
           <span>Bagikan</span>
-          <span className="material-symbols-outlined text-[16px]">ios_share</span>
+          <Icon name="ios_share" className="text-[16px]" />
           <span>&rarr;</span>
           <span className="font-semibold">Tambah ke Layar Utama</span>
-          <span className="material-symbols-outlined text-[16px]">add_box</span>
+          <Icon name="add_box" className="text-[16px]" />
         </div>
       )}
     </aside>

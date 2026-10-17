@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, ReactNode } from "react";
+import React, { InputHTMLAttributes, ReactElement, ReactNode, cloneElement, isValidElement } from "react";
 
 export interface FormFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
@@ -18,7 +18,7 @@ export default function FormField({
   className = "",
   ...inputProps
 }: FormFieldProps) {
-  const hintId = hint ? `${id}-hint` : undefined;
+  const hintId = hint && !error ? `${id}-hint` : undefined;
   const errorId = error ? `${id}-error` : undefined;
   const describedBy = [errorId, hintId].filter(Boolean).join(" ") || undefined;
 
@@ -33,17 +33,17 @@ export default function FormField({
       </label>
 
       {children ? (
-        children
+        withFieldA11y(children, Boolean(error), describedBy)
       ) : (
         <input
           id={id}
           required={required}
           aria-invalid={Boolean(error)}
           aria-describedby={describedBy}
-          className={`min-h-11 w-full border bg-white px-3.5 py-2.5 text-base text-primary placeholder:text-muted/60 transition focus:outline-hidden focus:ring-2 sm:text-sm ${
+          className={`min-h-11 w-full border bg-white px-3.5 py-2.5 text-base text-primary placeholder:text-muted/80 transition focus:outline-hidden focus:ring-2 sm:text-sm ${
             error
-              ? "border-secondary focus:border-secondary focus:ring-secondary/20"
-              : "border-border focus:border-primary focus:ring-primary/20"
+              ? "border-secondary focus:border-secondary focus:ring-secondary"
+              : "border-border-strong focus:border-primary focus:ring-primary"
           }`}
           {...inputProps}
         />
@@ -62,4 +62,18 @@ export default function FormField({
       ) : null}
     </div>
   );
+}
+
+type FieldControlProps = { "aria-invalid"?: boolean; "aria-describedby"?: string };
+
+function withFieldA11y(children: ReactNode, isInvalid: boolean, describedBy?: string) {
+  if (!isValidElement<FieldControlProps>(children)) return children;
+  const control = children as ReactElement<FieldControlProps>;
+  const ownDescribedBy = control.props["aria-describedby"];
+  const mergedDescribedBy = [describedBy, ownDescribedBy].filter(Boolean).join(" ") || undefined;
+
+  return cloneElement(control, {
+    "aria-invalid": isInvalid || control.props["aria-invalid"] || undefined,
+    "aria-describedby": mergedDescribedBy,
+  });
 }

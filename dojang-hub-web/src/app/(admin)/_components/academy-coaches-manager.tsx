@@ -8,6 +8,7 @@ import {
   updateAkademiCoach,
 } from "../_lib/admin-api";
 import { FormField, PageHeader, ResponsiveColumn, ResponsiveList, SheetModal } from "./ui";
+import StatusMessage from "./ui/status-message";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -165,7 +166,7 @@ export default function AcademyCoachesManager() {
       render: (item) => (
         <span
           className={`inline-flex items-center px-2 py-0.5 text-xs font-bold ${
-            item.is_active ? "bg-success/10 text-success" : "bg-surface-container text-muted"
+            item.is_active ? "bg-success/10 text-success-strong" : "bg-surface-container text-muted"
           }`}
         >
           {item.is_active ? "Aktif" : "Nonaktif"}
@@ -184,7 +185,7 @@ export default function AcademyCoachesManager() {
                 <button
                   type="button"
                   onClick={() => startEdit(item)}
-                  className="inline-flex min-h-11 items-center justify-center border border-border px-3.5 py-1.5 text-xs font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+                  className="inline-flex min-h-11 items-center justify-center border border-border px-3.5 py-1.5 text-xs font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary"
                 >
                   Edit Profil
                 </button>
@@ -205,16 +206,8 @@ export default function AcademyCoachesManager() {
         description="Kelola tingkatan sabuk, nomor lisensi, kontak, dan biodata pelatih akademi."
       />
 
-      {message ? (
-        <p className="border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">
-          {message}
-        </p>
-      ) : null}
-      {error ? (
-        <p className="border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">
-          {error}
-        </p>
-      ) : null}
+      <StatusMessage tone="success" message={message} />
+      <StatusMessage tone="error" message={error} />
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="w-full sm:max-w-xs">
@@ -223,7 +216,7 @@ export default function AcademyCoachesManager() {
           </label>
           <input
             id="coaches-search"
-            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-sm text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border-strong bg-white px-3.5 py-2.5 text-sm text-primary placeholder:text-muted/80 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             placeholder="Cari pelatih..."
             value={query}
             onChange={(event) => setQuery(event.target.value)}
@@ -305,7 +298,7 @@ export default function AcademyCoachesManager() {
             <textarea
               id="coach-address"
               rows={3}
-              className="w-full border border-border bg-white p-3 text-base text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:text-sm"
+              className="w-full border border-border-strong bg-white p-3 text-base text-primary placeholder:text-muted/80 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
               value={form.address}
               onChange={(event) => setForm((current) => ({ ...current, address: event.target.value }))}
               placeholder="Alamat domisili..."
@@ -315,7 +308,7 @@ export default function AcademyCoachesManager() {
           <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
             <button
               type="button"
-              className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary"
               onClick={resetForm}
               disabled={isSaving}
             >
@@ -323,7 +316,7 @@ export default function AcademyCoachesManager() {
             </button>
             <button
               type="submit"
-              className="inline-flex min-h-11 items-center justify-center bg-primary px-6 text-sm font-bold text-white transition hover:bg-primary-container disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="inline-flex min-h-11 items-center justify-center bg-primary px-6 text-sm font-bold text-white transition hover:bg-primary-container disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-primary"
               disabled={isSaving}
             >
               {isSaving ? "Menyimpan..." : "Simpan"}

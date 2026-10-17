@@ -12,6 +12,8 @@ import {
 } from "../_lib/admin-api";
 import UserFormModal, { UserFormData } from "./setup/users/user-form-modal";
 import { PageHeader, ResponsiveColumn, ResponsiveList } from "./ui";
+import Icon from "./ui/icon";
+import StatusMessage from "./ui/status-message";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -198,7 +200,7 @@ export default function AcademyUsersManager() {
       render: (item) => (
         <span
           className={`inline-flex items-center px-2 py-0.5 text-xs font-bold ${
-            item.is_active ? "bg-success/10 text-success" : "bg-secondary/10 text-secondary"
+            item.is_active ? "bg-success/10 text-success-strong" : "bg-secondary/10 text-secondary"
           }`}
         >
           {item.is_active ? "Aktif" : "Nonaktif"}
@@ -215,7 +217,7 @@ export default function AcademyUsersManager() {
           <button
             type="button"
             onClick={() => startEdit(item)}
-            className="inline-flex min-h-11 items-center justify-center border border-border px-3 py-1.5 text-xs font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="inline-flex min-h-11 items-center justify-center border border-border px-3 py-1.5 text-xs font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary"
           >
             Edit
           </button>
@@ -223,7 +225,7 @@ export default function AcademyUsersManager() {
             <button
               type="button"
               onClick={() => handleDeactivate(item)}
-              className="inline-flex min-h-11 items-center justify-center border border-secondary/30 px-3 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary/10 focus:outline-hidden focus:ring-2 focus:ring-secondary/20"
+              className="inline-flex min-h-11 items-center justify-center border border-secondary/30 px-3 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary/10 focus:outline-hidden focus:ring-2 focus:ring-secondary"
             >
               Nonaktifkan
             </button>
@@ -245,24 +247,16 @@ export default function AcademyUsersManager() {
           <button
             type="button"
             onClick={openCreateModal}
-            className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white shadow-xs transition hover:bg-secondary-dark focus:outline-hidden focus:ring-2 focus:ring-secondary/50 sm:w-auto"
+            className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white shadow-xs transition hover:bg-secondary-dark focus:outline-hidden focus:ring-2 focus:ring-secondary sm:w-auto"
           >
-            <span className="material-symbols-outlined text-[20px]">person_add</span>
+            <Icon name="person_add" className="text-[20px]" />
             Tambah Akun
           </button>
         }
       />
 
-      {message ? (
-        <p className="border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">
-          {message}
-        </p>
-      ) : null}
-      {error ? (
-        <p className="border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">
-          {error}
-        </p>
-      ) : null}
+      <StatusMessage tone="success" message={message} />
+      <StatusMessage tone="error" message={error} />
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -272,7 +266,7 @@ export default function AcademyUsersManager() {
             </label>
             <input
               id="users-search"
-              className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-sm text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="min-h-11 w-full border border-border-strong bg-white px-3.5 py-2.5 text-sm text-primary placeholder:text-muted/80 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
               placeholder="Cari nama atau email..."
               value={query}
               onChange={(event) => setQuery(event.target.value)}
@@ -284,7 +278,7 @@ export default function AcademyUsersManager() {
             </label>
             <select
               id="users-role-filter"
-              className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-sm text-primary transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="min-h-11 w-full border border-border-strong bg-white px-3.5 py-2.5 text-sm text-primary transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
               value={roleFilter}
               onChange={(event) => setRoleFilter(event.target.value)}
             >

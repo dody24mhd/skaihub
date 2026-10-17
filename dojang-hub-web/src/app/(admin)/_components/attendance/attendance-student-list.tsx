@@ -37,7 +37,7 @@ export default function AttendanceStudentList({
           <button
             type="button"
             onClick={() => onSetAll("present")}
-            className="min-h-11 flex-1 sm:flex-none border-2 border-success bg-success/10 px-3.5 text-xs font-bold uppercase text-success transition hover:bg-success hover:text-white"
+            className="min-h-11 flex-1 sm:flex-none border-2 border-success bg-success/10 px-3.5 text-xs font-bold uppercase text-success-strong transition hover:bg-success-strong hover:text-white"
           >
             Semua Hadir
           </button>
