@@ -23,8 +23,10 @@ Riset: 2026-10-17 (L4-C). Dokumen ini adalah **sumber kebenaran katalog bawaan**
 - Kyu/Geup `n` → `sequence = (11 − n) × 10` (Geup/Kyu 10 = 10, … , 1 = 100).
 - Dan/Poom `n` → `sequence = 100 + n × 10` (Dan 1 = 110, … ). **Poom n dan Dan n memakai
   `sequence` yang sama** karena setara tingkatnya (Poom dikonversi ke Dan setelah usia 15).
-- UKT: sabuk tujuan harus punya `sequence` **lebih besar**; bila ada tingkat (nilai `sequence`
-  berbeda) di antara asal dan tujuan, itu "loncat tingkat" → butuh `allow_skip` + catatan.
+- UKT: sabuk tujuan harus punya `sequence` **lebih besar** (satu-satunya aturan yang memblokir).
+  Bila ada tingkat (nilai `sequence` berbeda) di antara asal dan tujuan, itu "loncat tingkat":
+  **tetap diterima**, API mengembalikan `warnings` (mis. "Melewati 2 tingkat dari … ke …") dan UI
+  menampilkannya tanpa memblokir — syarat kelayakan adalah kebijakan tiap akademi (keputusan pemilik).
 
 ## 1. Taekwondo Kukkiwon (`taekwondo_kukkiwon`) — dipakai PBTI
 
