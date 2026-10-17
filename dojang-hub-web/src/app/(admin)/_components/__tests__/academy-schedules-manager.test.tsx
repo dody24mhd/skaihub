@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import AcademySchedulesManager from "../academy-schedules-manager";
 import * as adminApi from "../../_lib/admin-api";
@@ -25,7 +25,53 @@ const mockMe: adminApi.AkademiMeResponse = {
   entitlements: { student_limit: 100, has_public_website: true, has_subdomain: true, has_rapor: true, has_exam_events: true, has_parent_portal: false },
 };
 
-const mockSchedules = {
+const mockPlaces: { data: adminApi.TrainingPlace[] } = {
+  data: [
+    {
+      id: 1,
+      akademi_id: 1,
+      name: "Dojang Utama",
+      address: null,
+      notes: null,
+      is_active: true,
+      created_at: "",
+      updated_at: "",
+    },
+  ],
+};
+
+const mockClasses: { data: adminApi.TrainingClass[] } = {
+  data: [
+    {
+      id: 1,
+      akademi_id: 1,
+      name: "Kelas Sore",
+      training_place_id: 1,
+      spp_amount_override: null,
+      target_sessions_per_month: 8,
+      is_active: true,
+      created_at: "",
+      updated_at: "",
+    },
+  ],
+};
+
+const mockCoaches: { data: adminApi.Coach[] } = {
+  data: [
+    {
+      id: 1,
+      akademi_id: 1,
+      name: "Sabeum Budi",
+      email: "budi@test.com",
+      role: "pelatih",
+      avatar_url: null,
+      is_active: true,
+      akademi: null,
+    },
+  ],
+};
+
+const mockSchedules: { data: adminApi.TrainingSchedule[] } = {
   data: [
     {
       id: 5,
@@ -38,25 +84,23 @@ const mockSchedules = {
       ends_at: "18:00:00",
       is_active: true,
       notes: "Bawa pelindung",
-      class: { id: 1, name: "Kelas Sore" },
-      training_place: { id: 1, name: "Dojang Utama" },
-      coach: { id: 1, name: "Sabeum Budi" },
+      created_at: "",
+      updated_at: "",
+      class: mockClasses.data[0],
+      training_place: mockPlaces.data[0],
+      coach: mockCoaches.data[0],
     },
   ],
 };
-
-const mockClasses = { data: [{ id: 1, name: "Kelas Sore", is_active: true }] };
-const mockPlaces = { data: [{ id: 1, name: "Dojang Utama", is_active: true }] };
-const mockCoaches = { data: [{ id: 1, name: "Sabeum Budi", is_active: true }] };
 
 describe("AcademySchedulesManager", () => {
   beforeEach(() => {
     localStorage.setItem("skaihub_admin_token", "fake-token");
     vi.mocked(adminApi.getAkademiMe).mockResolvedValue(mockMe);
-    vi.mocked(adminApi.getAkademiTrainingSchedules).mockResolvedValue(mockSchedules as any);
-    vi.mocked(adminApi.getAkademiClasses).mockResolvedValue(mockClasses as any);
-    vi.mocked(adminApi.getAkademiTrainingPlaces).mockResolvedValue(mockPlaces as any);
-    vi.mocked(adminApi.getAkademiCoaches).mockResolvedValue(mockCoaches as any);
+    vi.mocked(adminApi.getAkademiTrainingSchedules).mockResolvedValue(mockSchedules);
+    vi.mocked(adminApi.getAkademiClasses).mockResolvedValue(mockClasses);
+    vi.mocked(adminApi.getAkademiTrainingPlaces).mockResolvedValue(mockPlaces);
+    vi.mocked(adminApi.getAkademiCoaches).mockResolvedValue(mockCoaches);
   });
 
   it("merender daftar jadwal latihan dengan ResponsiveList", async () => {

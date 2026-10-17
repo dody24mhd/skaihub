@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useMemo, useState } from "react";
 import {
   Coach,
   TrainingClass,
@@ -33,7 +33,7 @@ const emptyForm: ScheduleFormData = {
 };
 
 export default function AcademySchedulesManager() {
-  const tokenRef = useRef("");
+  const [token, setToken] = useState("");
   const [items, setItems] = useState<TrainingSchedule[]>([]);
   const [classes, setClasses] = useState<TrainingClass[]>([]);
   const [places, setPlaces] = useState<TrainingPlace[]>([]);
@@ -96,7 +96,7 @@ export default function AcademySchedulesManager() {
   useEffect(() => {
     queueMicrotask(() => {
       const activeToken = localStorage.getItem(TOKEN_KEY) || "";
-      tokenRef.current = activeToken;
+      setToken(activeToken);
 
       if (!activeToken) {
         setError("Sesi tidak ditemukan. Silakan login ulang.");
@@ -165,20 +165,21 @@ export default function AcademySchedulesManager() {
     setError("");
 
     try {
+      const activeToken = token || localStorage.getItem(TOKEN_KEY) || "";
       if (editing) {
         await updateAkademiTrainingSchedule(
-          tokenRef.current,
+          activeToken,
           editing.id,
           payloadFromForm()
         );
       } else {
         await createAkademiTrainingSchedule(
-          tokenRef.current,
+          activeToken,
           payloadFromForm()
         );
       }
 
-      await loadData(tokenRef.current);
+      await loadData(activeToken);
       setIsModalOpen(false);
       setEditing(null);
       setForm(emptyForm);
@@ -207,8 +208,9 @@ export default function AcademySchedulesManager() {
     setError("");
 
     try {
-      await deleteAkademiTrainingSchedule(tokenRef.current, item.id);
-      await loadData(tokenRef.current);
+      const activeToken = token || localStorage.getItem(TOKEN_KEY) || "";
+      await deleteAkademiTrainingSchedule(activeToken, item.id);
+      await loadData(activeToken);
       if (editing?.id === item.id) {
         setIsModalOpen(false);
         setEditing(null);
@@ -223,15 +225,11 @@ export default function AcademySchedulesManager() {
     }
   }
 
-  const columns = useMemo(
-    () =>
-      buildScheduleColumns({
-        canManage,
-        onEdit: handleStartEdit,
-        onDelete: handleDelete,
-      }),
-    [canManage]
-  );
+  const columns = buildScheduleColumns({
+    canManage,
+    onEdit: handleStartEdit,
+    onDelete: handleDelete,
+  });
 
   if (isLoading)
     return <p className="text-sm font-medium text-muted">Memuat jadwal latihan...</p>;

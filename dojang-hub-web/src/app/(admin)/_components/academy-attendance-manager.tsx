@@ -14,7 +14,6 @@ import {
   uploadAkademiFile,
   updateAkademiTrainingSessionAttendance,
 } from "../_lib/admin-api";
-import AttendanceStudentCard from "./attendance/attendance-student-card";
 import AttendanceSummaryBar from "./attendance/attendance-summary-bar";
 import AttendanceSessionCreate from "./attendance/attendance-session-create";
 import AttendanceSessionInfo from "./attendance/attendance-session-info";

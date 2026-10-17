@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import AcademyAttendanceOverviewManager from "../academy-attendance-overview-manager";
 import * as adminApi from "../../_lib/admin-api";
@@ -33,22 +33,56 @@ const mockSessions = {
         status: "completed" as const,
         attendances_count: 5,
         present_count: 4,
-        class: { id: 1, name: "Kelas Sore" },
-        coach: { id: 1, name: "Sabeum Budi" },
+        class: {
+          id: 1,
+          akademi_id: 1,
+          name: "Kelas Sore",
+          training_place_id: null,
+          spp_amount_override: null,
+          target_sessions_per_month: 8,
+          is_active: true,
+          created_at: "",
+          updated_at: "",
+        },
+        coach: {
+          id: 1,
+          name: "Sabeum Budi",
+          email: "budi@test.com",
+          role: "pelatih" as const,
+          avatar_url: null,
+          is_active: true,
+          akademi_id: 1,
+          akademi: null,
+        },
       },
     ],
+    current_page: 1,
+    last_page: 1,
+    total: 1,
   },
 };
 
-const mockClasses = {
-  data: [{ id: 1, name: "Kelas Sore", is_active: true }],
+const mockClasses: { data: adminApi.TrainingClass[] } = {
+  data: [
+    {
+      id: 1,
+      akademi_id: 1,
+      name: "Kelas Sore",
+      training_place_id: null,
+      spp_amount_override: null,
+      target_sessions_per_month: 8,
+      is_active: true,
+      created_at: "",
+      updated_at: "",
+    },
+  ],
 };
 
 describe("AcademyAttendanceOverviewManager", () => {
   beforeEach(() => {
     localStorage.setItem("skaihub_admin_token", "fake-token");
-    vi.mocked(adminApi.getAkademiTrainingSessions).mockResolvedValue(mockSessions as any);
-    vi.mocked(adminApi.getAkademiClasses).mockResolvedValue(mockClasses as any);
+    vi.mocked(adminApi.getAkademiTrainingSessions).mockResolvedValue(mockSessions);
+    vi.mocked(adminApi.getAkademiClasses).mockResolvedValue(mockClasses);
   });
 
   it("merender kalender absensi aktual dan filter pencarian", async () => {

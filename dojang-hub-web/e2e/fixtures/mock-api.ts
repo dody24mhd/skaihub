@@ -109,6 +109,50 @@ export const MOCK_CLASSES = [
   },
 ];
 
+export const MOCK_TRAINING_PLACES = [
+  {
+    id: 1,
+    akademi_id: 1,
+    name: "Dojang Utama",
+    address: "Jl. Sudirman No. 1",
+    is_active: true,
+    created_at: "2026-01-01T00:00:00Z",
+    updated_at: "2026-01-01T00:00:00Z",
+  },
+];
+
+export const MOCK_COACHES = [
+  {
+    id: 1,
+    akademi_id: 1,
+    name: "Sabeum Nim",
+    email: "coach@example.com",
+    role: "pelatih" as const,
+    is_active: true,
+    avatar_url: null,
+    created_at: "2026-01-01T00:00:00Z",
+  },
+];
+
+export const MOCK_TRAINING_SCHEDULES = [
+  {
+    id: 1,
+    akademi_id: 1,
+    class_id: 1,
+    training_place_id: 1,
+    coach_id: 1,
+    day_of_week: 1,
+    starts_at: "16:00:00",
+    ends_at: "18:00:00",
+    is_active: true,
+    notes: "Latihan reguler sore",
+    class: MOCK_CLASSES[0],
+    training_place: MOCK_TRAINING_PLACES[0],
+    coach: MOCK_COACHES[0],
+    coaches: [MOCK_COACHES[0]],
+  },
+];
+
 export const MOCK_TRAINING_SESSIONS = [
   {
     id: 1,
@@ -146,6 +190,14 @@ export const MOCK_TRAINING_SESSIONS = [
       email: "coach@example.com",
       phone: "08123456789",
     },
+    coaches: [
+      {
+        id: 1,
+        name: "Sabeum Nim",
+        email: "coach@example.com",
+        phone: "08123456789",
+      },
+    ],
     training_place: {
       id: 1,
       name: "Dojang Utama",
@@ -153,8 +205,8 @@ export const MOCK_TRAINING_SESSIONS = [
       is_active: true,
     },
     attendances: [
-      { id: 1, student_id: 1, status: "hadir", student: MOCK_STUDENTS[0] },
-      { id: 2, student_id: 2, status: "izin", student: MOCK_STUDENTS[1] },
+      { id: 1, student_id: 1, participant_name: "Arya Pratama", is_extra_participant: false, status: "present", student: MOCK_STUDENTS[0] },
+      { id: 2, student_id: 2, participant_name: "Dewi Lestari", is_extra_participant: false, status: "absent", student: MOCK_STUDENTS[1] },
     ],
   },
 ];
@@ -229,6 +281,39 @@ export async function setupMockApi(page: Page) {
     const url = route.request().url();
     const method = route.request().method();
 
+    if (method === "PUT" && url.includes("/attendance")) {
+      const postData = (route.request().postDataJSON() || {}) as {
+        status?: string;
+        material?: string;
+        attendances?: Array<{ id: number; status: string }>;
+      };
+      const updatedSession = {
+        ...MOCK_TRAINING_SESSIONS[0],
+        status: postData.status || "completed",
+        material: postData.material || MOCK_TRAINING_SESSIONS[0].material,
+        attendances: (MOCK_TRAINING_SESSIONS[0].attendances || []).map((att) => {
+          const edit = (postData.attendances || []).find((e) => e.id === att.id);
+          return edit ? { ...att, status: edit.status } : att;
+        }),
+      };
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ message: "Berhasil", training_session: updatedSession }),
+      });
+    }
+
+    if (method === "POST" && url.includes("/akademi/training-sessions")) {
+      return route.fulfill({
+        status: 201,
+        contentType: "application/json",
+        body: JSON.stringify({
+          message: "Berita acara dibuat",
+          training_session: MOCK_TRAINING_SESSIONS[0],
+        }),
+      });
+    }
+
     if (method !== "GET") {
       return route.fulfill({
         status: 200,
@@ -269,11 +354,51 @@ export async function setupMockApi(page: Page) {
       });
     }
 
+    if (url.includes("/akademi/coaches")) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ data: MOCK_COACHES }),
+      });
+    }
+
+    if (url.includes("/akademi/training-places")) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ data: MOCK_TRAINING_PLACES }),
+      });
+    }
+
+    if (url.includes("/akademi/training-schedules")) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ data: MOCK_TRAINING_SCHEDULES }),
+      });
+    }
+
+    if (url.match(/\/akademi\/training-sessions\/\d+/)) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ training_session: MOCK_TRAINING_SESSIONS[0] }),
+      });
+    }
+
     if (url.includes("/akademi/training-sessions")) {
       return route.fulfill({
         status: 200,
         contentType: "application/json",
-        body: JSON.stringify({ data: MOCK_TRAINING_SESSIONS }),
+        body: JSON.stringify({
+          data: {
+            data: MOCK_TRAINING_SESSIONS,
+            total: MOCK_TRAINING_SESSIONS.length,
+            current_page: 1,
+            last_page: 1,
+            per_page: 200,
+          },
+        }),
       });
     }
 
@@ -293,3 +418,4 @@ export async function setupMockApi(page: Page) {
     });
   });
 }
+
