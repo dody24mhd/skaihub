@@ -28,6 +28,8 @@ class EvaluationAspectCopyTest extends TestCase
 
         $this->akademiA = Akademi::create(['name' => 'Garuda', 'slug' => 'garuda', 'sport_type' => 'taekwondo', 'status' => 'active', 'plan' => 'starter']);
         $this->akademiB = Akademi::create(['name' => 'Elang', 'slug' => 'elang', 'sport_type' => 'taekwondo', 'status' => 'active', 'plan' => 'starter']);
+        $this->giveActiveSubscription($this->akademiA);
+        $this->giveActiveSubscription($this->akademiB);
 
         $this->source = $this->period($this->akademiA, 'Semester 1');
         $this->target = $this->period($this->akademiA, 'Semester 2');

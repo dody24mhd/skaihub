@@ -251,6 +251,8 @@ class SubscriptionLifecycleTest extends TestCase
         $this->postJson('/api/akademi/students', [
             'name' => 'Siswa Masa Tenggang',
             'gender' => 'male',
+            'guardian_name' => 'Wali Siswa',
+            'guardian_phone' => '081200000001',
             'birth_date' => '2014-01-01',
             'joined_date' => '2026-11-03',
             'height_cm' => 150,

@@ -117,6 +117,8 @@ class SportRankSystemFilterTest extends TestCase
             'joined_date' => '2024-01-01',
             'height_cm' => 140,
             'weight_kg' => 35,
+            'guardian_name' => 'Wali Siswa',
+            'guardian_phone' => '081200000001',
         ];
 
         $this->postJson('/api/akademi/students', [
