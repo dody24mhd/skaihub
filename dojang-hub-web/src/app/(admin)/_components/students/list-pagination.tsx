@@ -24,13 +24,13 @@ export default function ListPagination({
       <div className="flex items-center justify-between gap-2 sm:justify-end">
         <button type="button" onClick={onPrev} disabled={currentPage <= 1 || isDisabled} className={pageButtonClass}>
           <Icon name="chevron_left" className="text-[17px]" />
-          Prev
+          Sebelumnya
         </button>
         <span className="min-w-24 text-center text-xs font-bold text-primary">
           Halaman {currentPage} / {lastPage || 1}
         </span>
         <button type="button" onClick={onNext} disabled={currentPage >= lastPage || isDisabled} className={pageButtonClass}>
-          Next
+          Berikutnya
           <Icon name="chevron_right" className="text-[17px]" />
         </button>
       </div>

@@ -210,7 +210,7 @@ export default function AdminShell({
             className="flex h-11 w-full items-center gap-3 rounded-md px-3 text-sm font-semibold text-white/72 transition hover:bg-secondary hover:text-white"
           >
             <Icon name="logout" className="text-[20px]" />
-            Logout
+            Keluar
           </button>
         </div>
       </aside>
@@ -242,7 +242,7 @@ export default function AdminShell({
                 type="button"
                 onClick={handleLogout}
                 className="inline-flex size-10 items-center justify-center rounded-md border border-border bg-white text-primary transition hover:bg-secondary/10 hover:text-secondary"
-                aria-label="Logout"
+                aria-label="Keluar"
               >
                 <Icon name="logout" className="text-[20px]" />
               </button>
@@ -327,7 +327,7 @@ export default function AdminShell({
               className="flex h-11 w-full items-center gap-3 rounded-md px-3 text-sm font-semibold text-secondary hover:bg-secondary/10"
             >
               <Icon name="logout" className="text-[20px]" />
-              Logout
+              Keluar
             </button>
           </div>
         </div>

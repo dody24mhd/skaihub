@@ -154,7 +154,7 @@ export default function AttendanceHistoryList({
               className="min-h-11 inline-flex items-center gap-1.5 border-2 border-border bg-white px-4 text-sm font-bold text-primary transition hover:bg-surface-container-low disabled:cursor-not-allowed disabled:opacity-40"
             >
               <Icon name="chevron_left" className="text-[18px]" />
-              Prev
+              Sebelumnya
             </button>
             <button
               type="button"
@@ -162,7 +162,7 @@ export default function AttendanceHistoryList({
               onClick={() => onPageChange(Math.min(pageCount, activePage + 1))}
               className="min-h-11 inline-flex items-center gap-1.5 border-2 border-border bg-white px-4 text-sm font-bold text-primary transition hover:bg-surface-container-low disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Next
+              Berikutnya
               <Icon name="chevron_right" className="text-[18px]" />
             </button>
           </div>
