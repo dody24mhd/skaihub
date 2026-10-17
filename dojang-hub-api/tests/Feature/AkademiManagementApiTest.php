@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Akademi;
 use App\Models\SportRank;
 use App\Models\User;
+use App\Services\SubscriptionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -33,6 +34,11 @@ class AkademiManagementApiTest extends TestCase
 
         $this->admin = User::factory()->akademiAdmin($this->akademi->id)->create();
         Sanctum::actingAs($this->admin);
+
+        app(SubscriptionService::class)->createInitial($this->akademi, [
+            'plan' => 'starter',
+            'duration_type' => 'monthly',
+        ]);
     }
 
     public function test_admin_akademi_can_manage_training_places_classes_and_students(): void

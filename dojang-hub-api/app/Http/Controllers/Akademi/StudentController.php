@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\SportRank;
 use App\Models\Student;
 use App\Models\TrainingClass;
+use App\Services\SubscriptionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -13,6 +14,8 @@ use Illuminate\Validation\Rule;
 
 class StudentController extends Controller
 {
+    public function __construct(private readonly SubscriptionService $subscriptions) {}
+
     public function index(Request $request): JsonResponse
     {
         $query = Student::query()
@@ -52,12 +55,18 @@ class StudentController extends Controller
 
         $akademi = $request->user()->akademi;
         $data = $request->validate($this->rules($akademi->id, $akademi->sport_type));
+        $status = $data['status'] ?? 'active';
+
+        if ($status === 'active') {
+            $this->subscriptions->assertCanAddActiveStudent($akademi);
+        }
+
         $data['member_number'] = $data['member_number'] ?? $this->nextMemberNumber($akademi->slug);
 
         $student = Student::create([
             ...$data,
             'akademi_id' => $akademi->id,
-            'status' => $data['status'] ?? 'active',
+            'status' => $status,
         ])->load(['currentRank', 'primaryClass.trainingPlace']);
 
         return response()->json(['student' => $student], 201);
@@ -133,6 +142,11 @@ class StudentController extends Controller
 
         $akademi = $request->user()->akademi;
         $data = $request->validate($this->rules($akademi->id, $akademi->sport_type, true, $student->id));
+
+        if (($data['status'] ?? null) === 'active' && $student->status !== 'active') {
+            $this->subscriptions->assertCanAddActiveStudent($akademi, $student->id);
+        }
+
         $student->update($data);
 
         return response()->json([
