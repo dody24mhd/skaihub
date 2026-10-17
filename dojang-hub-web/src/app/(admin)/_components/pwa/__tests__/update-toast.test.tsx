@@ -3,9 +3,12 @@ import { describe, expect, it, vi } from "vitest";
 import UpdateToast from "../update-toast";
 
 describe("UpdateToast", () => {
-  it("does not render when no update is available", () => {
-    const { container } = render(<UpdateToast />);
-    expect(container.firstChild).toBeNull();
+  it("keeps an empty status live region mounted when no update is available", () => {
+    render(<UpdateToast />);
+
+    const region = screen.getByRole("status");
+    expect(region).toBeEmptyDOMElement();
+    expect(screen.queryByText("Versi baru tersedia")).toBeNull();
   });
 
   it("renders toast when sw-update-available event is dispatched", () => {
@@ -26,7 +29,9 @@ describe("UpdateToast", () => {
       );
     });
 
-    expect(screen.getByText("Versi baru tersedia")).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("Versi baru tersedia");
+    // Di HP toast berada di atas bottom nav (bukan bottom-4 yang menutupinya)
+    expect(screen.getByRole("complementary")).toHaveClass("bottom-[calc(4.5rem+env(safe-area-inset-bottom,0px))]");
     const reloadButton = screen.getByRole("button", { name: "Muat ulang" });
     expect(reloadButton).toBeInTheDocument();
 
