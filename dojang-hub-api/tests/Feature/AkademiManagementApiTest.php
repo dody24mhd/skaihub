@@ -338,20 +338,15 @@ class AkademiManagementApiTest extends TestCase
 
         Sanctum::actingAs(User::findOrFail($adminId));
 
-        $adminTwoId = $this->postJson('/api/akademi/users', [
+        // Admin cannot create another admin (PRD: only Ketua manages Admin)
+        $this->postJson('/api/akademi/users', [
             'name' => 'Admin Dua',
             'email' => 'admin.dua@test.local',
             'password' => 'password123',
             'role' => 'admin_akademi',
-        ])->assertCreated()
-            ->assertJsonPath('academy_user.role', 'admin_akademi')
-            ->json('academy_user.id');
+        ])->assertUnprocessable();
 
-        $this->assertDatabaseHas('users', [
-            'id' => $adminTwoId,
-            'role' => 'admin_akademi',
-        ]);
-
+        // Admin can manage coach
         $this->patchJson("/api/akademi/users/{$coachId}", [
             'name' => 'Coach Update',
             'role' => 'pelatih',

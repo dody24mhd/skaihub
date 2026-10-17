@@ -16,6 +16,7 @@ class CoachController extends Controller
         $coaches = User::query()
             ->with('coachProfile')
             ->where('akademi_id', $request->user()->akademi_id)
+            ->where('role', 'pelatih')
             ->whereHas('coachProfile')
             ->orderByDesc('is_active')
             ->orderBy('name')
@@ -156,7 +157,9 @@ class CoachController extends Controller
     private function ensureCoachBelongsToCurrentAkademi(Request $request, User $coach): void
     {
         abort_unless(
-            $coach->akademi_id === $request->user()->akademi_id && $coach->coachProfile()->exists(),
+            $coach->akademi_id === $request->user()->akademi_id
+                && $coach->role === 'pelatih'
+                && $coach->coachProfile()->exists(),
             404,
             'Pelatih tidak ditemukan.'
         );
