@@ -16,6 +16,11 @@ class TrainingSessionService
         return in_array($user->role, self::ADMIN_ROLES, true);
     }
 
+    public function coachBackfillDays(): int
+    {
+        return max(0, (int) config('training.coach_backfill_days', 7));
+    }
+
     public function isScheduleCoach(User $user, TrainingSchedule $schedule): bool
     {
         return $user->role === 'pelatih'

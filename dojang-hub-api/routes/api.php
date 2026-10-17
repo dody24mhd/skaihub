@@ -18,6 +18,7 @@ use App\Http\Controllers\Akademi\SportRankController as AkademiSportRankControll
 use App\Http\Controllers\Akademi\SppBillController as AkademiSppBillController;
 use App\Http\Controllers\Akademi\StudentAchievementController as AkademiStudentAchievementController;
 use App\Http\Controllers\Akademi\StudentController as AkademiStudentController;
+use App\Http\Controllers\Akademi\TodaySessionController as AkademiTodaySessionController;
 use App\Http\Controllers\Akademi\TrainingClassController as AkademiTrainingClassController;
 use App\Http\Controllers\Akademi\TrainingPlaceController as AkademiTrainingPlaceController;
 use App\Http\Controllers\Akademi\TrainingScheduleController as AkademiTrainingScheduleController;
@@ -130,6 +131,7 @@ Route::prefix('akademi')
         Route::post('training-sessions/{trainingSession}/reschedule', [AkademiTrainingSessionActionController::class, 'reschedule']);
         Route::post('training-sessions/{trainingSession}/cancel', [AkademiTrainingSessionActionController::class, 'cancel']);
         Route::post('training-sessions/from-schedule', [AkademiTrainingSessionActionController::class, 'fromSchedule']);
+        Route::get('sessions/today', [AkademiTodaySessionController::class, 'index']);
         // end L4-A
         Route::patch('training-sessions/{trainingSession}/attendance', [AkademiTrainingSessionController::class, 'updateAttendance']);
         Route::apiResource('training-sessions', AkademiTrainingSessionController::class)->parameters([
