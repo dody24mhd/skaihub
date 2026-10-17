@@ -22,6 +22,11 @@ if (isVitest) {
     "/academy/attendance",
     "/academy/attendance/new",
     "/academy/schedules",
+    "/academy/classes",
+    "/academy/coaches",
+    "/academy/users",
+    "/academy/places",
+    "/academy/public-profile",
   ];
 
   playwrightTest.describe("Responsive Layout & Shell", () => {
