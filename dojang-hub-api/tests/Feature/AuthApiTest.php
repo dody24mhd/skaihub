@@ -271,4 +271,24 @@ class AuthApiTest extends TestCase
             ->getJson('/api/akademi/me')
             ->assertUnauthorized();
     }
+
+    public function test_inactive_super_admin_cannot_access_super_admin_routes(): void
+    {
+        $superAdmin = User::factory()->superAdmin()->create(['is_active' => false]);
+        Sanctum::actingAs($superAdmin);
+
+        $this->getJson('/api/super-admin/akademi')
+            ->assertUnauthorized()
+            ->assertJsonPath('message', 'Akun tidak aktif. Hubungi administrator.');
+    }
+
+    public function test_inactive_user_cannot_access_auth_me(): void
+    {
+        $user = User::factory()->superAdmin()->create(['is_active' => false]);
+        Sanctum::actingAs($user);
+
+        $this->getJson('/api/auth/me')
+            ->assertUnauthorized()
+            ->assertJsonPath('message', 'Akun tidak aktif. Hubungi administrator.');
+    }
 }

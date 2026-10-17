@@ -50,14 +50,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login'])->middleware('throttle:login');
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware(['auth:sanctum', 'active'])->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
         Route::get('me', [AuthController::class, 'me']);
     });
 });
 
 Route::prefix('super-admin')
-    ->middleware(['auth:sanctum', 'super.admin'])
+    ->middleware(['auth:sanctum', 'active', 'super.admin'])
     ->group(function () {
         Route::apiResource('akademi', SuperAdminAkademiController::class);
         Route::get('akademi/{akademi}/subscriptions', [SuperAdminSubscriptionController::class, 'index']);
@@ -84,7 +84,7 @@ Route::prefix('compro')->group(function () {
 });
 
 Route::prefix('admin')
-    ->middleware(['auth:sanctum', 'platform.admin'])
+    ->middleware(['auth:sanctum', 'active', 'platform.admin'])
     ->group(function () {
         Route::apiResource('events', AdminEventController::class);
         Route::apiResource('blogs', AdminBlogController::class);
@@ -99,7 +99,7 @@ Route::prefix('admin')
     });
 
 Route::prefix('akademi')
-    ->middleware(['auth:sanctum', 'akademi.user'])
+    ->middleware(['auth:sanctum', 'active', 'akademi.user'])
     ->group(function () {
         Route::get('me', [AkademiProfileController::class, 'me']);
         Route::get('dashboard/summary', [AkademiDashboardController::class, 'summary']);
