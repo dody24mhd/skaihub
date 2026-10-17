@@ -166,12 +166,25 @@ class AkademiController extends Controller
             'name', 'slug', 'sport_type', 'logo_url', 'status',
         ]));
 
+        if ($request->filled('status') && in_array($request->status, ['inactive', 'suspended'], true)) {
+            DB::table('personal_access_tokens')
+                ->where('tokenable_type', User::class)
+                ->whereIn('tokenable_id', $akademi->users()->select('id'))
+                ->delete();
+        }
+
         return response()->json(['akademi' => $akademi->fresh()]);
     }
 
     public function destroy(int $id): JsonResponse
     {
         $akademi = Akademi::findOrFail($id);
+
+        DB::table('personal_access_tokens')
+            ->where('tokenable_type', User::class)
+            ->whereIn('tokenable_id', $akademi->users()->select('id'))
+            ->delete();
+
         $akademi->delete();
 
         return response()->json(['message' => 'Akademi berhasil dihapus.']);

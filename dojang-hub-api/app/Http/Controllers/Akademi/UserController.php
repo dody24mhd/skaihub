@@ -89,6 +89,11 @@ class UserController extends Controller
 
             if (! empty($data['password'])) {
                 $user->password = $data['password'];
+                $user->tokens()->delete();
+            }
+
+            if (array_key_exists('is_active', $data) && ! $data['is_active']) {
+                $user->tokens()->delete();
             }
 
             $user->save();
@@ -124,6 +129,7 @@ class UserController extends Controller
 
         $user->forceFill(['is_active' => false])->save();
         $user->coachProfile()?->update(['status' => 'inactive']);
+        $user->tokens()->delete();
 
         return response()->json(['message' => 'Akun akademi berhasil dinonaktifkan.']);
     }

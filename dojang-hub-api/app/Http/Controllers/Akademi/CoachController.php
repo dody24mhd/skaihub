@@ -83,6 +83,11 @@ class CoachController extends Controller
 
             if (! empty($data['password'])) {
                 $coach->password = $data['password'];
+                $coach->tokens()->delete();
+            }
+
+            if (array_key_exists('is_active', $data) && ! $data['is_active']) {
+                $coach->tokens()->delete();
             }
 
             $coach->save();
