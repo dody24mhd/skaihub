@@ -269,7 +269,7 @@ class EvaluationController extends Controller
                     'class_id' => $scoreData['class_id'] ?? $student->primary_class_id,
                     'assessed_by' => $request->user()->id,
                     'score' => $scoreData['score'],
-                    'indicator' => $this->indicatorForScore((int) $scoreData['score']),
+                    'indicator' => self::indicatorForScore((int) $scoreData['score']),
                     'notes' => $scoreData['notes'] ?? null,
                 ]
             );
@@ -284,7 +284,7 @@ class EvaluationController extends Controller
         ]);
     }
 
-    private function indicatorForScore(int $score): string
+    public static function indicatorForScore(int $score): string
     {
         if ($score < 60) {
             return 'kurang';
