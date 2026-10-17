@@ -156,11 +156,11 @@ class TrainingSessionController extends Controller
             'status' => ['sometimes', Rule::in(['draft', 'completed', 'cancelled'])],
             'attendances' => ['sometimes', 'array'],
             'attendances.*.id' => ['required_with:attendances', 'integer', Rule::exists('training_attendances', 'id')],
-            'attendances.*.status' => ['required_with:attendances', Rule::in(['present', 'absent', 'excused'])],
+            'attendances.*.status' => ['required_with:attendances', Rule::in(['present', 'absent', 'excused', 'sick'])],
             'attendances.*.notes' => ['nullable', 'string'],
             'extra_participants' => ['sometimes', 'array'],
             'extra_participants.*.participant_name' => ['required_with:extra_participants', 'string', 'max:150'],
-            'extra_participants.*.status' => ['required_with:extra_participants', Rule::in(['present', 'absent', 'excused'])],
+            'extra_participants.*.status' => ['required_with:extra_participants', Rule::in(['present', 'absent', 'excused', 'sick'])],
             'extra_participants.*.notes' => ['nullable', 'string'],
         ]);
 
