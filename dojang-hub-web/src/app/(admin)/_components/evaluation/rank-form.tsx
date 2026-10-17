@@ -1,49 +1,25 @@
 "use client";
 
 import { Dispatch, FormEvent, SetStateAction } from "react";
+import AcademyRankBeltBadge from "../academy-rank-belt-badge";
+import { BELT_COLOR_OPTIONS } from "../belt-colors";
 import { FormField } from "../ui";
-
-const beltOptions = [
-  { code: "white", label: "Putih", className: "bg-white border-slate-300" },
-  { code: "yellow", label: "Kuning", className: "bg-yellow-300 border-yellow-500" },
-  { code: "green", label: "Hijau", className: "bg-emerald-500 border-emerald-700" },
-  { code: "blue", label: "Biru", className: "bg-blue-600 border-blue-800" },
-  { code: "red", label: "Merah", className: "bg-red-600 border-red-800" },
-  { code: "black", label: "Hitam", className: "bg-neutral-950 border-neutral-700" },
-  { code: "poom", label: "Poom", className: "bg-red-600 border-neutral-900" },
-];
 
 export type RankFormValues = {
   code: string;
   label: string;
   sequence: string;
+  belt_color: string;
+  stripe_color: string;
 };
 
 export const emptyRankForm: RankFormValues = {
   code: "",
   label: "",
   sequence: "1",
+  belt_color: "",
+  stripe_color: "",
 };
-
-export function BeltIcon({ code, label }: { code: string; label: string }) {
-  const option = beltOptions.find((item) => item.code === code);
-  const className = option?.className || "bg-slate-200 border-slate-400";
-
-  return (
-    <span className="inline-flex items-center gap-2">
-      <span
-        className={`relative inline-flex h-4 w-12 overflow-hidden rounded-sm border ${className}`}
-        aria-hidden="true"
-      >
-        {code === "poom" ? (
-          <span className="absolute inset-y-0 right-0 w-1/2 bg-neutral-950" />
-        ) : null}
-        <span className="absolute left-1/2 top-0 h-full w-1 -translate-x-1/2 bg-white/70" />
-      </span>
-      <span>{option?.label || label}</span>
-    </span>
-  );
-}
 
 type RankFormProps = {
   idPrefix: string;
@@ -69,36 +45,61 @@ export default function RankForm({
       <FormField
         id={`${idPrefix}-label`}
         label="Nama tingkatan"
+        placeholder="Misal: Geup 9 Strip Khusus"
         value={form.label}
         onChange={(e) => setForm((cur) => ({ ...cur, label: e.target.value }))}
         required
       />
-      <div className="flex flex-col gap-1.5">
-        <span className="text-xs font-bold uppercase tracking-wide text-primary">
-          Icon warna
-        </span>
+      <fieldset className="flex flex-col gap-1.5">
+        <legend className="mb-1.5 text-xs font-bold uppercase tracking-wide text-primary">
+          Warna sabuk
+        </legend>
         <div className="grid grid-cols-2 gap-2">
-          {beltOptions.map((option) => (
+          {BELT_COLOR_OPTIONS.map((option) => (
             <button
-              key={option.code}
+              key={option.value}
               type="button"
-              aria-pressed={form.code === option.code}
-              onClick={() => setForm((cur) => ({ ...cur, code: option.code }))}
+              aria-pressed={form.belt_color === option.value}
+              onClick={() => setForm((cur) => ({ ...cur, belt_color: option.value }))}
               className={`flex min-h-11 items-center justify-between rounded-md border px-3 text-sm font-bold transition ${
-                form.code === option.code
+                form.belt_color === option.value
                   ? "border-primary bg-primary/5 text-primary"
                   : "border-border text-muted hover:bg-surface-container"
               }`}
             >
-              <BeltIcon code={option.code} label={option.label} />
+              <AcademyRankBeltBadge
+                rank={{ code: option.value, label: option.label, belt_color: option.value }}
+                size="sm"
+              />
             </button>
           ))}
         </div>
+      </fieldset>
+      <div className="flex flex-col gap-1.5">
+        <label
+          htmlFor={`${idPrefix}-stripe`}
+          className="text-xs font-bold uppercase tracking-wide text-primary"
+        >
+          Warna strip
+        </label>
+        <select
+          id={`${idPrefix}-stripe`}
+          className="min-h-11 w-full rounded-md border border-border bg-white px-3 text-base text-primary focus:border-primary sm:text-sm"
+          value={form.stripe_color}
+          onChange={(e) => setForm((cur) => ({ ...cur, stripe_color: e.target.value }))}
+        >
+          <option value="">Tanpa strip</option>
+          {BELT_COLOR_OPTIONS.filter((option) => option.value !== "red_black").map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
       </div>
       <FormField
         id={`${idPrefix}-code`}
-        label="Kode custom"
-        placeholder="Misal: dan-1, strip-1"
+        label="Kode"
+        placeholder="Misal: geup-9-strip"
         value={form.code}
         onChange={(e) => setForm((cur) => ({ ...cur, code: e.target.value }))}
         required
@@ -106,6 +107,7 @@ export default function RankForm({
       <FormField
         id={`${idPrefix}-sequence`}
         label="Urutan"
+        hint="Isi di antara urutan sabuk bawaan, mis. 25 untuk di antara 20 dan 30."
         type="number"
         inputMode="numeric"
         min="1"

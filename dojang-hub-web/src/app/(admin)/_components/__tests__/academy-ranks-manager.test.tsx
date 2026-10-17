@@ -15,6 +15,20 @@ const mockRanks = [
   { id: 2, akademi_id: 1, sport_type: "taekwondo" as const, code: "yellow", label: "Kuning", sequence: 2 },
 ];
 
+const builtinRank = {
+  id: 10,
+  akademi_id: null,
+  sport_type: "taekwondo",
+  rank_system: "taekwondo_kukkiwon",
+  code: "tkd-geup-8",
+  label: "Geup 8 (Kuning Strip Hijau)",
+  sequence: 30,
+  level_type: "geup" as const,
+  level_number: 8,
+  belt_color: "yellow",
+  stripe_color: "green",
+};
+
 describe("AcademyRanksManager", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -28,8 +42,9 @@ describe("AcademyRanksManager", () => {
     render(<AcademyRanksManager />);
 
     expect(await screen.findByText("Sabuk / Tingkatan")).toBeInTheDocument();
-    expect(await screen.findAllByText("Putih")).toHaveLength(3); // 1 table, 1 card, 1 button option di form aside
-    expect(await screen.findAllByText("Kuning")).toHaveLength(3);
+    // 1 table, 1 card, 1 tombol warna & 1 opsi warna strip di form aside
+    expect(await screen.findAllByText("Putih")).toHaveLength(4);
+    expect(await screen.findAllByText("Kuning")).toHaveLength(4);
   });
 
   it("membuka SheetModal saat tombol Tambah Tingkatan diklik di mobile", async () => {
@@ -49,7 +64,8 @@ describe("AcademyRanksManager", () => {
     try {
       render(<AcademyRanksManager />);
 
-      const [editBtn] = await screen.findAllByRole("button", { name: "Edit" });
+      // Tombol Edit kini punya aria-label "Edit <nama>" agar bisa dibedakan pembaca layar.
+      const [editBtn] = await screen.findAllByRole("button", { name: "Edit Putih" });
       fireEvent.click(editBtn);
 
       expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
@@ -57,5 +73,21 @@ describe("AcademyRanksManager", () => {
     } finally {
       vi.unstubAllGlobals();
     }
+  });
+
+  it("menandai sabuk bawaan sebagai terkunci dengan label sistem", async () => {
+    vi.mocked(adminApi.getAkademiSportRanks).mockResolvedValue({
+      data: [builtinRank, ...mockRanks],
+    });
+
+    render(<AcademyRanksManager />);
+
+    expect(await screen.findAllByText("Bawaan Kukkiwon")).toHaveLength(2);
+    expect(screen.getByText(/Sistem Taekwondo Kukkiwon/)).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Edit Geup 8 (Kuning Strip Hijau)" })).not.toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: "Edit Putih" }).length).toBeGreaterThan(0);
+    expect(
+      document.querySelector('[aria-label="Geup 8 (Kuning Strip Hijau)"] [data-stripe-color="green"]')
+    ).not.toBeNull();
   });
 });

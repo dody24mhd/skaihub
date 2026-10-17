@@ -1,68 +1,82 @@
 "use client";
 
 import { SportRank } from "../../_lib/admin-api";
+import AcademyRankBeltBadge from "../academy-rank-belt-badge";
 import { ResponsiveColumn, ResponsiveList } from "../ui";
-import { BeltIcon } from "./rank-form";
 
 type RankListProps = {
   rows: SportRank[];
+  builtinLabel: string;
   onEdit: (item: SportRank) => void;
   onDelete: (item: SportRank) => void;
 };
 
-export default function RankList({ rows, onEdit, onDelete }: RankListProps) {
+export function isBuiltinRank(item: SportRank): boolean {
+  return item.akademi_id === null || item.akademi_id === undefined;
+}
+
+export default function RankList({ rows, builtinLabel, onEdit, onDelete }: RankListProps) {
   const columns: ResponsiveColumn<SportRank>[] = [
     {
       key: "label",
-      header: "Nama Tingkatan",
+      header: "Tingkatan",
       primary: true,
       render: (item) => (
-        <div className="flex items-center gap-3">
-          <BeltIcon code={item.code} label={item.label} />
-          <span className="text-xs font-semibold text-muted md:hidden">
-            (Urutan: {item.sequence})
-          </span>
+        <div className="flex flex-wrap items-center gap-3">
+          <AcademyRankBeltBadge rank={item} size="md" />
+          <span className="text-xs font-semibold text-muted md:hidden">Urutan {item.sequence}</span>
         </div>
       ),
     },
     {
       key: "sequence",
       header: "Urutan",
-      render: (item) => (
-        <span className="font-bold text-primary">{item.sequence}</span>
-      ),
+      render: (item) => <span className="font-bold text-primary">{item.sequence}</span>,
     },
     {
-      key: "code",
-      header: "Kode",
-      render: (item) => (
-        <span className="rounded-sm bg-surface-container px-2 py-0.5 text-xs font-mono text-muted">
-          {item.code}
-        </span>
-      ),
+      key: "source",
+      header: "Asal",
+      render: (item) =>
+        isBuiltinRank(item) ? (
+          <span className="inline-flex items-center gap-1 rounded-sm bg-surface-container px-2 py-0.5 text-xs font-bold text-muted">
+            <span className="material-symbols-outlined text-[14px]" aria-hidden="true">
+              lock
+            </span>
+            {builtinLabel}
+          </span>
+        ) : (
+          <span className="inline-flex items-center rounded-sm bg-primary/5 px-2 py-0.5 text-xs font-bold text-primary">
+            Tambahan akademi
+          </span>
+        ),
     },
     {
       key: "actions",
       header: "Aksi",
       className: "text-right",
-      render: (item) => (
-        <div className="flex flex-wrap items-center justify-end gap-2">
-          <button
-            className="inline-flex min-h-11 items-center justify-center rounded-md border border-border px-3 text-xs font-bold text-primary transition hover:border-primary hover:bg-surface-container"
-            onClick={() => onEdit(item)}
-            type="button"
-          >
-            Edit
-          </button>
-          <button
-            className="inline-flex min-h-11 items-center justify-center rounded-md border border-secondary/30 px-3 text-xs font-bold text-secondary transition hover:bg-secondary/10"
-            onClick={() => onDelete(item)}
-            type="button"
-          >
-            Hapus
-          </button>
-        </div>
-      ),
+      render: (item) =>
+        isBuiltinRank(item) ? (
+          <span className="text-xs text-muted">Terkunci</span>
+        ) : (
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <button
+              className="inline-flex min-h-11 items-center justify-center rounded-md border border-border px-3 text-xs font-bold text-primary transition hover:border-primary hover:bg-surface-container"
+              onClick={() => onEdit(item)}
+              type="button"
+              aria-label={`Edit ${item.label}`}
+            >
+              Edit
+            </button>
+            <button
+              className="inline-flex min-h-11 items-center justify-center rounded-md border border-secondary/30 px-3 text-xs font-bold text-secondary transition hover:bg-secondary/10"
+              onClick={() => onDelete(item)}
+              type="button"
+              aria-label={`Hapus ${item.label}`}
+            >
+              Hapus
+            </button>
+          </div>
+        ),
     },
   ];
 
