@@ -12,43 +12,47 @@ export const metadata: Metadata = {
 const sections = [
   {
     title: "1. Penerimaan Syarat",
-    content: `Dengan mengakses atau menggunakan layanan SKAIHUB ("Platform"), Anda menyetujui untuk terikat oleh syarat dan ketentuan ini. Jika Anda tidak setuju dengan salah satu ketentuan di sini, mohon untuk tidak menggunakan Platform kami.`,
+    content: `Dengan mengakses atau menggunakan layanan SKAIHUB ("Platform"), Anda menyetujui syarat dan ketentuan ini. Jika Anda tidak setuju dengan salah satu ketentuan, mohon tidak menggunakan Platform kami.`,
   },
   {
     title: "2. Deskripsi Layanan",
-    content: `SKAIHUB adalah platform Software as a Service (SaaS) yang menyediakan sistem manajemen digital untuk akademi bela diri, termasuk namun tidak terbatas pada manajemen siswa, absensi, kenaikan sabuk/kyu, rapor digital, dan website publik akademi berbasis subdomain.`,
+    content: `SKAIHUB adalah platform berbasis web untuk mengelola akademi bela diri, meliputi data siswa dan pelatih, jadwal dan absensi, SPP, evaluasi dan rapor siswa, serta sabuk dan UKT. Halaman publik akademi di subdomain nama.skaihub.com hanya tersedia untuk Paket Pro dan Scale.`,
   },
   {
     title: "3. Akun dan Keamanan",
-    content: `Anda bertanggung jawab untuk menjaga kerahasiaan kredensial akun Anda. SKAIHUB tidak bertanggung jawab atas kerugian yang timbul akibat akses tidak sah yang disebabkan oleh kelalaian Anda dalam menjaga keamanan akun. Segera hubungi kami jika Anda mencurigai adanya akses tidak sah.`,
+    content: `Akun dibuat oleh tim SKAIHUB untuk pengurus akademi, lalu pengurus dapat menambahkan Admin dan Pelatih. Anda bertanggung jawab menjaga kerahasiaan kredensial akun. SKAIHUB tidak bertanggung jawab atas kerugian akibat akses tidak sah yang disebabkan kelalaian dalam menjaga akun. Segera hubungi kami jika Anda mencurigai ada akses tidak sah.`,
   },
   {
-    title: "4. Isolasi Data Antar Akademi",
-    content: `Setiap akademi beroperasi secara terisolasi di dalam platform. Data milik satu akademi tidak dapat diakses oleh akademi lain. SKAIHUB menerapkan kontrol akses ketat di setiap lapisan sistem untuk memastikan privasi dan keamanan data Anda.`,
+    title: "4. Pemisahan Data Antar Akademi",
+    content: `Setiap akademi hanya dapat melihat dan mengelola datanya sendiri. Data milik satu akademi tidak dapat diakses oleh akademi lain.`,
   },
   {
     title: "5. Paket Berlangganan dan Pembayaran",
-    content: `Layanan SKAIHUB tersedia dalam beberapa paket berlangganan bulanan (Starter, Pro, Scale). Pembayaran dilakukan di awal periode berlangganan. Tidak ada refund untuk periode yang sudah berjalan. Anda dapat menghentikan langganan kapan saja tanpa penalti, berlaku di periode billing berikutnya.`,
+    content: `Layanan tersedia dalam paket Starter, Pro, dan Scale dengan harga bulanan sesuai halaman Harga. Pembayaran dilakukan di awal periode melalui transfer bank manual, lalu dikonfirmasi oleh tim SKAIHUB. Perubahan paket atau penambahan kuota siswa dilakukan lewat tim SKAIHUB. Tidak ada refund untuk periode yang sudah berjalan. Jika tidak ingin melanjutkan, Anda cukup tidak memperpanjang langganan.`,
   },
   {
-    title: "6. Penghentian Layanan",
-    content: `SKAIHUB berhak menangguhkan atau menghentikan akses Anda jika terjadi pelanggaran terhadap syarat ini, keterlambatan pembayaran yang signifikan, atau penggunaan Platform untuk tujuan yang melanggar hukum. Setelah penghentian, data akademi akan disimpan selama 30 hari sebelum dihapus permanen.`,
+    title: "6. Masa Aktif, Tenggang, dan Mode Baca-Saja",
+    content: `Peringatan perpanjangan ditampilkan 14 hari sebelum masa aktif berakhir. Setelah masa aktif berakhir, akademi mendapat masa tenggang 7 hari. Jika belum diperpanjang setelah masa tenggang, akun berubah menjadi baca-saja: data tetap dapat dilihat, tetapi tidak dapat ditambah atau diubah sampai langganan diperpanjang.`,
   },
   {
-    title: "7. Kepemilikan Konten",
-    content: `Konten yang Anda unggah ke Platform (foto, dokumen, data siswa) tetap menjadi milik Anda. SKAIHUB hanya menggunakan data tersebut untuk keperluan operasional layanan yang Anda berlangganan. Kami tidak akan menjual atau membagikan data Anda kepada pihak ketiga tanpa izin Anda.`,
+    title: "7. Penghentian Layanan",
+    content: `SKAIHUB berhak menangguhkan atau menghentikan akses jika terjadi pelanggaran terhadap syarat ini atau penggunaan Platform untuk tujuan yang melanggar hukum. Permintaan salinan atau penghapusan data akademi dapat diajukan melalui email hello@skaihub.com.`,
   },
   {
-    title: "8. Batasan Tanggung Jawab",
-    content: `SKAIHUB tidak bertanggung jawab atas kerugian tidak langsung, kehilangan keuntungan, atau kerusakan data yang timbul dari penggunaan atau ketidakmampuan penggunaan layanan kami, sepanjang diizinkan oleh hukum yang berlaku di Indonesia.`,
+    title: "8. Kepemilikan Konten",
+    content: `Konten yang Anda unggah ke Platform (foto, dokumen, data siswa) tetap menjadi milik Anda. SKAIHUB hanya menggunakan data tersebut untuk menjalankan layanan yang Anda gunakan. Kami tidak menjual atau membagikan data Anda kepada pihak ketiga tanpa izin Anda.`,
   },
   {
-    title: "9. Perubahan Syarat",
-    content: `SKAIHUB berhak mengubah syarat dan ketentuan ini sewaktu-waktu. Perubahan signifikan akan diberitahukan melalui email atau notifikasi dalam platform minimal 14 hari sebelum berlaku. Penggunaan layanan setelah perubahan berlaku dianggap sebagai penerimaan syarat baru.`,
+    title: "9. Batasan Tanggung Jawab",
+    content: `SKAIHUB tidak bertanggung jawab atas kerugian tidak langsung, kehilangan keuntungan, atau kerusakan data yang timbul dari penggunaan atau ketidakmampuan menggunakan layanan, sepanjang diizinkan oleh hukum yang berlaku di Indonesia.`,
   },
   {
-    title: "10. Hukum yang Berlaku",
-    content: `Syarat dan ketentuan ini tunduk pada hukum Republik Indonesia. Sengketa yang timbul akan diselesaikan secara musyawarah, dan jika tidak tercapai kesepakatan, diselesaikan melalui pengadilan yang berwenang di Indonesia.`,
+    title: "10. Perubahan Syarat",
+    content: `SKAIHUB dapat mengubah syarat dan ketentuan ini. Perubahan penting akan diberitahukan lewat WhatsApp kepada pengurus akademi minimal 14 hari sebelum berlaku. Penggunaan layanan setelah perubahan berlaku dianggap sebagai persetujuan atas syarat baru.`,
+  },
+  {
+    title: "11. Hukum yang Berlaku",
+    content: `Syarat dan ketentuan ini tunduk pada hukum Republik Indonesia. Sengketa diselesaikan secara musyawarah terlebih dahulu. Jika tidak tercapai kesepakatan, sengketa diselesaikan melalui pengadilan yang berwenang di Indonesia.`,
   },
 ];
 

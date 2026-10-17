@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import ContactForm from "../_components/contact-form";
 import { getHomeFaqs, getSiteSettings } from "../_lib/compro-data";
-import { createWhatsAppUrl, formatWhatsAppDisplay, WHATSAPP_DISPLAY, WHATSAPP_NUMBER } from "../_lib/whatsapp";
+import { createWhatsAppUrl, formatWhatsAppDisplay, OFFICE_HOURS, WHATSAPP_DISPLAY, WHATSAPP_NUMBER } from "../_lib/whatsapp";
 
 export const metadata: Metadata = {
   title: "Hubungi SKAIHUB",
@@ -56,7 +56,7 @@ export default async function HubungiPage() {
       icon: "schedule",
       title: "Jam Operasional",
       desc: "Kami siap membantu di jam kerja",
-      value: "Senin – Jumat, 09.00 – 17.00 WIB",
+      value: OFFICE_HOURS,
       action: null,
       label: null,
       highlighted: false,
@@ -80,7 +80,7 @@ export default async function HubungiPage() {
             <span className="text-secondary">Kami Bantu?</span>
           </h1>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-white/60">
-            Dari konsultasi paket hingga setup awal, tim SKAIHUB siap membantu akademi Anda memulai perjalanan digital.
+            Dari konsultasi paket sampai menyiapkan akun, tim SKAIHUB siap membantu akademi Anda lewat WhatsApp.
           </p>
         </div>
       </section>
@@ -99,7 +99,7 @@ export default async function HubungiPage() {
               </h2>
             </div>
             <p className="max-w-sm text-base leading-relaxed text-muted md:text-right">
-              Kami merespons setiap pertanyaan dengan cepat dan ramah.
+              Pertanyaan dijawab pada jam layanan, paling cepat lewat WhatsApp.
             </p>
           </div>
 
@@ -162,7 +162,7 @@ export default async function HubungiPage() {
         <div className="container-app">
           <div className="grid gap-16 lg:grid-cols-2">
 
-            {/* Kiri — info */}
+            {/* Kiri: info */}
             <div>
               <div className="mb-4 flex items-center gap-3">
                 <div className="h-1 w-10 bg-secondary" />
@@ -172,14 +172,14 @@ export default async function HubungiPage() {
                 Tinggalkan<br />Pesan untuk Kami
               </h2>
               <p className="mt-4 text-base leading-relaxed text-muted">
-                Isi form ini dan tim SKAIHUB akan menghubungi Anda via WhatsApp dalam 1x24 jam di hari kerja.
+                Isi form ini dan tim SKAIHUB akan menghubungi Anda lewat WhatsApp pada jam layanan.
               </p>
 
               <div className="mt-8 space-y-4">
                 {[
                   { icon: "check_circle", text: "Konsultasi gratis tanpa komitmen" },
-                  { icon: "check_circle", text: "Respons dalam 1x24 jam hari kerja" },
-                  { icon: "check_circle", text: "Tim siap bantu setup dari awal" },
+                  { icon: "check_circle", text: "Dibalas pada jam layanan" },
+                  { icon: "check_circle", text: "Tim bantu menyiapkan akun dari awal" },
                 ].map((item) => (
                   <div key={item.text} className="flex items-center gap-3">
                     <span className="material-symbols-outlined text-secondary" style={{ fontVariationSettings: "'FILL' 1", fontSize: "20px" }}>
@@ -191,9 +191,9 @@ export default async function HubungiPage() {
               </div>
             </div>
 
-            {/* Kanan — form */}
+            {/* Kanan: form */}
             <div className="bg-white p-8 shadow-[8px_8px_0px_theme(colors.primary)]">
-              <ContactForm />
+              <ContactForm waNumber={waNumber} />
             </div>
           </div>
         </div>

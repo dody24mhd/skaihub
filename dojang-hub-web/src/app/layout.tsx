@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     template: "%s | SKAIHUB",
   },
   description:
-    "Platform manajemen akademi bela diri Indonesia — Taekwondo, Karate, dan cabang olahraga bela diri lainnya. Digitalisasi operasional, absensi, rapor digital, dan website profil akademi.",
+    "Platform manajemen akademi Taekwondo dan Karate di Indonesia untuk data siswa, absensi, SPP, rapor siswa, sabuk dan UKT, serta website profil akademi.",
   applicationName: "SKAIHUB",
   keywords: [
     "SKAIHUB",
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     "aplikasi karate",
     "absensi taekwondo",
     "absensi karate",
-    "rapor digital bela diri",
+    "rapor siswa bela diri",
     "website akademi bela diri",
     "sistem kelola atlet indonesia",
   ],
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     siteName: "SKAIHUB",
     title: "SKAIHUB - Sistem Kelola Atlet Indonesia Hub",
     description:
-      "Platform manajemen akademi bela diri Indonesia (Taekwondo & Karate) untuk absensi, rapor digital, operasional, dan website profil akademi.",
+      "Platform manajemen akademi Taekwondo dan Karate di Indonesia untuk data siswa, absensi, SPP, rapor siswa, sabuk dan UKT, serta website profil akademi.",
     images: [
       {
         url: "/images/hero-mockup.png",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "SKAIHUB - Sistem Kelola Atlet Indonesia Hub",
     description:
-      "Platform manajemen akademi bela diri Indonesia (Taekwondo & Karate) untuk absensi, rapor digital, operasional, dan website profil akademi.",
+      "Platform manajemen akademi Taekwondo dan Karate di Indonesia untuk data siswa, absensi, SPP, rapor siswa, sabuk dan UKT, serta website profil akademi.",
     images: ["/images/hero-mockup.png"],
   },
   robots: {

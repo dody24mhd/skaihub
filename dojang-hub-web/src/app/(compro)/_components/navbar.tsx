@@ -13,12 +13,15 @@ const navItems = [
   { label: "Hubungi", href: "/hubungi" },
 ];
 
-const registerUrl = createWhatsAppUrl(
-  "Halo SKAIHUB, saya ingin mendaftarkan akademi bela diri."
-);
+const REGISTER_MESSAGE = "Halo SKAIHUB, saya ingin mendaftarkan akademi bela diri.";
 
-export default function Navbar() {
+type NavbarProps = {
+  waNumber?: string;
+};
+
+export default function Navbar({ waNumber }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const registerUrl = createWhatsAppUrl(REGISTER_MESSAGE, waNumber);
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-surface-bright/95 backdrop-blur">

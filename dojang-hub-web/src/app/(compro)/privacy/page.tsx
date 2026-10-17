@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Kebijakan Privasi | SKAIHUB",
   description:
-    "Kebijakan privasi SKAIHUB — bagaimana kami mengumpulkan, menggunakan, dan melindungi data akademi dan pengguna platform.",
+    "Kebijakan privasi SKAIHUB: bagaimana kami mengumpulkan, menggunakan, dan melindungi data akademi dan pengguna platform.",
   alternates: { canonical: "/privacy" },
   robots: { index: true, follow: true },
 };
@@ -12,43 +12,47 @@ export const metadata: Metadata = {
 const sections = [
   {
     title: "1. Informasi yang Kami Kumpulkan",
-    content: `Kami mengumpulkan informasi yang Anda berikan secara langsung saat mendaftar atau menggunakan layanan, termasuk: nama akademi, nama admin, alamat email, nomor WhatsApp, dan data operasional akademi (data siswa, pelatih, absensi, rapor). Kami juga mengumpulkan data teknis seperti log akses, browser, dan alamat IP untuk keamanan sistem.`,
+    content: `Kami mengumpulkan informasi yang Anda berikan saat konsultasi, aktivasi akun, dan penggunaan layanan, termasuk nama akademi, nama pengurus, alamat email, nomor WhatsApp, serta data operasional akademi (data siswa dan wali, pelatih, absensi, SPP, evaluasi, dan riwayat sabuk). Server kami juga dapat mencatat data teknis dasar seperti alamat IP dan jenis browser untuk menjaga keamanan layanan.`,
   },
   {
     title: "2. Bagaimana Kami Menggunakan Data",
-    content: `Data yang kami kumpulkan digunakan untuk: menyediakan dan meningkatkan layanan platform, memverifikasi identitas dan keamanan akun, mengirim notifikasi terkait layanan (pembaruan sistem, tagihan), menganalisis penggunaan platform secara agregat untuk perbaikan produk, dan menghubungi Anda untuk keperluan dukungan teknis.`,
+    content: `Data digunakan untuk menjalankan dan memperbaiki layanan, menjaga keamanan akun, menghubungi pengurus akademi lewat WhatsApp terkait layanan (misalnya pembaruan sistem dan perpanjangan langganan), serta memberikan bantuan teknis.`,
   },
   {
-    title: "3. Isolasi dan Keamanan Data Akademi",
-    content: `Setiap akademi memiliki ruang data yang terisolasi sepenuhnya. Data siswa, pelatih, dan operasional satu akademi tidak dapat dilihat, diakses, atau dimodifikasi oleh akademi lain maupun pihak ketiga mana pun. Seluruh data disimpan dengan enkripsi dan komunikasi dilindungi menggunakan HTTPS.`,
+    title: "3. Pemisahan Data Akademi",
+    content: `Setiap akademi memiliki ruang data sendiri. Data siswa, pelatih, dan operasional satu akademi tidak dapat dilihat atau diubah oleh akademi lain. Komunikasi antara browser dan server dilindungi HTTPS.`,
   },
   {
     title: "4. Berbagi Data dengan Pihak Ketiga",
-    content: `Kami tidak menjual atau menyewakan data Anda kepada pihak ketiga. Data hanya dibagikan kepada: penyedia infrastruktur cloud (untuk hosting dan penyimpanan file) berdasarkan perjanjian kerahasiaan, dan pihak berwenang jika diwajibkan oleh hukum yang berlaku di Indonesia.`,
+    content: `Kami tidak menjual atau menyewakan data Anda. Data hanya dibagikan kepada penyedia infrastruktur (hosting dan penyimpanan file) yang diperlukan untuk menjalankan layanan, dan kepada pihak berwenang jika diwajibkan oleh hukum yang berlaku di Indonesia.`,
   },
   {
-    title: "5. Penyimpanan dan Retensi Data",
-    content: `Data akademi aktif disimpan selama masa berlangganan aktif. Setelah langganan berakhir atau dihentikan, data akan disimpan selama 30 hari sebagai masa tenggang, kemudian dihapus secara permanen dari sistem kami. Anda dapat mengekspor data sebelum periode ini berakhir.`,
+    title: "5. Halaman Publik Akademi",
+    content: `Untuk akademi di Paket Pro dan Scale, informasi yang dipilih pengurus untuk ditampilkan (profil, foto, galeri, prestasi, pengurus, pelatih, tempat latihan, dan nomor WhatsApp akademi) dapat dilihat publik di nama.skaihub.com. Data internal seperti absensi, SPP, dan nilai siswa tidak ditampilkan di halaman publik.`,
   },
   {
-    title: "6. Cookie dan Pelacakan",
-    content: `Platform SKAIHUB menggunakan cookie sesi untuk autentikasi dan keamanan akun. Kami tidak menggunakan cookie untuk iklan atau pelacakan lintas situs. Website publik (skaihub.com) mungkin menggunakan analitik anonim (Google Analytics) untuk memahami pengunjung secara agregat.`,
+    title: "6. Penyimpanan dan Retensi Data",
+    content: `Data akademi disimpan selama akademi menggunakan layanan. Jika langganan berakhir dan masa tenggang 7 hari terlewati, akun menjadi baca-saja dan data tetap tersimpan. Anda dapat meminta salinan atau penghapusan data akademi melalui email hello@skaihub.com.`,
   },
   {
-    title: "7. Hak Anda atas Data",
-    content: `Anda memiliki hak untuk: mengakses data yang kami simpan tentang akademi Anda, meminta koreksi data yang tidak akurat, mengunduh salinan data akademi Anda, dan meminta penghapusan data akademi Anda. Untuk menggunakan hak ini, hubungi kami melalui email hello@skaihub.com.`,
+    title: "7. Cookie dan Penyimpanan Browser",
+    content: `Aplikasi SKAIHUB menyimpan token login di penyimpanan browser agar Anda tetap masuk. Kami tidak memasang cookie iklan atau pelacakan lintas situs.`,
   },
   {
-    title: "8. Keamanan Sistem",
-    content: `Kami menerapkan langkah-langkah keamanan teknis dan organisasi yang sesuai untuk melindungi data Anda, termasuk: enkripsi data saat transit (HTTPS/TLS), enkripsi password (bcrypt), pemisahan data antar akademi, pemantauan akses dan log audit, serta backup otomatis harian.`,
+    title: "8. Hak Anda atas Data",
+    content: `Anda berhak mengakses data akademi Anda, meminta koreksi data yang tidak akurat, mengunduh data (misalnya ekspor CSV di dalam aplikasi), dan meminta penghapusan data akademi. Untuk menggunakan hak ini, hubungi kami di hello@skaihub.com.`,
   },
   {
-    title: "9. Perubahan Kebijakan Privasi",
-    content: `Kebijakan privasi ini dapat diperbarui dari waktu ke waktu. Perubahan material akan diberitahukan melalui email atau notifikasi dalam platform minimal 14 hari sebelum berlaku. Penggunaan layanan setelah perubahan dianggap sebagai penerimaan kebijakan baru.`,
+    title: "9. Keamanan",
+    content: `Kami menjaga data dengan langkah yang wajar, termasuk koneksi HTTPS, password yang disimpan dalam bentuk hash, dan pembatasan akses sesuai peran (Ketua, Admin, dan Pelatih). Tidak ada sistem yang sepenuhnya bebas risiko, jadi segera laporkan kepada kami jika Anda menemukan masalah keamanan.`,
   },
   {
-    title: "10. Kontak untuk Privasi",
-    content: `Untuk pertanyaan, kekhawatiran, atau permintaan terkait privasi data Anda, silakan hubungi kami di hello@skaihub.com. Kami berkomitmen untuk merespons dalam waktu 5 hari kerja.`,
+    title: "10. Perubahan Kebijakan Privasi",
+    content: `Kebijakan ini dapat diperbarui dari waktu ke waktu. Perubahan penting akan diberitahukan lewat WhatsApp kepada pengurus akademi minimal 14 hari sebelum berlaku. Penggunaan layanan setelah perubahan dianggap sebagai persetujuan atas kebijakan baru.`,
+  },
+  {
+    title: "11. Kontak untuk Privasi",
+    content: `Untuk pertanyaan atau permintaan terkait privasi data, hubungi kami di hello@skaihub.com.`,
   },
 ];
 
@@ -81,7 +85,7 @@ export default function PrivacyPage() {
           <div className="mb-12 border-l-4 border-secondary bg-secondary/5 p-6">
             <p className="text-sm font-bold text-primary uppercase tracking-wider mb-2">Komitmen Kami</p>
             <p className="text-base leading-relaxed text-muted">
-              SKAIHUB berkomitmen untuk melindungi privasi dan keamanan data akademi yang menggunakan platform kami. Kebijakan ini menjelaskan secara transparan bagaimana kami mengelola data Anda.
+              SKAIHUB berkomitmen untuk melindungi privasi dan keamanan data akademi yang menggunakan platform kami. Kebijakan ini menjelaskan bagaimana kami mengelola data Anda.
             </p>
           </div>
 

@@ -3,135 +3,129 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { createWhatsAppUrl } from "../_lib/whatsapp";
 import { getSiteSettings } from "../_lib/compro-data";
+import { MODULE_COUNT, PRODUCT_MODULES, PUBLIC_SITE_PLAN_LABEL } from "../_lib/product";
 
 export const metadata: Metadata = {
   title: "Fitur Aplikasi Manajemen Akademi Bela Diri",
   description:
-    "Fitur SKAIHUB untuk data siswa, jadwal latihan, absensi, SPP, rapor digital, kenaikan sabuk/kyu, dan website publik akademi. Mendukung Taekwondo dan Karate.",
+    "Fitur SKAIHUB untuk data siswa, jadwal dan absensi, SPP, evaluasi dan rapor siswa, sabuk dan UKT, serta website publik akademi (Paket Pro & Scale). Untuk Taekwondo dan Karate.",
   alternates: {
     canonical: "/fitur",
   },
   openGraph: {
     title: "Fitur Aplikasi Manajemen Akademi Bela Diri | SKAIHUB",
     description:
-      "Kelola data siswa, absensi, SPP, rapor digital, kenaikan sabuk/kyu, dan website publik akademi dalam satu platform.",
+      "Kelola data siswa, absensi, SPP, rapor siswa, sabuk dan UKT, serta website publik akademi dalam satu platform.",
     url: "/fitur",
   },
 };
 
-const modules = [
-  {
-    id: "data",
-    icon: "group",
-    label: "01",
-    title: "Data & Manajemen",
-    short: "Semua data siswa dan pelatih dalam satu tempat.",
-    desc: "Kelola profil lengkap setiap siswa — dari biodata, foto, data orang tua, hingga riwayat sabuk dan prestasi personal. Tidak ada lagi data yang tercecer di grup WhatsApp atau buku catatan.",
+type ModuleDetail = {
+  short: string;
+  desc: string;
+  bullets: string[];
+  mockup: string;
+};
+
+const moduleDetails: Record<string, ModuleDetail> = {
+  data: {
+    short: "Data siswa, wali, kelas, dan pelatih dalam satu tempat.",
+    desc: "Simpan biodata siswa lengkap dengan foto, kelas utama, tingkatan, dan kontak. Nama dan nomor wali wajib diisi untuk siswa di bawah 17 tahun, jadi kontak orang tua tidak tercecer.",
     bullets: [
-      "Biodata lengkap siswa & orang tua terintegrasi",
-      "Foto profil & nomor KTA",
-      "Status aktif, tidak aktif, atau alumni",
-      "Riwayat sabuk & prestasi per siswa",
-      "Data pelatih: lisensi, DAN level, spesialisasi",
+      "Biodata, foto, kelas utama, dan tingkatan siswa",
+      "Kontak wali wajib untuk siswa di bawah 17 tahun",
+      "Status aktif, nonaktif, atau alumni",
+      "Kelas, tempat latihan, dan data pelatih",
+      "Ekspor daftar siswa ke CSV",
     ],
     mockup: "/images/mockups/mockup-data.png",
-    flip: false,
   },
-  {
-    id: "jadwal",
-    icon: "event_available",
-    label: "02",
-    title: "Jadwal & Latihan",
-    short: "Absensi harian dan log materi dalam satu form.",
-    desc: "Pelatih buka dashboard, lihat jadwal hari ini, langsung input kehadiran dan catat materi latihan — semua dalam satu alur tanpa berpindah halaman.",
+  jadwal: {
+    short: "Kelas Hari Ini dari jadwal rutin, absen langsung dari HP.",
+    desc: "Atur jadwal rutin per kelas, tempat, dan pelatih. Setiap hari sesinya muncul di Kelas Hari Ini, pelatih tinggal mencatat kehadiran dan materi latihan.",
     bullets: [
-      "Jadwal mingguan per hari dan lokasi",
-      "Absensi manual — centang langsung dari dashboard",
-      "Log materi latihan terintegrasi di form absensi",
-      "Rekap kehadiran per siswa per periode",
-      "Riwayat sesi latihan tersimpan otomatis",
+      "Jadwal rutin mingguan per kelas, tempat, dan pelatih",
+      "Kelas Hari Ini dibuat otomatis dari jadwal",
+      "Pindah jadwal, batalkan sesi, atau ganti pelatih",
+      "Absensi Hadir, Izin, Sakit, Alpa dengan materi, catatan, dan foto",
+      "Absensi susulan oleh pelatih hingga 7 hari ke belakang",
     ],
     mockup: "/images/mockups/mockup-operasional.png",
-    flip: true,
   },
-  {
-    id: "sabuk",
-    icon: "military_tech",
-    label: "03",
-    title: "Riwayat Tingkatan",
-    short: "Dokumentasi UKT/UKD rapi, sabuk/kyu update otomatis.",
-    desc: "Catat event UKT yang diikuti siswa, input nilai dan hasil, lalu sistem otomatis update sabuk/kyu siswa yang lulus. Upload sertifikat fisik sebagai dokumentasi digital.",
+  spp: {
+    short: "Tagihan bulanan, pembayaran, dan tunggakan.",
+    desc: "Tentukan SPP bulanan per kelas, atau pakai nominal default akademi. Buat tagihan sebulan sekaligus, catat pembayaran, lalu bagikan kuitansi lewat WhatsApp.",
     bullets: [
-      "Buat event UKT/UKD per periode",
-      "Daftar peserta & input nilai per siswa",
-      "Hasil lulus/tidak lulus dengan catatan",
-      "Update sabuk/kyu otomatis jika lulus",
-      "Upload sertifikat UKT per siswa (PDF/foto)",
-    ],
-    mockup: "/images/mockups/mockup-website.png",
-    flip: false,
-  },
-  {
-    id: "rapor",
-    icon: "description",
-    label: "04",
-    title: "Evaluasi Siswa",
-    short: "Rapor digital per periode, dimensi bisa dikustom.",
-    desc: "Buat periode rapor sendiri, tentukan dimensi dan indikator penilaian sesuai standar akademi Anda. Input nilai per siswa, tambah catatan pelatih, dan ekspor PDF siap cetak.",
-    bullets: [
-      "Periode rapor custom (3 bulan, semester, dll)",
-      "Template dimensi penilaian default tersedia",
-      "Dimensi & indikator bisa diedit per akademi",
-      "Input nilai + catatan pelatih per siswa",
-      "Ekspor PDF rapor individual siap cetak",
+      "SPP bulanan per kelas dengan nominal default akademi",
+      "Buat tagihan bulanan untuk semua siswa aktif",
+      "Pembayaran sebagian dan pembebasan SPP dengan alasan",
+      "Status jatuh tempo dan daftar tunggakan",
+      "Kuitansi siap cetak, bisa dibagikan lewat tautan WhatsApp",
+      "Ringkasan keuangan untuk Ketua dan ekspor CSV",
     ],
     mockup: "/images/mockups/mockup-laporan.png",
-    flip: true,
   },
-  {
-    id: "spp",
-    icon: "payments",
-    label: "05",
-    title: "Keuangan & SPP",
-    short: "Catat iuran bulanan, pantau tunggakan.",
-    desc: "Nominal SPP diset saat registrasi siswa. Setiap bulan tinggal update status bayar — Lunas, Belum, atau Cicil. Rekap tunggakan tersedia otomatis.",
+  evaluasi: {
+    short: "Nilai per aspek, rapor siap cetak.",
+    desc: "Buat periode evaluasi dan aspek penilaian sesuai standar akademi. Pelatih memberi nilai 1 sampai 100 yang langsung tampil sebagai predikat, lalu rapor siswa bisa dicetak atau disimpan sebagai PDF.",
     bullets: [
-      "Nominal SPP per siswa (bisa berbeda-beda)",
-      "Status bayar per bulan: Lunas / Belum / Cicil",
-      "Catat tanggal & metode pembayaran",
-      "Rekap tunggakan siswa otomatis",
-      "Ekspor laporan SPP ke Excel",
+      "Periode evaluasi sesuai kebutuhan akademi",
+      "Aspek penilaian bisa diatur dan disalin dari periode lain",
+      "Nilai 1 sampai 100 dengan predikat Kurang, Cukup, Baik, Sangat Baik",
+      "Catatan pelatih per siswa",
+      "Rapor siap cetak, simpan sebagai PDF lewat fitur cetak browser",
+      "Ekspor rekap evaluasi ke CSV",
+    ],
+    mockup: "/images/mockups/mockup-laporan.png",
+  },
+  sabuk: {
+    short: "Event UKT, riwayat tingkatan, dan sertifikat.",
+    desc: "Catat event UKT, daftarkan peserta, lalu isi hasilnya. Tingkatan siswa yang lulus diperbarui otomatis dan sertifikat UKT siap dicetak.",
+    bullets: [
+      "Sistem sabuk Taekwondo Kukkiwon, Karate FORKI, dan Karate KKI",
+      "Event UKT dengan daftar peserta",
+      "Nilai, hasil lulus atau tidak lulus, dan catatan",
+      "Tingkatan siswa diperbarui otomatis saat lulus",
+      "Riwayat tingkatan dan prestasi per siswa",
+      "Sertifikat UKT siap cetak",
+    ],
+    mockup: "/images/mockups/mockup-data.png",
+  },
+  website: {
+    short: "Halaman profil akademi di nama.skaihub.com.",
+    desc: "Akademi di Paket Pro dan Scale mendapat halaman publik sendiri. Tampilkan profil, foto hero, galeri, prestasi, pengurus, pelatih, tempat latihan, dan tombol WhatsApp.",
+    bullets: [
+      "Alamat sendiri: nama.skaihub.com",
+      "Profil akademi, logo, dan warna tema",
+      "Foto hero dan galeri",
+      "Prestasi, pengurus, dan pelatih akademi",
+      "Daftar tempat latihan beserta alamat",
+      "Tombol WhatsApp untuk calon siswa",
     ],
     mockup: "/images/mockups/mockup-website.png",
-    flip: false,
   },
-  {
-    id: "landing",
-    icon: "language",
-    label: "06",
-    title: "Website Publik Akademi",
-    short: "Alamat web sendiri, tampil profesional online.",
-    desc: "Paket Pro dan Scale mendapat alamat web unik seperti namaakademi.skaihub.com. Tampilkan profil, lokasi latihan, galeri, prestasi akademi, dan CTA WhatsApp dari halaman akademi sendiri.",
-    bullets: [
-      "Alamat unik: namaakademi.skaihub.com",
-      "Profil akademi: logo, tagline, deskripsi, tema warna",
-      "Jadwal latihan & galeri foto publik",
-      "Profil pelatih & prestasi akademi",
-      "Form pendaftaran online (leads capture)",
-      "Kontak, sosmed, Google Maps embed",
-    ],
-    mockup: "/images/mockups/mockup-website.png",
-    flip: true,
-  },
+};
+
+const modules = PRODUCT_MODULES.map((module, index) => ({
+  ...module,
+  ...moduleDetails[module.id],
+  label: String(index + 1).padStart(2, "0"),
+  flip: index % 2 === 1,
+}));
+
+const extras = [
+  { icon: "badge", text: "Akses sesuai peran: Ketua, Admin, dan Pelatih" },
+  { icon: "install_mobile", text: "Bisa dipasang di HP seperti aplikasi (PWA)" },
+  { icon: "download", text: "Ekspor data siswa, SPP, dan evaluasi ke CSV" },
 ];
 
 const beforeAfter = [
-  { aspect: "Data Siswa", before: "Buku catatan / Excel", after: "Dashboard digital, bisa diakses kapan saja" },
-  { aspect: "Absensi", before: "Kertas daftar hadir manual", after: "Centang langsung dari HP, rekap otomatis" },
-  { aspect: "Iuran SPP", before: "Catatan di buku kas", after: "Status bayar per siswa, rekap tunggakan otomatis" },
-  { aspect: "Rapor Siswa", before: "Tulis tangan atau Excel", after: "Input nilai digital, Ekspor PDF siap cetak" },
-  { aspect: "Kenaikan Sabuk/Kyu", before: "Catatan terpisah, tidak terdokumentasi", after: "Event UKT/UKD tercatat, sabuk/kyu update otomatis" },
-  { aspect: "Profil Online", before: "Tidak ada / hanya Instagram", after: "Website profesional dengan alamat akademi sendiri" },
+  { aspect: "Data Siswa", before: "Buku catatan dan file terpisah", after: "Data siswa dan wali di satu tempat, bisa diekspor ke CSV" },
+  { aspect: "Absensi", before: "Daftar hadir kertas", after: "Kelas Hari Ini, absen Hadir, Izin, Sakit, Alpa dari HP" },
+  { aspect: "Iuran SPP", before: "Catatan di buku kas", after: "Tagihan bulanan, pembayaran sebagian, daftar tunggakan" },
+  { aspect: "Rapor Siswa", before: "Ditulis tangan", after: "Nilai per aspek, rapor siap cetak atau simpan PDF" },
+  { aspect: "Kenaikan Sabuk", before: "Catatan terpisah dan mudah hilang", after: "Event UKT tercatat, tingkatan diperbarui otomatis, sertifikat siap cetak" },
+  { aspect: "Profil Online", before: "Hanya media sosial", after: "Halaman akademi di nama.skaihub.com (Paket Pro & Scale)" },
 ];
 
 export default async function FiturPage() {
@@ -158,22 +152,22 @@ export default async function FiturPage() {
             <span className="text-secondary">Kamu Butuhkan</span>
           </h1>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-white/60">
-            6 modul terintegrasi — dari pencatatan harian hingga website publik akademi. Mendukung Taekwondo dan Karate.
+            {MODULE_COUNT} modul yang saling terhubung, dari absensi harian sampai website publik akademi. Untuk Taekwondo dan Karate.
           </p>
         </div>
       </section>
 
-      {/* -- OVERVIEW 6 MODUL -- */}
+      {/* -- OVERVIEW MODUL -- */}
       <section className="section-y bg-white">
         <div className="container-app">
           <div className="mb-14 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
               <div className="mb-3 flex items-center gap-3">
                 <div className="h-1 w-10 bg-secondary" />
-                <span className="text-xs font-black uppercase tracking-[0.2em] text-secondary">6 Modul</span>
+                <span className="text-xs font-black uppercase tracking-[0.2em] text-secondary">{MODULE_COUNT} Modul</span>
               </div>
               <h2 className="font-heading text-4xl font-black uppercase leading-none tracking-tight text-primary md:text-5xl">
-                Satu Platform,<br />Enam Modul
+                Satu Platform,<br />{MODULE_COUNT} Modul
               </h2>
             </div>
             <p className="max-w-sm text-base leading-relaxed text-muted md:text-right">
@@ -199,8 +193,13 @@ export default async function FiturPage() {
                   </span>
                 </div>
                 <div>
-                  <h3 className="font-heading text-base font-black uppercase text-primary">{mod.title}</h3>
+                  <h3 className="font-heading text-base font-black uppercase text-primary">{mod.name}</h3>
                   <p className="mt-1 text-sm leading-relaxed text-muted">{mod.short}</p>
+                  {mod.publicSiteOnly && (
+                    <span className="mt-3 inline-flex bg-secondary/10 px-2 py-1 text-[10px] font-black uppercase tracking-widest text-secondary">
+                      {PUBLIC_SITE_PLAN_LABEL}
+                    </span>
+                  )}
                 </div>
                 <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-secondary opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                   Lihat Detail
@@ -211,6 +210,17 @@ export default async function FiturPage() {
               </a>
             ))}
           </div>
+
+          <ul className="mt-8 grid gap-3 md:grid-cols-3">
+            {extras.map((item) => (
+              <li key={item.text} className="flex items-center gap-3 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700">
+                <span className="material-symbols-outlined flex-shrink-0 text-secondary" style={{ fontVariationSettings: "'FILL' 1", fontSize: "20px" }}>
+                  {item.icon}
+                </span>
+                {item.text}
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
@@ -229,13 +239,12 @@ export default async function FiturPage() {
                 <div className="group relative aspect-[4/3] w-full overflow-hidden bg-[#0a2040] shadow-[12px_12px_0px_theme(colors.secondary)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[16px_16px_0px_theme(colors.secondary)]">
                   <Image
                     src={mod.mockup}
-                    alt={mod.title}
+                    alt={mod.name}
                     fill
                     className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
                     sizes="(max-width: 1024px) 100vw, 50vw"
                   />
-                  {/* Overlay tipis saat hover — dihapus */}
-                </div>
+                                  </div>
                 {/* Label nomor */}
                 <div className="absolute -bottom-4 -left-4 bg-primary px-4 py-2 transition-all duration-300 group-hover:bg-secondary">
                   <span className="font-heading text-xs font-black uppercase tracking-widest text-white">Modul {mod.label}</span>
@@ -250,11 +259,13 @@ export default async function FiturPage() {
                       {mod.icon}
                     </span>
                   </div>
-                  <span className="text-xs font-black uppercase tracking-[0.2em] text-secondary">{mod.title}</span>
+                  <span className="text-xs font-black uppercase tracking-[0.2em] text-secondary">
+                    {mod.publicSiteOnly ? PUBLIC_SITE_PLAN_LABEL : `Modul ${mod.label}`}
+                  </span>
                 </div>
 
                 <h2 className="font-heading text-3xl font-black uppercase leading-tight text-primary md:text-4xl">
-                  {mod.title}
+                  {mod.name}
                 </h2>
                 <p className="mt-4 text-base leading-relaxed text-muted">{mod.desc}</p>
 
@@ -288,7 +299,7 @@ export default async function FiturPage() {
               </h2>
             </div>
             <p className="max-w-sm text-sm leading-relaxed text-white/60 md:text-right">
-              Dari manual ke digital — perbedaannya terasa dari hari pertama.
+              Dari catatan manual ke satu sistem yang rapi dan mudah dicek.
             </p>
           </div>
 
@@ -320,13 +331,13 @@ export default async function FiturPage() {
           <div>
             <div className="mb-4 flex items-center gap-3">
               <div className="h-1 w-10 bg-secondary" />
-              <span className="text-xs font-black uppercase tracking-[0.2em] text-secondary">Mulai Sekarang</span>
+              <span className="text-xs font-black uppercase tracking-[0.2em] text-secondary">Konsultasi</span>
             </div>
             <h2 className="font-heading text-4xl font-black uppercase leading-none tracking-tight text-primary md:text-5xl">
               Tertarik?<br />Hubungi Kami
             </h2>
             <p className="mt-4 max-w-lg text-base leading-relaxed text-muted">
-              Tim SKAIHUB siap membantu setup akademi Anda. Konsultasi gratis via WhatsApp.
+              Tim SKAIHUB bantu menyiapkan akun akademi Anda. Konsultasi gratis lewat WhatsApp.
             </p>
           </div>
           <div className="flex flex-col items-start gap-4 md:items-end">

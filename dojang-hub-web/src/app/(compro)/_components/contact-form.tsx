@@ -3,15 +3,20 @@
 import { FormEvent, useMemo, useState } from "react";
 import { submitContactInquiry } from "../_lib/api";
 import { createWhatsAppUrl } from "../_lib/whatsapp";
+import { formatPlanPrice } from "@/lib/plan-pricing";
 
 const planLabels: Record<string, string> = {
-  starter: "Starter - Rp 99.000/bulan",
-  pro: "Pro - Rp 199.000/bulan",
-  scale: "Scale - Rp 349.000/bulan",
+  starter: `Starter, ${formatPlanPrice("starter")}/bulan`,
+  pro: `Pro, ${formatPlanPrice("pro")}/bulan`,
+  scale: `Scale, ${formatPlanPrice("scale")}/bulan`,
   konsultasi: "Belum tahu, ingin konsultasi dulu",
 };
 
-export default function ContactForm() {
+type ContactFormProps = {
+  waNumber?: string;
+};
+
+export default function ContactForm({ waNumber }: ContactFormProps) {
   const [name, setName] = useState("");
   const [akademiName, setAkademiName] = useState("");
   const [phone, setPhone] = useState("");
@@ -37,8 +42,8 @@ export default function ContactForm() {
       `Pesan: ${message || "-"}`,
     ];
 
-    return createWhatsAppUrl(lines.join("\n"));
-  }, [akademiName, message, name, phone, plan]);
+    return createWhatsAppUrl(lines.join("\n"), waNumber);
+  }, [akademiName, message, name, phone, plan, waNumber]);
 
   const validateForm = () => {
     const errors = {
@@ -225,10 +230,10 @@ export default function ContactForm() {
       </button>
       <p className="text-center text-xs text-muted">
         {status === "success"
-          ? "Data minat tersimpan. Anda bisa lanjut ke WhatsApp dari notifikasi."
+          ? "Pesan tersimpan. Anda bisa lanjut chat lewat WhatsApp."
           : status === "fallback"
-            ? "API belum merespons, gunakan WhatsApp sebagai jalur utama."
-            : "Setelah dikirim, data masuk ke CMS dan Anda bisa lanjut ke WhatsApp."}
+            ? "Pesan belum terkirim. Silakan lanjut lewat WhatsApp."
+            : "Setelah dikirim, pesan diterima tim SKAIHUB dan Anda bisa lanjut chat lewat WhatsApp."}
       </p>
     </form>
     {status === "success" || status === "fallback" ? (
@@ -244,7 +249,7 @@ export default function ContactForm() {
           </h2>
           <p className="mt-3 text-sm leading-6 text-muted">
             {status === "success"
-              ? "Data Anda sudah masuk ke CMS SKAIHUB. Tim kami akan menindaklanjuti pesan ini."
+              ? "Pesan Anda sudah diterima tim SKAIHUB. Kami akan menghubungi Anda lewat WhatsApp."
               : submitError || "Sistem belum berhasil menyimpan pesan. Anda tetap bisa menghubungi tim SKAIHUB lewat WhatsApp."}
           </p>
           <div className="mt-6 grid gap-3 sm:grid-cols-2">

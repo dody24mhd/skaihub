@@ -15,3 +15,5 @@ export function formatWhatsAppDisplay(number: string): string {
   return number;
 }
 
+/** Jam layanan tim SKAIHUB, dipakai di semua halaman compro agar formatnya seragam. */
+export const OFFICE_HOURS = "Senin sampai Jumat, 09.00 sampai 17.00 WIB";

@@ -21,7 +21,7 @@ export default async function ComproLayout({
   );
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <Navbar waNumber={waNumber} />
       <main>{children}</main>
       <footer className="border-t border-slate-800 bg-primary py-14 text-surface-variant">
         <div className="container-app grid gap-10 md:grid-cols-4">
@@ -38,7 +38,7 @@ export default async function ComproLayout({
               </span>
             </Link>
             <p className="text-sm leading-6 text-surface-variant/80">
-              Platform manajemen akademi bela diri — Taekwondo dan Karate — untuk operasional yang lebih rapi, terukur, dan profesional.
+              Platform manajemen akademi Taekwondo dan Karate untuk operasional yang lebih rapi dan profesional.
             </p>
           </div>
 

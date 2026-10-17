@@ -2,14 +2,16 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import HeroSlider from "./_components/hero-slider";
 import FeatureTabs from "./_components/feature-tabs";
+import PlanCardView from "./_components/plan-card";
 import {
   getHomeTestimonials,
   getPublicBlogPosts,
   getPublicEvents,
   getSiteSettings,
 } from "./_lib/compro-data";
-import { createWhatsAppUrl } from "./_lib/whatsapp";
-import { effectiveStudentLimit } from "@/lib/plan-pricing";
+import { createWhatsAppUrl, OFFICE_HOURS } from "./_lib/whatsapp";
+import { MODULE_COUNT, PLAN_CARDS, PLAN_KEYS, PUBLIC_SITE_PLAN_LABEL } from "./_lib/product";
+import { quotaNote } from "@/lib/plan-pricing";
 
 export const metadata: Metadata = {
   alternates: {
@@ -17,59 +19,7 @@ export const metadata: Metadata = {
   },
 };
 
-const prices = [
-  {
-    name: "Starter",
-    tag: null,
-    desc: "Untuk akademi yang baru mulai digital",
-    price: "Rp 99.000",
-    access: "app.skaihub.com",
-    features: [
-      { text: `Kuota ${effectiveStudentLimit("starter", 0)} siswa aktif`, included: true },
-      { text: "Data Siswa & Pelatih", included: true },
-      { text: "Jadwal, Sesi & Absensi", included: true },
-      { text: "Iuran Siswa / Rekap SPP", included: true },
-      { text: "Evaluasi Siswa", included: true },
-      { text: "Riwayat Tingkatan & Prestasi", included: true },
-      { text: "Website Publik Akademi", included: false },
-    ],
-    highlighted: false,
-  },
-  {
-    name: "Pro",
-    tag: "Paling Populer",
-    desc: "Tampil profesional dengan website akademi",
-    price: "Rp 199.000",
-    access: "namaakademi.skaihub.com",
-    features: [
-      { text: `Kuota ${effectiveStudentLimit("pro", 0)} siswa aktif`, included: true },
-      { text: "Data Siswa & Pelatih", included: true },
-      { text: "Jadwal, Sesi & Absensi", included: true },
-      { text: "Iuran Siswa / Rekap SPP", included: true },
-      { text: "Evaluasi Siswa", included: true },
-      { text: "Riwayat Tingkatan & Prestasi", included: true },
-      { text: "Website Publik Akademi", included: true },
-    ],
-    highlighted: true,
-  },
-  {
-    name: "Scale",
-    tag: null,
-    desc: "Untuk akademi besar dengan operasional lebih padat",
-    price: "Rp 349.000",
-    access: "namaakademi.skaihub.com",
-    features: [
-      { text: `Kuota ${effectiveStudentLimit("scale", 0)} siswa aktif`, included: true },
-      { text: "Data Siswa & Pelatih", included: true },
-      { text: "Jadwal, Sesi & Absensi", included: true },
-      { text: "Iuran Siswa / Rekap SPP", included: true },
-      { text: "Evaluasi Siswa", included: true },
-      { text: "Riwayat Tingkatan & Prestasi", included: true },
-      { text: "Website Publik Akademi", included: true },
-    ],
-    highlighted: false,
-  },
-];
+const prices = PLAN_CARDS;
 
 function formatShortDate(value: string | null) {
   if (!value) return "Tanggal menyusul";
@@ -108,8 +58,8 @@ export default async function Home() {
             {/* Stats */}
             <div className="flex flex-wrap items-center gap-10">
               {[
-                { num: "6", label: "Modul Utama" },
-                { num: "3", label: "Paket Fleksibel" },
+                { num: String(MODULE_COUNT), label: "Modul Utama" },
+                { num: String(PLAN_KEYS.length), label: "Pilihan Paket" },
                 { num: "Gratis", label: "Konsultasi Awal" },
               ].map((s, i) => (
                 <div key={s.label} className="flex items-center gap-10">
@@ -125,7 +75,7 @@ export default async function Home() {
             <div className="flex flex-col gap-3">
               <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/30">Dirancang untuk</p>
               <div className="flex flex-wrap items-center gap-6">
-                {["AKADEMI BARU", "AKADEMI AKTIF", "MULTI CABANG", "PELATIH"].map((name) => (
+                {["AKADEMI BARU", "AKADEMI AKTIF", "KETUA & ADMIN AKADEMI", "PELATIH"].map((name) => (
                   <span key={name} className="font-heading text-sm font-black tracking-tight text-white/20 transition hover:text-white/60">{name}</span>
                 ))}
               </div>
@@ -150,7 +100,7 @@ export default async function Home() {
               </h2>
             </div>
             <p className="max-w-sm text-base leading-relaxed text-muted md:text-right">
-              Sistem manajemen modern yang dirancang khusus untuk merapikan operasional dan meningkatkan profesionalitas akademi Taekwondo dan Karate Anda.
+              Dirancang khusus untuk akademi Taekwondo dan Karate. Dari absensi harian sampai SPP, semua tercatat rapi dan bisa dibuka dari HP.
             </p>
           </div>
 
@@ -160,12 +110,16 @@ export default async function Home() {
             <div className="group relative overflow-hidden bg-primary p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[8px_8px_0px_theme(colors.secondary)] md:col-span-2">
               <div className="absolute -right-8 -top-8 h-32 w-32 rotate-12 bg-secondary/20 transition-transform duration-500 group-hover:scale-150" />
               <div className="absolute right-4 top-4 h-1 w-16 bg-secondary" />
-              <p className="relative z-10 font-heading text-7xl font-black leading-none text-white/10 transition-colors duration-300 group-hover:text-white/20">100%</p>
-              <h3 className="relative z-10 mt-3 font-heading text-2xl font-black uppercase text-white">
-                Produktif Mencetak Juara
+              <div className="relative z-10 mb-6 inline-flex bg-white/10 p-3 transition-colors duration-300 group-hover:bg-white/20">
+                <span className="material-symbols-outlined text-white" style={{ fontVariationSettings: "'FILL' 1", fontSize: "24px" }}>
+                  sports_martial_arts
+                </span>
+              </div>
+              <h3 className="relative z-10 font-heading text-2xl font-black uppercase text-white">
+                Latihan Lebih Terarah
               </h3>
               <p className="relative z-10 mt-3 max-w-md text-sm leading-relaxed text-white/60">
-                Jadikan sesi melatih lebih terarah. Susun jadwal, catat materi latihan, rekap absensi, dan pantau evaluasi siswa dengan histori yang rapi.
+                Sesi muncul otomatis di Kelas Hari Ini dari jadwal rutin. Pelatih mencatat Hadir, Izin, Sakit, atau Alpa, lalu menambah materi, catatan, dan foto latihan.
               </p>
             </div>
 
@@ -181,7 +135,7 @@ export default async function Home() {
                 Administrasi Bebas Repot
               </h3>
               <p className="relative z-10 mt-3 text-sm leading-relaxed text-white/80">
-                Dari pencatatan absen hingga iuran bulanan, kelola seluruh data siswa akademi langsung dari smartphone.
+                Buat tagihan SPP bulanan, catat pembayaran sebagian, dan pantau tunggakan dari HP. Kuitansi siap cetak atau dibagikan lewat WhatsApp.
               </p>
             </div>
 
@@ -198,19 +152,15 @@ export default async function Home() {
                     Bangun Reputasi Akademi yang Profesional
                   </h3>
                   <p className="mt-3 text-base leading-relaxed text-muted">
-                    Jadikan akademi Anda pilihan nomor satu di kota Anda. Tampil lebih siap dan modern di era digital.
+                    Calon siswa bisa melihat profil, galeri, prestasi, pengurus, dan pelatih akademi Anda, lalu langsung menghubungi lewat tombol WhatsApp.
                   </p>
                 </div>
-                <div className="flex flex-col items-center gap-3 md:pr-8">
-                  <div className="flex items-center gap-1">
-                    {[1,2,3,4,5].map((i) => (
-                      <svg key={i} className="h-7 w-7 fill-yellow-400" viewBox="0 0 24 24">
-                        <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <p className="text-2xl font-black text-primary md:text-white">4.9 / 5.0</p>
-                  <p className="text-center text-xs font-bold uppercase tracking-widest text-muted md:text-white/40">Rating Kepuasan Akademi</p>
+                <div className="flex flex-col items-start gap-3 md:items-center md:pr-8">
+                  <span className="inline-flex items-center gap-2 bg-primary px-4 py-2 font-heading text-base font-black text-white md:bg-white/10">
+                    <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>language</span>
+                    nama.skaihub.com
+                  </span>
+                  <p className="text-xs font-bold uppercase tracking-widest text-muted md:text-white/60">{PUBLIC_SITE_PLAN_LABEL}</p>
                 </div>
               </div>
             </div>
@@ -254,126 +204,22 @@ export default async function Home() {
               </h2>
             </div>
             <p className="max-w-sm text-base leading-relaxed text-muted md:text-right">
-              Pilih paket yang paling cocok untuk ukuran dan kebutuhan akademi.
+              Tiga paket dengan fitur inti yang sama. Bedanya ada di kuota siswa dan website publik akademi.
             </p>
           </div>
 
           <div className="grid gap-6 md:grid-cols-3 md:items-end">
             {prices.map((plan) => (
-              <article
-                key={plan.name}
-                className={`relative flex flex-col p-8 transition-all duration-300 ${
-                  plan.highlighted
-                    ? "bg-primary text-white shadow-[8px_8px_0px_theme(colors.secondary)] md:-translate-y-4"
-                    : "border-2 border-border bg-white text-slate-800 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg"
-                }`}
-              >
-                {/* Diagonal accent — hanya di Pro */}
-                {plan.highlighted && (
-                  <>
-                    <div className="absolute -right-0 -top-0 h-24 w-24 bg-secondary/20 [clip-path:polygon(100%_0%,0%_0%,100%_100%)]" />
-                    <div className="absolute -right-0 -top-0 h-16 w-16 bg-secondary/30 [clip-path:polygon(100%_0%,0%_0%,100%_100%)]" />
-                  </>
-                )}
-
-                {/* Icon watermark */}
-                {plan.name === "Starter" && (
-                  <span
-                    className="material-symbols-outlined pointer-events-none absolute -bottom-4 -right-4 select-none text-primary opacity-[0.04]"
-                    style={{ fontSize: "160px", fontVariationSettings: "'FILL' 1" }}
-                  >
-                    assignment
-                  </span>
-                )}
-                {plan.name === "Scale" && (
-                  <span
-                    className="material-symbols-outlined pointer-events-none absolute -bottom-4 -right-4 select-none text-primary opacity-[0.04]"
-                    style={{ fontSize: "160px", fontVariationSettings: "'FILL' 1" }}
-                  >
-                    military_tech
-                  </span>
-                )}
-
-                {/* Badge populer */}
-                {plan.tag && (
-                  <div className="absolute -top-4 left-6">
-                    <span className="inline-flex items-center gap-1.5 bg-secondary px-4 py-1.5 text-xs font-black uppercase tracking-widest text-white">
-                      <svg className="h-3 w-3" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
-                      </svg>
-                      {plan.tag}
-                    </span>
-                  </div>
-                )}
-
-                {/* Header */}
-                <div className="mb-6 mt-2">
-                  <h3 className={`font-heading text-xl font-black uppercase ${plan.highlighted ? "text-white" : "text-primary"}`}>
-                    {plan.name}
-                  </h3>
-                  <p className={`mt-1 text-sm ${plan.highlighted ? "text-white/50" : "text-muted"}`}>
-                    {plan.desc}
-                  </p>
-                </div>
-
-                {/* Harga */}
-                <div className={`mb-6 border-b pb-6 ${plan.highlighted ? "border-white/10" : "border-border"}`}>
-                  <div className="flex items-end gap-1">
-                    <span className="font-heading text-4xl font-black tracking-tight">{plan.price}</span>
-                    <span className={`mb-1 text-sm font-medium ${plan.highlighted ? "text-white/50" : "text-muted"}`}>/bulan</span>
-                  </div>
-                  {/* Access URL */}
-                  <div className={`mt-2 inline-flex items-center gap-1.5 px-2 py-1 text-[10px] font-bold ${
-                    plan.highlighted ? "bg-white/10 text-white/60" : "bg-slate-100 text-muted"
-                  }`}>
-                    <span className="material-symbols-outlined text-xs" style={{ fontSize: "12px" }}>language</span>
-                    {plan.access}
-                  </div>
-                </div>
-
-                {/* Fitur list */}
-                <ul className="flex-1 space-y-3">
-                  {plan.features.map((feature) => (
-                    <li key={feature.text} className="flex items-center gap-3 text-sm">
-                      {feature.included ? (
-                        <span className={`material-symbols-outlined flex-shrink-0 text-base ${plan.highlighted ? "text-secondary" : "text-primary"}`}
-                          style={{ fontVariationSettings: "'FILL' 1", fontSize: "18px" }}>
-                          check_circle
-                        </span>
-                      ) : (
-                        <span className="material-symbols-outlined flex-shrink-0 text-base text-slate-300"
-                          style={{ fontVariationSettings: "'FILL' 0", fontSize: "18px" }}>
-                          cancel
-                        </span>
-                      )}
-                      <span className={
-                        feature.included
-                          ? plan.highlighted ? "text-white/80" : "text-slate-700"
-                          : plan.highlighted ? "text-white/25" : "text-slate-300"
-                      }>
-                        {feature.text}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* CTA */}
-                <Link
-                  href={createWhatsAppUrl(
-                    `Halo SKAIHUB, saya tertarik paket ${plan.name}. Bisa dibantu penjelasannya?`,
-                    waNumber,
-                  )}
-                  className={`mt-8 block py-3.5 text-center text-sm font-black uppercase tracking-widest transition-all ${
-                    plan.highlighted
-                      ? "bg-secondary text-white hover:bg-secondary-dark"
-                      : "border-2 border-primary text-primary hover:bg-primary hover:text-white"
-                  }`}
-                >
-                  {plan.highlighted ? "Mulai Sekarang" : "Pilih Paket"}
-                </Link>
-              </article>
+              <PlanCardView key={plan.key} plan={plan} waNumber={waNumber} />
             ))}
           </div>
+          <p data-testid="quota-note" className="mt-10 border-l-4 border-secondary bg-slate-50 px-4 py-3 text-sm leading-relaxed text-slate-700">
+            <span className="font-bold text-primary">Kuota siswa aktif: </span>
+            {quotaNote()}{" "}
+            <Link href="/harga" className="font-bold text-primary underline underline-offset-4 hover:text-secondary">
+              Lihat detail paket
+            </Link>
+          </p>
         </div>
       </section>
 
@@ -554,13 +400,13 @@ export default async function Home() {
           <div>
             <div className="mb-4 flex items-center gap-3">
               <div className="h-1 w-10 bg-secondary" />
-              <span className="text-xs font-black uppercase tracking-[0.2em] text-secondary">Mulai Sekarang</span>
+              <span className="text-xs font-black uppercase tracking-[0.2em] text-secondary">Konsultasi</span>
             </div>
             <h2 className="font-heading text-4xl font-black uppercase leading-none tracking-tight text-white md:text-6xl">
               Siap Mendigitalkan<br />Akademi Anda?
             </h2>
             <p className="mt-4 max-w-lg text-base leading-relaxed text-white/50">
-              Mari berdiskusi tentang bagaimana SKAIHUB dapat membantu operasional akademi bela diri Anda menjadi lebih rapi dan profesional.
+              Ceritakan kebutuhan akademi Anda. Tim SKAIHUB bantu pilih paket dan menyiapkan akun lewat WhatsApp.
             </p>
           </div>
           <div className="flex flex-col items-start gap-4 md:items-end">
@@ -573,7 +419,7 @@ export default async function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
             </Link>
-            <p className="text-xs text-white/30">Senin - Jumat, 09:00 - 17:00 WIB</p>
+            <p className="text-xs text-white/30">{OFFICE_HOURS}</p>
           </div>
         </div>
       </section>

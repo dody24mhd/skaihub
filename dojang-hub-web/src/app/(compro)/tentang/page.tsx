@@ -6,14 +6,14 @@ import { getSiteSettings } from "../_lib/compro-data";
 export const metadata: Metadata = {
   title: "Tentang SKAIHUB",
   description:
-    "SKAIHUB membantu akademi bela diri Indonesia (Taekwondo, Karate, dan lainnya) merapikan operasional, data siswa, absensi, penilaian, dan profil digital.",
+    "SKAIHUB membantu akademi Taekwondo dan Karate di Indonesia merapikan data siswa, absensi, SPP, evaluasi, dan profil digital akademi.",
   alternates: {
     canonical: "/tentang",
   },
   openGraph: {
     title: "Tentang SKAIHUB | Platform Manajemen Akademi Bela Diri",
     description:
-      "Kenali visi SKAIHUB untuk membantu akademi bela diri tampil lebih rapi, profesional, dan siap digital.",
+      "Kenali SKAIHUB, platform untuk membantu akademi bela diri bekerja lebih rapi dan tampil profesional.",
     url: "/tentang",
   },
 };
@@ -22,22 +22,22 @@ const values = [
   {
     icon: "touch_app",
     title: "Mudah",
-    desc: "Dirancang untuk pengurus akademi, bukan developer. Tidak perlu keahlian teknis — langsung bisa dipakai dari hari pertama.",
+    desc: "Dirancang untuk pengurus dan pelatih, bukan orang IT. Tampilan sederhana dan nyaman dipakai dari HP.",
   },
   {
     icon: "bolt",
     title: "Efektif",
-    desc: "Setiap fitur menyelesaikan masalah nyata. Tidak ada fitur yang dibuat hanya untuk terlihat canggih.",
+    desc: "Setiap fitur dibuat untuk pekerjaan nyata di akademi. Tidak ada fitur yang dibuat hanya supaya terlihat canggih.",
   },
   {
     icon: "account_tree",
     title: "Sistematis",
-    desc: "Alur kerja yang terstruktur — dari absensi harian, Rapor, hingga kenaikan sabuk — semua mengikuti alur yang logis dan konsisten.",
+    desc: "Alur kerja yang runtut, dari absensi harian, rapor, sampai kenaikan sabuk. Semuanya mengikuti urutan yang konsisten.",
   },
   {
     icon: "hub",
     title: "Terintegrasi",
-    desc: "Semua modul terhubung. Data siswa yang diinput sekali langsung tersedia di absensi, Rapor, SPP, dan riwayat sabuk.",
+    desc: "Semua modul terhubung. Data siswa yang diisi sekali langsung dipakai di absensi, rapor, SPP, dan riwayat sabuk.",
   },
 ];
 
@@ -65,7 +65,7 @@ export default async function TentangPage() {
             <span className="text-secondary">SKAIHUB</span>
           </h1>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-white/60">
-            Platform manajemen akademi bela diri yang dibangun dari pemahaman mendalam tentang kebutuhan komunitas Taekwondo dan Karate Indonesia.
+            Platform manajemen akademi bela diri yang dibangun untuk kebutuhan pengurus dan pelatih Taekwondo dan Karate di Indonesia.
           </p>
         </div>
       </section>
@@ -75,7 +75,7 @@ export default async function TentangPage() {
         <div className="container-app">
           <div className="grid gap-16 lg:grid-cols-2 lg:gap-24">
 
-            {/* Kiri — label + heading */}
+            {/* Kiri: label + heading */}
             <div>
               <div className="mb-4 flex items-center gap-3">
                 <div className="h-1 w-10 bg-secondary" />
@@ -85,33 +85,21 @@ export default async function TentangPage() {
                 Kenapa<br />SKAIHUB<br />Dibuat?
               </h2>
 
-              {/* Stats kecil */}
-              <div className="mt-10 grid grid-cols-2 gap-6">
-                {[
-                  { num: "Banyak", label: "Akademi mulai butuh sistem rapi" },
-                  { num: "Manual", label: "Masih jadi tantangan umum" },
-                ].map((s) => (
-                  <div key={s.label} className="border-l-2 border-secondary pl-4">
-                    <p className="font-heading text-3xl font-black text-primary">{s.num}</p>
-                    <p className="mt-1 text-sm text-muted">{s.label}</p>
-                  </div>
-                ))}
-              </div>
             </div>
 
-            {/* Kanan — narasi */}
+            {/* Kanan: narasi */}
             <div className="flex flex-col gap-6 text-base leading-relaxed text-muted">
               <p>
-                Komunitas bela diri Indonesia itu besar dan tersebar di banyak daerah. Taekwondo, Karate, dan berbagai cabang olahraga bela diri lainnya memiliki ribuan akademi yang tersebar dari Sabang sampai Merauke. Tapi di balik semangat yang luar biasa itu, banyak akademi masih mengelola operasional mereka dengan cara yang sama seperti puluhan tahun lalu: buku catatan, Excel, dan grup WhatsApp.
+                Banyak akademi Taekwondo dan Karate di Indonesia dikelola dengan semangat besar, tetapi administrasinya masih tersebar di buku catatan, spreadsheet, dan grup WhatsApp.
               </p>
               <p>
-                Data siswa tercecer. Absensi tidak terlacak. Rapor ditulis tangan. Tidak ada profil online yang bisa ditemukan calon siswa baru. Pengurus akademi yang seharusnya fokus melatih, justru menghabiskan waktu untuk urusan administrasi yang sebenarnya bisa diotomasi.
+                Akibatnya data siswa mudah tercecer, absensi sulit direkap, dan rapor masih ditulis tangan. Pengurus yang seharusnya fokus melatih justru banyak tersita untuk urusan administrasi.
               </p>
               <p>
-                SKAIHUB lahir dari keprihatinan itu. Kami percaya setiap akademi — besar maupun kecil — berhak punya sistem digital yang rapi, terjangkau, dan mudah digunakan. Bukan software generik yang dipaksakan, tapi platform yang benar-benar dirancang untuk alur kerja akademi bela diri.
+                SKAIHUB dibuat untuk membantu hal itu. Kami percaya akademi besar maupun kecil layak punya sistem yang rapi, terjangkau, dan mudah dipakai. Bukan software umum yang dipaksakan, tetapi platform yang mengikuti alur kerja akademi bela diri.
               </p>
               <p className="font-semibold text-primary">
-                Satu platform. Untuk setiap akademi. Dari profil publik hingga manajemen internal yang terstandarisasi.
+                Satu platform untuk operasional akademi, dari absensi harian sampai halaman profil publik.
               </p>
             </div>
           </div>
@@ -145,7 +133,7 @@ export default async function TentangPage() {
                 <span className="font-heading text-xs font-black uppercase tracking-widest text-secondary">Visi</span>
               </div>
               <p className="font-heading text-xl font-bold leading-relaxed text-white">
-                Menjadi sistem operasi digital untuk komunitas bela diri Indonesia — Taekwondo dan Karate — dari tingkat akademi hingga nasional.
+                Menjadi platform andalan akademi Taekwondo dan Karate di Indonesia untuk mengelola operasional sehari-hari.
               </p>
             </div>
 
@@ -161,10 +149,10 @@ export default async function TentangPage() {
               </div>
               <ul className="space-y-3">
                 {[
-                  "Menyediakan platform manajemen akademi bela diri yang mudah, terjangkau, dan siap pakai",
-                  "Membantu setiap akademi tampil profesional secara digital",
-                  "Menstandarisasi pengelolaan data siswa, absensi, dan penilaian di seluruh Indonesia",
-                  "Tumbuh bersama komunitas bela diri Indonesia — Taekwondo, Karate, dan cabang lainnya",
+                  "Menyediakan platform manajemen akademi yang mudah, terjangkau, dan siap pakai",
+                  "Membantu akademi tampil lebih profesional secara digital",
+                  "Merapikan pengelolaan data siswa, absensi, SPP, dan penilaian",
+                  "Terus berkembang bersama masukan pengurus dan pelatih",
                 ].map((m, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm text-white/70">
                     <div className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 bg-secondary" />
@@ -247,7 +235,7 @@ export default async function TentangPage() {
             Siap Bersama<br />SKAIHUB?
           </h2>
           <p className="max-w-lg text-base leading-relaxed text-muted">
-            Bergabunglah dengan akademi bela diri yang sudah merapikan operasional mereka bersama SKAIHUB.
+            Ceritakan kebutuhan akademi Anda. Tim SKAIHUB bantu pilih paket dan menyiapkan akun lewat WhatsApp.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
