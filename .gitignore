@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+vendor/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Next.js & Frontend Build Outputs
+.next/
+out/
+build/
+dist/
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment & Credentials
+.env
+.env.*
+!.env.example
+*.pem
+auth.json
+
+# Storage & Logs
+*.log
+storage/logs/
+dojang-hub-api/storage/*.key
+dojang-hub-api/storage/pail
+public/hot
+public/storage
+
+# Testing & Cache
+.phpunit.result.cache
+.phpunit.cache/
+coverage/
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo

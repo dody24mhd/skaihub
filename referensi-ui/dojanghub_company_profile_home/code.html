@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DojangHub - Kelola Dojang Taekwondo Lebih Profesional</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Montserrat:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#f8f9ff",
+                        "martial-red": "#D32F2F",
+                        "success-green": "#10B981",
+                        "on-error-container": "#93000a",
+                        "belt-yellow": "#FACC15",
+                        "secondary-fixed-dim": "#ffb3ac",
+                        "surface-tint": "#4e5e82",
+                        "secondary-fixed": "#ffdad6",
+                        "belt-blue": "#2563EB",
+                        "on-primary-fixed": "#071b3b",
+                        "surface-variant": "#d5e3fc",
+                        "primary-fixed": "#d8e2ff",
+                        "slate-200": "#E2E8F0",
+                        "tertiary-container": "#292c2e",
+                        "inverse-surface": "#233144",
+                        "slate-400": "#94A3B8",
+                        "on-background": "#0d1c2e",
+                        "surface-dim": "#ccdbf3",
+                        "on-primary-fixed-variant": "#364669",
+                        "surface-container-low": "#eff4ff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-container": "#fffbff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "surface-container-high": "#dce9ff",
+                        "error": "#ba1a1a",
+                        "outline": "#75777f",
+                        "on-secondary-fixed-variant": "#930010",
+                        "surface": "#f8f9ff",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#f8f9ff",
+                        "on-secondary-fixed": "#410003",
+                        "secondary-container": "#da3433",
+                        "outline-variant": "#c5c6cf",
+                        "slate-800": "#1E293B",
+                        "slate-50": "#F8FAFC",
+                        "inverse-primary": "#b6c6f0",
+                        "surface-container": "#e6eeff",
+                        "on-tertiary-fixed": "#191c1e",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed-dim": "#b6c6f0",
+                        "surface-container-highest": "#d5e3fc",
+                        "on-surface": "#0d1c2e",
+                        "tertiary": "#141819",
+                        "on-primary-container": "#8293ba",
+                        "secondary": "#b6171e",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#e0e3e5",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-surface-variant": "#44474e",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#1a2b4c",
+                        "primary": "#031636",
+                        "deep-navy": "#1A2B4C",
+                        "on-tertiary-container": "#909395"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xl": "80px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "sm": "12px",
+                        "base": "8px",
+                        "md": "24px",
+                        "xs": "4px",
+                        "lg": "48px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Montserrat"],
+                        "display-lg-mobile": ["Montserrat"],
+                        "display-lg": ["Montserrat"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Montserrat"],
+                        "headline-sm": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "14px", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased selection:bg-martial-red selection:text-white">
+<!-- Top Navigation Bar -->
+<nav class="bg-surface-bright dark:bg-primary docked full-width top-0 border-b border-slate-200 dark:border-slate-800 z-50 sticky">
+<div class="flex justify-between items-center max-w-container-max mx-auto px-gutter h-20">
+<a class="text-headline-sm font-headline-sm font-bold text-primary dark:text-surface-bright flex items-center gap-xs" href="#">
+<span class="material-symbols-outlined text-martial-red" style="font-variation-settings: 'FILL' 1;">sports_martial_arts</span>
+                DojangHub
+            </a>
+<div class="hidden md:flex items-center gap-lg">
+<a class="text-on-surface-variant dark:text-surface-variant font-label-md text-label-md hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200" href="#fitur">Features</a>
+<a class="text-on-surface-variant dark:text-surface-variant font-label-md text-label-md hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200" href="#harga">Pricing</a>
+<a class="text-on-surface-variant dark:text-surface-variant font-label-md text-label-md hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200" href="#tentang">About</a>
+<a class="text-on-surface-variant dark:text-surface-variant font-label-md text-label-md hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200" href="#blog">Blog</a>
+</div>
+<a class="bg-primary text-on-primary font-label-md text-label-md px-md py-sm rounded-lg hover:bg-opacity-90 transition-opacity flex items-center gap-xs" href="https://wa.me/1234567890" target="_blank">
+                Get Started
+                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+</nav>
+<!-- Hero Section -->
+<header class="py-xl relative overflow-hidden bg-surface-container-lowest">
+<div class="absolute inset-0 z-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#1a2b4c 1px, transparent 1px); background-size: 24px 24px;"></div>
+<div class="max-w-container-max mx-auto px-gutter relative z-10">
+<div class="grid md:grid-cols-2 gap-xl items-center">
+<div class="flex flex-col gap-lg">
+<div class="inline-flex items-center gap-xs bg-surface-container-high px-sm py-xs rounded-full w-max">
+<span class="material-symbols-outlined text-martial-red text-[16px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-sm text-label-sm text-primary">Platform Manajemen Taekwondo #1 di Indonesia</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary">Kelola Dojang Taekwondo Kamu Lebih <span class="text-martial-red">Profesional</span></h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">Tingkatkan efisiensi dojang Anda dengan sistem manajemen terpadu. Dari absensi QR, pencatatan sabuk, hingga laporan perkembangan siswa dalam satu platform B2B yang andal.</p>
+<div class="flex flex-wrap gap-md mt-sm">
+<a class="bg-martial-red text-white font-label-md text-label-md px-lg py-md rounded-lg hover:bg-opacity-90 transition-opacity shadow-[0px_4px_10px_rgba(211,47,47,0.3)] flex items-center gap-xs" href="https://wa.me/1234567890" target="_blank">
+<span class="material-symbols-outlined">chat</span>
+                            Daftarkan Dojang Kamu
+                        </a>
+<a class="border border-slate-200 text-primary font-label-md text-label-md px-lg py-md rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-xs" href="#demo">
+<span class="material-symbols-outlined">play_circle</span>
+                            Lihat Demo
+                        </a>
+</div>
+<div class="flex items-center gap-md mt-lg pt-lg border-t border-slate-200">
+<div class="flex -space-x-sm">
+<div class="w-10 h-10 rounded-full border-2 border-white bg-slate-200"></div>
+<div class="w-10 h-10 rounded-full border-2 border-white bg-slate-300"></div>
+<div class="w-10 h-10 rounded-full border-2 border-white bg-slate-400"></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Dipercaya oleh <span class="font-bold text-primary">50+</span> Dojang di seluruh Indonesia.</p>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -inset-lg bg-gradient-to-tr from-surface-variant to-surface-bright rounded-[2rem] opacity-50 blur-xl"></div>
+<img alt="Dashboard Mockup" class="relative z-10 w-full rounded-xl shadow-[0px_10px_30px_rgba(0,0,0,0.1)] border border-slate-200" data-alt="A clean, professional modern dashboard interface for a martial arts management software displayed on a sleek laptop monitor. The UI features deep navy and white base colors with vibrant martial red accents. It shows data visualizations, student attendance lists, and belt progression charts. The laptop sits on a minimal wooden desk with soft, natural studio lighting, conveying a high-tech, reliable B2B SaaS environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoVnootpFwuDgZZrnFX7do25iYOYZ0_IWeVsH_y6DruJoW7aNMbc3So8UeTXorT3rnd_XIZurrXe8d4XTiK_pGTW9wWfu9_r_w-FH_OyS2PnJiIZcurrrI77UxoMOjryXtxwPILFGgqtUjGh3K0JXmBQU2W_GjnXnlcAQ45oQH6Elc1Sl4fjL7-OV4u92YQt07K4cDIpolD08oOeDXV1iH0n_mr_9C3bp2ZUMKgiGrdiSIHIKnDPscJejNyW_3SqoFxlDycrCx0Ak"/>
+<!-- Floating Badge -->
+<div class="absolute -left-lg bottom-xl bg-white p-md rounded-lg shadow-[0px_10px_15px_rgba(0,0,0,0.1)] border border-slate-100 z-20 flex items-center gap-sm">
+<div class="w-12 h-12 rounded-full bg-success-green bg-opacity-10 flex items-center justify-center">
+<span class="material-symbols-outlined text-success-green" style="font-variation-settings: 'FILL' 1;">qr_code_scanner</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-slate-400">Absensi Hari Ini</p>
+<p class="font-headline-sm text-headline-sm text-primary">124 Siswa Hadir</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Footer -->
+<footer class="bg-primary dark:bg-tertiary-container full-width py-lg mt-xl">
+<div class="max-w-container-max mx-auto px-gutter grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-md items-start">
+<div class="flex flex-col gap-sm">
+<a class="text-headline-sm font-headline-sm font-bold text-surface-bright flex items-center gap-xs" href="#">
+<span class="material-symbols-outlined text-martial-red" style="font-variation-settings: 'FILL' 1;">sports_martial_arts</span>
+                    DojangHub
+                </a>
+<p class="font-body-sm text-body-sm text-surface-variant opacity-80 mt-sm">© 2024 DojangHub. Empowering Dojang Owners Worldwide.</p>
+</div>
+<div class="flex flex-col gap-sm">
+<h4 class="font-label-md text-label-md text-on-primary dark:text-on-tertiary mb-sm">Platform</h4>
+<a class="text-surface-variant opacity-80 font-body-sm text-body-sm hover:text-on-primary dark:hover:text-on-tertiary transition-opacity" href="#">Features</a>
+<a class="text-surface-variant opacity-80 font-body-sm text-body-sm hover:text-on-primary dark:hover:text-on-tertiary transition-opacity" href="#">Pricing</a>
+</div>
+<div class="flex flex-col gap-sm">
+<h4 class="font-label-md text-label-md text-on-primary dark:text-on-tertiary mb-sm">Legal</h4>
+<a class="text-surface-variant opacity-80 font-body-sm text-body-sm hover:text-on-primary dark:hover:text-on-tertiary transition-opacity" href="#">Terms</a>
+<a class="text-surface-variant opacity-80 font-body-sm text-body-sm hover:text-on-primary dark:hover:text-on-tertiary transition-opacity" href="#">Privacy</a>
+</div>
+<div class="flex flex-col gap-sm">
+<h4 class="font-label-md text-label-md text-on-primary dark:text-on-tertiary mb-sm">Connect</h4>
+<a class="text-surface-variant opacity-80 font-body-sm text-body-sm hover:text-on-primary dark:hover:text-on-tertiary transition-opacity" href="#">Support</a>
+<a class="text-surface-variant opacity-80 font-body-sm text-body-sm hover:text-on-primary dark:hover:text-on-tertiary transition-opacity flex items-center gap-xs" href="#">
+<span class="material-symbols-outlined text-[16px]">mail</span>
+                    hello@dojanghub.com
+                </a>
+</div>
+</div>
+</footer>
+</body></html>

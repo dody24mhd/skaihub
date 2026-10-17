@@ -1,0 +1,259 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { ReactNode, useEffect } from "react";
+
+const TOKEN_KEY = "skaihub_admin_token";
+const EMAIL_KEY = "skaihub_admin_email";
+const NAME_KEY = "skaihub_admin_name";
+const ROLE_KEY = "skaihub_admin_role";
+
+const navSections = [
+  {
+    title: "Platform",
+    items: [
+      {
+        title: "Dashboard",
+        href: "/internal",
+        icon: "dashboard",
+      },
+      {
+        title: "Akademi",
+        href: "/internal/akademi",
+        icon: "domain",
+      },
+      {
+        title: "Subscription",
+        href: "/internal/subscription",
+        icon: "payments",
+      },
+      {
+        title: "Admin Akademi",
+        href: "/internal/users",
+        icon: "manage_accounts",
+      },
+    ],
+  },
+  {
+    title: "CMS",
+    items: [
+      {
+        title: "Dashboard CMS",
+        href: "/internal/cms-dashboard",
+        icon: "query_stats",
+      },
+      {
+        title: "Event",
+        href: "/internal/event",
+        icon: "event",
+      },
+      {
+        title: "Berita",
+        href: "/internal/berita",
+        icon: "newspaper",
+      },
+      {
+        title: "Pesan Masuk",
+        href: "/internal/inquiry",
+        icon: "inbox",
+      },
+      {
+        title: "FAQ",
+        href: "/internal/faq",
+        icon: "quiz",
+      },
+      {
+        title: "Testimoni",
+        href: "/internal/testimoni",
+        icon: "reviews",
+      },
+      {
+        title: "Pengaturan",
+        href: "/internal/settings",
+        icon: "settings",
+      },
+    ],
+  },
+];
+
+type AdminShellProps = {
+  title: string;
+  eyebrow?: string;
+  description?: string;
+  children: ReactNode;
+};
+
+export default function AdminShell({
+  title,
+  eyebrow = "Admin CMS",
+  description,
+  children,
+}: AdminShellProps) {
+  const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      const role = localStorage.getItem(ROLE_KEY);
+      if (role && ["ketua_akademi", "admin_akademi", "pelatih"].includes(role)) {
+        router.replace("/academy");
+      }
+    });
+  }, [router]);
+
+  function handleLogout() {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(EMAIL_KEY);
+    localStorage.removeItem(NAME_KEY);
+    localStorage.removeItem(ROLE_KEY);
+    router.push("/login");
+  }
+
+  return (
+    <main className="min-h-screen bg-surface text-primary lg:grid lg:grid-cols-[280px_1fr]">
+      <aside className="hidden border-r border-border bg-primary text-white lg:flex lg:min-h-screen lg:flex-col">
+        <div className="border-b border-white/10 p-5">
+          <Link href="/internal" className="flex items-center gap-3">
+            <div className="flex size-11 items-center justify-center rounded-md bg-white text-primary">
+              <span className="material-symbols-outlined text-[26px]">
+                sports_martial_arts
+              </span>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-white/65">SKAIHUB</p>
+              <p className="font-heading text-lg font-bold text-white">
+                Admin Control
+              </p>
+            </div>
+          </Link>
+        </div>
+
+        <nav className="flex-1 space-y-6 p-4">
+          {navSections.map((section) => (
+            <div key={section.title}>
+              <p className="mb-2 px-3 text-xs font-bold uppercase text-white/40">
+                {section.title}
+              </p>
+              <div className="space-y-1">
+                {section.items.map((item) => {
+                  const isActive =
+                    item.href === "/internal"
+                      ? pathname === item.href
+                      : pathname.startsWith(item.href);
+
+                  return (
+                    <Link
+                      key={item.title}
+                      href={item.href}
+                      className={`flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold transition ${
+                        isActive
+                          ? "bg-white text-primary"
+                          : "text-white/72 hover:bg-white/10 hover:text-white"
+                      }`}
+                    >
+                      <span className="material-symbols-outlined text-[20px]">
+                        {item.icon}
+                      </span>
+                      {item.title}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </nav>
+
+        <div className="space-y-3 border-t border-white/10 p-4">
+          <Link
+            href="https://skaihub.com"
+            className="flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold text-white/72 transition hover:bg-white/10 hover:text-white"
+          >
+            <span className="material-symbols-outlined text-[20px]">home</span>
+            Lihat Web
+          </Link>
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="flex h-11 w-full items-center gap-3 rounded-md px-3 text-sm font-semibold text-white/72 transition hover:bg-secondary hover:text-white"
+          >
+            <span className="material-symbols-outlined text-[20px]">logout</span>
+            Logout
+          </button>
+        </div>
+      </aside>
+
+      <section className="min-w-0">
+        <header className="sticky top-0 z-20 border-b border-border bg-white/95 backdrop-blur">
+          <div className="flex min-h-16 items-center justify-between gap-4 px-5 lg:px-8">
+            <div className="min-w-0">
+              <p className="label-caps text-secondary">{eyebrow}</p>
+              <h1 className="truncate text-xl font-bold text-primary sm:text-2xl">
+                {title}
+              </h1>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Link
+                href="/internal"
+                className="inline-flex size-10 items-center justify-center rounded-md border border-border bg-white text-primary transition hover:bg-surface-container-low lg:hidden"
+                aria-label="Dashboard"
+              >
+                <span className="material-symbols-outlined text-[20px]">
+                  dashboard
+                </span>
+              </Link>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="inline-flex size-10 items-center justify-center rounded-md border border-border bg-white text-primary transition hover:bg-secondary/10 hover:text-secondary"
+                aria-label="Logout"
+              >
+                <span className="material-symbols-outlined text-[20px]">
+                  logout
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <nav className="flex gap-2 overflow-x-auto border-t border-border px-5 py-3 lg:hidden">
+            {navSections
+              .flatMap((section) => section.items)
+              .map((item) => {
+                const isActive =
+                  item.href === "/internal"
+                    ? pathname === item.href
+                    : pathname.startsWith(item.href);
+
+                return (
+                  <Link
+                    key={item.title}
+                    href={item.href}
+                    className={`inline-flex h-9 shrink-0 items-center gap-2 rounded-md px-3 text-sm font-semibold ${
+                      isActive
+                        ? "bg-primary text-white"
+                        : "bg-surface-container-low text-primary"
+                    }`}
+                  >
+                    <span className="material-symbols-outlined text-[18px]">
+                      {item.icon}
+                    </span>
+                    {item.title}
+                  </Link>
+                );
+              })}
+          </nav>
+        </header>
+
+        <div className="px-5 py-6 lg:px-8 lg:py-8">
+          {description ? (
+            <p className="mb-6 max-w-3xl text-sm leading-6 text-muted">
+              {description}
+            </p>
+          ) : null}
+          {children}
+        </div>
+      </section>
+    </main>
+  );
+}

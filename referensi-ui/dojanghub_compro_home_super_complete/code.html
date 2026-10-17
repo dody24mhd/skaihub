@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DojangHub - Kelola Dojang Taekwondo Lebih Profesional</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Montserrat:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#f8f9ff",
+                        "martial-red": "#D32F2F",
+                        "success-green": "#10B981",
+                        "on-error-container": "#93000a",
+                        "belt-yellow": "#FACC15",
+                        "secondary-fixed-dim": "#ffb3ac",
+                        "surface-tint": "#4e5e82",
+                        "secondary-fixed": "#ffdad6",
+                        "belt-blue": "#2563EB",
+                        "on-primary-fixed": "#071b3b",
+                        "surface-variant": "#d5e3fc",
+                        "primary-fixed": "#d8e2ff",
+                        "slate-200": "#E2E8F0",
+                        "tertiary-container": "#292c2e",
+                        "inverse-surface": "#233144",
+                        "slate-400": "#94A3B8",
+                        "on-background": "#0d1c2e",
+                        "surface-dim": "#ccdbf3",
+                        "on-primary-fixed-variant": "#364669",
+                        "surface-container-low": "#eff4ff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-container": "#fffbff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "surface-container-high": "#dce9ff",
+                        "error": "#ba1a1a",
+                        "outline": "#75777f",
+                        "on-secondary-fixed-variant": "#930010",
+                        "surface": "#f8f9ff",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#f8f9ff",
+                        "on-secondary-fixed": "#410003",
+                        "secondary-container": "#da3433",
+                        "outline-variant": "#c5c6cf",
+                        "slate-800": "#1E293B",
+                        "slate-50": "#F8FAFC",
+                        "inverse-primary": "#b6c6f0",
+                        "surface-container": "#e6eeff",
+                        "on-tertiary-fixed": "#191c1e",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed-dim": "#b6c6f0",
+                        "surface-container-highest": "#d5e3fc",
+                        "on-surface": "#0d1c2e",
+                        "tertiary": "#141819",
+                        "on-primary-container": "#8293ba",
+                        "secondary": "#b6171e",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#e0e3e5",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-surface-variant": "#44474e",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#1a2b4c",
+                        "primary": "#031636",
+                        "deep-navy": "#1A2B4C",
+                        "on-tertiary-container": "#909395"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xl": "80px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "sm": "12px",
+                        "base": "8px",
+                        "md": "24px",
+                        "xs": "4px",
+                        "lg": "48px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Montserrat"],
+                        "display-lg-mobile": ["Montserrat"],
+                        "display-lg": ["Montserrat"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Montserrat"],
+                        "headline-sm": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "14px", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased selection:bg-martial-red selection:text-white">
+<!-- Top Navigation Bar -->
+<nav class="bg-surface-bright dark:bg-primary docked full-width top-0 border-b border-slate-200 dark:border-slate-800 z-50 sticky">
+<div class="flex justify-between items-center max-w-container-max mx-auto px-gutter h-20">
+<a class="text-headline-sm font-headline-sm font-bold text-primary dark:text-surface-bright flex items-center gap-xs" href="#">
+<span class="material-symbols-outlined text-martial-red" style="font-variation-settings: 'FILL' 1;">sports_martial_arts</span>
+                DojangHub
+            </a>
+<div class="hidden md:flex items-center gap-lg">
+<a class="text-on-surface-variant dark:text-surface-variant font-label-md text-label-md hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200" href="#fitur">Features</a>
+<a class="text-on-surface-variant dark:text-surface-variant font-label-md text-label-md hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200" href="#harga">Pricing</a>
+<a class="text-on-surface-variant dark:text-surface-variant font-label-md text-label-md hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200" href="#tentang">About</a>
+<a class="text-on-surface-variant dark:text-surface-variant font-label-md text-label-md hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-200" href="#blog">Blog</a>
+</div>
+<a class="bg-primary text-on-primary font-label-md text-label-md px-md py-sm rounded-lg hover:bg-opacity-90 transition-opacity flex items-center gap-xs" href="https://wa.me/1234567890" target="_blank">
+                Get Started
+                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+</nav>
+<!-- Hero Section -->
+<header class="py-xl relative overflow-hidden bg-surface-container-lowest">
+<div class="absolute inset-0 z-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#1a2b4c 1.5px, transparent 1.5px); background-size: 32px 32px;"></div>
+<div class="absolute top-0 right-0 -mr-xl -mt-xl w-[600px] h-[600px] bg-gradient-to-br from-surface-variant to-surface-bright rounded-full opacity-40 blur-3xl z-0 pointer-events-none"></div>
+<div class="max-w-container-max mx-auto px-gutter relative z-10">
+<div class="grid md:grid-cols-2 gap-xl items-center">
+<div class="flex flex-col gap-lg">
+<div class="inline-flex items-center gap-xs bg-surface-container-high px-sm py-xs rounded-full w-max border border-slate-200">
+<span class="material-symbols-outlined text-martial-red text-[16px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-sm text-label-sm text-primary">Platform Manajemen Taekwondo #1 di Indonesia</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary">Kelola Dojang Taekwondo Kamu Lebih <span class="text-martial-red">Profesional</span></h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">Tingkatkan efisiensi dojang Anda dengan sistem manajemen terpadu. Dari absensi QR, pencatatan sabuk, hingga laporan perkembangan siswa dalam satu platform B2B yang andal.</p>
+<div class="flex flex-wrap gap-md mt-sm">
+<a class="bg-martial-red text-white font-label-md text-label-md px-lg py-md rounded-lg hover:bg-opacity-90 transition-opacity shadow-[0px_4px_10px_rgba(211,47,47,0.3)] flex items-center gap-xs" href="https://wa.me/1234567890" target="_blank">
+<span class="material-symbols-outlined">chat</span>
+                            Daftarkan Dojang Kamu
+                        </a>
+<a class="border border-slate-200 text-primary font-label-md text-label-md px-lg py-md rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-xs bg-white" href="#demo">
+<span class="material-symbols-outlined">play_circle</span>
+                            Lihat Demo
+                        </a>
+</div>
+<div class="flex items-center gap-md mt-lg pt-lg border-t border-slate-200">
+<div class="flex -space-x-sm">
+<div class="w-10 h-10 rounded-full border-2 border-white bg-slate-200"></div>
+<div class="w-10 h-10 rounded-full border-2 border-white bg-slate-300"></div>
+<div class="w-10 h-10 rounded-full border-2 border-white bg-slate-400"></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Dipercaya oleh <span class="font-bold text-primary">50+</span> Dojang di seluruh Indonesia.</p>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -inset-lg bg-gradient-to-tr from-surface-variant to-surface-bright rounded-[2rem] opacity-50 blur-xl"></div>
+<img alt="Multi-device Dashboard Mockup" class="relative z-10 w-full rounded-xl shadow-[0px_20px_40px_rgba(0,0,0,0.15)] border border-slate-200" data-alt="A clean, professional modern dashboard interface for a martial arts management software displayed on a sleek laptop monitor and a mobile phone side-by-side. The UI features deep navy and white base colors with vibrant martial red accents. It shows data visualizations, student attendance lists, and belt progression charts. The laptop and phone sit on a minimal wooden desk with soft, natural studio lighting, conveying a high-tech, reliable B2B SaaS environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaag7ZAUSygjSE6zkSTh3yEJuUI4bO3hxoNtpaTByPY005OoyRIpoUPcwW1bijTwWO5xEwbjZosqjsm3SpxCWiDgi_UfUq8tmd1WTDK9QplG3E9iy8dupM_7s4JpUVM32ti81OQ4qhbpf9z4cNAqXKwfX6GPgaY82F_Sog7r3pj_YBC2OMGz2QY7sR4JKy4JiyhDe6Xv96OTuHAE05G3XTZgU_KgE6Gv2bxRWZWSvOZo9-1DNeYJ06yR12UqBQE7n7AWDZn-vE2a4"/>
+<!-- Floating Badge -->
+<div class="absolute -left-lg bottom-xl bg-white p-md rounded-lg shadow-[0px_10px_20px_rgba(0,0,0,0.1)] border border-slate-100 z-20 flex items-center gap-sm">
+<div class="w-12 h-12 rounded-full bg-success-green bg-opacity-10 flex items-center justify-center">
+<span class="material-symbols-outlined text-success-green" style="font-variation-settings: 'FILL' 1;">qr_code_scanner</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-slate-400">Absensi Hari Ini</p>
+<p class="font-headline-sm text-headline-sm text-primary">124 Siswa Hadir</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Section 2: Problem Statement -->
+<section class="py-xl bg-white border-b border-slate-200">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="text-center mb-xl">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-sm">Masalah Klasik Pengurus Dojang</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Masih menggunakan cara manual untuk mengurus administrasi dojang? Sudah saatnya beralih ke sistem yang lebih efisien.</p>
+</div>
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-md">
+<!-- Card 1 -->
+<div class="bg-surface p-lg rounded-xl border border-slate-100 flex flex-col gap-sm items-start shadow-sm hover:shadow-md transition-shadow">
+<div class="w-12 h-12 rounded-full bg-martial-red bg-opacity-10 flex items-center justify-center text-martial-red mb-xs">
+<span class="material-symbols-outlined">edit_document</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Absensi Manual</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Masih menggunakan buku absen fisik yang rentan hilang atau rusak, merepotkan saat rekap akhir bulan.</p>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface p-lg rounded-xl border border-slate-100 flex flex-col gap-sm items-start shadow-sm hover:shadow-md transition-shadow">
+<div class="w-12 h-12 rounded-full bg-martial-red bg-opacity-10 flex items-center justify-center text-martial-red mb-xs">
+<span class="material-symbols-outlined">history_edu</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Rapor Tulisan Tangan</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Membuat rapor ujian sabuk satu per satu dengan tulisan tangan memakan waktu berjam-jam.</p>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface p-lg rounded-xl border border-slate-100 flex flex-col gap-sm items-start shadow-sm hover:shadow-md transition-shadow">
+<div class="w-12 h-12 rounded-full bg-martial-red bg-opacity-10 flex items-center justify-center text-martial-red mb-xs">
+<span class="material-symbols-outlined">visibility_off</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Tidak Ada Profil Online</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Calon siswa kesulitan mencari informasi pendaftaran atau jadwal latihan dojang Anda di internet.</p>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface p-lg rounded-xl border border-slate-100 flex flex-col gap-sm items-start shadow-sm hover:shadow-md transition-shadow">
+<div class="w-12 h-12 rounded-full bg-martial-red bg-opacity-10 flex items-center justify-center text-martial-red mb-xs">
+<span class="material-symbols-outlined">folder_off</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Data Berceceran</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Informasi pendaftaran, iuran, dan riwayat sabuk terpencar di berbagai grup WhatsApp.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Solusi / Fitur Showcase -->
+<section class="py-xl bg-surface-container-lowest" id="fitur">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="text-center mb-xl">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-sm">Satu Platform, Berbagai Solusi</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">DojangHub menyediakan semua fitur yang Anda butuhkan untuk mengelola dojang dengan lebih profesional dan efisien.</p>
+</div>
+<div class="flex flex-col gap-xl">
+<!-- Feature 1: Landing Page -->
+<div class="grid md:grid-cols-2 gap-xl items-center">
+<div class="flex flex-col gap-md">
+<div class="w-12 h-12 rounded-full bg-belt-blue bg-opacity-10 flex items-center justify-center text-belt-blue">
+<span class="material-symbols-outlined">web</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-primary">Website Dojang Profesional</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Setiap dojang mendapatkan subdomain (nama-dojang.dojanghub.com) yang berfungsi sebagai landing page untuk menarik calon siswa baru.</p>
+<ul class="flex flex-col gap-sm mt-sm">
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-success-green">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Profil, sejarah, dan galeri foto dojang</span>
+</li>
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-success-green">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Informasi jadwal latihan dan lokasi map</span>
+</li>
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-success-green">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Formulir pendaftaran online terintegrasi</span>
+</li>
+</ul>
+</div>
+<div class="bg-surface p-md rounded-2xl border border-slate-200 shadow-md">
+<img alt="Website Builder Interface" class="rounded-lg w-full h-auto object-cover border border-slate-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDi4ykKqEW9Y4iHQ1R118-s6LXgcHU3HONJMyDXiM0moNpQE2Ln5Wv8xSAxN5Ry-5M9hEyrhUOutOOV2pEM9xj-guiKQjRNRBJeyKSg2fJB2fI49sYuv2cxGOIRVTJvYjuEqIBOBfjnGWqT1FNctYOVmTWmw27yqhISSMhH5hEwaC7UJupPHe46L5lBxI8NI-8mGPikk49fRSfKfcyFOsqMOpfxeVjeDoIN9BuY3u5utk0ICCeYmiwlFgezhlB68ZEEHJeleNGTY3o"/>
+</div>
+</div>
+<!-- Feature 2: Digital Attendance -->
+<div class="grid md:grid-cols-2 gap-xl items-center flex-row-reverse md:flex-row-reverse">
+<div class="bg-surface p-md rounded-2xl border border-slate-200 shadow-md md:col-start-1">
+<img alt="QR Code Scanner Interface" class="rounded-lg w-full h-auto object-cover border border-slate-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAe9gHalXUXu7DYfaZFaq3JJVs5DOAm4EQ-GLmJl8OZZsc-rZ9ax7ggweFSzR75oEjnCSkGoykMs1gjRZ1b6v6xzqNyHQ9_PyjXuOpTpTkRXLi-dUGkRJdBMblFHJzlwvCb6ZHfnNY-sbCT5DGfg2Sp7dfR8p8EN2lHkBRr70RSho34Yxd195onrOqZ3LT5vfDi6ZMm3kS5dyyT6gJOiVdBNCPzYO8z4l5d4c9bpqSp6YgQm3RdJM0CFOM6JsJjxno0VSJepjUucbU"/>
+</div>
+<div class="flex flex-col gap-md md:col-start-2">
+<div class="w-12 h-12 rounded-full bg-success-green bg-opacity-10 flex items-center justify-center text-success-green">
+<span class="material-symbols-outlined">qr_code_scanner</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-primary">Absensi Digital via QR Code</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Tinggalkan buku absen manual. Proses absensi menjadi instan, akurat, dan datanya langsung tersimpan di sistem.</p>
+<ul class="flex flex-col gap-sm mt-sm">
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-success-green">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">QR code unik untuk setiap siswa</span>
+</li>
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-success-green">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Sabeum dapat scan menggunakan smartphone</span>
+</li>
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-success-green">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Rekap kehadiran bulanan otomatis</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Feature 3: Belt Progression -->
+<div class="grid md:grid-cols-2 gap-xl items-center">
+<div class="flex flex-col gap-md">
+<div class="w-12 h-12 rounded-full bg-belt-yellow bg-opacity-10 flex items-center justify-center text-belt-yellow">
+<span class="material-symbols-outlined">military_tech</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-primary">Manajemen Sabuk &amp; Ujian</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Pantau perkembangan tingkat sabuk (Geup/Dan) setiap siswa dengan mudah dan terstruktur.</p>
+<ul class="flex flex-col gap-sm mt-sm">
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-success-green">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Riwayat kenaikan sabuk tersimpan rapi</span>
+</li>
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-success-green">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Jadwal ujian kenaikan tingkat (UKT)</span>
+</li>
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-success-green">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Pembuatan rapor (certificate) otomatis (PDF)</span>
+</li>
+</ul>
+</div>
+<div class="bg-surface p-md rounded-2xl border border-slate-200 shadow-md">
+<img alt="Belt Progression Dashboard" class="rounded-lg w-full h-auto object-cover border border-slate-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCy1IjIGb7J0V69Gc702ELiRAvz4dBfn_a0geEqBLkrwigFjIGTrbKD3VC0z4IqcNd8weDK4hFIMxwV782NK-up3oPLrYZvrNqa5j5ttckWMWgYDxjAuM_aps_j6_dKeGXVg0we7AWWUCWDJH49fJ5yilFeb51R5uTXFcCkaXZCaqsY1LTJo1ov2b9N_L7ZrIG52pZ3tacfZaiIgf1Hymwuj0ZVbyBNXblOpFp35jRK1c__vEuFZmVIX6x6TxkWcNA0qF6PZfsf5yQ"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 5: Pricing Table -->
+<section class="py-xl bg-surface-bright" id="harga">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="text-center mb-xl">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-sm">Harga Transparan, Sesuai Kebutuhan</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Pilih paket yang paling cocok untuk ukuran dan kebutuhan dojang Anda.</p>
+</div>
+<div class="grid md:grid-cols-3 gap-lg max-w-5xl mx-auto">
+<!-- Starter -->
+<div class="bg-white rounded-2xl border border-slate-200 p-lg shadow-sm hover:shadow-md transition-shadow flex flex-col">
+<h3 class="font-headline-md text-headline-md text-primary mb-xs">Starter</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">Cocok untuk dojang baru</p>
+<div class="mb-lg">
+<span class="font-display-lg-mobile text-display-lg-mobile text-primary">Rp 99.000</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">/bulan</span>
+</div>
+<ul class="flex flex-col gap-sm mb-xl flex-grow">
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-success-green text-[20px]">check</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Hingga 50 Siswa Aktif</span>
+</li>
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-success-green text-[20px]">check</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Basic Landing Page</span>
+</li>
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-success-green text-[20px]">check</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Absensi Manual</span>
+</li>
+</ul>
+<a class="w-full text-center border border-slate-200 text-primary font-label-md text-label-md py-md rounded-lg hover:bg-slate-50 transition-colors" href="#">Pilih Paket</a>
+</div>
+<!-- Pro -->
+<div class="bg-primary rounded-2xl border border-primary p-lg shadow-xl relative flex flex-col transform md:-translate-y-4">
+<div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-martial-red text-white font-label-sm text-label-sm px-md py-xs rounded-full">Paling Populer</div>
+<h3 class="font-headline-md text-headline-md text-white mb-xs">Pro</h3>
+<p class="font-body-sm text-body-sm text-surface-variant opacity-80 mb-md">Standar profesional dojang</p>
+<div class="mb-lg">
+<span class="font-display-lg-mobile text-display-lg-mobile text-white">Rp 249.000</span>
+<span class="font-body-sm text-body-sm text-surface-variant opacity-80">/bulan</span>
+</div>
+<ul class="flex flex-col gap-sm mb-xl flex-grow text-white">
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-success-green text-[20px]">check</span>
+<span class="font-body-sm text-body-sm opacity-90">Hingga 200 Siswa Aktif</span>
+</li>
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-success-green text-[20px]">check</span>
+<span class="font-body-sm text-body-sm opacity-90">Custom Domain Landing Page</span>
+</li>
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-success-green text-[20px]">check</span>
+<span class="font-body-sm text-body-sm opacity-90">Absensi QR Code</span>
+</li>
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-success-green text-[20px]">check</span>
+<span class="font-body-sm text-body-sm opacity-90">Manajemen Rapor (PDF)</span>
+</li>
+</ul>
+<a class="w-full text-center bg-martial-red text-white font-label-md text-label-md py-md rounded-lg hover:bg-opacity-90 transition-opacity" href="#">Pilih Paket</a>
+</div>
+<!-- Premium -->
+<div class="bg-white rounded-2xl border border-slate-200 p-lg shadow-sm hover:shadow-md transition-shadow flex flex-col">
+<h3 class="font-headline-md text-headline-md text-primary mb-xs">Premium</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">Manajemen multi-cabang</p>
+<div class="mb-lg">
+<span class="font-display-lg-mobile text-display-lg-mobile text-primary">Rp 499.000</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">/bulan</span>
+</div>
+<ul class="flex flex-col gap-sm mb-xl flex-grow">
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-success-green text-[20px]">check</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Siswa Aktif Tidak Terbatas</span>
+</li>
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-success-green text-[20px]">check</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Multi Dojang / Cabang</span>
+</li>
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-success-green text-[20px]">check</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Semua Fitur Pro</span>
+</li>
+<li class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-success-green text-[20px]">check</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Prioritas Support 24/7</span>
+</li>
+</ul>
+<a class="w-full text-center border border-slate-200 text-primary font-label-md text-label-md py-md rounded-lg hover:bg-slate-50 transition-colors" href="#">Pilih Paket</a>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 6: Testimonials -->
+<section class="py-xl bg-surface-container-lowest border-y border-slate-200">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="text-center mb-xl">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-sm">Suara Mereka yang Sudah Digital</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Bergabunglah dengan puluhan dojang yang telah meningkatkan efisiensi operasional mereka.</p>
+</div>
+<div class="grid md:grid-cols-3 gap-md">
+<!-- Testimonial 1 -->
+<div class="bg-surface p-lg rounded-xl border border-slate-100 flex flex-col gap-md">
+<div class="flex items-center gap-sm">
+<img alt="Sabeum Budi" class="w-12 h-12 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGE9CxMDaN1XTrSjnI4oEEff59gwql-TXU9OBL3rqpOzcZ04PYU2dQdlf0-3eD5WYy9bZgr3jImNcd8G6p23yZgeH5rHqkOZIzFD_GtEzTxgEdaZqFajIynwSgIB7fKTJ6PjKbg36fajeQ1Z6jPCqZcQ6Y_hFr9CJ_4rBp6Xzy--gH8_UY8Vim7_9atg9-76UyX3ASvB2rHLOQ-RpYoXdbVduXwm6WXhCZgtePQd0Ue05Z2QBqzNfYnPeGz53ygGz3WjsB-GG9Vi4"/>
+<div>
+<h4 class="font-headline-sm text-[16px] text-primary">Sabeum Budi</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Garuda Taekwondo Club</p>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">"Semenjak pakai DojangHub, rekap absen dan bikin rapor UKT jadi sangat cepat. Dulu butuh berhari-hari, sekarang tinggal klik saja."</p>
+</div>
+<!-- Testimonial 2 -->
+<div class="bg-surface p-lg rounded-xl border border-slate-100 flex flex-col gap-md">
+<div class="flex items-center gap-sm">
+<img alt="Sabeum Nisa" class="w-12 h-12 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2iF4whE93Y5IRk4EZ5W2M87IixjY4HILHPVmkkSV3vnGnQOqTsmA8jXl-Nh9VxhFmeebgFClIQu6GQjErunKGd_ugvATmdAC2lKQbYovIs2UPELAacrmU2Mzu7CXN6FVxAQUZSPPoiMXyDWMRzp-AaNObfgh4WR3jD2EhB0iP4qb_m7M8LAK6UOYAaSOVpcN8iSfUu0pOmbKVgsC9St0ilDMAGVhG7Jf9BXjrOknOG29iG2hzT1UY1SEoUrs5rp8ZhfuBieiMLdc"/>
+<div>
+<h4 class="font-headline-sm text-[16px] text-primary">Sabeum Nisa</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Tiger Dojang</p>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">"Landing page-nya keren banget. Sejak ada web sendiri dari DojangHub, banyak orang tua murid yang daftar langsung secara online."</p>
+</div>
+<!-- Testimonial 3 -->
+<div class="bg-surface p-lg rounded-xl border border-slate-100 flex flex-col gap-md">
+<div class="flex items-center gap-sm">
+<img alt="Sabeum Anton" class="w-12 h-12 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEDeOhcE1KHIBvRL-GAF8_A-pw3SbRnLeEim7TSTO5fHVTO-qWIofWVtnFDs6yQQZ4DTcr1nJiUOWW7_8s2AGvpF_ipVjyJ4qWR7c_f8y-z2rO5Dw3YqaQuLNjxZiM5DQlS6lbQMSd0Tcab6YnJ4Gc744sAsik6vFF2gXITO70TVHWw9JlwekHEp6e_vWdYxSC32Ve4v02JNw-O2U3KpfxDzt20jhO6r_w2H8TTKiHwPJiH7SBVpdsfow1DM2EGLVAMSbZa8Pd4j8"/>
+<div>
+<h4 class="font-headline-sm text-[16px] text-primary">Sabeum Anton</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Bumi Putera TKD</p>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">"Fitur manajemen multi-cabangnya sangat membantu saya memantau 3 dojang sekaligus. Sangat direkomendasikan!"</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 7: FAQ -->
+<section class="py-xl bg-white">
+<div class="max-w-3xl mx-auto px-gutter">
+<div class="text-center mb-xl">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-sm">Pertanyaan yang Sering Diajukan</h2>
+</div>
+<div class="flex flex-col gap-sm">
+<!-- FAQ 1 -->
+<details class="group bg-surface rounded-lg border border-slate-200 [&amp;_summary::-webkit-details-marker]:hidden">
+<summary class="flex cursor-pointer items-center justify-between gap-1.5 p-md font-headline-sm text-[16px] text-primary">
+                    Apakah data dojang saya aman?
+                    <span class="shrink-0 transition duration-300 group-open:-rotate-180">
+<span class="material-symbols-outlined">expand_more</span>
+</span>
+</summary>
+<div class="px-md pb-md font-body-sm text-body-sm text-on-surface-variant">
+                    Ya, kami menggunakan server yang aman dengan enkripsi data standar industri. Data dojang Anda bersifat rahasia dan tidak akan dibagikan ke pihak ketiga.
+                </div>
+</details>
+<!-- FAQ 2 -->
+<details class="group bg-surface rounded-lg border border-slate-200 [&amp;_summary::-webkit-details-marker]:hidden">
+<summary class="flex cursor-pointer items-center justify-between gap-1.5 p-md font-headline-sm text-[16px] text-primary">
+                    Apakah saya bisa mencoba gratis?
+                    <span class="shrink-0 transition duration-300 group-open:-rotate-180">
+<span class="material-symbols-outlined">expand_more</span>
+</span>
+</summary>
+<div class="px-md pb-md font-body-sm text-body-sm text-on-surface-variant">
+                    Saat ini kami menyediakan sesi demo gratis di mana tim kami akan menunjukkan cara kerja DojangHub secara langsung.
+                </div>
+</details>
+<!-- FAQ 3 -->
+<details class="group bg-surface rounded-lg border border-slate-200 [&amp;_summary::-webkit-details-marker]:hidden">
+<summary class="flex cursor-pointer items-center justify-between gap-1.5 p-md font-headline-sm text-[16px] text-primary">
+                    Bagaimana jika jumlah murid saya bertambah di tengah jalan?
+                    <span class="shrink-0 transition duration-300 group-open:-rotate-180">
+<span class="material-symbols-outlined">expand_more</span>
+</span>
+</summary>
+<div class="px-md pb-md font-body-sm text-body-sm text-on-surface-variant">
+                    Anda dapat melakukan upgrade paket kapan saja. Hubungi tim support kami untuk proses penyesuaian paket (prorata).
+                </div>
+</details>
+</div>
+</div>
+</section>
+<!-- Section 8: Final CTA -->
+<section class="py-xl bg-primary text-white text-center">
+<div class="max-w-container-max mx-auto px-gutter flex flex-col items-center gap-md">
+<h2 class="font-headline-lg text-headline-lg text-white">Siap Mendigitalkan Dojang Anda?</h2>
+<p class="font-body-lg text-body-lg text-surface-variant opacity-90 max-w-2xl">Mari berdiskusi dengan tim kami tentang bagaimana DojangHub dapat membantu operasional dojang Anda. Hubungi kami sekarang.</p>
+<a class="mt-md bg-martial-red text-white font-label-md text-label-md px-xl py-md rounded-lg hover:bg-opacity-90 transition-opacity flex items-center gap-sm shadow-lg text-[16px]" href="https://wa.me/1234567890" target="_blank">
+<span class="material-symbols-outlined">chat</span>
+            Hubungi Kami via WhatsApp
+        </a>
+<p class="font-label-sm text-label-sm text-surface-variant opacity-70 mt-sm">Jam Operasional: Senin - Jumat, 09:00 - 17:00 WIB</p>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-primary dark:bg-tertiary-container full-width py-lg border-t border-slate-800">
+<div class="max-w-container-max mx-auto px-gutter grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-md items-start">
+<div class="flex flex-col gap-sm">
+<a class="text-headline-sm font-headline-sm font-bold text-surface-bright flex items-center gap-xs" href="#">
+<span class="material-symbols-outlined text-martial-red" style="font-variation-settings: 'FILL' 1;">sports_martial_arts</span>
+                    DojangHub
+                </a>
+<p class="font-body-sm text-body-sm text-surface-variant opacity-80 mt-sm">© 2024 DojangHub. Empowering Dojang Owners Worldwide.</p>
+</div>
+<div class="flex flex-col gap-sm">
+<h4 class="font-label-md text-label-md text-on-primary dark:text-on-tertiary mb-sm">Platform</h4>
+<a class="text-surface-variant opacity-80 font-body-sm text-body-sm hover:text-on-primary dark:hover:text-on-tertiary transition-opacity" href="#">Features</a>
+<a class="text-surface-variant opacity-80 font-body-sm text-body-sm hover:text-on-primary dark:hover:text-on-tertiary transition-opacity" href="#">Pricing</a>
+</div>
+<div class="flex flex-col gap-sm">
+<h4 class="font-label-md text-label-md text-on-primary dark:text-on-tertiary mb-sm">Legal</h4>
+<a class="text-surface-variant opacity-80 font-body-sm text-body-sm hover:text-on-primary dark:hover:text-on-tertiary transition-opacity" href="#">Terms</a>
+<a class="text-surface-variant opacity-80 font-body-sm text-body-sm hover:text-on-primary dark:hover:text-on-tertiary transition-opacity" href="#">Privacy</a>
+</div>
+<div class="flex flex-col gap-sm">
+<h4 class="font-label-md text-label-md text-on-primary dark:text-on-tertiary mb-sm">Connect</h4>
+<a class="text-surface-variant opacity-80 font-body-sm text-body-sm hover:text-on-primary dark:hover:text-on-tertiary transition-opacity" href="#">Support</a>
+<a class="text-surface-variant opacity-80 font-body-sm text-body-sm hover:text-on-primary dark:hover:text-on-tertiary transition-opacity flex items-center gap-xs" href="#">
+<span class="material-symbols-outlined text-[16px]">mail</span>
+                    hello@dojanghub.com
+                </a>
+</div>
+</div>
+</footer>
+</body></html>

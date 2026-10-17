@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DojangHub - Digital Attendance</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#b6c6f0",
+                    "surface-container": "#e6eeff",
+                    "surface-container-low": "#eff4ff",
+                    "surface-tint": "#4e5e82",
+                    "on-surface-variant": "#44474e",
+                    "secondary": "#b6171e",
+                    "belt-blue": "#2563EB",
+                    "inverse-on-surface": "#eaf1ff",
+                    "primary": "#031636",
+                    "surface-container-highest": "#d5e3fc",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed": "#410003",
+                    "martial-red": "#D32F2F",
+                    "on-tertiary-fixed-variant": "#444749",
+                    "surface-dim": "#ccdbf3",
+                    "slate-800": "#1E293B",
+                    "background": "#f8f9ff",
+                    "error": "#ba1a1a",
+                    "on-primary-fixed-variant": "#364669",
+                    "on-primary-fixed": "#071b3b",
+                    "on-secondary": "#ffffff",
+                    "belt-yellow": "#FACC15",
+                    "primary-container": "#1a2b4c",
+                    "outline-variant": "#c5c6cf",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed-dim": "#ffb3ac",
+                    "tertiary-fixed-dim": "#c4c7c9",
+                    "on-tertiary": "#ffffff",
+                    "slate-50": "#F8FAFC",
+                    "secondary-fixed": "#ffdad6",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#292c2e",
+                    "deep-navy": "#1A2B4C",
+                    "on-primary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "on-background": "#0d1c2e",
+                    "primary-fixed": "#d8e2ff",
+                    "success-green": "#10B981",
+                    "inverse-primary": "#b6c6f0",
+                    "surface-bright": "#f8f9ff",
+                    "on-tertiary-container": "#909395",
+                    "surface-variant": "#d5e3fc",
+                    "on-tertiary-fixed": "#191c1e",
+                    "inverse-surface": "#233144",
+                    "on-secondary-container": "#fffbff",
+                    "outline": "#75777f",
+                    "tertiary-fixed": "#e0e3e5",
+                    "surface-container-high": "#dce9ff",
+                    "on-primary-container": "#8293ba",
+                    "slate-400": "#94A3B8",
+                    "surface": "#f8f9ff",
+                    "tertiary": "#141819",
+                    "secondary-container": "#da3433",
+                    "on-surface": "#0d1c2e",
+                    "on-secondary-fixed-variant": "#930010",
+                    "slate-200": "#E2E8F0"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "container-max": "1280px",
+                    "gutter": "24px",
+                    "sm": "12px",
+                    "md": "24px",
+                    "base": "8px",
+                    "xs": "4px",
+                    "xl": "80px",
+                    "lg": "48px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Montserrat"],
+                    "display-lg": ["Montserrat"],
+                    "label-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-md": ["Montserrat"],
+                    "display-lg-mobile": ["Montserrat"],
+                    "headline-sm": ["Montserrat"],
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                    "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                    "label-md": ["14px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                    "label-sm": ["12px", { "lineHeight": "14px", "fontWeight": "500" }],
+                    "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                    "display-lg-mobile": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                    "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                    "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                    "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                    "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-body-md text-body-md text-on-surface antialiased flex">
+<!-- Shared Component: SideNavBar -->
+<nav class="bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container font-headline-sm text-headline-sm font-label-md text-label-md docked h-screen left-0 w-64 shadow-md fixed flex flex-col z-40 transition-transform duration-300 md:translate-x-0 -translate-x-full">
+<div class="p-6 border-b border-white/10 flex flex-col gap-2">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-martial-red flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">sports_martial_arts</span>
+</div>
+<h1 class="text-headline-sm font-bold text-on-primary">DojangHub</h1>
+</div>
+<p class="text-label-sm text-on-primary/70 uppercase tracking-widest">Elite Management</p>
+</div>
+<div class="flex-1 overflow-y-auto py-4 flex flex-col gap-1">
+<a class="text-surface-variant dark:text-on-tertiary-container hover:bg-white/10 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 hover:bg-white/10 transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<a class="text-surface-variant dark:text-on-tertiary-container hover:bg-white/10 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 hover:bg-white/10 transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">group</span>
+<span class="font-label-md text-label-md">Students</span>
+</a>
+<a class="text-surface-variant dark:text-on-tertiary-container hover:bg-white/10 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 hover:bg-white/10 transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">sports_martial_arts</span>
+<span class="font-label-md text-label-md">Coaches</span>
+</a>
+<!-- Active Tab: Attendance -->
+<a class="bg-martial-red text-white rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 translate-x-1 transition-transform shadow-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">how_to_reg</span>
+<span class="font-label-md text-label-md">Attendance</span>
+</a>
+<a class="text-surface-variant dark:text-on-tertiary-container hover:bg-white/10 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 hover:bg-white/10 transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">military_tech</span>
+<span class="font-label-md text-label-md">Belt Progression</span>
+</a>
+<a class="text-surface-variant dark:text-on-tertiary-container hover:bg-white/10 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 hover:bg-white/10 transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">assignment</span>
+<span class="font-label-md text-label-md">Report Cards</span>
+</a>
+<a class="text-surface-variant dark:text-on-tertiary-container hover:bg-white/10 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 hover:bg-white/10 transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">workspace_premium</span>
+<span class="font-label-md text-label-md">Achievements</span>
+</a>
+<a class="text-surface-variant dark:text-on-tertiary-container hover:bg-white/10 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 hover:bg-white/10 transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">campaign</span>
+<span class="font-label-md text-label-md">Announcements</span>
+</a>
+<div class="mt-auto pt-4 border-t border-white/10 mx-4">
+<a class="text-surface-variant dark:text-on-tertiary-container hover:bg-white/10 rounded-lg -mx-2 my-1 px-4 py-3 flex items-center gap-3 hover:bg-white/10 transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col md:ml-64 min-h-screen">
+<!-- Shared Component: TopAppBar -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface text-primary dark:text-primary-fixed font-headline-sm text-headline-sm font-label-sm text-label-sm border-b border-slate-200 dark:border-outline-variant flat docked top-0 right-0 w-full md:w-[calc(100%-256px)] fixed z-30 flex justify-between items-center px-md h-16">
+<div class="flex items-center gap-4">
+<button class="md:hidden p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-full px-4 py-2 w-64 focus-within:border-deep-navy focus-within:ring-1 focus-within:ring-deep-navy transition-all">
+<span class="material-symbols-outlined text-slate-400 text-[20px]">search</span>
+<input class="bg-transparent border-none outline-none text-body-sm w-full text-on-surface placeholder:text-slate-400 p-0 focus:ring-0" placeholder="Search students..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-on-surface-variant hover:bg-surface-container dark:hover:bg-surface-container-high rounded-full p-2 transition-colors relative group">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-martial-red rounded-full border border-white"></span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container dark:hover:bg-surface-container-high rounded-full p-2 transition-colors group">
+<span class="material-symbols-outlined">apps</span>
+</button>
+<div class="h-8 w-px bg-slate-200 mx-2"></div>
+<button class="flex items-center gap-2 hover:bg-surface-container rounded-full p-1 pr-3 transition-colors">
+<img alt="Instructor Avatar" class="w-8 h-8 rounded-full object-cover border border-slate-200" data-alt="A professional headshot of an Asian male martial arts instructor in his 30s, wearing a dark navy polo shirt. He has a warm, confident smile. The background is a bright, modern indoor space with soft, natural lighting. The overall mood is approachable, professional, and clean, fitting a modern corporate SaaS platform aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3sqMwZfPVh7XeX_ofDNyS-5kJ-AveD-lWDEp1cSecaWYa9GwjVBECo8Cp7dLz3EQlT2FeXsq5S9qeFF5eyDQWGTcjh_Wu4yHEmz9Mec08Ne9ytproZ-BiKY8MoKH9WMYYdgRN_KNBdqPDqd2AwLJIGompZIBEGewyp1PnqzSv5g_SLZXBSwJzBkGqH-rUnsRftlrnXoUV4gksPQ1lO-iGtOCZkuyMhFupI36aObBsMdS4zKXL91698D1dkgr_Op7MyjWKRBy3ZtY"/>
+<span class="font-label-md text-label-md hidden lg:block">Sabeum Andi</span>
+<span class="material-symbols-outlined text-[18px] text-slate-400 hidden lg:block">expand_more</span>
+</button>
+</div>
+</header>
+<!-- Page Content -->
+<main class="flex-1 pt-[88px] px-4 md:px-lg pb-12 overflow-x-hidden">
+<div class="max-w-container-max mx-auto flex flex-col gap-6">
+<!-- Session Info Banner -->
+<div class="bg-white rounded-xl border border-slate-200 shadow-[0px_2px_4px_rgba(0,0,0,0.05)] p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative overflow-hidden">
+<!-- Decorative subtle accent -->
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-deep-navy"></div>
+<div class="flex flex-col gap-1 z-10 pl-2">
+<div class="flex items-center gap-3">
+<h2 class="font-headline-md text-headline-md text-deep-navy">Sesi Sore - Reguler</h2>
+<span class="bg-surface-container px-2 py-1 rounded text-label-sm font-label-sm text-surface-tint">Taekwondo Base</span>
+</div>
+<div class="flex items-center gap-4 text-slate-500 font-body-sm text-body-sm mt-1">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">sports_martial_arts</span>
+<span>Pelatih: Sabeum Andi</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span class="font-medium text-slate-700">Tanggal: 19 Mei 2026</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+<span>16:00 - 17:30</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3 w-full md:w-auto z-10">
+<button class="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-slate-200 text-slate-800 font-label-md text-label-md hover:bg-slate-50 transition-colors bg-white shadow-sm group">
+<span class="material-symbols-outlined text-[20px] group-hover:text-martial-red transition-colors">qr_code_scanner</span>
+<span>Mode QR</span>
+</button>
+<button class="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-deep-navy text-white font-label-md text-label-md hover:bg-primary-fixed-dim hover:text-deep-navy transition-all shadow-md active:scale-95">
+<span class="material-symbols-outlined text-[20px]">save</span>
+<span>Simpan Absensi</span>
+</button>
+</div>
+</div>
+<!-- Stats & Filters -->
+<div class="flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="flex gap-2">
+<div class="px-3 py-1.5 rounded-full border border-success-green/30 bg-success-green/10 text-success-green font-label-sm text-label-sm flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-success-green"></span>
+                            Hadir: 18
+                        </div>
+<div class="px-3 py-1.5 rounded-full border border-slate-200 bg-white text-slate-600 font-label-sm text-label-sm flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-belt-yellow"></span>
+                            Izin: 2
+                        </div>
+<div class="px-3 py-1.5 rounded-full border border-slate-200 bg-white text-slate-600 font-label-sm text-label-sm flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-martial-red"></span>
+                            Alpha: 0
+                        </div>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-slate-500">Filter Sabuk:</span>
+<select class="bg-white border border-slate-200 text-on-surface font-body-sm text-body-sm rounded-lg px-3 py-1.5 focus:border-deep-navy focus:ring-1 focus:ring-deep-navy outline-none">
+<option>Semua Sabuk</option>
+<option>Putih</option>
+<option>Kuning</option>
+<option>Hijau</option>
+</select>
+</div>
+</div>
+<!-- Student List Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+<!-- Student Card 1 (Hadir) -->
+<div class="bg-white rounded-xl border border-slate-200 shadow-[0px_2px_4px_rgba(0,0,0,0.05)] p-4 flex flex-col gap-4 hover:border-surface-tint transition-colors relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-16 h-16 bg-success-green/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+<div class="flex items-start gap-3 relative z-10">
+<div class="relative">
+<img alt="Student Portrait" class="w-12 h-12 rounded-full object-cover border-2 border-slate-100" data-alt="A portrait of a young female taekwondo student looking directly at the camera with a focused expression. She wears a clean white taekwondo uniform. The background is a soft, out-of-focus training hall. Bright, modern, high-contrast lighting emphasizing clarity and energy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEfUVwmNtii1t7TYSagd_LEDYGB8pa_ugDi-gGcylIkw3S7NY16yT-PH-MnpUuBiTfjTN_6peQDPh2E-hBK5OK1JpDMIWqxoW21gAdgQb6ydbfEG8-4i3k3UPo3j69--MZrB2MaVTad2QYrb1kX1JdMSm2nZ2Pd8PwwZ6GhRKbai1qkXR0-taFjnm0ze0VnZT7c9QYOwJYHYFeSucjMY1GFqEXTqNGsAouHypVOIC7xze29NM9zkpCGlxj_1kqhqjPxOzhw0hng8I"/>
+<!-- Belt Indicator (Yellow) -->
+<div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white bg-belt-yellow shadow-sm" title="Sabuk Kuning"></div>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-label-md text-label-md text-deep-navy truncate">Budi Santoso</h3>
+<p class="font-body-sm text-body-sm text-slate-500 truncate">ID: TKD-2023-014</p>
+</div>
+</div>
+<!-- Segmented Control for Status -->
+<div class="flex items-center bg-slate-50 p-1 rounded-lg border border-slate-200 relative z-10">
+<button class="flex-1 py-1.5 px-2 rounded-md bg-white shadow-sm border border-slate-200 text-success-green font-label-sm text-label-sm text-center font-bold">H</button>
+<button class="flex-1 py-1.5 px-2 rounded-md text-slate-500 font-label-sm text-label-sm text-center hover:text-slate-800 transition-colors">I</button>
+<button class="flex-1 py-1.5 px-2 rounded-md text-slate-500 font-label-sm text-label-sm text-center hover:text-slate-800 transition-colors">S</button>
+<button class="flex-1 py-1.5 px-2 rounded-md text-slate-500 font-label-sm text-label-sm text-center hover:text-martial-red transition-colors">A</button>
+</div>
+</div>
+<!-- Student Card 2 (Izin) -->
+<div class="bg-white rounded-xl border border-slate-200 shadow-[0px_2px_4px_rgba(0,0,0,0.05)] p-4 flex flex-col gap-4 hover:border-surface-tint transition-colors relative overflow-hidden group">
+<div class="flex items-start gap-3 relative z-10">
+<div class="relative">
+<div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center border-2 border-slate-100 text-slate-400 font-headline-sm">AR</div>
+<!-- Belt Indicator (Blue) -->
+<div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white bg-belt-blue shadow-sm" title="Sabuk Biru"></div>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-label-md text-label-md text-deep-navy truncate">Ayu Rahmawati</h3>
+<p class="font-body-sm text-body-sm text-slate-500 truncate">ID: TKD-2022-088</p>
+</div>
+</div>
+<!-- Segmented Control -->
+<div class="flex items-center bg-slate-50 p-1 rounded-lg border border-slate-200 relative z-10">
+<button class="flex-1 py-1.5 px-2 rounded-md text-slate-500 font-label-sm text-label-sm text-center hover:text-success-green transition-colors">H</button>
+<button class="flex-1 py-1.5 px-2 rounded-md bg-white shadow-sm border border-slate-200 text-belt-yellow font-label-sm text-label-sm text-center font-bold">I</button>
+<button class="flex-1 py-1.5 px-2 rounded-md text-slate-500 font-label-sm text-label-sm text-center hover:text-slate-800 transition-colors">S</button>
+<button class="flex-1 py-1.5 px-2 rounded-md text-slate-500 font-label-sm text-label-sm text-center hover:text-martial-red transition-colors">A</button>
+</div>
+</div>
+<!-- Student Card 3 (Hadir) -->
+<div class="bg-white rounded-xl border border-slate-200 shadow-[0px_2px_4px_rgba(0,0,0,0.05)] p-4 flex flex-col gap-4 hover:border-surface-tint transition-colors relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-16 h-16 bg-success-green/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+<div class="flex items-start gap-3 relative z-10">
+<div class="relative">
+<img alt="Student Portrait" class="w-12 h-12 rounded-full object-cover border-2 border-slate-100" data-alt="A portrait of a male taekwondo student in a white dobok, standing in a brightly lit, modern martial arts studio. The lighting is crisp and even, highlighting the clean white fabric against a neutral background. The tone is disciplined and energetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDduSkSsEqzUWd4FxHjwror2sVSgFHQb_th_W-cB8BQlIs9MdrxzeU4QX3VX8dIq-UtwKZIpQyke_vCO2kEdpm6U8Meu4rB1DKHLLsfYQHMePekAnAFM5BWhM97O7J0XaLiiRtreptMf9dmJ4-Bq0C0D8KjzsUt09M9xi79QgLLgOA3QA474-2X7Mb7a_5cJmRLW3ERfSx8DXjT3B2a--06T_hI9KqjALY52KkfftCnISHawZZRVQm4In2asYE8PkzwwfTce2RAkaI"/>
+<!-- Belt Indicator (Red) -->
+<div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white bg-martial-red shadow-sm" title="Sabuk Merah"></div>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-label-md text-label-md text-deep-navy truncate">Kevin Wijaya</h3>
+<p class="font-body-sm text-body-sm text-slate-500 truncate">ID: TKD-2021-002</p>
+</div>
+</div>
+<!-- Segmented Control -->
+<div class="flex items-center bg-slate-50 p-1 rounded-lg border border-slate-200 relative z-10">
+<button class="flex-1 py-1.5 px-2 rounded-md bg-white shadow-sm border border-slate-200 text-success-green font-label-sm text-label-sm text-center font-bold">H</button>
+<button class="flex-1 py-1.5 px-2 rounded-md text-slate-500 font-label-sm text-label-sm text-center hover:text-slate-800 transition-colors">I</button>
+<button class="flex-1 py-1.5 px-2 rounded-md text-slate-500 font-label-sm text-label-sm text-center hover:text-slate-800 transition-colors">S</button>
+<button class="flex-1 py-1.5 px-2 rounded-md text-slate-500 font-label-sm text-label-sm text-center hover:text-martial-red transition-colors">A</button>
+</div>
+</div>
+<!-- Student Card 4 (Alpha) -->
+<div class="bg-white rounded-xl border border-martial-red/30 shadow-[0px_2px_4px_rgba(0,0,0,0.05)] p-4 flex flex-col gap-4 hover:border-martial-red transition-colors relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-16 h-16 bg-martial-red/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+<div class="flex items-start gap-3 relative z-10">
+<div class="relative">
+<img alt="Student Portrait" class="w-12 h-12 rounded-full object-cover border-2 border-slate-100 grayscale" data-alt="A portrait of a young male taekwondo student, rendered in black and white or desaturated tones to indicate absence. He wears a standard uniform. The background is a simple, modern studio setting. The high-contrast aesthetic is maintained despite the desaturation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGuy7Ok1_-T5RdA3bF15AI9JrGUt-G9eyQKCBCukoaa70uiC0gZDyTYCVFJ90qnH1dPK7M78cgJCc6PdCl7TFb1acue1LLDSUM0Ef70XRKvKQlpUaKB1_lWvstqLeWKfAuVbSxcIAQHfUyUmFxnG1nKFussic0sPPhXT4xE1NZAc0gtVcaB4unlBZLA1DtqUg3MfibFPpMuy-865B6K3TO6y_vHkyrO1nFycyYec217ZVqen0GxMPlBbQ3KltDgAzZceVDQLZ-u2s"/>
+<!-- Belt Indicator (Green) -->
+<div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white bg-success-green shadow-sm" title="Sabuk Hijau"></div>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-label-md text-label-md text-slate-700 truncate">Dimas Prasetyo</h3>
+<p class="font-body-sm text-body-sm text-slate-400 truncate">ID: TKD-2023-105</p>
+</div>
+</div>
+<!-- Segmented Control -->
+<div class="flex items-center bg-slate-50 p-1 rounded-lg border border-slate-200 relative z-10">
+<button class="flex-1 py-1.5 px-2 rounded-md text-slate-500 font-label-sm text-label-sm text-center hover:text-success-green transition-colors">H</button>
+<button class="flex-1 py-1.5 px-2 rounded-md text-slate-500 font-label-sm text-label-sm text-center hover:text-slate-800 transition-colors">I</button>
+<button class="flex-1 py-1.5 px-2 rounded-md text-slate-500 font-label-sm text-label-sm text-center hover:text-slate-800 transition-colors">S</button>
+<button class="flex-1 py-1.5 px-2 rounded-md bg-white shadow-sm border border-martial-red/30 text-martial-red font-label-sm text-label-sm text-center font-bold">A</button>
+</div>
+</div>
+<!-- Student Card 5 (Unmarked - Default State) -->
+<div class="bg-white rounded-xl border border-slate-200 shadow-[0px_2px_4px_rgba(0,0,0,0.05)] p-4 flex flex-col gap-4 hover:border-surface-tint transition-colors relative overflow-hidden group">
+<div class="flex items-start gap-3 relative z-10">
+<div class="relative">
+<div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center border-2 border-slate-100 text-slate-400 font-headline-sm">SN</div>
+<!-- Belt Indicator (White) -->
+<div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-slate-200 bg-white shadow-sm" title="Sabuk Putih"></div>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-label-md text-label-md text-deep-navy truncate">Siti Nurhaliza</h3>
+<p class="font-body-sm text-body-sm text-slate-500 truncate">ID: TKD-2024-012</p>
+</div>
+</div>
+<!-- Segmented Control -->
+<div class="flex items-center bg-slate-50 p-1 rounded-lg border border-slate-200 relative z-10">
+<button class="flex-1 py-1.5 px-2 rounded-md text-slate-500 font-label-sm text-label-sm text-center hover:text-success-green hover:bg-white hover:shadow-sm transition-all">H</button>
+<button class="flex-1 py-1.5 px-2 rounded-md text-slate-500 font-label-sm text-label-sm text-center hover:text-slate-800 hover:bg-white hover:shadow-sm transition-all">I</button>
+<button class="flex-1 py-1.5 px-2 rounded-md text-slate-500 font-label-sm text-label-sm text-center hover:text-slate-800 hover:bg-white hover:shadow-sm transition-all">S</button>
+<button class="flex-1 py-1.5 px-2 rounded-md text-slate-500 font-label-sm text-label-sm text-center hover:text-martial-red hover:bg-white hover:shadow-sm transition-all">A</button>
+</div>
+</div>
+</div>
+<!-- Bottom spacing for mobile fab if needed -->
+<div class="h-16 md:hidden"></div>
+</div>
+</main>
+</div>
+</body></html>

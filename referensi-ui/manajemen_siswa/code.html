@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Student Management - DojangHub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Montserrat:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-fixed-dim": "#b6c6f0",
+                      "surface-container": "#e6eeff",
+                      "surface-container-low": "#eff4ff",
+                      "surface-tint": "#4e5e82",
+                      "on-surface-variant": "#44474e",
+                      "secondary": "#b6171e",
+                      "belt-blue": "#2563EB",
+                      "inverse-on-surface": "#eaf1ff",
+                      "primary": "#031636",
+                      "surface-container-highest": "#d5e3fc",
+                      "surface-container-lowest": "#ffffff",
+                      "on-secondary-fixed": "#410003",
+                      "martial-red": "#D32F2F",
+                      "on-tertiary-fixed-variant": "#444749",
+                      "surface-dim": "#ccdbf3",
+                      "slate-800": "#1E293B",
+                      "background": "#f8f9ff",
+                      "error": "#ba1a1a",
+                      "on-primary-fixed-variant": "#364669",
+                      "on-primary-fixed": "#071b3b",
+                      "on-secondary": "#ffffff",
+                      "belt-yellow": "#FACC15",
+                      "primary-container": "#1a2b4c",
+                      "outline-variant": "#c5c6cf",
+                      "on-error-container": "#93000a",
+                      "secondary-fixed-dim": "#ffb3ac",
+                      "tertiary-fixed-dim": "#c4c7c9",
+                      "on-tertiary": "#ffffff",
+                      "slate-50": "#F8FAFC",
+                      "secondary-fixed": "#ffdad6",
+                      "on-error": "#ffffff",
+                      "tertiary-container": "#292c2e",
+                      "deep-navy": "#1A2B4C",
+                      "on-primary": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "on-background": "#0d1c2e",
+                      "primary-fixed": "#d8e2ff",
+                      "success-green": "#10B981",
+                      "inverse-primary": "#b6c6f0",
+                      "surface-bright": "#f8f9ff",
+                      "on-tertiary-container": "#909395",
+                      "surface-variant": "#d5e3fc",
+                      "on-tertiary-fixed": "#191c1e",
+                      "inverse-surface": "#233144",
+                      "on-secondary-container": "#fffbff",
+                      "outline": "#75777f",
+                      "tertiary-fixed": "#e0e3e5",
+                      "surface-container-high": "#dce9ff",
+                      "on-primary-container": "#8293ba",
+                      "slate-400": "#94A3B8",
+                      "surface": "#f8f9ff",
+                      "tertiary": "#141819",
+                      "secondary-container": "#da3433",
+                      "on-surface": "#0d1c2e",
+                      "on-secondary-fixed-variant": "#930010",
+                      "slate-200": "#E2E8F0"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "container-max": "1280px",
+                      "gutter": "24px",
+                      "sm": "12px",
+                      "md": "24px",
+                      "base": "8px",
+                      "xs": "4px",
+                      "xl": "80px",
+                      "lg": "48px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Montserrat"],
+                      "display-lg": ["Montserrat"],
+                      "label-md": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "headline-md": ["Montserrat"],
+                      "display-lg-mobile": ["Montserrat"],
+                      "headline-sm": ["Montserrat"],
+                      "body-lg": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "14px", "fontWeight": "500"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "display-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-on-surface font-body-md min-h-screen flex">
+<!-- SideNavBar (Shared Component) -->
+<aside class="bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container font-headline-sm text-headline-sm font-label-md text-label-md docked h-screen left-0 w-64 shadow-md fixed flex flex-col z-40">
+<!-- Brand Header -->
+<div class="h-16 flex items-center px-gutter border-b border-white/10 gap-3">
+<div class="w-8 h-8 rounded-full bg-martial-red flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-size: 20px;">sports_martial_arts</span>
+</div>
+<div class="flex flex-col">
+<span class="text-headline-sm font-bold text-on-primary leading-tight">DojangHub</span>
+<span class="text-[10px] text-on-primary/70 uppercase tracking-widest leading-none">Elite Management</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 overflow-y-auto py-md flex flex-col gap-1">
+<a class="text-surface-variant dark:text-on-tertiary-container hover:bg-white/10 transition-all duration-200 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<a class="bg-martial-red text-white rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 Active: translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-label-md text-label-md">Students</span>
+</a>
+<a class="text-surface-variant dark:text-on-tertiary-container hover:bg-white/10 transition-all duration-200 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined">sports_martial_arts</span>
+<span class="font-label-md text-label-md">Coaches</span>
+</a>
+<a class="text-surface-variant dark:text-on-tertiary-container hover:bg-white/10 transition-all duration-200 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined">how_to_reg</span>
+<span class="font-label-md text-label-md">Attendance</span>
+</a>
+<a class="text-surface-variant dark:text-on-tertiary-container hover:bg-white/10 transition-all duration-200 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined">military_tech</span>
+<span class="font-label-md text-label-md">Belt Progression</span>
+</a>
+<a class="text-surface-variant dark:text-on-tertiary-container hover:bg-white/10 transition-all duration-200 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="font-label-md text-label-md">Report Cards</span>
+</a>
+<a class="text-surface-variant dark:text-on-tertiary-container hover:bg-white/10 transition-all duration-200 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined">workspace_premium</span>
+<span class="font-label-md text-label-md">Achievements</span>
+</a>
+<a class="text-surface-variant dark:text-on-tertiary-container hover:bg-white/10 transition-all duration-200 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined">campaign</span>
+<span class="font-label-md text-label-md">Announcements</span>
+</a>
+<a class="text-surface-variant dark:text-on-tertiary-container hover:bg-white/10 transition-all duration-200 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col ml-64 min-w-0">
+<!-- TopAppBar (Shared Component - Medium) -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface text-primary dark:text-primary-fixed font-headline-sm text-headline-sm font-label-sm text-label-sm docked top-0 right-0 w-full border-b border-slate-200 dark:border-outline-variant flat flex justify-between items-center px-md h-16 sticky z-30">
+<!-- Search Bar (on_left) -->
+<div class="flex-1 max-w-md">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-deep-navy focus:ring-1 focus:ring-deep-navy transition-colors font-body-sm text-body-sm text-slate-800 placeholder-slate-400" placeholder="Search students, KTA numbers..." type="text"/>
+</div>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:bg-surface-container dark:hover:bg-surface-container-high rounded-full p-2 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container dark:hover:bg-surface-container-high rounded-full p-2 transition-colors">
+<span class="material-symbols-outlined">apps</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-slate-200 ml-2">
+<img alt="Instructor Avatar" class="w-full h-full object-cover" data-alt="A professional headshot of a confident male martial arts instructor wearing a crisp white taekwondo uniform with a black belt partially visible. The background is a brightly lit, modern dojang training area with subtle high-contrast lighting emphasizing discipline and focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHcrhE4ztVB3TqLuxe9RzWrBd4OaAMkzsMQGld48UK5eagB8FGmciJUVEA4aufClY47OfyLea896W0VZSIGsV1-a9IZ82YHswWmhVDHoqcqfno_XJstBzM3uH7uAn_HqDjcewXA3bilThbNLC_bkPeFOvgvumggmelWLPpcnXtDNHlkRpkls2EfNcZKbuVRk7EEFQuzV4-K9VvHXlOt1X8pmVt-iwm3tKQWRzxGeFZChqPVFSwQ3nz4RDSOONO4HWzGGPwRcCxQXQ"/>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<main class="flex-1 p-lg overflow-y-auto">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-md gap-4">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-deep-navy">Student Directory</h1>
+<p class="font-body-sm text-body-sm text-slate-500 mt-1">Manage enrollments, track progression, and monitor attendance.</p>
+</div>
+<button class="bg-martial-red hover:bg-secondary text-white font-label-md text-label-md px-6 py-3 rounded-lg flex items-center gap-2 transition-colors shadow-sm active:shadow-inner">
+<span class="material-symbols-outlined" style="font-size: 20px;">add</span>
+                    Add Student
+                </button>
+</div>
+<!-- Enhanced Toolbar / Filters -->
+<div class="bg-white p-4 rounded-xl border border-slate-200 shadow-[0_2px_4px_rgba(0,0,0,0.05)] mb-md flex flex-wrap gap-4 items-end">
+<div class="flex-1 min-w-[200px]">
+<label class="block font-label-sm text-label-sm text-slate-400 mb-1 uppercase tracking-wider">Quick Search</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" style="font-size: 18px;">search</span>
+<input class="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-deep-navy text-body-sm" placeholder="Name or ID..." type="text"/>
+</div>
+</div>
+<div class="w-48">
+<label class="block font-label-sm text-label-sm text-slate-400 mb-1 uppercase tracking-wider">Filter by Belt</label>
+<select class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-deep-navy text-body-sm text-slate-800 appearance-none bg-white">
+<option value="all">All Belts</option>
+<option value="white">White Belt</option>
+<option value="yellow">Yellow Belt</option>
+<option value="green">Green Belt</option>
+<option value="blue">Blue Belt</option>
+<option value="red">Red Belt</option>
+<option value="black">Black Belt</option>
+</select>
+</div>
+<div class="w-48">
+<label class="block font-label-sm text-label-sm text-slate-400 mb-1 uppercase tracking-wider">Status</label>
+<select class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-deep-navy text-body-sm text-slate-800 appearance-none bg-white">
+<option value="active">Active Members</option>
+<option value="inactive">Inactive</option>
+<option value="trial">Trial</option>
+</select>
+</div>
+</div>
+<!-- Data Table Card -->
+<div class="bg-white border border-slate-200 rounded-xl shadow-[0_2px_4px_rgba(0,0,0,0.05)] overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 border-b border-slate-200">
+<th class="py-4 px-6 font-label-md text-label-md text-slate-500 font-semibold uppercase tracking-wider">Student Profile</th>
+<th class="py-4 px-6 font-label-md text-label-md text-slate-500 font-semibold uppercase tracking-wider">KTA Number</th>
+<th class="py-4 px-6 font-label-md text-label-md text-slate-500 font-semibold uppercase tracking-wider">Current Belt</th>
+<th class="py-4 px-6 font-label-md text-label-md text-slate-500 font-semibold uppercase tracking-wider">Attendance (30d)</th>
+<th class="py-4 px-6 font-label-md text-label-md text-slate-500 font-semibold uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50/50 transition-colors group">
+<td class="py-4 px-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-slate-200 shrink-0">
+<img alt="Student" class="w-full h-full object-cover" data-alt="A portrait of a young, focused female martial arts student in a clean white uniform. The lighting is bright and modern, set against a neutral, slightly blurred dojang background, emphasizing a disciplined and professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbiL9VjK1oiW7KrPIhb3pD-d5BFno2OKLhzZr_oz3yDAH0f9d0wlEkDeGhwJ3SN6cJVLEFWWqaWYyrl-d_ATIkiBqzciM_CXYlRyPPbQv0eT3jj62cbHlQ07D21QQW_KbwxmaGUcyC_QLkotdXtwwDCc0vasWrfqaiz4oyWDUBPz1hJJNX5D5-ncf4YtEm9NaKfEXOtP45YEQNhLONjkTWooW2z2Z09yX4RvUecVnpSeda1JQ1Rtfyc47FZzdin40wIMIIT-ZUMaM"/>
+</div>
+<div>
+<div class="font-label-md text-label-md text-slate-800">Sarah Jenkins</div>
+<div class="font-body-sm text-body-sm text-slate-500">Joined Mar 2023</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6 font-body-sm text-body-sm text-slate-600 font-mono">KTA-29384-A</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-belt-blue text-white shadow-sm">
+                                        Blue Belt
+                                    </span>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md text-slate-800">92%</span>
+<div class="w-24 h-2 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-success-green w-[92%] rounded-full"></div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="text-slate-400 hover:text-deep-navy transition-colors p-2 rounded-lg hover:bg-slate-100">
+<span class="material-symbols-outlined" style="font-size: 20px;">visibility</span>
+</button>
+<button class="text-slate-400 hover:text-martial-red transition-colors p-2 rounded-lg hover:bg-slate-100">
+<span class="material-symbols-outlined" style="font-size: 20px;">edit</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50/50 transition-colors group">
+<td class="py-4 px-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-slate-200 shrink-0 bg-slate-200 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">person</span>
+</div>
+<div>
+<div class="font-label-md text-label-md text-slate-800">Michael Chen</div>
+<div class="font-body-sm text-body-sm text-slate-500">Joined Jan 2024</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6 font-body-sm text-body-sm text-slate-600 font-mono">KTA-44102-B</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-belt-yellow text-black shadow-sm">
+                                        Yellow Belt
+                                    </span>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md text-slate-800">100%</span>
+<div class="w-24 h-2 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-success-green w-[100%] rounded-full"></div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="text-slate-400 hover:text-deep-navy transition-colors p-2 rounded-lg hover:bg-slate-100">
+<span class="material-symbols-outlined" style="font-size: 20px;">visibility</span>
+</button>
+<button class="text-slate-400 hover:text-martial-red transition-colors p-2 rounded-lg hover:bg-slate-100">
+<span class="material-symbols-outlined" style="font-size: 20px;">edit</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-50/50 transition-colors group">
+<td class="py-4 px-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-slate-200 shrink-0 bg-slate-200 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">person</span>
+</div>
+<div>
+<div class="font-label-md text-label-md text-slate-800">David Rodriguez</div>
+<div class="font-body-sm text-body-sm text-slate-500">Joined Aug 2021</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6 font-body-sm text-body-sm text-slate-600 font-mono">KTA-10045-C</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-800 text-white shadow-sm border border-slate-600">
+                                        Black Belt
+                                    </span>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md text-slate-800">75%</span>
+<div class="w-24 h-2 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-martial-red w-[75%] rounded-full"></div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="text-slate-400 hover:text-deep-navy transition-colors p-2 rounded-lg hover:bg-slate-100">
+<span class="material-symbols-outlined" style="font-size: 20px;">visibility</span>
+</button>
+<button class="text-slate-400 hover:text-martial-red transition-colors p-2 rounded-lg hover:bg-slate-100">
+<span class="material-symbols-outlined" style="font-size: 20px;">edit</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 border-t border-slate-200 flex items-center justify-between bg-white">
+<span class="font-body-sm text-body-sm text-slate-500">Showing <span class="font-medium text-slate-800">1</span> to <span class="font-medium text-slate-800">3</span> of <span class="font-medium text-slate-800">124</span> students</span>
+<div class="flex gap-1">
+<button class="px-3 py-1 border border-slate-200 rounded-md text-slate-400 hover:bg-slate-50 hover:text-slate-800 disabled:opacity-50 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 18px;">chevron_left</span>
+</button>
+<button class="px-3 py-1 bg-deep-navy text-white rounded-md font-label-sm text-label-sm">1</button>
+<button class="px-3 py-1 border border-slate-200 rounded-md text-slate-600 hover:bg-slate-50 font-label-sm text-label-sm transition-colors">2</button>
+<button class="px-3 py-1 border border-slate-200 rounded-md text-slate-600 hover:bg-slate-50 font-label-sm text-label-sm transition-colors">3</button>
+<span class="px-2 py-1 text-slate-400">...</span>
+<button class="px-3 py-1 border border-slate-200 rounded-md text-slate-600 hover:bg-slate-50 hover:text-slate-800 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 18px;">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
