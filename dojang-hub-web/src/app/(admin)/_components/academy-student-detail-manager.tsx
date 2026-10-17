@@ -6,6 +6,7 @@ import { StudentDetailResponse, getAkademiMe, getAkademiStudentDetail } from "..
 import StudentAchievementsSection from "./students/student-achievements-section";
 import StudentProfileCard from "./students/student-profile-card";
 import StudentRankHistorySection from "./students/student-rank-history-section";
+import StudentReportLink from "./students/student-report-link";
 import StudentRecentHistory from "./students/student-recent-history";
 
 const TOKEN_KEY = "skaihub_admin_token";
@@ -80,6 +81,8 @@ export default function AcademyStudentDetailManager({ studentId }: { studentId: 
       </div>
 
       <StudentProfileCard student={data.student} summary={data.summary} />
+
+      <StudentReportLink token={token} studentId={data.student.id} />
 
       <section className="grid gap-4 lg:grid-cols-2">
         <StudentAchievementsSection token={token} studentId={data.student.id} canManage={canManage} />
