@@ -11,6 +11,7 @@ use App\Models\TrainingClass;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class EvaluationController extends Controller
@@ -162,6 +163,52 @@ class EvaluationController extends Controller
         $aspect->delete();
 
         return response()->json(['message' => 'Variabel penilaian berhasil dihapus.']);
+    }
+
+    public function copyAspects(Request $request, EvaluationPeriod $period, EvaluationPeriod $source): JsonResponse
+    {
+        $this->ensureCanConfigure($request);
+        $this->ensurePeriodBelongsToCurrentAkademi($request, $period);
+        $this->ensurePeriodBelongsToCurrentAkademi($request, $source);
+
+        abort_if($period->is($source), 422, 'Pilih periode sumber yang berbeda.');
+
+        $copiedCount = DB::transaction(function () use ($period, $source) {
+            $targetAspects = EvaluationAspect::query()->where('evaluation_period_id', $period->id)->get();
+            $existingNames = $targetAspects->map(fn (EvaluationAspect $aspect) => Str::lower(trim($aspect->name)))->all();
+            $baseOrder = (int) $targetAspects->max('sort_order');
+
+            $newAspects = EvaluationAspect::query()
+                ->where('akademi_id', $period->akademi_id)
+                ->where('evaluation_period_id', $source->id)
+                ->orderBy('sort_order')
+                ->orderBy('name')
+                ->get()
+                ->reject(fn (EvaluationAspect $aspect) => in_array(Str::lower(trim($aspect->name)), $existingNames, true));
+
+            foreach ($newAspects as $aspect) {
+                EvaluationAspect::create([
+                    'akademi_id' => $period->akademi_id,
+                    'evaluation_period_id' => $period->id,
+                    'name' => $aspect->name,
+                    'category' => $aspect->category,
+                    'sort_order' => $baseOrder + $aspect->sort_order,
+                    'is_active' => $aspect->is_active,
+                    'description' => $aspect->description,
+                ]);
+            }
+
+            return $newAspects->count();
+        });
+
+        $aspects = EvaluationAspect::query()
+            ->where('akademi_id', $period->akademi_id)
+            ->where('evaluation_period_id', $period->id)
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get();
+
+        return response()->json(['data' => $aspects, 'copied_count' => $copiedCount], 201);
     }
 
     public function scores(Request $request, EvaluationPeriod $period): JsonResponse
