@@ -15,6 +15,7 @@ import {
 import { shortDate } from "./evaluation/evaluation-types";
 import { ResponsiveColumn, ResponsiveList } from "./ui";
 import StatusMessage from "./ui/status-message";
+import Icon from "./ui/icon";
 
 export default function AcademyRankPromotionsManager() {
   const {
@@ -112,7 +113,7 @@ export default function AcademyRankPromotionsManager() {
             className="inline-flex min-h-11 items-center gap-1 text-xs font-bold text-primary underline-offset-2 hover:underline"
             href={`/academy/rank-promotions/${item.rank_promotion_event_id}/certificates/${item.id}`}
           >
-            <span aria-hidden="true" className="material-symbols-outlined text-[16px]">workspace_premium</span>
+            <Icon className="text-[16px]" name="workspace_premium" />
             Sertifikat
           </Link>
         ) : (

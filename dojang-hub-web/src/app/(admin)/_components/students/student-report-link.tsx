@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { EvaluationPeriod, getAkademiEvaluationPeriods } from "../../_lib/admin-api";
 import { statusLabels } from "../evaluation/evaluation-types";
+import Icon from "../ui/icon";
 
 function defaultPeriodId(periods: EvaluationPeriod[]): string {
   const period = periods.find((item) => item.status === "active") ?? periods[0];
@@ -83,7 +84,7 @@ export default function StudentReportLink({ token, studentId }: { token: string;
               className="inline-flex min-h-11 items-center justify-center gap-2 bg-secondary px-4 text-sm font-bold text-white hover:bg-secondary-dark"
               href={`/academy/students/${studentId}/report?period_id=${periodId}`}
             >
-              <span aria-hidden="true" className="material-symbols-outlined text-[18px]">print</span>
+              <Icon className="text-[18px]" name="print" />
               Cetak Rapor
             </Link>
           </div>

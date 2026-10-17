@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ReactNode, useCallback, useEffect, useState } from "react";
+import Icon from "../ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -92,7 +93,7 @@ export default function PrintablePage({
       <div className={`mx-auto space-y-4 ${widthClass}`}>
         <div className="flex flex-col gap-2 print:hidden sm:flex-row sm:items-center sm:justify-between">
           <Link className="inline-flex min-h-11 items-center gap-2 text-sm font-bold text-primary" href={backHref}>
-            <span aria-hidden="true" className="material-symbols-outlined text-[18px]">arrow_back</span>
+            <Icon className="text-[18px]" name="arrow_back" />
             {backLabel}
           </Link>
           {isReady ? (
@@ -101,7 +102,7 @@ export default function PrintablePage({
               onClick={() => window.print()}
               type="button"
             >
-              <span aria-hidden="true" className="material-symbols-outlined text-[18px]">print</span>
+              <Icon className="text-[18px]" name="print" />
               Cetak / Simpan PDF
             </button>
           ) : null}
