@@ -76,6 +76,53 @@ describe("sanitizeHtml", () => {
     expect(clean).toBe("<p>Konten</p>Klik");
   });
 
+  it("keeps h1 headings", () => {
+    expect(sanitizeHtml("<h1>Judul Utama</h1>")).toBe("<h1>Judul Utama</h1>");
+  });
+
+  it("keeps Quill alignment and indent classes", () => {
+    const html = [
+      '<p class="ql-align-center">Tengah</p>',
+      '<h2 class="ql-align-right">Kanan</h2>',
+      '<p class="ql-align-justify">Rata</p>',
+      '<ol><li class="ql-indent-1">Menjorok</li></ol>',
+      '<p class="ql-align-center ql-indent-2">Dua kelas</p>',
+    ].join("");
+    expect(sanitizeHtml(html)).toBe(html);
+  });
+
+  it("drops a class attribute that has any non-ql- token", () => {
+    expect(sanitizeHtml('<p class="text-red-500">Teks</p>')).toBe("<p>Teks</p>");
+    expect(sanitizeHtml('<p class="ql-align-center evil">Teks</p>')).toBe("<p>Teks</p>");
+    expect(sanitizeHtml('<p class="evil ql-align-center">Teks</p>')).toBe("<p>Teks</p>");
+    expect(sanitizeHtml('<p class="fixed inset-0 z-50">Overlay</p>')).toBe("<p>Overlay</p>");
+  });
+
+  it("drops class values that only look like ql- tokens", () => {
+    expect(sanitizeHtml('<p class="ql-">Teks</p>')).toBe("<p>Teks</p>");
+    expect(sanitizeHtml('<p class="ql-align-center&quot;onclick=&quot;x">Teks</p>')).toBe("<p>Teks</p>");
+    expect(sanitizeHtml('<p class="ql-align_center">Teks</p>')).toBe("<p>Teks</p>");
+    expect(sanitizeHtml('<p class="QL-ALIGN-CENTER">Teks</p>')).toBe("<p>Teks</p>");
+    expect(sanitizeHtml('<p class="">Teks</p>')).toBe("<p>Teks</p>");
+  });
+
+  it("normalizes whitespace between valid ql- tokens", () => {
+    expect(sanitizeHtml('<p class="  ql-align-center\t ql-indent-1 ">Teks</p>')).toBe(
+      '<p class="ql-align-center ql-indent-1">Teks</p>',
+    );
+  });
+
+  it("still strips other attributes next to a valid class", () => {
+    const dirty = '<p class="ql-align-center" style="position:fixed" id="x" onclick="alert(1)">Teks</p>';
+    expect(sanitizeHtml(dirty)).toBe('<p class="ql-align-center">Teks</p>');
+  });
+
+  it("keeps a valid ql- class on links and images without loosening URL checks", () => {
+    expect(sanitizeHtml('<a class="ql-align-center" href="javascript:alert(1)">x</a>')).toBe(
+      '<a class="ql-align-center">x</a>',
+    );
+  });
+
   it("handles empty or non-string inputs safely", () => {
     expect(sanitizeHtml("")).toBe("");
     // @ts-expect-error test invalid input types
