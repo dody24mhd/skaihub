@@ -156,4 +156,21 @@ class TrainingSessionRescheduleTest extends TestCase
             'reason' => 'Libur',
         ])->assertNotFound();
     }
+
+    public function test_only_admin_can_change_session_coaches(): void
+    {
+        $substitute = User::factory()->pelatih($this->akademi->id)->create();
+
+        Sanctum::actingAs($this->coach);
+        $this->putJson("/api/akademi/training-sessions/{$this->session->id}", [
+            'coach_ids' => [$substitute->id],
+        ])->assertForbidden();
+
+        Sanctum::actingAs($this->admin);
+        $this->putJson("/api/akademi/training-sessions/{$this->session->id}", [
+            'coach_ids' => [$substitute->id],
+        ])->assertOk()
+            ->assertJsonPath('training_session.coach_id', $substitute->id);
+        $this->assertSame([$substitute->id], $this->session->coaches()->pluck('users.id')->all());
+    }
 }

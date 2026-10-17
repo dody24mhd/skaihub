@@ -130,6 +130,7 @@ class TrainingSessionController extends Controller
         if ($request->user()->role === 'pelatih') {
             abort_if($request->has('class_id') && (int) $request->class_id !== (int) $trainingSession->class_id, 403, 'Akses ditolak. Pelatih tidak bisa mengubah kelas sesi latihan.');
             abort_if($request->has('training_schedule_id') && (int) $request->training_schedule_id !== (int) $trainingSession->training_schedule_id, 403, 'Akses ditolak. Pelatih tidak bisa mengubah jadwal sesi latihan.');
+            abort_if($request->has('coach_ids') || $request->has('coach_id'), 403, 'Akses ditolak. Hanya ketua atau admin akademi yang bisa mengganti pelatih sesi.');
         }
 
         $this->sessions->ensureWithinCoachWindow($request->user(), $trainingSession->session_date);
