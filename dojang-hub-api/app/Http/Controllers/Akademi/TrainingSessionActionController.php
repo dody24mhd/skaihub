@@ -37,6 +37,8 @@ class TrainingSessionActionController extends Controller
         $this->sessions->ensureWithinCoachWindow($request->user(), $date);
 
         if ($existing) {
+            $this->sessions->syncDraftRoster($existing);
+
             return response()->json(['training_session' => $existing->load($this->sessions->relations())]);
         }
 

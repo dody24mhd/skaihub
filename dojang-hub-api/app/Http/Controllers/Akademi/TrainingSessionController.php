@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Akademi;
 
 use App\Http\Controllers\Controller;
-use App\Models\Student;
 use App\Models\TrainingClass;
 use App\Models\TrainingPlace;
 use App\Models\TrainingSchedule;
@@ -105,16 +104,7 @@ class TrainingSessionController extends Controller
 
             $session->coaches()->sync($coachIds);
 
-            Student::query()
-                ->where('akademi_id', $akademiId)
-                ->where('primary_class_id', $session->class_id)
-                ->where('status', 'active')
-                ->orderBy('name')
-                ->get()
-                ->each(fn (Student $student) => $session->attendances()->create([
-                    'student_id' => $student->id,
-                    'status' => 'present',
-                ]));
+            $this->sessions->syncRoster($session);
 
             return $session->load($this->relations());
         });
@@ -125,6 +115,7 @@ class TrainingSessionController extends Controller
     public function show(Request $request, TrainingSession $trainingSession): JsonResponse
     {
         $this->ensureBelongsToCurrentAkademi($request, $trainingSession);
+        $this->sessions->syncDraftRoster($trainingSession);
 
         return response()->json([
             'training_session' => $trainingSession->load($this->relations()),
@@ -194,6 +185,8 @@ class TrainingSessionController extends Controller
         ]);
 
         DB::transaction(function () use ($data, $trainingSession) {
+            $this->sessions->syncDraftRoster($trainingSession);
+
             if (request()->user()->role === 'pelatih') {
                 $trainingSession->coaches()->syncWithoutDetaching([request()->user()->id]);
                 if (! $trainingSession->coach_id) {

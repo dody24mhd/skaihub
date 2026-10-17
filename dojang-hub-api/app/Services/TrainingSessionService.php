@@ -74,6 +74,13 @@ class TrainingSessionService
             ]));
     }
 
+    public function syncDraftRoster(TrainingSession $session): void
+    {
+        if ($session->status === 'draft') {
+            $this->syncRoster($session);
+        }
+    }
+
     /**
      * @return array<int, string>
      */
