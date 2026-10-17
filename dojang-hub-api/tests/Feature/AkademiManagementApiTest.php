@@ -840,6 +840,8 @@ class AkademiManagementApiTest extends TestCase
     public function test_assigned_coach_can_update_own_training_session_attendance(): void
     {
         $this->travelTo('2026-05-26 08:00:00');
+        // The setUp subscription starts today; cover the travelled-to date too (L4-D write guard).
+        $this->giveActiveSubscription($this->akademi, 'starter');
         $class = $this->akademi->trainingClasses()->create(['name' => 'Junior Senin']);
         $coach = User::factory()->pelatih($this->akademi->id)->create();
         $otherCoach = User::factory()->pelatih($this->akademi->id)->create();

@@ -13,13 +13,18 @@ trait BuildsTrainingFixtures
 {
     protected function makeAkademi(string $name = 'Akademi Juara'): Akademi
     {
-        return Akademi::create([
+        $akademi = Akademi::create([
             'name' => $name,
             'slug' => Str::slug($name),
             'sport_type' => 'taekwondo',
             'status' => 'active',
             'plan' => 'pro',
         ]);
+
+        // L4-D: write routes need a live subscription (402 when read-only).
+        $this->giveActiveSubscription($akademi);
+
+        return $akademi;
     }
 
     protected function makeClass(Akademi $akademi, string $name = 'Kelas Reguler'): TrainingClass
