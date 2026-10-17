@@ -57,7 +57,7 @@ export default function AttendanceStudentList({
             key={att.id}
             attendanceId={att.id}
             studentName={att.student?.name || att.participant_name || "Peserta"}
-            rankName={att.student?.rank?.name}
+            rankName={att.student?.current_rank?.label}
             status={attendanceEdits[att.id] || normalizeStatus(att.status)}
             isExtra={att.is_extra_participant}
             onStatusChange={onStatusChange}

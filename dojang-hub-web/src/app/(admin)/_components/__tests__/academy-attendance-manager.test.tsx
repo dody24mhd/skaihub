@@ -16,10 +16,10 @@ vi.mock("../../_lib/admin-api", async (importOriginal) => {
   };
 });
 
-const mockMe = {
-  user: { id: 1, name: "Ketua", email: "k@test.com", role: "ketua_akademi" as const, akademi_id: 1, is_active: true },
-  akademi: { id: 1, name: "Dojang Hebat", slug: "dojang-hebat", sport_type: "taekwondo", logo_url: null, status: "active" as const, plan: "pro" as const, plan_expires_at: null, created_at: "", updated_at: "" },
-  subscription: { id: 1, akademi_id: 1, plan: "pro" as const, duration: "yearly" as const, status: "active" as const, payment_status: "paid" as const, starts_at: "", ends_at: "", included_student_limit: 100, extra_student_blocks: 0 },
+const mockMe: adminApi.AkademiMeResponse = {
+  user: { id: 1, name: "Ketua", email: "k@test.com", role: "ketua_akademi", akademi_id: 1, is_active: true, avatar_url: null },
+  akademi: { id: 1, name: "Dojang Hebat", slug: "dojang-hebat", sport_type: "taekwondo", logo_url: null, status: "active", plan: "pro", plan_expires_at: null, created_at: "", updated_at: "" },
+  subscription: null,
   entitlements: { student_limit: 100, has_public_website: true, has_subdomain: true, has_rapor: true, has_exam_events: true, has_parent_portal: false },
 };
 
