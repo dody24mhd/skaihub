@@ -344,7 +344,7 @@ class StudentController extends Controller
      */
     private function nextMemberNumber(Akademi $akademi): string
     {
-        $prefix = Str::upper(Str::substr(Str::slug($akademi->slug, ''), 0, 6)) ?: 'AKD';
+        $prefix = Student::memberNumberPrefix($akademi->slug);
         $pattern = '/^'.preg_quote($prefix, '/').'-(\d+)$/';
 
         $highest = Student::withTrashed()
@@ -354,7 +354,7 @@ class StudentController extends Controller
             ->map(fn (string $number) => preg_match($pattern, $number, $matches) ? (int) $matches[1] : 0)
             ->max() ?? 0;
 
-        return sprintf('%s-%04d', $prefix, $highest + 1);
+        return Student::formatMemberNumber($prefix, $highest + 1);
     }
 
     private function ensureCanManageMasterData(Request $request): void

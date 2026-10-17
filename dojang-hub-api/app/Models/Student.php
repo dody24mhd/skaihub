@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Student extends Model
 {
@@ -33,6 +34,17 @@ class Student extends Model
         'school_grade',
         'health_notes',
     ];
+
+    /** Prefix nomor anggota dari slug akademi, mis. "karate-musi" -> "KARATE" (format PREFIX-0001). */
+    public static function memberNumberPrefix(string $akademiSlug): string
+    {
+        return Str::upper(Str::substr(Str::slug($akademiSlug, ''), 0, 6)) ?: 'AKD';
+    }
+
+    public static function formatMemberNumber(string $prefix, int $sequence): string
+    {
+        return sprintf('%s-%04d', $prefix, $sequence);
+    }
 
     protected function casts(): array
     {
