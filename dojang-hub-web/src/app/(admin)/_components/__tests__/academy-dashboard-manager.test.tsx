@@ -106,4 +106,16 @@ describe("AcademyDashboardManager", () => {
     expect(await screen.findByRole("heading", { name: "Kelas Hari Ini" })).toBeInTheDocument();
     expect(await screen.findByText("Tidak ada jadwal latihan hari ini.")).toBeInTheDocument();
   });
+
+  it("tidak menampilkan 0 siswa aktif ketika ringkasan siswa disembunyikan (pelatih)", async () => {
+    vi.mocked(adminApi.getAkademiDashboardSummary).mockResolvedValue({
+      ...mockSummary,
+      students: null,
+    } as unknown as adminApi.AkademiDashboardSummary);
+    render(<AcademyDashboardManager />);
+
+    expect(await screen.findByText("Taekwondo Nusantara")).toBeInTheDocument();
+    expect(screen.getByText("tidak ditampilkan untuk pelatih")).toBeInTheDocument();
+    expect(screen.queryByText("siswa aktif terdaftar")).not.toBeInTheDocument();
+  });
 });
