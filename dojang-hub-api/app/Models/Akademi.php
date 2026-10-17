@@ -129,8 +129,8 @@ class Akademi extends Model
     public function hasPublicWebsite(): bool
     {
         $subscriptions = app(SubscriptionService::class);
-        $activeSubscription = $subscriptions->activeForAkademi($this);
+        $subscription = $subscriptions->entitledSubscription($this);
 
-        return (bool) ($subscriptions->entitlements($activeSubscription)['has_public_website'] ?? false);
+        return (bool) ($subscriptions->entitlements($subscription)['has_public_website'] ?? false);
     }
 }

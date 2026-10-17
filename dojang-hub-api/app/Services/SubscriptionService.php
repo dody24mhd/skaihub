@@ -89,9 +89,18 @@ class SubscriptionService
             ->first();
     }
 
+    /**
+     * Langganan yang menentukan entitlement: berjalan, akan habis, atau masa tenggang
+     * (langganan terakhir). Saat baca-saja tidak ada entitlement.
+     */
+    public function entitledSubscription(Akademi $akademi): ?Subscription
+    {
+        return $this->lifecycle($akademi)['entitled'];
+    }
+
     public function assertCanAddActiveStudent(Akademi $akademi, ?int $ignoreStudentId = null): void
     {
-        $subscription = $this->activeForAkademi($akademi);
+        $subscription = $this->entitledSubscription($akademi);
         $limit = $this->entitlements($subscription)['student_limit'];
 
         $activeCount = $this->activeStudentCount($akademi, $ignoreStudentId);
@@ -114,7 +123,7 @@ class SubscriptionService
     /**
      * active → expiring (≤ renewal_warning_days) → grace (habis ≤ grace_days) → read_only.
      *
-     * @return array{state: string, days_left: int, ends_at: ?CarbonImmutable, current: ?Subscription}
+     * @return array{state: string, days_left: int, ends_at: ?CarbonImmutable, current: ?Subscription, entitled: ?Subscription}
      */
     public function lifecycle(Akademi $akademi): array
     {
@@ -125,7 +134,7 @@ class SubscriptionService
 
     /**
      * @param  Collection<int, Subscription>  $subscriptions  langganan satu akademi
-     * @return array{state: string, days_left: int, ends_at: ?CarbonImmutable, current: ?Subscription}
+     * @return array{state: string, days_left: int, ends_at: ?CarbonImmutable, current: ?Subscription, entitled: ?Subscription}
      */
     public function lifecycleFromSubscriptions(Collection $subscriptions): array
     {
@@ -140,23 +149,25 @@ class SubscriptionService
             $daysLeft = (int) $today->diffInDays($lastDay);
             $state = $daysLeft <= (int) config('skaihub.renewal_warning_days') ? 'expiring' : 'active';
 
-            return ['state' => $state, 'days_left' => $daysLeft, 'ends_at' => $lastDay->endOfDay(), 'current' => $current];
+            return ['state' => $state, 'days_left' => $daysLeft, 'ends_at' => $lastDay->endOfDay(), 'current' => $current, 'entitled' => $current];
         }
 
         $previous = $counted->filter(fn (Subscription $s) => $s->ends_at < $now)->sortByDesc('ends_at')->first();
 
         if (! $previous) {
-            return ['state' => 'read_only', 'days_left' => 0, 'ends_at' => null, 'current' => null];
+            return ['state' => 'read_only', 'days_left' => 0, 'ends_at' => null, 'current' => null, 'entitled' => null];
         }
 
         $lastDay = $this->lastDayOf($previous);
         $graceLeft = (int) config('skaihub.grace_days') - (int) $lastDay->diffInDays($today);
+        $inGrace = $graceLeft >= 0;
 
         return [
-            'state' => $graceLeft >= 0 ? 'grace' : 'read_only',
+            'state' => $inGrace ? 'grace' : 'read_only',
             'days_left' => max(0, $graceLeft),
             'ends_at' => $lastDay->endOfDay(),
             'current' => null,
+            'entitled' => $inGrace ? $previous : null,
         ];
     }
 

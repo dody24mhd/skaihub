@@ -142,7 +142,7 @@ class AkademiController extends Controller
             ])
             ->findOrFail($id);
 
-        $subscription = $this->subscriptions->activeForAkademi($akademi);
+        $subscription = $this->subscriptions->entitledSubscription($akademi);
 
         return response()->json([
             'akademi' => $akademi,

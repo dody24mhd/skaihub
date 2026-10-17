@@ -105,7 +105,7 @@ class LandingPageEntitlementTest extends TestCase
             'included_student_limit' => 150,
             'extra_student_blocks' => 0,
             'starts_at' => now()->subMonths(2),
-            'ends_at' => now()->subDay(),
+            'ends_at' => now()->subDays(10),
             'amount' => 199000,
             'payment_status' => 'paid',
             'status' => 'active',

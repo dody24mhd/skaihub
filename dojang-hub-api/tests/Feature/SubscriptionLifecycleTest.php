@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\AcademyPublicProfile;
 use App\Models\Akademi;
 use App\Models\Subscription;
 use App\Models\User;
@@ -222,5 +223,64 @@ class SubscriptionLifecycleTest extends TestCase
             ->assertJsonPath('days_left', 11)
             ->assertJsonPath('effective_student_limit', 250)
             ->assertJsonPath('active_students', 1);
+    }
+
+    private function proAkademiWithPublishedProfile(): Akademi
+    {
+        $akademi = $this->akademi('publik-academy');
+        $this->subscriptions->createInitial($akademi, ['plan' => 'pro', 'duration_type' => 'monthly']);
+        AcademyPublicProfile::create([
+            'akademi_id' => $akademi->id,
+            'about' => 'Profil publik kami',
+            'is_published' => true,
+        ]);
+
+        return $akademi;
+    }
+
+    public function test_grace_keeps_student_quota_from_last_subscription(): void
+    {
+        $akademi = $this->akademi();
+        $this->monthlySubscription($akademi);
+        $this->travelTo(now()->setDate(2026, 11, 3));
+        Sanctum::actingAs(User::factory()->akademiAdmin($akademi->id)->create());
+
+        $this->assertSame('grace', $this->subscriptions->lifecycleState($akademi));
+        $this->assertSame(100, $this->subscriptions->entitlements($this->subscriptions->entitledSubscription($akademi))['student_limit']);
+
+        $this->postJson('/api/akademi/students', [
+            'name' => 'Siswa Masa Tenggang',
+            'gender' => 'male',
+            'birth_date' => '2014-01-01',
+            'joined_date' => '2026-11-03',
+            'height_cm' => 150,
+            'weight_kg' => 45,
+            'status' => 'active',
+        ])->assertCreated();
+
+        $this->getJson('/api/akademi/me')
+            ->assertOk()
+            ->assertJsonPath('subscription_state', 'grace')
+            ->assertJsonPath('effective_student_limit', 100)
+            ->assertJsonPath('subscription.plan', 'starter');
+    }
+
+    public function test_grace_keeps_public_page_visible(): void
+    {
+        $this->proAkademiWithPublishedProfile();
+        $this->travelTo(now()->setDate(2026, 11, 3));
+
+        $this->getJson('/api/public/akademi/publik-academy')->assertOk();
+    }
+
+    public function test_read_only_hides_public_page_and_drops_entitlements(): void
+    {
+        $akademi = $this->proAkademiWithPublishedProfile();
+        $this->travelTo(now()->setDate(2026, 11, 8));
+
+        $this->assertNull($this->subscriptions->entitledSubscription($akademi));
+        $this->getJson('/api/public/akademi/publik-academy')
+            ->assertNotFound()
+            ->assertJsonPath('message', 'Halaman publik tidak tersedia untuk paket ini.');
     }
 }

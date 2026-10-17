@@ -37,7 +37,7 @@ class DashboardController extends Controller
     {
         $lifecycle = $this->subscriptions->lifecycleFromSubscriptions($akademi->subscriptions);
         $current = $lifecycle['current'];
-        $limit = $this->subscriptions->entitlements($current)['student_limit'];
+        $limit = $this->subscriptions->entitlements($lifecycle['entitled'])['student_limit'];
 
         return [
             'akademi_id' => $akademi->id,

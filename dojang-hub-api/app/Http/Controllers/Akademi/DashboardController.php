@@ -53,7 +53,7 @@ class DashboardController extends Controller
                 ->where('status', 'present')
                 ->count();
 
-        $subscription = $this->subscriptions->activeForAkademi($akademi);
+        $subscription = $this->subscriptions->entitledSubscription($akademi);
         $activePeriod = EvaluationPeriod::query()
             ->withCount('scores')
             ->where('akademi_id', $akademi->id)

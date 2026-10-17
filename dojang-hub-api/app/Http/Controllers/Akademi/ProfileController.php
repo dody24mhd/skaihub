@@ -15,9 +15,9 @@ class ProfileController extends Controller
     {
         $user = $request->user()->load('akademi');
         $akademi = $user->akademi;
-        $subscription = $this->subscriptions->activeForAkademi($akademi);
-        $entitlements = $this->subscriptions->entitlements($subscription);
         $lifecycle = $this->subscriptions->lifecycle($akademi);
+        $subscription = $lifecycle['entitled'];
+        $entitlements = $this->subscriptions->entitlements($subscription);
 
         return response()->json([
             'user' => [

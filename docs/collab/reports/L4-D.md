@@ -31,14 +31,14 @@ Diubah (frontend `dojang-hub-web`):
 
 Test:
 - `SubscriptionPricingTest` (11) — 0/1/2 blok, multi-bulan, baca config, kuota efektif 100/200/350, subtotal otomatis, trial gratis, nominal manual butuh catatan, role — LULUS
-- `SubscriptionLifecycleTest` (14) — active/expiring/grace/read_only (travel), perpanjangan tercatat, cancelled diabaikan, pencatatan langganan baru membuka baca-saja, tulis ditolak 402, GET/export lolos, grace boleh tulis, super-admin tak terdampak, isolasi antar akademi, field `/me` — LULUS
+- `SubscriptionLifecycleTest` (17) — active/expiring/grace/read_only (travel), perpanjangan tercatat, cancelled diabaikan, pencatatan langganan baru membuka baca-saja, tulis ditolak 402, GET/export lolos, grace boleh tulis, super-admin tak terdampak, isolasi antar akademi, field `/me` — LULUS
 - `SuperAdminDashboardTest` (3) — angka MRR, state, attention, near quota; 403 non super admin; 401 — LULUS
 - Penyesuaian test lama karena keputusan pemilik (blok gratis): `StudentQuotaTest` (batas 50→100, blok +1 → 150), `AuthApiTest` (limit pro+1 blok 200→250); `test_cannot_create_active_student_without_active_subscription` kini mengharapkan 402 read_only (akademi tanpa langganan = baca-saja)
 - Vitest: `plan-pricing.test.ts` (6), `subscription-banner.test.tsx` (8), `operator-dashboard-panel.test.tsx` (3), `subscription-price-preview.test.tsx` (5) — LULUS
 - Playwright `subscription-banner.spec.ts` (mobile): baca-saja (banner merah di bawah header & di atas bottom nav, Tambah Siswa hilang, Export ada, tanpa scroll horizontal), akan habis (sisa hari), aktif (tanpa banner)
 
 Verifikasi:
-- `php artisan test` → 131 passed (589 assertions)
+- `php artisan test` → 134 passed (600 assertions) (setelah perbaikan masa tenggang)
 - `vendor/bin/pint --dirty` → passed
 - `npm run lint` → 0 errors, 6 warnings (lama, `<img>`)
 - `npm run typecheck` → 0 errors
@@ -52,7 +52,7 @@ Verifikasi:
 3. **Hitungan hari:** hari terakhir tercakup = `ends_at − 1 detik`. `expiring` bila sisa ≤ 14 hari; `grace` hari ke-1..7 setelah hari terakhir; `read_only` mulai hari ke-8. `days_left` saat grace = sisa hari tenggang.
 4. **Perpanjangan yang sudah dicatat dan menyambung** memperpanjang cakupan, jadi tidak muncul peringatan palsu.
 5. **"Sampai pembayaran dicatat"** = super admin membuat langganan baru (status bayar apa pun). Siklus dihitung dari tanggal, bukan `payment_status`; tagihan belum lunas dipantau lewat alert yang sudah ada.
-6. **Masa tenggang:** penulisan tetap boleh, tetapi entitlement (kuota menambah siswa aktif baru, website publik) tetap hanya dari langganan aktif — perilaku & test lama (`test_expired_subscription_does_not_grant_akademi_entitlements`) dipertahankan. **Perlu konfirmasi pemilik** bila grace seharusnya tetap memberi kuota paket terakhir.
+6. **Masa tenggang = layanan penuh** (keputusan lead, commit `fix(api): keep entitlements during grace period`). Entitlement (kuota siswa efektif, website publik, fitur paket) diambil dari langganan terbaru selama state `active`/`expiring`/`grace`; hanya `read_only` yang menghapusnya (tulis ditolak 402, halaman publik 404). Satu sumber: `SubscriptionService::entitledSubscription(Akademi)`, dipakai `entitlements()`/`assertCanAddActiveStudent`, `Akademi::hasPublicWebsite`, middleware `feature`, `/akademi/me` (`subscription` = langganan yang memberi entitlement), dashboard akademi, detail & dashboard super admin. `activeForAkademi()` kini hanya dipakai untuk snapshot `akademi.plan`. Test lama yang menegaskan sebaliknya diubah: `AuthApiTest::test_expired_subscription_does_not_grant_akademi_entitlements` dan `LandingPageEntitlementTest::test_expired_pro_cannot_access_public_endpoint` dulu memakai langganan yang berakhir **kemarin** (kini = masa tenggang); tanggal akhirnya digeser ke **10 hari lalu** (baca-saja) sehingga maksud test (langganan kedaluwarsa tidak memberi entitlement) tetap diuji. Test baru: grace hari ke-3 → bisa menambah siswa aktif dalam kuota (100) & halaman publik tampil; read_only → halaman publik 404 dan tanpa entitlement.
 7. **Nominal manual** yang berbeda dari harga otomatis wajib `notes` (422). Trial = Rp 0. Durasi custom ditagih per bulan dibulatkan (min. 1).
 8. **Blok gratis** dibaca dari config saat dipakai (tidak di-snapshot); `included_student_limit` tetap snapshot seperti sebelumnya.
 9. **MRR** = jumlah ekuivalen bulanan (`amount / bulan`) langganan yang sedang berjalan pada akademi berstatus aktif, termasuk yang belum lunas; akademi suspended/nonaktif tidak dihitung di dashboard. Lifecycle dihitung di memori dari langganan yang di-eager-load (tanpa N+1).
@@ -63,4 +63,4 @@ Verifikasi:
 - Form absensi detail (`/academy/attendance/new`) dan halaman tulis lain tidak memakai `useCanWrite()`; server tetap menolak dengan pesan 402.
 - Checklist Bagian B/D `PLAN-2026-10.md` tidak diubah (belum ada butir 4.4/4.7; menghindari konflik merge antarjalur).
 
-Catatan/keputusan yang perlu pemilik project: keputusan no. 6 (kuota saat masa tenggang).
+Catatan/keputusan yang perlu pemilik project: tidak ada (no. 6 sudah diputuskan lead).
