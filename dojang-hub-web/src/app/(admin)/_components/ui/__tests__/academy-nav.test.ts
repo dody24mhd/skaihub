@@ -26,6 +26,13 @@ describe("academy-nav", () => {
       const scaleItems = scaleSections.flatMap((s) => s.items);
       expect(scaleItems.some((item) => item.href === "/academy/public-profile")).toBe(true);
     });
+
+    it("offers Ganti Password to every academy role", () => {
+      for (const role of ["ketua_akademi", "admin_akademi", "pelatih"] as const) {
+        const items = filterNavSectionsByRole(buildNavSections("starter"), role).flatMap((s) => s.items);
+        expect(items.some((item) => item.href === "/academy/account")).toBe(true);
+      }
+    });
   });
 
   describe("filterNavSectionsByRole", () => {

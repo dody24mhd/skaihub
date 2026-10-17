@@ -2061,3 +2061,59 @@ export function deleteAkademiStudentAchievement(token: string, studentId: number
     method: "DELETE",
   });
 }
+
+// L5-B
+export type PlatformUser = {
+  id: number;
+  name: string;
+  email: string;
+  role: "super_admin" | "admin";
+  is_active: boolean;
+  akademi_id: null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type PlatformUserPayload = {
+  name: string;
+  email: string;
+  password?: string;
+  is_active: boolean;
+};
+
+export type ChangePasswordPayload = {
+  current_password: string;
+  password: string;
+  password_confirmation: string;
+};
+
+export function getPlatformUsers(token: string) {
+  return adminFetch<{ data: PlatformUser[] }>("/super-admin/platform-users", token);
+}
+
+export function createPlatformUser(token: string, payload: PlatformUserPayload) {
+  return adminFetch<{ platform_user: PlatformUser }>("/super-admin/platform-users", token, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function updatePlatformUser(token: string, id: number, payload: PlatformUserPayload) {
+  return adminFetch<{ platform_user: PlatformUser }>(`/super-admin/platform-users/${id}`, token, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function deactivatePlatformUser(token: string, id: number) {
+  return adminFetch<{ message: string }>(`/super-admin/platform-users/${id}`, token, {
+    method: "DELETE",
+  });
+}
+
+export function changeOwnPassword(token: string, payload: ChangePasswordPayload) {
+  return adminFetch<{ message: string }>("/auth/password", token, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+}

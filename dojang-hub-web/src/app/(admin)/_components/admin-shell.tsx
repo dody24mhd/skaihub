@@ -30,9 +30,10 @@ const navSections = [
         icon: "payments",
       },
       {
-        title: "Admin Akademi",
+        title: "Staf Platform",
         href: "/internal/users",
         icon: "manage_accounts",
+        superAdminOnly: true,
       },
     ],
   },
@@ -94,13 +95,21 @@ export default function AdminShell({
   const pathname = usePathname();
   const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [role, setRole] = useState("");
+
+  const visibleNavSections = navSections.map((section) => ({
+    ...section,
+    items: section.items.filter((item) => !("superAdminOnly" in item) || role === "super_admin"),
+  }));
 
   useEffect(() => {
     queueMicrotask(() => {
-      const role = localStorage.getItem(ROLE_KEY);
-      if (role && ["ketua_akademi", "admin_akademi", "pelatih"].includes(role)) {
+      const storedRole = localStorage.getItem(ROLE_KEY);
+      if (storedRole && ["ketua_akademi", "admin_akademi", "pelatih"].includes(storedRole)) {
         router.replace("/academy");
+        return;
       }
+      setRole(storedRole || "");
     });
   }, [router]);
 
@@ -133,7 +142,7 @@ export default function AdminShell({
         </div>
 
         <nav className="flex-1 space-y-6 p-4">
-          {navSections.map((section) => (
+          {visibleNavSections.map((section) => (
             <div key={section.title}>
               <p className="mb-2 px-3 text-xs font-bold uppercase text-white/40">
                 {section.title}
@@ -168,6 +177,17 @@ export default function AdminShell({
         </nav>
 
         <div className="space-y-3 border-t border-white/10 p-4">
+          <Link
+            href="/internal/account"
+            className={`flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold transition ${
+              pathname === "/internal/account"
+                ? "bg-white text-primary"
+                : "text-white/72 hover:bg-white/10 hover:text-white"
+            }`}
+          >
+            <span className="material-symbols-outlined text-[20px]">lock_reset</span>
+            Ganti Password
+          </Link>
           <Link
             href="https://skaihub.com"
             className="flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold text-white/72 transition hover:bg-white/10 hover:text-white"
@@ -243,7 +263,7 @@ export default function AdminShell({
         side="left"
       >
         <div className="space-y-6">
-          {navSections.map((section) => (
+          {visibleNavSections.map((section) => (
             <div key={section.title}>
               <p className="mb-2 px-1 text-xs font-bold uppercase tracking-wider text-muted/70">
                 {section.title}
@@ -278,6 +298,14 @@ export default function AdminShell({
           ))}
 
           <div className="space-y-2 border-t border-border pt-4">
+            <Link
+              href="/internal/account"
+              onClick={() => setIsDrawerOpen(false)}
+              className="flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold text-primary hover:bg-surface-container-low"
+            >
+              <span className="material-symbols-outlined text-[20px]">lock_reset</span>
+              Ganti Password
+            </Link>
             <Link
               href="https://skaihub.com"
               className="flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold text-primary hover:bg-surface-container-low"
