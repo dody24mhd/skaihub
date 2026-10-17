@@ -1,7 +1,29 @@
 "use client";
 
-import { ReactNode, useEffect, useRef } from "react";
+import { KeyboardEvent, ReactNode, useEffect, useId, useRef } from "react";
 import Icon from "./icon";
+
+const FOCUSABLE_SELECTOR =
+  'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+// Sheet bisa bertumpuk; kunci scroll body dihitung agar yang terakhir ditutup yang memulihkan.
+let scrollLockCount = 0;
+let overflowBeforeLock = "";
+
+function lockBodyScroll() {
+  if (scrollLockCount === 0) {
+    overflowBeforeLock = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+  }
+  scrollLockCount += 1;
+}
+
+function unlockBodyScroll() {
+  scrollLockCount = Math.max(0, scrollLockCount - 1);
+  if (scrollLockCount === 0) {
+    document.body.style.overflow = overflowBeforeLock;
+  }
+}
 
 export type SheetModalProps = {
   isOpen: boolean;
@@ -24,21 +46,19 @@ export default function SheetModal({
 }: SheetModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLElement | null>(null);
+  const titleId = useId();
+  const descriptionId = useId();
 
   // Simpan elemen pemicu fokus saat modal dibuka
   useEffect(() => {
     if (isOpen) {
       triggerRef.current = document.activeElement as HTMLElement | null;
-      // Kunci scroll body
-      const originalOverflow = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
+      lockBodyScroll();
 
       // Berikan fokus ke dialog
       const timer = setTimeout(() => {
         if (dialogRef.current) {
-          const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
-            'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-          );
+          const focusable = dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
           if (focusable.length > 0) {
             focusable[0].focus();
           } else {
@@ -49,7 +69,7 @@ export default function SheetModal({
 
       return () => {
         clearTimeout(timer);
-        document.body.style.overflow = originalOverflow;
+        unlockBodyScroll();
         if (triggerRef.current && typeof triggerRef.current.focus === "function") {
           triggerRef.current.focus();
         }
@@ -57,49 +77,34 @@ export default function SheetModal({
     }
   }, [isOpen]);
 
-  // Tangani tombol keyboard: Escape & focus trap Tab
-  useEffect(() => {
-    if (!isOpen) return;
-
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        onClose();
-        return;
-      }
-
-      if (e.key === "Tab" && dialogRef.current) {
-        const focusable = Array.from(
-          dialogRef.current.querySelectorAll<HTMLElement>(
-            'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-          )
-        );
-
-        if (focusable.length === 0) {
-          e.preventDefault();
-          return;
-        }
-
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-
-        if (e.shiftKey) {
-          if (document.activeElement === first) {
-            e.preventDefault();
-            last.focus();
-          }
-        } else {
-          if (document.activeElement === last) {
-            e.preventDefault();
-            first.focus();
-          }
-        }
-      }
+  // Escape & focus trap ditangani di panel (bukan window) agar hanya sheet teratas yang bereaksi.
+  function handleKeyDown(e: KeyboardEvent<HTMLDivElement>) {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      e.stopPropagation();
+      onClose();
+      return;
     }
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
+    if (e.key !== "Tab" || !dialogRef.current) return;
+    e.stopPropagation();
+
+    const focusable = Array.from(dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
+    if (focusable.length === 0) {
+      e.preventDefault();
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
 
   if (!isOpen) return null;
 
@@ -126,9 +131,10 @@ export default function SheetModal({
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
-        aria-labelledby="sheet-modal-title"
-        aria-describedby={description ? "sheet-modal-desc" : undefined}
+        aria-labelledby={titleId}
+        aria-describedby={description ? descriptionId : undefined}
         tabIndex={-1}
+        onKeyDown={handleKeyDown}
         className={`relative z-10 flex flex-col bg-white text-primary border-border shadow-2xl focus:outline-hidden ${
           isLeft
             ? "h-full w-full max-w-xs sm:max-w-sm border-r overflow-y-auto"
@@ -139,13 +145,13 @@ export default function SheetModal({
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-white px-5 py-4">
           <div className="min-w-0 pr-2">
             <h2
-              id="sheet-modal-title"
+              id={titleId}
               className="truncate font-heading text-lg font-bold uppercase tracking-tight text-primary"
             >
               {title}
             </h2>
             {description ? (
-              <p id="sheet-modal-desc" className="text-xs text-muted">
+              <p id={descriptionId} className="text-xs text-muted">
                 {description}
               </p>
             ) : null}

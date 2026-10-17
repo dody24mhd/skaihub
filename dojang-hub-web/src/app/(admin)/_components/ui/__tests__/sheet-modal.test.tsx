@@ -32,8 +32,8 @@ describe("SheetModal", () => {
     const dialog = screen.getByRole("dialog");
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveAttribute("aria-modal", "true");
-    expect(dialog).toHaveAttribute("aria-labelledby", "sheet-modal-title");
-    expect(dialog).toHaveAttribute("aria-describedby", "sheet-modal-desc");
+    expect(dialog).toHaveAccessibleName("Test Modal");
+    expect(dialog).toHaveAccessibleDescription("Modal description");
     expect(screen.getByText("Test Modal")).toBeInTheDocument();
     expect(screen.getByText("Modal description")).toBeInTheDocument();
   });
@@ -59,8 +59,44 @@ describe("SheetModal", () => {
       </SheetModal>
     );
 
-    fireEvent.keyDown(window, { key: "Escape" });
+    fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
     expect(handleClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("generates unique title/description ids per instance", () => {
+    render(
+      <>
+        <SheetModal isOpen={true} onClose={vi.fn()} title="Pertama" description="Deskripsi A">
+          <div>A</div>
+        </SheetModal>
+        <SheetModal isOpen={true} onClose={vi.fn()} title="Kedua" description="Deskripsi B">
+          <div>B</div>
+        </SheetModal>
+      </>
+    );
+
+    const [first, second] = screen.getAllByRole("dialog");
+    expect(first.getAttribute("aria-labelledby")).not.toBe(second.getAttribute("aria-labelledby"));
+    expect(first).toHaveAccessibleName("Pertama");
+    expect(second).toHaveAccessibleName("Kedua");
+    expect(second).toHaveAccessibleDescription("Deskripsi B");
+  });
+
+  it("closes only the top-most sheet on Escape when sheets are stacked", () => {
+    const closeOuter = vi.fn();
+    const closeInner = vi.fn();
+    render(
+      <SheetModal isOpen={true} onClose={closeOuter} title="Luar">
+        <SheetModal isOpen={true} onClose={closeInner} title="Dalam">
+          <button type="button">Aksi dalam</button>
+        </SheetModal>
+      </SheetModal>
+    );
+
+    fireEvent.keyDown(screen.getByRole("button", { name: "Aksi dalam" }), { key: "Escape" });
+
+    expect(closeInner).toHaveBeenCalledTimes(1);
+    expect(closeOuter).not.toHaveBeenCalled();
   });
 
   it("calls onClose when backdrop is clicked", () => {
