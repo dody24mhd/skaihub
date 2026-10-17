@@ -171,7 +171,9 @@ class StudentController extends Controller
         return [
             'current_rank_id' => [
                 'nullable',
-                Rule::exists(SportRank::class, 'id')->where('sport_type', $sportType),
+                Rule::exists(SportRank::class, 'id')
+                    ->where('sport_type', $sportType)
+                    ->where(fn ($q) => $q->whereNull('akademi_id')->orWhere('akademi_id', $akademiId)),
             ],
             'primary_class_id' => [
                 'nullable',

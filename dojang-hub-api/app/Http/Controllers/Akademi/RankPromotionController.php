@@ -90,7 +90,12 @@ class RankPromotionController extends Controller
         $sportType = $request->user()->akademi->sport_type;
         $data = $request->validate([
             'student_id' => ['required', Rule::exists(Student::class, 'id')->where('akademi_id', $akademiId)],
-            'to_rank_id' => ['required', Rule::exists(SportRank::class, 'id')->where('sport_type', $sportType)],
+            'to_rank_id' => [
+                'required',
+                Rule::exists(SportRank::class, 'id')
+                    ->where('sport_type', $sportType)
+                    ->where(fn ($q) => $q->whereNull('akademi_id')->orWhere('akademi_id', $akademiId)),
+            ],
             'result' => ['sometimes', Rule::in(['registered', 'passed', 'failed', 'absent'])],
             'score' => ['nullable', 'integer', 'min:0', 'max:100'],
             'notes' => ['nullable', 'string'],
@@ -133,9 +138,16 @@ class RankPromotionController extends Controller
         $this->ensureEventBelongsToCurrentAkademi($request, $rankPromotionEvent);
         $this->ensureParticipantBelongsToEvent($request, $rankPromotionEvent, $participant);
 
+        $akademiId = $request->user()->akademi_id;
         $sportType = $request->user()->akademi->sport_type;
         $data = $request->validate([
-            'to_rank_id' => ['sometimes', 'required', Rule::exists(SportRank::class, 'id')->where('sport_type', $sportType)],
+            'to_rank_id' => [
+                'sometimes',
+                'required',
+                Rule::exists(SportRank::class, 'id')
+                    ->where('sport_type', $sportType)
+                    ->where(fn ($q) => $q->whereNull('akademi_id')->orWhere('akademi_id', $akademiId)),
+            ],
             'result' => ['sometimes', Rule::in(['registered', 'passed', 'failed', 'absent'])],
             'score' => ['nullable', 'integer', 'min:0', 'max:100'],
             'notes' => ['nullable', 'string'],
