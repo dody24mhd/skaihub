@@ -92,8 +92,6 @@ describe("AcademyPublicProfileManager", () => {
         zoom: 100,
         sort_order: 0,
         is_active: true,
-        created_at: "2026-01-01T00:00:00Z",
-        updated_at: "2026-01-01T00:00:00Z",
       },
     ],
     officials: [
@@ -116,8 +114,6 @@ describe("AcademyPublicProfileManager", () => {
         caption: "Ujian Kenaikan Tingkat",
         show_on_about: true,
         sort_order: 0,
-        created_at: "2026-01-01T00:00:00Z",
-        updated_at: "2026-01-01T00:00:00Z",
       },
     ],
     achievements: [

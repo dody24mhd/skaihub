@@ -53,14 +53,18 @@ describe("AcademyCoachesManager", () => {
       role: "pelatih",
       avatar_url: null,
       is_active: true,
+      akademi: mockMe.akademi,
       coach_profile: {
         id: 1,
         user_id: 1,
+        akademi_id: 1,
         phone: "081234567890",
         rank_label: "Dan 3 Kukkiwon",
         license_number: "LIC-123",
+        photo_url: null,
         joined_date: "2024-01-15T00:00:00Z",
         address: "Jl. Merdeka 10",
+        status: "active",
       },
     },
     {
@@ -71,6 +75,7 @@ describe("AcademyCoachesManager", () => {
       role: "pelatih",
       avatar_url: null,
       is_active: false,
+      akademi: mockMe.akademi,
       coach_profile: null,
     },
   ];

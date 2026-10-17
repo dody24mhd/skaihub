@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AcademyManagedUser,
   AdminUser,
@@ -10,27 +10,10 @@ import {
   getAkademiUsers,
   updateAkademiUser,
 } from "../_lib/admin-api";
-import { FormField, PageHeader, ResponsiveColumn, ResponsiveList, SheetModal } from "./ui";
+import UserFormModal, { UserFormData } from "./setup/users/user-form-modal";
+import { PageHeader, ResponsiveColumn, ResponsiveList } from "./ui";
 
 const TOKEN_KEY = "skaihub_admin_token";
-
-type UserForm = {
-  name: string;
-  email: string;
-  password: string;
-  role: "ketua_akademi" | "admin_akademi" | "pelatih";
-  is_active: boolean;
-  is_coach: boolean;
-};
-
-const emptyForm: UserForm = {
-  name: "",
-  email: "",
-  password: "",
-  role: "pelatih",
-  is_active: true,
-  is_coach: true,
-};
 
 const roleLabels: Record<AdminUser["role"], string> = {
   super_admin: "Super Admin",
@@ -45,9 +28,8 @@ export default function AcademyUsersManager() {
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [currentRole, setCurrentRole] = useState<AdminUser["role"] | "">("");
   const [items, setItems] = useState<AcademyManagedUser[]>([]);
-  const [form, setForm] = useState<UserForm>(emptyForm);
   const [editing, setEditing] = useState<AcademyManagedUser | null>(null);
-  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
   const [isLoading, setIsLoading] = useState(true);
@@ -82,12 +64,6 @@ export default function AcademyUsersManager() {
     setCurrentRole(profileData.user.role);
     setCurrentUserId(profileData.user.id);
     setItems(userData.data);
-    setForm((current) => ({
-      ...current,
-      role: ["ketua_akademi", "admin_akademi"].includes(profileData.user.role)
-        ? "admin_akademi"
-        : "pelatih",
-    }));
   }
 
   useEffect(() => {
@@ -107,80 +83,51 @@ export default function AcademyUsersManager() {
     });
   }, []);
 
-  function resetForm() {
+  function closeModal() {
     setEditing(null);
-    setForm({
-      ...emptyForm,
-      role: canManagePengurus ? "admin_akademi" : "pelatih",
-      is_coach: !canManagePengurus,
-    });
-    setIsFormOpen(false);
-    setMessage("");
-    setError("");
+    setIsModalOpen(false);
   }
 
   function openCreateModal() {
     setEditing(null);
-    setForm({
-      ...emptyForm,
-      role: canManagePengurus ? "admin_akademi" : "pelatih",
-      is_coach: !canManagePengurus,
-    });
     setMessage("");
     setError("");
-    setIsFormOpen(true);
+    setIsModalOpen(true);
   }
 
   function startEdit(item: AcademyManagedUser) {
     setEditing(item);
-    setForm({
-      name: item.name,
-      email: item.email,
-      password: "",
-      role:
-        item.role === "ketua_akademi"
-          ? "ketua_akademi"
-          : item.role === "admin_akademi"
-          ? "admin_akademi"
-          : "pelatih",
-      is_active: item.is_active,
-      is_coach: item.role === "pelatih" || Boolean(item.coach_profile),
-    });
     setMessage("");
     setError("");
-    setIsFormOpen(true);
+    setIsModalOpen(true);
   }
 
-  function payloadFromForm() {
-    return {
-      name: form.name,
-      email: form.email,
-      password: form.password,
-      role: form.role,
-      is_active: form.is_active,
-      is_coach: form.role === "pelatih" ? true : form.is_coach,
-    };
-  }
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function handleSubmit(formData: UserFormData) {
     setIsSaving(true);
     setMessage("");
     setError("");
 
     try {
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
+        is_active: formData.is_active,
+        is_coach: formData.role === "pelatih" ? true : formData.is_coach,
+      };
+
       if (editing) {
-        const payload = payloadFromForm();
         await updateAkademiUser(tokenRef.current, editing.id, {
           ...payload,
           password: payload.password || undefined,
         });
       } else {
-        await createAkademiUser(tokenRef.current, payloadFromForm());
+        await createAkademiUser(tokenRef.current, payload);
       }
 
       await loadData(tokenRef.current);
-      resetForm();
+      closeModal();
       setMessage(editing ? "Akun diperbarui." : "Akun ditambahkan.");
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Gagal menyimpan akun.");
@@ -205,7 +152,7 @@ export default function AcademyUsersManager() {
     try {
       await deleteAkademiUser(tokenRef.current, item.id);
       await loadData(tokenRef.current);
-      if (editing?.id === item.id) resetForm();
+      if (editing?.id === item.id) closeModal();
       setMessage("Akun dinonaktifkan.");
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Gagal menonaktifkan akun.");
@@ -363,135 +310,15 @@ export default function AcademyUsersManager() {
         }
       />
 
-      <SheetModal
-        isOpen={isFormOpen}
-        onClose={resetForm}
-        title={editing ? "Edit Akun" : "Tambah Akun"}
-        description={
-          editing
-            ? `Perbarui akses akun untuk ${editing.name}`
-            : "Tambahkan akun login baru untuk pengurus atau pelatih."
-        }
-      >
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <FormField
-            id="user-name"
-            label="Nama Lengkap"
-            required
-            value={form.name}
-            onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
-            placeholder="Contoh: Sabeum Hartono"
-          />
-
-          <FormField
-            id="user-email"
-            label="Email Login"
-            type="email"
-            required
-            value={form.email}
-            onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
-            placeholder="nama@email.com"
-          />
-
-          <FormField
-            id="user-password"
-            label="Password"
-            type="password"
-            required={!editing}
-            value={form.password}
-            onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
-            placeholder={editing ? "Kosongkan jika tidak diubah" : "Minimal 8 karakter"}
-            hint={
-              editing
-                ? "Isi password baru hanya jika ingin mereset password akun ini."
-                : undefined
-            }
-          />
-
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="user-role" className="text-xs font-bold uppercase tracking-wide text-primary">
-              Jenis Akun
-            </label>
-            {canManagePengurus && form.role !== "ketua_akademi" ? (
-              <select
-                id="user-role"
-                className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:text-sm"
-                value={form.role}
-                onChange={(event) => {
-                  const nextRole = event.target.value as UserForm["role"];
-                  setForm((current) => ({
-                    ...current,
-                    role: nextRole,
-                    is_coach: nextRole === "pelatih" ? true : current.is_coach,
-                  }));
-                }}
-              >
-                <option value="admin_akademi">Pengurus Akademi</option>
-                <option value="pelatih">Pelatih</option>
-              </select>
-            ) : (
-              <div className="flex min-h-11 items-center border border-border bg-surface-container px-3.5 text-sm font-medium text-muted">
-                {roleLabels[form.role] || form.role}
-              </div>
-            )}
-          </div>
-
-          {form.role !== "pelatih" ? (
-            <label className="flex items-start gap-3 border border-border bg-surface-container-low p-3 text-sm font-semibold text-primary">
-              <input
-                className="mt-1 size-4 rounded-xs border-border text-primary focus:ring-2 focus:ring-primary/20"
-                type="checkbox"
-                checked={form.is_coach}
-                onChange={(event) =>
-                  setForm((current) => ({ ...current, is_coach: event.target.checked }))
-                }
-              />
-              <span>
-                Juga sebagai pelatih
-                <span className="block text-xs font-medium leading-5 text-muted">
-                  Akun ini punya akses {roleLabels[form.role]}, sekaligus tercatat di daftar pelatih.
-                </span>
-              </span>
-            </label>
-          ) : null}
-
-          <label className="flex items-center gap-3 text-sm font-semibold text-primary">
-            <input
-              type="checkbox"
-              className="size-4 rounded-xs border-border text-primary focus:ring-2 focus:ring-primary/20"
-              checked={form.is_active}
-              disabled={editing?.id === currentUserId}
-              onChange={(event) =>
-                setForm((current) => ({ ...current, is_active: event.target.checked }))
-              }
-            />
-            <span>Akun aktif</span>
-          </label>
-          {editing?.id === currentUserId ? (
-            <p className="text-xs font-medium text-muted">
-              Akun yang sedang digunakan login tidak bisa dinonaktifkan sendiri.
-            </p>
-          ) : null}
-
-          <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-            <button
-              type="button"
-              className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
-              onClick={resetForm}
-              disabled={isSaving}
-            >
-              Batal
-            </button>
-            <button
-              type="submit"
-              className="inline-flex min-h-11 items-center justify-center bg-primary px-6 text-sm font-bold text-white transition hover:bg-primary-container disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-primary/20"
-              disabled={isSaving}
-            >
-              {isSaving ? "Menyimpan..." : "Simpan"}
-            </button>
-          </div>
-        </form>
-      </SheetModal>
+      <UserFormModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onSubmit={handleSubmit}
+        editing={editing}
+        canManagePengurus={canManagePengurus}
+        currentUserId={currentUserId}
+        isSaving={isSaving}
+      />
     </div>
   );
 }

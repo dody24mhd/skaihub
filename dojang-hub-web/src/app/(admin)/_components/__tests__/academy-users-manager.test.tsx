@@ -54,7 +54,8 @@ describe("AcademyUsersManager", () => {
       email: "ketua@test.com",
       role: "ketua_akademi",
       is_active: true,
-      created_at: "2026-01-01T00:00:00Z",
+      avatar_url: null,
+      akademi: mockMe.akademi,
       coach_profile: null,
     },
     {
@@ -64,7 +65,8 @@ describe("AcademyUsersManager", () => {
       email: "staff@test.com",
       role: "admin_akademi",
       is_active: true,
-      created_at: "2026-01-02T00:00:00Z",
+      avatar_url: null,
+      akademi: mockMe.akademi,
       coach_profile: null,
     },
     {
@@ -74,8 +76,20 @@ describe("AcademyUsersManager", () => {
       email: "joko@test.com",
       role: "pelatih",
       is_active: false,
-      created_at: "2026-01-03T00:00:00Z",
-      coach_profile: { id: 1 },
+      avatar_url: null,
+      akademi: mockMe.akademi,
+      coach_profile: {
+        id: 1,
+        user_id: 3,
+        akademi_id: 1,
+        phone: null,
+        license_number: null,
+        rank_label: null,
+        photo_url: null,
+        joined_date: null,
+        address: null,
+        status: "active",
+      },
     },
   ];
 
