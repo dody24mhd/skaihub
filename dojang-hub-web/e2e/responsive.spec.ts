@@ -38,6 +38,8 @@ if (isVitest) {
     "/academy/students/new",
     "/academy/students/1",
     "/academy/spp",
+    // L5-B
+    "/academy/account",
   ];
 
   playwrightTest.describe("Responsive Layout & Shell", () => {
@@ -230,6 +232,108 @@ if (isVitest) {
       await playwrightExpect(dialog.getByLabel(/Nominal bayar/)).toHaveValue("150000");
       await page.keyboard.press("Escape");
       await playwrightExpect(dialog).toBeHidden();
+    });
+  });
+
+  // L5-B
+  playwrightTest.describe("Akun: ganti password & staf platform (L5-B)", () => {
+    const json = (body: unknown, status = 200) => ({
+      status,
+      contentType: "application/json",
+      body: JSON.stringify(body),
+    });
+
+    playwrightTest("pelatih ganti password dari menu Lainnya di HP", async ({ page }, testInfo) => {
+      playwrightTest.skip(testInfo.project.name !== "mobile", "Alur khusus HP");
+      let attempts = 0;
+      await setAdminSession(page, { role: "pelatih" });
+      await setupMockApi(page);
+      await page.route("**/api/auth/password", async (route) => {
+        attempts += 1;
+        if (attempts === 1) {
+          return route.fulfill(
+            json({ message: "Password saat ini salah.", errors: { current_password: ["Password saat ini salah."] } }, 422)
+          );
+        }
+        return route.fulfill(json({ message: "Password berhasil diubah." }));
+      });
+
+      await page.goto("/academy");
+      await page.getByRole("button", { name: "Lainnya" }).click();
+      await page.getByRole("dialog").getByRole("link", { name: "Ganti Password" }).click();
+      await playwrightExpect(page).toHaveURL(/\/academy\/account$/);
+
+      await page.getByLabel(/Password Saat Ini/).fill("salah-total");
+      await page.getByLabel(/^Password Baru/).fill("passwordbaru123");
+      await page.getByLabel(/Ulangi Password Baru/).fill("passwordbaru123");
+      await page.getByRole("button", { name: "Simpan Password" }).click();
+      await playwrightExpect(page.getByText("Password saat ini salah.")).toBeVisible();
+
+      await page.getByLabel(/Password Saat Ini/).fill("passwordlama");
+      await page.getByRole("button", { name: "Simpan Password" }).click();
+      await playwrightExpect(page.getByText(/Password berhasil diubah/)).toBeVisible();
+      await playwrightExpect(page.getByLabel(/Password Saat Ini/)).toHaveValue("");
+    });
+
+    playwrightTest("super admin mengelola staf platform", async ({ page }) => {
+      const staff = {
+        id: 2,
+        name: "Staf Konten",
+        email: "konten@skaihub.test",
+        role: "admin",
+        is_active: true,
+        akademi_id: null,
+        created_at: "2026-01-02T00:00:00Z",
+        updated_at: "2026-01-02T00:00:00Z",
+      };
+      let createdPayload: Record<string, unknown> | null = null;
+
+      await setAdminSession(page, { role: "super_admin", name: "Super Admin", email: "super@skaihub.test" });
+      await page.route("**/api/**", async (route) => {
+        const url = route.request().url();
+        const method = route.request().method();
+        if (url.includes("/auth/me")) {
+          return route.fulfill(
+            json({
+              user: {
+                id: 1,
+                name: "Super Admin",
+                email: "super@skaihub.test",
+                role: "super_admin",
+                avatar_url: null,
+                is_active: true,
+                akademi_id: null,
+                akademi: null,
+              },
+            })
+          );
+        }
+        if (url.includes("/super-admin/platform-users") && method === "POST") {
+          createdPayload = route.request().postDataJSON() as Record<string, unknown>;
+          return route.fulfill(json({ platform_user: { ...staff, id: 3, name: "Staf Baru" } }, 201));
+        }
+        if (url.includes("/super-admin/platform-users")) {
+          return route.fulfill(
+            json({ data: [{ ...staff, id: 1, name: "Super Admin", email: "super@skaihub.test", role: "super_admin" }, staff] })
+          );
+        }
+        return route.fulfill(json({ data: [] }));
+      });
+
+      await page.goto("/internal/users");
+      await playwrightExpect(page.getByText("Staf Konten").filter({ visible: true })).toBeVisible();
+      const hasHorizontalScroll = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+      playwrightExpect(hasHorizontalScroll).toBe(false);
+
+      await page.getByRole("button", { name: /Tambah Staf/ }).click();
+      const dialog = page.getByRole("dialog");
+      await dialog.getByLabel(/Nama Lengkap/).fill("Staf Baru");
+      await dialog.getByLabel(/Email Login/).fill("baru@skaihub.test");
+      await dialog.getByLabel(/^Password/).fill("password123");
+      await dialog.getByRole("button", { name: "Simpan" }).click();
+
+      await playwrightExpect(page.getByText("Staf platform ditambahkan.")).toBeVisible();
+      playwrightExpect(createdPayload).toMatchObject({ name: "Staf Baru", email: "baru@skaihub.test", is_active: true });
     });
   });
 

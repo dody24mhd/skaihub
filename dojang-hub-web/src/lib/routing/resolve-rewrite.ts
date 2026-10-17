@@ -7,12 +7,25 @@
  *    - '/' -> '/internal'
  *    - paths starting with '/internal', '/login', '/offline' -> no rewrite (null)
  *    - other paths -> `/internal${path}`
- * 2. Academy subdomains (any non-empty subdomain other than 'admin'):
+ * 2. Other reserved subdomains (RESERVED_SUBDOMAINS, e.g. 'www', 'app', 'api'):
+ *    - no rewrite (null); 'www'/'app' therefore behave like the base domain
+ * 3. Academy subdomains (any other non-empty subdomain):
  *    - '/' -> `/a/${subdomain}`
  *    - other paths -> `/a/${subdomain}${path}`
- * 3. Compro / main domain / IP:
+ * 4. Compro / main domain / IP:
  *    - no rewrite (null)
  */
+// Keep in sync with dojang-hub-api/config/skaihub.php `reserved_subdomains`.
+export const RESERVED_SUBDOMAINS: readonly string[] = [
+  "www",
+  "app",
+  "api",
+  "admin",
+  "mail",
+  "static",
+  "cdn",
+  "status",
+];
 export function resolveRewrite(
   host: string,
   path: string,
@@ -49,13 +62,18 @@ export function resolveRewrite(
     return `/internal${normalizedPath}`;
   }
 
-  // 2. Akademi subdomain (<slug>.<baseDomain>)
+  // 2. Subdomain sistem lain (www, app, api, ...) bukan slug akademi
+  if (RESERVED_SUBDOMAINS.includes(subdomain)) {
+    return null;
+  }
+
+  // 3. Akademi subdomain (<slug>.<baseDomain>)
   if (subdomain && subdomain !== "") {
     return normalizedPath === "/"
       ? `/a/${subdomain}`
       : `/a/${subdomain}${normalizedPath}`;
   }
 
-  // 3. Compro Site / Main Domain
+  // 4. Compro Site / Main Domain
   return null;
 }

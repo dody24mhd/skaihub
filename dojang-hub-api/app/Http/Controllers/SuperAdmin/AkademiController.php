@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rules\NotIn;
 use Laravel\Sanctum\PersonalAccessToken;
 
 class AkademiController extends Controller
@@ -47,7 +48,7 @@ class AkademiController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:150'],
-            'slug' => ['nullable', 'string', 'max:100', 'unique:akademi,slug', 'regex:/^[a-z0-9-]+$/'],
+            'slug' => ['nullable', 'string', 'max:100', 'unique:akademi,slug', 'regex:/^[a-z0-9-]+$/', $this->notReservedSlugRule()],
             'sport_type' => ['nullable', 'string', 'max:50'],
             'rank_system' => $this->rankSystemRules($request->input('sport_type') ?? 'taekwondo'),
             'logo_url' => ['nullable', 'string', 'max:500'],
@@ -65,12 +66,12 @@ class AkademiController extends Controller
             'admin_name' => ['nullable', 'required_with:admin_email,admin_password', 'string', 'max:255'],
             'admin_email' => ['nullable', 'required_with:admin_name,admin_password', 'email', 'unique:users,email'],
             'admin_password' => ['nullable', 'required_with:admin_name,admin_email', 'string', 'min:8'],
-        ]);
+        ], $this->slugMessages());
 
         $slug = $request->slug ?? Str::slug($request->name);
 
-        if (Akademi::where('slug', $slug)->exists()) {
-            $slug = $slug.'-'.Str::random(4);
+        if ($this->isReservedSlug($slug) || Akademi::where('slug', $slug)->exists()) {
+            $slug = $slug.'-'.Str::lower(Str::random(4));
         }
 
         return DB::transaction(function () use ($request, $slug): JsonResponse {
@@ -162,12 +163,12 @@ class AkademiController extends Controller
 
         $request->validate([
             'name' => ['sometimes', 'string', 'max:150'],
-            'slug' => ['sometimes', 'string', 'max:100', Rule::unique('akademi', 'slug')->ignore($id), 'regex:/^[a-z0-9-]+$/'],
+            'slug' => ['sometimes', 'string', 'max:100', Rule::unique('akademi', 'slug')->ignore($id), 'regex:/^[a-z0-9-]+$/', $this->notReservedSlugRule()],
             'sport_type' => ['sometimes', 'string', 'max:50'],
             'rank_system' => ['sometimes', ...$this->rankSystemRules($request->input('sport_type') ?? $akademi->sport_type)],
             'logo_url' => ['sometimes', 'nullable', 'string', 'max:500'],
             'status' => ['sometimes', Rule::in(['active', 'inactive', 'suspended'])],
-        ]);
+        ], $this->slugMessages());
 
         $rankSystem = $this->resolveRankSystemForUpdate($request, $akademi);
 
@@ -237,6 +238,23 @@ class AkademiController extends Controller
         }
 
         return $target;
+    }
+
+    private function notReservedSlugRule(): NotIn
+    {
+        return Rule::notIn(config('skaihub.reserved_subdomains'));
+    }
+
+    private function isReservedSlug(string $slug): bool
+    {
+        return in_array($slug, config('skaihub.reserved_subdomains'), true);
+    }
+
+    private function slugMessages(): array
+    {
+        return [
+            'slug.not_in' => 'Slug ":input" dicadangkan untuk sistem. Gunakan slug lain.',
+        ];
     }
 
     private function userSummary(User $user): array

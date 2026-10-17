@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { resolveRewrite } from "../resolve-rewrite";
+import { RESERVED_SUBDOMAINS, resolveRewrite } from "../resolve-rewrite";
 
 describe("resolveRewrite", () => {
   const baseDomain = "localhost:3000";
@@ -65,6 +65,33 @@ describe("resolveRewrite", () => {
     it("rewrites academy paths to /a/:subdomain/:path", () => {
       expect(resolveRewrite("garuda.localhost:3000", "/profil", baseDomain)).toBe("/a/garuda/profil");
       expect(resolveRewrite("tigers.localhost:3000", "/jadwal", baseDomain)).toBe("/a/tigers/jadwal");
+    });
+  });
+
+  describe("Reserved subdomain cases", () => {
+    it("treats www and app like the base domain (no rewrite)", () => {
+      expect(resolveRewrite("www.skaihub.com", "/", "skaihub.com")).toBeNull();
+      expect(resolveRewrite("www.skaihub.com", "/harga", "skaihub.com")).toBeNull();
+      expect(resolveRewrite("app.skaihub.com", "/", "skaihub.com")).toBeNull();
+      expect(resolveRewrite("app.localhost:3000", "/academy", baseDomain)).toBeNull();
+    });
+
+    it("never rewrites other reserved subdomains to an academy page", () => {
+      for (const sub of ["api", "mail", "static", "cdn", "status"]) {
+        expect(resolveRewrite(`${sub}.skaihub.com`, "/", "skaihub.com")).toBeNull();
+        expect(resolveRewrite(`${sub}.skaihub.com`, "/profil", "skaihub.com")).toBeNull();
+      }
+    });
+
+    it("matches reserved subdomains case-insensitively", () => {
+      expect(resolveRewrite("WWW.skaihub.com", "/", "skaihub.com")).toBeNull();
+      expect(resolveRewrite("API.skaihub.com", "/", "skaihub.com")).toBeNull();
+    });
+
+    it("exports the reserved list including admin", () => {
+      expect(RESERVED_SUBDOMAINS).toEqual(
+        expect.arrayContaining(["www", "app", "api", "admin", "mail", "static", "cdn", "status"])
+      );
     });
   });
 

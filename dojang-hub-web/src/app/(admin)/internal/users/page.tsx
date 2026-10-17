@@ -1,24 +1,16 @@
 import type { Metadata } from "next";
-import AdminComingSoon from "../../_components/admin-coming-soon";
+import AdminShell from "../../_components/admin-shell";
+import PlatformUsersManager from "../../_components/platform-users/platform-users-manager";
 
 export const metadata: Metadata = {
-  title: "Admin Akademi",
+  title: "Staf Platform",
   robots: { index: false, follow: false },
 };
 
 export default function AdminUsersPage() {
   return (
-    <AdminComingSoon
-      title="Admin Akademi"
-      icon="manage_accounts"
-      group="Platform"
-      description="Kelola owner, admin, dan akses tiap akademi."
-      checklist={[
-        "Owner utama setiap akademi",
-        "Admin tambahan dan role akses",
-        "Reset akses dan status akun",
-        "Audit perubahan penting",
-      ]}
-    />
+    <AdminShell title="Staf Platform" eyebrow="Platform">
+      <PlatformUsersManager />
+    </AdminShell>
   );
 }

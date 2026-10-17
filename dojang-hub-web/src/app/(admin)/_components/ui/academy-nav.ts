@@ -132,6 +132,17 @@ export function buildNavSections(plan: AkademiPlan | null): NavSection[] {
         },
       ],
     },
+    {
+      title: "Akun",
+      items: [
+        {
+          title: "Ganti Password",
+          href: "/academy/account",
+          icon: "lock_reset",
+          roles: ["ketua_akademi", "admin_akademi", "pelatih"],
+        },
+      ],
+    },
   ];
 }
 
