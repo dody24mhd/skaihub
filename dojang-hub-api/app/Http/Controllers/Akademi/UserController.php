@@ -72,23 +72,34 @@ class UserController extends Controller
         $this->ensureCanManageUsers($request);
         $this->ensureUserBelongsToCurrentAkademi($request, $user);
 
-        abort_if($user->id === $request->user()->id && $request->boolean('is_active') === false, 422, 'Akun sendiri tidak bisa dinonaktifkan.');
+        $isSelf = $user->id === $request->user()->id;
+
+        if ($isSelf) {
+            abort_if($request->has('role') && $request->role !== $user->role, 422, 'Role akun sendiri tidak bisa diubah.');
+            abort_if($request->has('is_active') && ! $request->boolean('is_active'), 422, 'Akun sendiri tidak bisa dinonaktifkan.');
+        }
 
         $data = $request->validate($this->rules($request, true, $user->id, $user));
 
-        DB::transaction(function () use ($data, $user) {
-            $targetRole = $data['role'] ?? $user->role;
+        DB::transaction(function () use ($data, $user, $isSelf) {
+            $targetRole = $isSelf ? $user->role : ($data['role'] ?? $user->role);
+            $targetIsActive = $isSelf ? $user->is_active : ($data['is_active'] ?? $user->is_active);
 
             $user->fill([
                 'name' => $data['name'] ?? $user->name,
                 'email' => $data['email'] ?? $user->email,
                 'role' => $targetRole,
                 'avatar_url' => array_key_exists('photo_url', $data) ? $data['photo_url'] : $user->avatar_url,
-                'is_active' => $data['is_active'] ?? $user->is_active,
+                'is_active' => $targetIsActive,
             ]);
 
             if (! empty($data['password'])) {
                 $user->password = $data['password'];
+                $user->tokens()->delete();
+            }
+
+            if (array_key_exists('is_active', $data) && ! $data['is_active']) {
+                $user->tokens()->delete();
             }
 
             $user->save();
@@ -124,6 +135,7 @@ class UserController extends Controller
 
         $user->forceFill(['is_active' => false])->save();
         $user->coachProfile()?->update(['status' => 'inactive']);
+        $user->tokens()->delete();
 
         return response()->json(['message' => 'Akun akademi berhasil dinonaktifkan.']);
     }
@@ -135,8 +147,12 @@ class UserController extends Controller
         $allowedRoles = $this->manageableRoles($request);
 
         if ($partial && $targetUser) {
-            $allowedRoles[] = $targetUser->role;
-            $allowedRoles = array_values(array_unique($allowedRoles));
+            if ($targetUser->id === $request->user()->id) {
+                $allowedRoles = [$targetUser->role];
+            } else {
+                $allowedRoles[] = $targetUser->role;
+                $allowedRoles = array_values(array_unique($allowedRoles));
+            }
         }
 
         return [
@@ -173,7 +189,7 @@ class UserController extends Controller
     {
         return match ($request->user()->role) {
             'ketua_akademi' => ['admin_akademi', 'pelatih'],
-            'admin_akademi' => ['admin_akademi', 'pelatih'],
+            'admin_akademi' => ['pelatih'],
             default => [],
         };
     }
@@ -181,13 +197,16 @@ class UserController extends Controller
     private function ensureUserBelongsToCurrentAkademi(Request $request, User $user): void
     {
         abort_unless(
-            $user->akademi_id === $request->user()->akademi_id
-                && (
-                    in_array($user->role, $this->manageableRoles($request), true)
-                    || $user->id === $request->user()->id
-                ),
+            $user->akademi_id === $request->user()->akademi_id,
             404,
             'Akun akademi tidak ditemukan.'
+        );
+
+        abort_unless(
+            in_array($user->role, $this->manageableRoles($request), true)
+                || $user->id === $request->user()->id,
+            403,
+            'Akses ditolak. Anda tidak memiliki izin untuk mengelola akun ini.'
         );
     }
 }

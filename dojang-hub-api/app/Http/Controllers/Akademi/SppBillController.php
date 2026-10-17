@@ -8,7 +8,9 @@ use App\Models\Student;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class SppBillController extends Controller
 {
@@ -123,27 +125,108 @@ class SppBillController extends Controller
             'amount' => ['required', 'numeric', 'min:0.01', 'max:9999999999.99'],
             'paid_at' => ['required', 'date'],
             'method' => ['nullable', 'string', 'max:50'],
-            'proof_url' => ['nullable', 'url', 'max:500'],
+            'proof_url' => ['nullable', 'string', 'max:500'],
             'notes' => ['nullable', 'string'],
         ]);
 
+        if (! empty($data['proof_url'])) {
+            $rawUrl = $data['proof_url'];
+
+            if (
+                str_contains($rawUrl, '\\') ||
+                preg_match('/[\x00-\x1F\x7F]/', $rawUrl)
+            ) {
+                throw ValidationException::withMessages([
+                    'proof_url' => ['Bukti pembayaran tidak valid.'],
+                ]);
+            }
+
+            $parsed = parse_url($rawUrl);
+            if ($parsed === false || isset($parsed['query']) || isset($parsed['fragment']) || str_contains($rawUrl, '?') || str_contains($rawUrl, '#')) {
+                throw ValidationException::withMessages([
+                    'proof_url' => ['Bukti pembayaran tidak boleh mengandung query atau fragment.'],
+                ]);
+            }
+
+            if (isset($parsed['host'])) {
+                $appHost = parse_url(config('app.url'), PHP_URL_HOST);
+                $reqHost = $request->getHost();
+                $storageHost = parse_url(Storage::disk('public')->url(''), PHP_URL_HOST);
+                $allowedHosts = array_values(array_filter([$appHost, $reqHost, $storageHost]));
+
+                if (! in_array($parsed['host'], $allowedHosts, true)) {
+                    throw ValidationException::withMessages([
+                        'proof_url' => ['Bukti pembayaran harus berasal dari berkas unggahan akademi ini.'],
+                    ]);
+                }
+            }
+
+            $path = $parsed['path'] ?? '';
+            $decodedPath = rawurldecode($path);
+
+            if (
+                str_contains($decodedPath, '..') ||
+                str_contains($decodedPath, '\\') ||
+                preg_match('/[\x00-\x1F\x7F]/', $decodedPath)
+            ) {
+                throw ValidationException::withMessages([
+                    'proof_url' => ['Bukti pembayaran mengandung path traversal.'],
+                ]);
+            }
+
+            $akademiId = $request->user()->akademi_id;
+            $requiredPrefix = "/storage/akademi/{$akademiId}/";
+
+            if (! str_starts_with($decodedPath, $requiredPrefix)) {
+                throw ValidationException::withMessages([
+                    'proof_url' => ['Bukti pembayaran harus berasal dari berkas unggahan akademi ini.'],
+                ]);
+            }
+
+            $relativeStoragePath = ltrim(substr($decodedPath, strlen('/storage/')), '/');
+
+            if (! Storage::disk('public')->exists($relativeStoragePath)) {
+                throw ValidationException::withMessages([
+                    'proof_url' => ['Berkas bukti pembayaran tidak ditemukan di penyimpanan server.'],
+                ]);
+            }
+        }
+
         DB::transaction(function () use ($data, $request, $sppBill) {
-            $sppBill->payments()->create([
+            $bill = SppBill::where('id', $sppBill->id)->lockForUpdate()->firstOrFail();
+
+            if (in_array($bill->status, ['paid', 'waived'], true)) {
+                throw ValidationException::withMessages([
+                    'status' => ['Tagihan ini sudah berstatus '.($bill->status === 'paid' ? 'lunas' : 'dikecualikan (waived)').' dan tidak bisa menerima pembayaran.'],
+                ]);
+            }
+
+            $currentPaid = (float) $bill->paid_amount;
+            $remaining = round((float) $bill->amount - $currentPaid, 2);
+
+            if (round((float) $data['amount'], 2) > $remaining) {
+                throw ValidationException::withMessages([
+                    'amount' => ['Jumlah pembayaran melebihi sisa tagihan (sisa: '.number_format($remaining, 0, ',', '.').').'],
+                ]);
+            }
+
+            $bill->payments()->create([
                 ...$data,
+                'akademi_id' => $request->user()->akademi_id,
                 'created_by' => $request->user()->id,
             ]);
 
-            $paidAmount = $sppBill->payments()->sum('amount');
+            $newPaidAmount = round($bill->payments()->sum('amount'), 2);
             $status = 'partial';
 
-            if ($paidAmount <= 0) {
+            if ($newPaidAmount <= 0) {
                 $status = 'unpaid';
-            } elseif ($paidAmount >= (float) $sppBill->amount) {
+            } elseif ($newPaidAmount >= (float) $bill->amount) {
                 $status = 'paid';
             }
 
-            $sppBill->update([
-                'paid_amount' => $paidAmount,
+            $bill->update([
+                'paid_amount' => $newPaidAmount,
                 'status' => $status,
             ]);
         });

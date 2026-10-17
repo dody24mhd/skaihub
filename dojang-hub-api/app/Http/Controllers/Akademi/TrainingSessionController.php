@@ -44,7 +44,9 @@ class TrainingSessionController extends Controller
             $query->whereMonth('session_date', $request->integer('month'));
         }
 
-        return response()->json(['data' => $query->paginate($request->integer('per_page', 25))]);
+        $perPage = min(max($request->integer('per_page', 25), 1), 100);
+
+        return response()->json(['data' => $query->paginate($perPage)]);
     }
 
     public function store(Request $request): JsonResponse
@@ -118,6 +120,11 @@ class TrainingSessionController extends Controller
         $this->ensureCanManageSessions($request, $trainingSession);
         $this->ensureBelongsToCurrentAkademi($request, $trainingSession);
 
+        if ($request->user()->role === 'pelatih') {
+            abort_if($request->has('class_id') && (int) $request->class_id !== (int) $trainingSession->class_id, 403, 'Akses ditolak. Pelatih tidak bisa mengubah kelas sesi latihan.');
+            abort_if($request->has('training_schedule_id') && (int) $request->training_schedule_id !== (int) $trainingSession->training_schedule_id, 403, 'Akses ditolak. Pelatih tidak bisa mengubah jadwal sesi latihan.');
+        }
+
         $data = $request->validate($this->rules($request->user()->akademi_id, true));
         $coachIds = array_key_exists('coach_ids', $data) ? $this->normalizedCoachIds($data) : null;
         $trainingSession->update([
@@ -149,11 +156,11 @@ class TrainingSessionController extends Controller
             'status' => ['sometimes', Rule::in(['draft', 'completed', 'cancelled'])],
             'attendances' => ['sometimes', 'array'],
             'attendances.*.id' => ['required_with:attendances', 'integer', Rule::exists('training_attendances', 'id')],
-            'attendances.*.status' => ['required_with:attendances', Rule::in(['present', 'absent', 'excused'])],
+            'attendances.*.status' => ['required_with:attendances', Rule::in(['present', 'absent', 'excused', 'sick'])],
             'attendances.*.notes' => ['nullable', 'string'],
             'extra_participants' => ['sometimes', 'array'],
             'extra_participants.*.participant_name' => ['required_with:extra_participants', 'string', 'max:150'],
-            'extra_participants.*.status' => ['required_with:extra_participants', Rule::in(['present', 'absent', 'excused'])],
+            'extra_participants.*.status' => ['required_with:extra_participants', Rule::in(['present', 'absent', 'excused', 'sick'])],
             'extra_participants.*.notes' => ['nullable', 'string'],
         ]);
 
@@ -201,8 +208,13 @@ class TrainingSessionController extends Controller
 
     public function destroy(Request $request, TrainingSession $trainingSession): JsonResponse
     {
-        $this->ensureCanManageSessions($request, $trainingSession);
         $this->ensureBelongsToCurrentAkademi($request, $trainingSession);
+
+        abort_unless(
+            in_array($request->user()->role, ['ketua_akademi', 'admin_akademi'], true),
+            403,
+            'Akses ditolak. Pelatih tidak bisa menghapus sesi latihan.'
+        );
 
         $trainingSession->delete();
 
@@ -243,12 +255,9 @@ class TrainingSessionController extends Controller
                 (int) $session->coach_id === (int) $request->user()->id
                 || $session->coaches()->where('users.id', $request->user()->id)->exists()
             );
-        $isTodayCoach = $session
-            && $role === 'pelatih'
-            && $session->session_date->isSameDay(now());
 
         abort_unless(
-            in_array($role, ['ketua_akademi', 'admin_akademi'], true) || $isAssignedCoach || $isTodayCoach,
+            in_array($role, ['ketua_akademi', 'admin_akademi'], true) || $isAssignedCoach,
             403,
             'Akses ditolak. Hanya admin akademi atau pelatih sesi yang bisa mengubah sesi latihan.'
         );

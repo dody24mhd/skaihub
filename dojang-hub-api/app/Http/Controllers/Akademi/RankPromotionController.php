@@ -90,7 +90,12 @@ class RankPromotionController extends Controller
         $sportType = $request->user()->akademi->sport_type;
         $data = $request->validate([
             'student_id' => ['required', Rule::exists(Student::class, 'id')->where('akademi_id', $akademiId)],
-            'to_rank_id' => ['required', Rule::exists(SportRank::class, 'id')->where('sport_type', $sportType)],
+            'to_rank_id' => [
+                'required',
+                Rule::exists(SportRank::class, 'id')
+                    ->where('sport_type', $sportType)
+                    ->where(fn ($q) => $q->whereNull('akademi_id')->orWhere('akademi_id', $akademiId)),
+            ],
             'result' => ['sometimes', Rule::in(['registered', 'passed', 'failed', 'absent'])],
             'score' => ['nullable', 'integer', 'min:0', 'max:100'],
             'notes' => ['nullable', 'string'],
@@ -133,9 +138,16 @@ class RankPromotionController extends Controller
         $this->ensureEventBelongsToCurrentAkademi($request, $rankPromotionEvent);
         $this->ensureParticipantBelongsToEvent($request, $rankPromotionEvent, $participant);
 
+        $akademiId = $request->user()->akademi_id;
         $sportType = $request->user()->akademi->sport_type;
         $data = $request->validate([
-            'to_rank_id' => ['sometimes', 'required', Rule::exists(SportRank::class, 'id')->where('sport_type', $sportType)],
+            'to_rank_id' => [
+                'sometimes',
+                'required',
+                Rule::exists(SportRank::class, 'id')
+                    ->where('sport_type', $sportType)
+                    ->where(fn ($q) => $q->whereNull('akademi_id')->orWhere('akademi_id', $akademiId)),
+            ],
             'result' => ['sometimes', Rule::in(['registered', 'passed', 'failed', 'absent'])],
             'score' => ['nullable', 'integer', 'min:0', 'max:100'],
             'notes' => ['nullable', 'string'],
@@ -160,8 +172,25 @@ class RankPromotionController extends Controller
         if ($participant->result === 'passed') {
             $student->update(['current_rank_id' => $participant->to_rank_id]);
 
+            $participant->loadMissing('event');
+            $student->rankHistories()->updateOrCreate(
+                ['rank_promotion_participant_id' => $participant->id],
+                [
+                    'akademi_id' => $student->akademi_id,
+                    'sport_rank_id' => $participant->to_rank_id,
+                    'achieved_on' => optional($participant->event?->event_date)->toDateString() ?? now()->toDateString(),
+                    'source_type' => 'promotion_event',
+                    'notes' => $participant->notes ?? 'Lulus ujian kenaikan tingkat',
+                    'changed_by' => $participant->assessed_by,
+                ]
+            );
+
             return;
         }
+
+        $student->rankHistories()
+            ->where('rank_promotion_participant_id', $participant->id)
+            ->delete();
 
         if ($student->current_rank_id === $participant->to_rank_id) {
             $student->update(['current_rank_id' => $participant->from_rank_id]);

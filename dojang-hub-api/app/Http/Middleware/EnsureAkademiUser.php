@@ -16,6 +16,10 @@ class EnsureAkademiUser
             return response()->json(['message' => 'Unauthenticated.'], 401);
         }
 
+        if (! $user->is_active) {
+            return response()->json(['message' => 'Akun tidak aktif. Hubungi administrator.'], 401);
+        }
+
         if ($user->isSuperAdmin() || ! $user->akademi_id) {
             return response()->json(['message' => 'Akses ditolak. Akun ini bukan user akademi.'], 403);
         }
@@ -31,4 +35,3 @@ class EnsureAkademiUser
         return $next($request);
     }
 }
-

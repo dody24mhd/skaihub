@@ -179,4 +179,116 @@ class AuthApiTest extends TestCase
         ])->assertForbidden()
             ->assertJsonPath('message', 'Akademi tidak aktif. Hubungi administrator.');
     }
+
+    public function test_inactive_user_token_is_rejected_with_401(): void
+    {
+        $akademi = Akademi::create([
+            'name' => 'Akademi Test',
+            'slug' => 'akademi-test',
+            'sport_type' => 'taekwondo',
+            'status' => 'active',
+            'plan' => 'pro',
+        ]);
+
+        $user = User::factory()->akademiAdmin($akademi->id)->create(['is_active' => true]);
+        $token = $user->createToken('api-token')->plainTextToken;
+
+        $user->update(['is_active' => false]);
+
+        $this->withToken($token)
+            ->getJson('/api/akademi/me')
+            ->assertUnauthorized()
+            ->assertJsonPath('message', 'Akun tidak aktif. Hubungi administrator.');
+    }
+
+    public function test_expired_token_is_rejected_with_401(): void
+    {
+        $akademi = Akademi::create([
+            'name' => 'Akademi Test Expiry',
+            'slug' => 'akademi-test-expiry',
+            'sport_type' => 'taekwondo',
+            'status' => 'active',
+            'plan' => 'pro',
+        ]);
+
+        $user = User::factory()->akademiAdmin($akademi->id)->create(['is_active' => true]);
+        $token = $user->createToken('api-token')->plainTextToken;
+
+        $this->travel(8)->days();
+
+        $this->withToken($token)
+            ->getJson('/api/akademi/me')
+            ->assertUnauthorized();
+    }
+
+    public function test_login_twice_keeps_only_one_active_token(): void
+    {
+        $user = User::factory()->superAdmin()->create([
+            'email' => 'super@example.com',
+            'password' => Hash::make('password123'),
+            'is_active' => true,
+        ]);
+
+        $this->postJson('/api/auth/login', [
+            'email' => 'super@example.com',
+            'password' => 'password123',
+        ])->assertOk();
+
+        $this->assertCount(1, $user->tokens);
+
+        $this->postJson('/api/auth/login', [
+            'email' => 'super@example.com',
+            'password' => 'password123',
+        ])->assertOk();
+
+        $this->assertCount(1, $user->fresh()->tokens);
+    }
+
+    public function test_changing_password_revokes_old_tokens(): void
+    {
+        $akademi = Akademi::create([
+            'name' => 'Akademi Test Password',
+            'slug' => 'akademi-test-password',
+            'sport_type' => 'taekwondo',
+            'status' => 'active',
+            'plan' => 'pro',
+        ]);
+
+        $admin = User::factory()->akademiAdmin($akademi->id)->create(['is_active' => true]);
+        $adminToken = $admin->createToken('api-token')->plainTextToken;
+        $pelatih = User::factory()->pelatih($akademi->id)->create(['is_active' => true]);
+        $token = $pelatih->createToken('api-token')->plainTextToken;
+
+        $this->withToken($adminToken)->putJson("/api/akademi/users/{$pelatih->id}", [
+            'password' => 'new-secret-password-123',
+        ])->assertOk();
+
+        $this->assertCount(0, $pelatih->fresh()->tokens);
+
+        $this->app['auth']->forgetGuards();
+
+        $this->withToken($token)
+            ->getJson('/api/akademi/me')
+            ->assertUnauthorized();
+    }
+
+    public function test_inactive_super_admin_cannot_access_super_admin_routes(): void
+    {
+        $superAdmin = User::factory()->superAdmin()->create(['is_active' => false]);
+        Sanctum::actingAs($superAdmin);
+
+        $this->getJson('/api/super-admin/akademi')
+            ->assertUnauthorized()
+            ->assertJsonPath('message', 'Akun tidak aktif. Hubungi administrator.');
+    }
+
+    public function test_inactive_user_cannot_access_auth_me(): void
+    {
+        $user = User::factory()->superAdmin()->create(['is_active' => false]);
+        Sanctum::actingAs($user);
+
+        $this->getJson('/api/auth/me')
+            ->assertUnauthorized()
+            ->assertJsonPath('message', 'Akun tidak aktif. Hubungi administrator.');
+    }
 }

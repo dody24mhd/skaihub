@@ -12,7 +12,15 @@ class EnsureSuperAdmin
     {
         $user = $request->user();
 
-        if (! $user || ! $user->isSuperAdmin()) {
+        if (! $user) {
+            return response()->json(['message' => 'Unauthenticated.'], 401);
+        }
+
+        if (! $user->is_active) {
+            return response()->json(['message' => 'Akun tidak aktif. Hubungi administrator.'], 401);
+        }
+
+        if (! $user->isSuperAdmin()) {
             return response()->json(['message' => 'Akses ditolak. Hanya super admin.'], 403);
         }
 

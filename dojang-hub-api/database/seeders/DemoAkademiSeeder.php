@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\Akademi;
 use App\Models\AcademyGalleryItem;
 use App\Models\AcademyPublicAchievement;
 use App\Models\AcademyPublicHeroImage;
 use App\Models\AcademyPublicOfficial;
 use App\Models\AcademyPublicProfile;
+use App\Models\Akademi;
 use App\Models\CoachProfile;
 use App\Models\EvaluationAspect;
 use App\Models\EvaluationPeriod;
@@ -258,8 +258,8 @@ class DemoAkademiSeeder extends Seeder
                     'height_cm' => $height,
                     'weight_kg' => $weight,
                     'student_phone' => null,
-                    'guardian_name' => 'Wali ' . strtok($name, ' '),
-                    'guardian_phone' => '08120000' . substr($member, -4),
+                    'guardian_name' => 'Wali '.strtok($name, ' '),
+                    'guardian_phone' => '08120000'.substr($member, -4),
                     'photo_url' => null,
                     'address' => 'Palembang',
                     'shirt_size' => $shirtSize,
@@ -466,6 +466,7 @@ class DemoAkademiSeeder extends Seeder
                 SppPayment::updateOrCreate(
                     ['spp_bill_id' => $bill->id, 'notes' => 'Pembayaran demo SPP'],
                     [
+                        'akademi_id' => $akademiId,
                         'amount' => $paidAmount,
                         'paid_at' => $now->copy()->day(min(8 + $index, 25))->toDateString(),
                         'method' => $index % 2 === 0 ? 'transfer' : 'cash',

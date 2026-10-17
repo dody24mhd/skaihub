@@ -156,16 +156,46 @@ class ExportController extends Controller
         return response()->streamDownload(function () use ($headers, $rows) {
             $handle = fopen('php://output', 'w');
             fwrite($handle, "\xEF\xBB\xBF");
-            fputcsv($handle, $headers);
+            fputcsv($handle, $this->sanitizeRow($headers));
 
             foreach ($rows as $row) {
-                fputcsv($handle, $row);
+                fputcsv($handle, $this->sanitizeRow($row));
             }
 
             fclose($handle);
         }, $filename, [
             'Content-Type' => 'text/csv; charset=UTF-8',
         ]);
+    }
+
+    private function sanitizeCell(mixed $value): mixed
+    {
+        if (! is_string($value) || $value === '') {
+            return $value;
+        }
+
+        if (preg_match('/^-?\d+(\.\d+)?$/', $value)) {
+            return $value;
+        }
+
+        if (str_starts_with($value, "\t") || str_starts_with($value, "\r")) {
+            return "'".$value;
+        }
+
+        $trimmed = ltrim($value, ' ');
+        if ($trimmed !== '') {
+            $firstChar = mb_substr($trimmed, 0, 1, 'UTF-8');
+            if (in_array($firstChar, ['=', '+', '-', '@', "\t", "\r", '＝', '＋', '－', '＠'], true)) {
+                return "'".$value;
+            }
+        }
+
+        return $value;
+    }
+
+    private function sanitizeRow(array $row): array
+    {
+        return array_map(fn ($cell) => $this->sanitizeCell($cell), $row);
     }
 
     private function ensureCanExportAdminData(Request $request): void

@@ -338,20 +338,15 @@ class AkademiManagementApiTest extends TestCase
 
         Sanctum::actingAs(User::findOrFail($adminId));
 
-        $adminTwoId = $this->postJson('/api/akademi/users', [
+        // Admin cannot create another admin (PRD: only Ketua manages Admin)
+        $this->postJson('/api/akademi/users', [
             'name' => 'Admin Dua',
             'email' => 'admin.dua@test.local',
             'password' => 'password123',
             'role' => 'admin_akademi',
-        ])->assertCreated()
-            ->assertJsonPath('academy_user.role', 'admin_akademi')
-            ->json('academy_user.id');
+        ])->assertUnprocessable();
 
-        $this->assertDatabaseHas('users', [
-            'id' => $adminTwoId,
-            'role' => 'admin_akademi',
-        ]);
-
+        // Admin can manage coach
         $this->patchJson("/api/akademi/users/{$coachId}", [
             'name' => 'Coach Update',
             'role' => 'pelatih',
@@ -690,17 +685,24 @@ class AkademiManagementApiTest extends TestCase
             'starts_at' => '16:00',
             'ends_at' => '17:30',
         ]);
+        $session->coaches()->attach($coachA->id);
 
+        // Coach B (unassigned) is rejected with 403 (F6 fix)
         Sanctum::actingAs($coachB);
+        $this->patchJson("/api/akademi/training-sessions/{$session->id}/attendance", [
+            'material' => 'Mengajar sesi hari ini',
+        ])->assertForbidden();
 
+        // Coach A (assigned) is allowed
+        Sanctum::actingAs($coachA);
         $this->patchJson("/api/akademi/training-sessions/{$session->id}/attendance", [
             'material' => 'Mengajar sesi hari ini',
         ])->assertOk()
-            ->assertJsonPath('training_session.coaches.0.id', $coachB->id);
+            ->assertJsonPath('training_session.coaches.0.id', $coachA->id);
 
         $this->assertDatabaseHas('training_session_coaches', [
             'training_session_id' => $session->id,
-            'coach_id' => $coachB->id,
+            'coach_id' => $coachA->id,
         ]);
     }
 

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AkademiController extends Controller
 {
@@ -166,12 +167,23 @@ class AkademiController extends Controller
             'name', 'slug', 'sport_type', 'logo_url', 'status',
         ]));
 
+        if ($request->filled('status') && in_array($request->status, ['inactive', 'suspended'], true)) {
+            PersonalAccessToken::whereIn('tokenable_id', $akademi->users()->select('id'))
+                ->where('tokenable_type', (new User)->getMorphClass())
+                ->delete();
+        }
+
         return response()->json(['akademi' => $akademi->fresh()]);
     }
 
     public function destroy(int $id): JsonResponse
     {
         $akademi = Akademi::findOrFail($id);
+
+        PersonalAccessToken::whereIn('tokenable_id', $akademi->users()->select('id'))
+            ->where('tokenable_type', (new User)->getMorphClass())
+            ->delete();
+
         $akademi->delete();
 
         return response()->json(['message' => 'Akademi berhasil dihapus.']);

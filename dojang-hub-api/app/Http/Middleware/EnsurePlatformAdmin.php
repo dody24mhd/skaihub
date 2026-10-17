@@ -16,7 +16,15 @@ class EnsurePlatformAdmin
     {
         $user = $request->user();
 
-        if (! $user || ! $user->isPlatformAdmin()) {
+        if (! $user) {
+            return response()->json(['message' => 'Unauthenticated.'], 401);
+        }
+
+        if (! $user->is_active) {
+            return response()->json(['message' => 'Akun tidak aktif. Hubungi administrator.'], 401);
+        }
+
+        if (! $user->isPlatformAdmin()) {
             return response()->json(['message' => 'Akses ditolak.'], 403);
         }
 

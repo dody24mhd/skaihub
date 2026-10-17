@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Services\SubscriptionService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Akademi extends Model
@@ -99,7 +101,7 @@ class Akademi extends Model
         return $this->hasMany(RankPromotionEvent::class);
     }
 
-    public function publicProfile(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function publicProfile(): HasOne
     {
         return $this->hasOne(AcademyPublicProfile::class);
     }
@@ -126,6 +128,9 @@ class Akademi extends Model
 
     public function hasPublicWebsite(): bool
     {
-        return in_array($this->plan, ['pro', 'scale'], true);
+        $subscriptions = app(SubscriptionService::class);
+        $activeSubscription = $subscriptions->activeForAkademi($this);
+
+        return (bool) ($subscriptions->entitlements($activeSubscription)['has_public_website'] ?? false);
     }
 }
