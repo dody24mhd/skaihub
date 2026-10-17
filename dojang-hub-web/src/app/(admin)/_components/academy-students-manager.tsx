@@ -168,15 +168,18 @@ export default function AcademyStudentsManager() {
         eyebrow="Master Data"
         title="Siswa"
         className="mb-0"
-        action={canEdit ? (
+        action={canManage ? (
           <div className="grid grid-cols-2 gap-2 sm:flex">
-            <Link
-              className="inline-flex min-h-11 items-center justify-center gap-2 bg-primary px-4 text-sm font-bold text-white transition hover:bg-primary-container"
-              href="/academy/students/new"
-            >
-              <span className="material-symbols-outlined text-[18px]">add</span>
-              Tambah Siswa
-            </Link>
+            {canEdit ? (
+              <Link
+                className="inline-flex min-h-11 items-center justify-center gap-2 bg-primary px-4 text-sm font-bold text-white transition hover:bg-primary-container"
+                href="/academy/students/new"
+              >
+                <span className="material-symbols-outlined text-[18px]">add</span>
+                Tambah Siswa
+              </Link>
+            ) : null}
+            {/* Export tetap tersedia saat baca-saja (L4-D). */}
             <button className="min-h-11 border border-border bg-white px-4 text-sm font-bold text-primary" onClick={handleExport} type="button" disabled={isSaving}>Export</button>
           </div>
         ) : undefined}

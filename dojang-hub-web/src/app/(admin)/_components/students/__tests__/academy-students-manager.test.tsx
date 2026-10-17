@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import * as api from "../../../_lib/admin-api";
 import AcademyStudentsManager from "../../academy-students-manager";
+import { resetSubscriptionStatus } from "../../ui/subscription-status";
 import { makeStudent } from "./fixtures";
 
 vi.mock("../../../_lib/admin-api", () => ({
@@ -10,7 +11,7 @@ vi.mock("../../../_lib/admin-api", () => ({
   getAkademiStudents: vi.fn(),
   deleteAkademiStudent: vi.fn(),
   downloadAkademiStudentsExport: vi.fn(),
-  getAkademiSubscriptionStatus: vi.fn(() => new Promise(() => {})),
+  getAkademiSubscriptionStatus: vi.fn(),
 }));
 
 const mockedApi = vi.mocked(api);
@@ -27,6 +28,21 @@ describe("AcademyStudentsManager", () => {
     mockedApi.getAkademiStudents.mockResolvedValue({
       data: { data: [makeStudent()], current_page: 1, last_page: 1, total: 1, per_page: 25 },
     } as Awaited<ReturnType<typeof api.getAkademiStudents>>);
+    resetSubscriptionStatus();
+    mockedApi.getAkademiSubscriptionStatus.mockResolvedValue({
+      subscription_state: "active",
+    } as Awaited<ReturnType<typeof api.getAkademiSubscriptionStatus>>);
+  });
+
+  it("mode baca-saja menyembunyikan tambah siswa tetapi export tetap ada (L4-D)", async () => {
+    mockedApi.getAkademiSubscriptionStatus.mockResolvedValue({
+      subscription_state: "read_only",
+    } as Awaited<ReturnType<typeof api.getAkademiSubscriptionStatus>>);
+    mockRole("ketua_akademi");
+    render(<AcademyStudentsManager />);
+
+    expect(await screen.findByRole("button", { name: "Export" })).toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByRole("link", { name: /tambah siswa/i })).not.toBeInTheDocument());
   });
 
   it("menampilkan siswa sebagai kartu dan mengirim filter status ke API", async () => {
