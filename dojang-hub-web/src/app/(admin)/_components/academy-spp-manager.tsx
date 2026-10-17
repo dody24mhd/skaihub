@@ -11,6 +11,7 @@ import {
 } from "../_lib/admin-api";
 import { buildSppBillColumns } from "./spp/spp-bill-columns";
 import SppClassSummaryList from "./spp/spp-class-summary-list";
+import SppGenerateModal from "./spp/spp-generate-modal";
 import SppPaymentModal from "./spp/spp-payment-modal";
 import { SPP_MONTH_LABELS, billsForClass, summarizeBills } from "./spp/spp-summary";
 import { ResponsiveList } from "./ui";
@@ -57,6 +58,7 @@ export default function AcademySppManager() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedClassId, setSelectedClassId] = useState("");
   const [payTarget, setPayTarget] = useState<SppBill | null>(null);
+  const [isGenerateOpen, setIsGenerateOpen] = useState(false);
   const [canManage, setCanManage] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState("");
@@ -151,9 +153,21 @@ export default function AcademySppManager() {
 
         <section className="card-soft bg-white p-4 sm:p-5">
           <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-            <div>
-              <p className="label-caps text-secondary">Administrasi</p>
-              <h2 className="font-heading text-xl font-bold text-primary">Rekap SPP</h2>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+              <div>
+                <p className="label-caps text-secondary">Administrasi</p>
+                <h2 className="font-heading text-xl font-bold text-primary">Rekap SPP</h2>
+              </div>
+              {canManage ? (
+                <button
+                  className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-4 text-sm font-bold text-white transition hover:bg-secondary-dark sm:w-auto"
+                  onClick={() => setIsGenerateOpen(true)}
+                  type="button"
+                >
+                  <span className="material-symbols-outlined text-[18px]">receipt_long</span>
+                  Buat Tagihan Bulan Ini
+                </button>
+              ) : null}
             </div>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
               <label>
@@ -218,6 +232,10 @@ export default function AcademySppManager() {
           )}
         </section>
       </section>
+
+      {isGenerateOpen ? (
+        <SppGenerateModal token={token} classes={classes} onClose={() => setIsGenerateOpen(false)} onGenerated={() => loadData(token)} />
+      ) : null}
 
       {payTarget ? (
         <SppPaymentModal key={payTarget.id} token={token} bill={payTarget} onClose={() => setPayTarget(null)} onPaid={handlePaid} />
