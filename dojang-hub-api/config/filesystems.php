@@ -17,6 +17,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Upload Disk
+    |--------------------------------------------------------------------------
+    |
+    | Disk untuk berkas unggahan (foto, bukti SPP). "public" = disk lokal yang
+    | dilayani di /storage. "s3" = object storage S3-kompatibel (mis. Cloudflare
+    | R2); isi AWS_* dan AWS_URL dengan URL publik bucket.
+    |
+    */
+
+    'upload_disk' => env('FILESYSTEM_UPLOAD_DISK', 'public'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Filesystem Disks
     |--------------------------------------------------------------------------
     |

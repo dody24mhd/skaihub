@@ -9,11 +9,11 @@ use App\Models\SppBill;
 use App\Models\SppBillEvent;
 use App\Models\SppPayment;
 use App\Models\Student;
+use App\Services\UploadStorage;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
@@ -166,7 +166,7 @@ class SppBillController extends Controller
         ], 201);
     }
 
-    public function pay(Request $request, SppBill $sppBill): JsonResponse
+    public function pay(Request $request, SppBill $sppBill, UploadStorage $uploads): JsonResponse
     {
         $this->ensureCanManageSpp($request);
         $this->ensureBelongsToCurrentAkademi($request, $sppBill);
@@ -198,17 +198,15 @@ class SppBillController extends Controller
                 ]);
             }
 
-            if (isset($parsed['host'])) {
-                $appHost = parse_url(config('app.url'), PHP_URL_HOST);
-                $reqHost = $request->getHost();
-                $storageHost = parse_url(Storage::disk('public')->url(''), PHP_URL_HOST);
-                $allowedHosts = array_values(array_filter([$appHost, $reqHost, $storageHost]));
+            // Tanpa host hanya sah untuk disk lokal (dilayani API sendiri di /storage).
+            $hostIsAllowed = isset($parsed['host'])
+                ? in_array($parsed['host'], $uploads->allowedHosts($request), true)
+                : $uploads->isLocal();
 
-                if (! in_array($parsed['host'], $allowedHosts, true)) {
-                    throw ValidationException::withMessages([
-                        'proof_url' => ['Bukti pembayaran harus berasal dari berkas unggahan akademi ini.'],
-                    ]);
-                }
+            if (! $hostIsAllowed) {
+                throw ValidationException::withMessages([
+                    'proof_url' => ['Bukti pembayaran harus berasal dari berkas unggahan akademi ini.'],
+                ]);
             }
 
             $path = $parsed['path'] ?? '';
@@ -225,7 +223,8 @@ class SppBillController extends Controller
             }
 
             $akademiId = $request->user()->akademi_id;
-            $requiredPrefix = "/storage/akademi/{$akademiId}/";
+            $basePath = $uploads->urlBasePath();
+            $requiredPrefix = "{$basePath}/akademi/{$akademiId}/";
 
             if (! str_starts_with($decodedPath, $requiredPrefix)) {
                 throw ValidationException::withMessages([
@@ -233,9 +232,9 @@ class SppBillController extends Controller
                 ]);
             }
 
-            $relativeStoragePath = ltrim(substr($decodedPath, strlen('/storage/')), '/');
+            $relativeStoragePath = ltrim(substr($decodedPath, strlen($basePath)), '/');
 
-            if (! Storage::disk('public')->exists($relativeStoragePath)) {
+            if (! $uploads->disk()->exists($relativeStoragePath)) {
                 throw ValidationException::withMessages([
                     'proof_url' => ['Berkas bukti pembayaran tidak ditemukan di penyimpanan server.'],
                 ]);
