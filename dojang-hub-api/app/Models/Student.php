@@ -83,4 +83,9 @@ class Student extends Model
     {
         return $this->hasMany(StudentRankHistory::class);
     }
+
+    public function achievements(): HasMany
+    {
+        return $this->hasMany(StudentAchievement::class);
+    }
 }

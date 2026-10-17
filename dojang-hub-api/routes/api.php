@@ -16,6 +16,7 @@ use App\Http\Controllers\Akademi\PublicProfileController as AkademiPublicProfile
 use App\Http\Controllers\Akademi\RankPromotionController as AkademiRankPromotionController;
 use App\Http\Controllers\Akademi\SportRankController as AkademiSportRankController;
 use App\Http\Controllers\Akademi\SppBillController as AkademiSppBillController;
+use App\Http\Controllers\Akademi\StudentAchievementController as AkademiStudentAchievementController;
 use App\Http\Controllers\Akademi\StudentController as AkademiStudentController;
 use App\Http\Controllers\Akademi\TrainingClassController as AkademiTrainingClassController;
 use App\Http\Controllers\Akademi\TrainingPlaceController as AkademiTrainingPlaceController;
@@ -113,6 +114,10 @@ Route::prefix('akademi')
             'classes' => 'class',
         ]);
         Route::get('students/{student}/rank-histories', [AkademiStudentController::class, 'rankHistories']);
+        Route::get('students/{student}/achievements', [AkademiStudentAchievementController::class, 'index']);
+        Route::post('students/{student}/achievements', [AkademiStudentAchievementController::class, 'store']);
+        Route::put('students/{student}/achievements/{achievement}', [AkademiStudentAchievementController::class, 'update']);
+        Route::delete('students/{student}/achievements/{achievement}', [AkademiStudentAchievementController::class, 'destroy']);
         Route::apiResource('students', AkademiStudentController::class);
         Route::apiResource('coaches', AkademiCoachController::class)->parameters([
             'coaches' => 'coach',
