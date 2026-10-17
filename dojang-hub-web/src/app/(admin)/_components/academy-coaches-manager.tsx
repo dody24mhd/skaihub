@@ -7,6 +7,7 @@ import {
   getAkademiMe,
   updateAkademiCoach,
 } from "../_lib/admin-api";
+import { FormField, PageHeader, ResponsiveColumn, ResponsiveList, SheetModal } from "./ui";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -33,6 +34,7 @@ export default function AcademyCoachesManager() {
   const [items, setItems] = useState<Coach[]>([]);
   const [form, setForm] = useState<CoachForm>(emptyForm);
   const [editing, setEditing] = useState<Coach | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [canManage, setCanManage] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -81,6 +83,7 @@ export default function AcademyCoachesManager() {
   function resetForm() {
     setForm(emptyForm);
     setEditing(null);
+    setIsFormOpen(false);
   }
 
   function startEdit(item: Coach) {
@@ -95,6 +98,7 @@ export default function AcademyCoachesManager() {
     });
     setMessage("");
     setError("");
+    setIsFormOpen(true);
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -127,111 +131,206 @@ export default function AcademyCoachesManager() {
     }
   }
 
+  const columns: ResponsiveColumn<Coach>[] = [
+    {
+      key: "name",
+      header: "Nama",
+      primary: true,
+      render: (item) => <span className="font-bold text-primary">{item.name}</span>,
+    },
+    {
+      key: "contact",
+      header: "Kontak",
+      render: (item) => (
+        <div>
+          <span className="block text-primary">{item.email}</span>
+          <span className="block text-xs text-muted">{item.coach_profile?.phone || "HP belum diisi"}</span>
+        </div>
+      ),
+    },
+    {
+      key: "rank",
+      header: "Tingkatan",
+      render: (item) => <span className="text-muted">{item.coach_profile?.rank_label || "-"}</span>,
+    },
+    {
+      key: "address",
+      header: "Alamat",
+      hideOnMobile: true,
+      render: (item) => <span className="text-muted">{item.coach_profile?.address || "-"}</span>,
+    },
+    {
+      key: "status",
+      header: "Status",
+      render: (item) => (
+        <span
+          className={`inline-flex items-center px-2 py-0.5 text-xs font-bold ${
+            item.is_active ? "bg-success/10 text-success" : "bg-surface-container text-muted"
+          }`}
+        >
+          {item.is_active ? "Aktif" : "Nonaktif"}
+        </span>
+      ),
+    },
+    ...(canManage
+      ? [
+          {
+            key: "actions",
+            header: "Aksi",
+            headerClassName: "text-right",
+            className: "text-right",
+            render: (item: Coach) => (
+              <div className="flex items-center justify-end">
+                <button
+                  type="button"
+                  onClick={() => startEdit(item)}
+                  className="inline-flex min-h-11 items-center justify-center border border-border px-3.5 py-1.5 text-xs font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+                >
+                  Edit Profil
+                </button>
+              </div>
+            ),
+          },
+        ]
+      : []),
+  ];
+
   if (isLoading) return <p className="text-sm text-muted">Memuat pelatih...</p>;
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_420px]">
-      <section className="card-soft rounded-lg bg-white p-5">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="label-caps text-secondary">Master Data</p>
-            <h2 className="font-heading text-xl font-bold text-primary">Profil Pelatih</h2>
-          </div>
-          <input className="h-10 rounded-md border border-border px-3 text-sm outline-none focus:border-primary" placeholder="Cari pelatih" value={query} onChange={(event) => setQuery(event.target.value)} />
-        </div>
+    <div className="space-y-6">
+      <PageHeader
+        eyebrow="Master Data"
+        title="Profil Pelatih"
+        description="Kelola tingkatan sabuk, nomor lisensi, kontak, dan biodata pelatih akademi."
+      />
 
-        {message ? <p className="mt-4 rounded-md border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">{message}</p> : null}
-        {error ? <p className="mt-4 rounded-md border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">{error}</p> : null}
-
-        <div className="mt-5 overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b border-border text-xs font-bold uppercase text-muted">
-                <th className="pb-3">Nama</th>
-                <th className="pb-3">Kontak</th>
-                <th className="pb-3">Alamat</th>
-                <th className="pb-3">Tingkatan</th>
-                <th className="pb-3">Status</th>
-                {canManage ? <th className="pb-3 text-right">Aksi</th> : null}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {filteredItems.map((item) => (
-                <tr key={item.id}>
-                  <td className="py-3 font-bold text-primary">{item.name}</td>
-                  <td className="py-3 text-muted">
-                    {item.email}
-                    <span className="block text-xs">{item.coach_profile?.phone || "HP belum diisi"}</span>
-                  </td>
-                  <td className="py-3 text-muted">{item.coach_profile?.address || "-"}</td>
-                  <td className="py-3 text-muted">{item.coach_profile?.rank_label || "-"}</td>
-                  <td className="py-3">
-                    <span className={`rounded-full px-2 py-1 text-xs font-bold ${item.is_active ? "bg-success/10 text-success" : "bg-surface-container text-muted"}`}>
-                      {item.is_active ? "Aktif" : "Nonaktif"}
-                    </span>
-                  </td>
-                  {canManage ? (
-                    <td className="py-3 text-right">
-                      <button className="rounded-md border border-border px-3 py-1 text-xs font-bold text-primary" onClick={() => startEdit(item)} type="button">Edit Profil</button>
-                    </td>
-                  ) : null}
-                </tr>
-              ))}
-              {!filteredItems.length ? (
-                <tr><td className="py-8 text-sm text-muted" colSpan={canManage ? 6 : 5}>Belum ada pelatih.</td></tr>
-              ) : null}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {canManage ? (
-        <aside className="card-soft rounded-lg bg-white p-5">
-          <p className="label-caps text-secondary">{editing ? "Edit" : "Profil"}</p>
-          <h2 className="font-heading text-lg font-bold text-primary">{editing ? editing.name : "Pilih Pelatih"}</h2>
-          {!editing ? (
-            <p className="mt-3 rounded-md border border-border bg-surface-container-low p-3 text-sm leading-6 text-muted">
-              Buat akun pelatih dari menu Akun Akademi terlebih dahulu. Setelah itu pilih pelatih di tabel untuk melengkapi profilnya.
-            </p>
-          ) : null}
-          {editing ? (
-          <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
-            <label className="block text-sm font-semibold text-primary">
-              Nama pelatih
-              <input className="mt-2 h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary" value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} required />
-            </label>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <label className="block text-sm font-semibold text-primary">
-                Nomor HP
-                <input className="mt-2 h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary" value={form.phone} onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))} />
-              </label>
-              <label className="block text-sm font-semibold text-primary">
-                Tanggal bergabung
-                <input className="mt-2 h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary" type="date" value={form.joined_date} onChange={(event) => setForm((current) => ({ ...current, joined_date: event.target.value }))} />
-              </label>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <label className="block text-sm font-semibold text-primary">
-                Tingkatan
-                <input className="mt-2 h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary" value={form.rank_label} onChange={(event) => setForm((current) => ({ ...current, rank_label: event.target.value }))} />
-              </label>
-              <label className="block text-sm font-semibold text-primary">
-                Nomor lisensi
-                <input className="mt-2 h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary" value={form.license_number} onChange={(event) => setForm((current) => ({ ...current, license_number: event.target.value }))} />
-              </label>
-            </div>
-            <label className="block text-sm font-semibold text-primary">
-              Alamat
-              <textarea className="mt-2 min-h-20 w-full rounded-md border border-border p-3 text-sm outline-none focus:border-primary" value={form.address} onChange={(event) => setForm((current) => ({ ...current, address: event.target.value }))} />
-            </label>
-            <div className="flex gap-2">
-              <button className="h-11 flex-1 rounded-md bg-primary px-4 text-sm font-bold text-white disabled:bg-muted" disabled={isSaving} type="submit">{isSaving ? "Menyimpan..." : "Simpan"}</button>
-              {editing ? <button className="h-11 rounded-md border border-border px-4 text-sm font-bold text-primary" onClick={resetForm} type="button">Batal</button> : null}
-            </div>
-          </form>
-          ) : null}
-        </aside>
+      {message ? (
+        <p className="border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">
+          {message}
+        </p>
       ) : null}
+      {error ? (
+        <p className="border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">
+          {error}
+        </p>
+      ) : null}
+
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="w-full sm:max-w-xs">
+          <label htmlFor="coaches-search" className="sr-only">
+            Cari pelatih
+          </label>
+          <input
+            id="coaches-search"
+            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-sm text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            placeholder="Cari pelatih..."
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+        </div>
+        <p className="text-xs text-muted sm:text-right">
+          Akun pelatih dibuat dari menu <span className="font-bold text-primary">Akun Akademi</span>.
+        </p>
+      </div>
+
+      <ResponsiveList
+        columns={columns}
+        rows={filteredItems}
+        getRowKey={(item) => item.id}
+        ariaLabel="Daftar pelatih akademi"
+        emptyState={
+          <div className="border-2 border-dashed border-border bg-white p-8 text-center text-sm font-medium text-muted">
+            {query ? "Tidak ada pelatih yang cocok dengan pencarian." : "Belum ada pelatih terdaftar."}
+          </div>
+        }
+      />
+
+      <SheetModal
+        isOpen={isFormOpen}
+        onClose={resetForm}
+        title="Edit Profil Pelatih"
+        description={editing ? `Perbarui profil dan lisensi untuk ${editing.name}` : undefined}
+      >
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          <FormField
+            id="coach-name"
+            label="Nama Pelatih"
+            required
+            value={form.name}
+            onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
+            placeholder="Nama lengkap pelatih"
+          />
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <FormField
+              id="coach-phone"
+              label="Nomor HP"
+              type="tel"
+              inputMode="tel"
+              value={form.phone}
+              onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
+              placeholder="08123456789"
+            />
+            <FormField
+              id="coach-joined"
+              label="Tanggal Bergabung"
+              type="date"
+              value={form.joined_date}
+              onChange={(event) => setForm((current) => ({ ...current, joined_date: event.target.value }))}
+            />
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <FormField
+              id="coach-rank"
+              label="Tingkatan Sabuk"
+              value={form.rank_label}
+              onChange={(event) => setForm((current) => ({ ...current, rank_label: event.target.value }))}
+              placeholder="Contoh: Dan 2 Kukkiwon"
+            />
+            <FormField
+              id="coach-license"
+              label="Nomor Lisensi"
+              value={form.license_number}
+              onChange={(event) => setForm((current) => ({ ...current, license_number: event.target.value }))}
+              placeholder="Contoh: L-2024-0012"
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="coach-address" className="text-xs font-bold uppercase tracking-wide text-primary">
+              Alamat Domisili
+            </label>
+            <textarea
+              id="coach-address"
+              rows={3}
+              className="w-full border border-border bg-white p-3 text-base text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:text-sm"
+              value={form.address}
+              onChange={(event) => setForm((current) => ({ ...current, address: event.target.value }))}
+              placeholder="Alamat domisili..."
+            />
+          </div>
+
+          <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <button
+              type="button"
+              className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              onClick={resetForm}
+              disabled={isSaving}
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              className="inline-flex min-h-11 items-center justify-center bg-primary px-6 text-sm font-bold text-white transition hover:bg-primary-container disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              disabled={isSaving}
+            >
+              {isSaving ? "Menyimpan..." : "Simpan"}
+            </button>
+          </div>
+        </form>
+      </SheetModal>
     </div>
   );
 }
