@@ -1981,3 +1981,80 @@ export function updateAkademiCoachVisibility(
     body: JSON.stringify({ coach_profile_id: coachProfileId, show_on_public: showOnPublic }),
   });
 }
+
+// L3-C
+export type StudentRankHistory = {
+  id: number;
+  akademi_id: number;
+  student_id: number;
+  sport_rank_id: number;
+  achieved_on: string;
+  source_type: "manual" | "promotion_event";
+  rank_promotion_participant_id: number | null;
+  notes: string | null;
+  // Relasi changedBy di-serialize Laravel ke key yang sama dengan kolom FK-nya.
+  changed_by: Pick<AdminUser, "id" | "name"> | null;
+  sport_rank?: SportRank | null;
+  promotion_participant?: (RankPromotionParticipant & { event?: RankPromotionEvent | null }) | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type StudentAchievement = {
+  id: number;
+  akademi_id: number;
+  student_id: number;
+  title: string;
+  event_name: string | null;
+  achieved_on: string | null;
+  result_label: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type StudentAchievementPayload = {
+  title: string;
+  event_name: string | null;
+  achieved_on: string | null;
+  result_label: string | null;
+  notes: string | null;
+};
+
+export function getAkademiStudentRankHistories(token: string, studentId: number) {
+  return adminFetch<{ data: StudentRankHistory[] }>(`/akademi/students/${studentId}/rank-histories`, token);
+}
+
+export function getAkademiStudentAchievements(token: string, studentId: number) {
+  return adminFetch<{ data: StudentAchievement[] }>(`/akademi/students/${studentId}/achievements`, token);
+}
+
+export function createAkademiStudentAchievement(
+  token: string,
+  studentId: number,
+  payload: StudentAchievementPayload,
+) {
+  return adminFetch<{ student_achievement: StudentAchievement }>(`/akademi/students/${studentId}/achievements`, token, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function updateAkademiStudentAchievement(
+  token: string,
+  studentId: number,
+  achievementId: number,
+  payload: Partial<StudentAchievementPayload>,
+) {
+  return adminFetch<{ student_achievement: StudentAchievement }>(
+    `/akademi/students/${studentId}/achievements/${achievementId}`,
+    token,
+    { method: "PUT", body: JSON.stringify(payload) },
+  );
+}
+
+export function deleteAkademiStudentAchievement(token: string, studentId: number, achievementId: number) {
+  return adminFetch<{ message: string }>(`/akademi/students/${studentId}/achievements/${achievementId}`, token, {
+    method: "DELETE",
+  });
+}
