@@ -170,12 +170,24 @@ class ExportController extends Controller
 
     private function sanitizeCell(mixed $value): mixed
     {
-        if (! is_string($value)) {
+        if (! is_string($value) || $value === '') {
             return $value;
         }
 
-        if ($value !== '' && in_array($value[0], ['=', '+', '-', '@', "\t", "\r"], true)) {
+        if (preg_match('/^-?\d+(\.\d+)?$/', $value)) {
+            return $value;
+        }
+
+        if (str_starts_with($value, "\t") || str_starts_with($value, "\r")) {
             return "'".$value;
+        }
+
+        $trimmed = ltrim($value, ' ');
+        if ($trimmed !== '') {
+            $firstChar = mb_substr($trimmed, 0, 1, 'UTF-8');
+            if (in_array($firstChar, ['=', '+', '-', '@', "\t", "\r", '＝', '＋', '－', '＠'], true)) {
+                return "'".$value;
+            }
         }
 
         return $value;
