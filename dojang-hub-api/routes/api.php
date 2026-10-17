@@ -99,7 +99,7 @@ Route::prefix('admin')
     });
 
 Route::prefix('akademi')
-    ->middleware(['auth:sanctum', 'active', 'akademi.user'])
+    ->middleware(['auth:sanctum', 'active', 'akademi.user', 'subscription.writable'])
     ->group(function () {
         Route::get('me', [AkademiProfileController::class, 'me']);
         Route::get('dashboard/summary', [AkademiDashboardController::class, 'summary']);

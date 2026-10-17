@@ -39,6 +39,8 @@ class StudentAchievementTest extends TestCase
             'plan' => 'pro',
         ]);
 
+        $this->giveActiveSubscription($this->akademiA);
+
         $this->akademiB = Akademi::create([
             'name' => 'Akademi Macan B',
             'slug' => 'akademi-macan-b',
@@ -46,6 +48,8 @@ class StudentAchievementTest extends TestCase
             'status' => 'active',
             'plan' => 'pro',
         ]);
+
+        $this->giveActiveSubscription($this->akademiB);
 
         $this->adminA = User::factory()->akademiAdmin($this->akademiA->id)->create();
         $this->coachA = User::factory()->pelatih($this->akademiA->id)->create();

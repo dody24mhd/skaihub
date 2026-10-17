@@ -11,6 +11,8 @@ use Illuminate\Validation\ValidationException;
 
 class SubscriptionService
 {
+    private const COUNTED_STATUSES = ['trialing', 'active', 'past_due', 'expired'];
+
     public function __construct(private readonly PlanPricingService $pricing) {}
 
     public function createInitial(Akademi $akademi, array $data, ?int $createdBy = null): Subscription
@@ -89,16 +91,64 @@ class SubscriptionService
         $subscription = $this->activeForAkademi($akademi);
         $limit = $this->entitlements($subscription)['student_limit'];
 
-        $activeCount = Student::where('akademi_id', $akademi->id)
-            ->where('status', 'active')
-            ->when($ignoreStudentId !== null, fn ($query) => $query->where('id', '!=', $ignoreStudentId))
-            ->count();
+        $activeCount = $this->activeStudentCount($akademi, $ignoreStudentId);
 
         if ($activeCount >= $limit) {
             throw ValidationException::withMessages([
                 'status' => ["Kuota siswa aktif paket Anda ({$limit}) sudah penuh. Hubungi SKAIHUB untuk menambah kuota."],
             ]);
         }
+    }
+
+    public function activeStudentCount(Akademi $akademi, ?int $ignoreStudentId = null): int
+    {
+        return Student::where('akademi_id', $akademi->id)
+            ->where('status', 'active')
+            ->when($ignoreStudentId !== null, fn ($query) => $query->where('id', '!=', $ignoreStudentId))
+            ->count();
+    }
+
+    /**
+     * active → expiring (≤ renewal_warning_days) → grace (habis ≤ grace_days) → read_only.
+     *
+     * @return array{state: string, days_left: int, ends_at: ?CarbonImmutable}
+     */
+    public function lifecycle(Akademi $akademi): array
+    {
+        $today = CarbonImmutable::now()->startOfDay();
+        $current = $this->activeForAkademi($akademi);
+
+        if ($current) {
+            $lastDay = $this->lastCoveredDay($akademi, $current);
+            $daysLeft = (int) $today->diffInDays($lastDay);
+            $state = $daysLeft <= (int) config('skaihub.renewal_warning_days') ? 'expiring' : 'active';
+
+            return ['state' => $state, 'days_left' => $daysLeft, 'ends_at' => $lastDay->endOfDay()];
+        }
+
+        $previous = Subscription::where('akademi_id', $akademi->id)
+            ->whereIn('status', self::COUNTED_STATUSES)
+            ->where('ends_at', '<', now())
+            ->latest('ends_at')
+            ->first();
+
+        if (! $previous) {
+            return ['state' => 'read_only', 'days_left' => 0, 'ends_at' => null];
+        }
+
+        $lastDay = $this->lastDayOf($previous);
+        $graceLeft = (int) config('skaihub.grace_days') - (int) $lastDay->diffInDays($today);
+
+        return [
+            'state' => $graceLeft >= 0 ? 'grace' : 'read_only',
+            'days_left' => max(0, $graceLeft),
+            'ends_at' => $lastDay->endOfDay(),
+        ];
+    }
+
+    public function lifecycleState(Akademi $akademi): string
+    {
+        return $this->lifecycle($akademi)['state'];
     }
 
     public function updatePayment(Subscription $subscription, array $data): Subscription
@@ -188,6 +238,32 @@ class SubscriptionService
         };
 
         return [$durationMonths, $startsAt, $endsAt];
+    }
+
+    private function lastCoveredDay(Akademi $akademi, Subscription $current): CarbonImmutable
+    {
+        $lastDay = $this->lastDayOf($current);
+
+        while ($next = $this->continuation($akademi, $lastDay)) {
+            $lastDay = $this->lastDayOf($next);
+        }
+
+        return $lastDay;
+    }
+
+    private function continuation(Akademi $akademi, CarbonImmutable $lastDay): ?Subscription
+    {
+        return Subscription::where('akademi_id', $akademi->id)
+            ->whereIn('status', ['trialing', 'active', 'past_due'])
+            ->where('starts_at', '<=', $lastDay->addDay()->endOfDay())
+            ->where('ends_at', '>', $lastDay->addDay()->startOfDay())
+            ->latest('ends_at')
+            ->first();
+    }
+
+    private function lastDayOf(Subscription $subscription): CarbonImmutable
+    {
+        return CarbonImmutable::parse($subscription->ends_at)->subSecond()->startOfDay();
     }
 
     private function resolveSubtotal(

@@ -253,6 +253,7 @@ class AuthApiTest extends TestCase
             'status' => 'active',
             'plan' => 'pro',
         ]);
+        $this->giveActiveSubscription($akademi);
 
         $admin = User::factory()->akademiAdmin($akademi->id)->create(['is_active' => true]);
         $adminToken = $admin->createToken('api-token')->plainTextToken;

@@ -166,8 +166,8 @@ class StudentQuotaTest extends TestCase
         // No subscription created for $this->akademi
         $this->postJson('/api/akademi/students', $this->validStudentPayload([
             'name' => 'Siswa Tanpa Langganan',
-        ]))->assertStatus(422)
-            ->assertJsonValidationErrors(['status']);
+        ]))->assertStatus(402)
+            ->assertJsonPath('subscription_state', 'read_only');
     }
 
     public function test_other_akademi_students_do_not_affect_quota(): void

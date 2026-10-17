@@ -35,6 +35,8 @@ class SppPaymentSecurityTest extends TestCase
             'plan' => 'pro',
         ]);
 
+        $this->giveActiveSubscription($this->akademi);
+
         $this->admin = User::factory()->akademiAdmin($this->akademi->id)->create();
 
         $this->student = $this->akademi->siswa()->create([

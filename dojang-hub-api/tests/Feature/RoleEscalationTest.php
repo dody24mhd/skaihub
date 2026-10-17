@@ -32,6 +32,8 @@ class RoleEscalationTest extends TestCase
             'plan' => 'pro',
         ]);
 
+        $this->giveActiveSubscription($this->akademi);
+
         $this->ketua = User::factory()->ketuaAkademi($this->akademi->id)->create([
             'email' => 'ketua@test.local',
         ]);
