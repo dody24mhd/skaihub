@@ -54,85 +54,142 @@ export default function AcademyDashboardManager() {
     });
   }, []);
 
-  if (isLoading) return <p className="text-sm text-muted">Memuat dashboard akademi...</p>;
+  if (isLoading) return <p className="text-sm font-medium text-muted">Memuat dashboard akademi...</p>;
 
   if (!summary) {
-    return <p className="rounded-md border border-secondary/20 bg-secondary/5 p-4 text-sm font-semibold text-secondary">{error}</p>;
+    return <p className="border-2 border-secondary/30 bg-secondary/10 p-4 text-sm font-bold text-secondary">{error}</p>;
   }
 
   const role = summary.profile.user.role;
 
   return (
     <div className="space-y-6">
-      <section className="card-soft rounded-lg bg-white p-5">
+      {/* Header Info Akademi */}
+      <section className="border-2 border-border bg-white p-4 sm:p-6">
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-center">
           <div>
-            <p className="label-caps text-secondary">{roleTitle(role)}</p>
-            <h2 className="mt-2 font-heading text-2xl font-black text-primary">{summary.profile.akademi.name}</h2>
-            <p className="mt-2 text-sm leading-6 text-muted">
-              {summary.period.month_label} - Paket {summary.profile.akademi.plan} - {summary.profile.akademi.sport_type}
+            <div className="mb-2 flex items-center gap-2">
+              <div className="h-1 w-6 bg-secondary" />
+              <span className="text-[11px] font-black uppercase tracking-[0.15em] text-secondary">
+                {roleTitle(role)}
+              </span>
+            </div>
+            <h2 className="font-heading text-2xl font-black uppercase tracking-tight text-primary">
+              {summary.profile.akademi.name}
+            </h2>
+            <p className="mt-1.5 text-sm leading-relaxed text-muted">
+              {summary.period.month_label} · Paket {summary.profile.akademi.plan} · {summary.profile.akademi.sport_type}
             </p>
           </div>
-          <div className="rounded-lg border border-border bg-surface-container-low p-4">
-            <p className="text-xs font-bold uppercase text-muted">Kuota siswa</p>
-            <p className="mt-2 text-2xl font-black text-primary">{summary.students?.active_count ?? "-"}</p>
-            <p className="text-sm text-muted">Limit {summary.profile.entitlements.student_limit || "-"}</p>
+          <div className="border border-border bg-surface-container-low p-4">
+            <span className="block text-[11px] font-bold uppercase tracking-wider text-muted">Kuota Siswa</span>
+            <p className="mt-1 font-heading text-2xl font-black text-primary">{summary.students?.active_count ?? "-"}</p>
+            <p className="text-xs text-muted">Limit {summary.profile.entitlements.student_limit || "-"}</p>
           </div>
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-3">
-        <article className="card-soft rounded-lg bg-white p-5">
-          <p className="label-caps text-secondary">Siswa Aktif</p>
-          <p className="mt-2 text-3xl font-black text-primary">{summary.students?.active_count || 0}</p>
-          <p className="text-sm text-muted">siswa aktif terdaftar</p>
+      {/* Ringkasan Statistik */}
+      <section className="grid gap-3 sm:grid-cols-3">
+        <article className="border-2 border-border bg-white p-4 sm:p-5">
+          <span className="block text-[11px] font-bold uppercase tracking-wider text-secondary">Siswa Aktif</span>
+          <p className="mt-1 font-heading text-3xl font-black text-primary">{summary.students?.active_count || 0}</p>
+          <p className="mt-1 text-xs text-muted">siswa aktif terdaftar</p>
         </article>
-        <article className="card-soft rounded-lg bg-white p-5">
-          <p className="label-caps text-secondary">Sesi Bulan Ini</p>
-          <p className="mt-2 text-3xl font-black text-primary">{summary.sessions.month_count}</p>
-          <p className="text-sm text-muted">{summary.sessions.completed_count} selesai</p>
+        <article className="border-2 border-border bg-white p-4 sm:p-5">
+          <span className="block text-[11px] font-bold uppercase tracking-wider text-secondary">Sesi Bulan Ini</span>
+          <p className="mt-1 font-heading text-3xl font-black text-primary">{summary.sessions.month_count}</p>
+          <p className="mt-1 text-xs text-muted">{summary.sessions.completed_count} selesai</p>
         </article>
-        <article className="card-soft rounded-lg bg-white p-5">
-          <p className="label-caps text-secondary">Penilaian Aktif</p>
-          <p className="mt-2 text-2xl font-black text-primary">{summary.evaluation.active_period?.name || "-"}</p>
-          <p className="text-sm text-muted">{summary.evaluation.active_scores_count} nilai masuk</p>
+        <article className="border-2 border-border bg-white p-4 sm:p-5">
+          <span className="block text-[11px] font-bold uppercase tracking-wider text-secondary">Penilaian Aktif</span>
+          <p className="mt-1 truncate font-heading text-xl font-black text-primary">{summary.evaluation.active_period?.name || "-"}</p>
+          <p className="mt-1 text-xs text-muted">{summary.evaluation.active_scores_count} nilai masuk</p>
         </article>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      {/* Shortcut Menu */}
+      <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {shortcutItems
           .filter((item) => item.roles.includes(role))
           .map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="card-soft flex min-h-36 flex-col justify-between rounded-lg bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-[0_12px_26px_rgba(15,23,42,0.08)]"
+              className="flex min-h-28 flex-col justify-between border-2 border-border bg-white p-4 transition hover:border-primary/40 hover:shadow-md active:bg-surface-container-low"
             >
-              <div className="flex size-11 items-center justify-center rounded-md bg-primary/10 text-primary">
+              <div className="flex size-11 items-center justify-center border border-primary/20 bg-primary/10 text-primary">
                 <span className="material-symbols-outlined text-[24px]">{item.icon}</span>
               </div>
-              <div>
-                <h2 className="mt-5 font-heading text-lg font-bold text-primary">{item.title}</h2>
-                <p className="mt-2 text-sm leading-6 text-muted">{item.description}</p>
+              <div className="mt-3">
+                <h3 className="font-heading text-base font-bold uppercase tracking-tight text-primary">{item.title}</h3>
+                <p className="mt-1 text-xs text-muted">{item.description}</p>
               </div>
             </Link>
           ))}
       </section>
 
+      {/* Sesi Latihan Terbaru (Kartu Mobile) */}
       <section>
-        <article className="card-soft rounded-lg bg-white p-5">
-          <h2 className="font-heading text-lg font-bold text-primary">Sesi Latihan Terbaru</h2>
-          <div className="mt-4 divide-y divide-border">
+        <article className="border-2 border-border bg-white p-4 sm:p-6">
+          <div className="mb-4 flex items-center justify-between gap-2">
+            <div>
+              <div className="mb-1 flex items-center gap-2">
+                <div className="h-1 w-6 bg-secondary" />
+                <span className="text-[11px] font-black uppercase tracking-[0.15em] text-secondary">
+                  Aktivitas
+                </span>
+              </div>
+              <h2 className="font-heading text-lg font-bold uppercase tracking-tight text-primary">
+                Sesi Latihan Terbaru
+              </h2>
+            </div>
+            <Link
+              href="/academy/attendance"
+              className="text-xs font-bold text-secondary hover:underline"
+            >
+              Lihat Semua
+            </Link>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {summary.sessions.latest.map((item) => (
-              <div key={item.id} className="py-3">
-                <p className="font-bold text-primary">{item.class?.name || "-"}</p>
-                <p className="text-xs text-muted">
-                  {item.session_date.slice(0, 10)}, {time(item.starts_at)} - {time(item.ends_at)}
-                </p>
-                <p className="mt-1 text-xs font-bold text-secondary">{item.coach?.name || "Tanpa pelatih"}</p>
+              <div
+                key={item.id}
+                className="flex flex-col justify-between border-2 border-border bg-white p-3.5 transition hover:border-primary/40"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-xs font-semibold text-muted">
+                      {item.session_date.slice(0, 10)}
+                    </span>
+                    <span className="text-xs text-muted">
+                      {time(item.starts_at)} - {time(item.ends_at)}
+                    </span>
+                  </div>
+                  <p className="mt-1.5 font-heading text-base font-bold text-primary truncate">
+                    {item.class?.name || "-"}
+                  </p>
+                  <p className="mt-1 text-xs font-semibold text-secondary">
+                    {item.coach?.name || "Tanpa pelatih"}
+                  </p>
+                </div>
+
+                <div className="mt-3 pt-2.5 border-t border-border">
+                  <Link
+                    href={`/academy/attendance/new?session=${item.id}`}
+                    className="min-h-11 inline-flex w-full items-center justify-center border-2 border-border bg-white text-xs font-bold text-primary transition hover:border-primary hover:bg-surface-container-low"
+                  >
+                    Buka Absensi
+                  </Link>
+                </div>
               </div>
             ))}
-            {!summary.sessions.latest.length ? <p className="py-4 text-sm text-muted">Belum ada sesi latihan bulan ini.</p> : null}
+            {!summary.sessions.latest.length ? (
+              <p className="col-span-full border-2 border-dashed border-border p-6 text-center text-sm font-medium text-muted">
+                Belum ada sesi latihan bulan ini.
+              </p>
+            ) : null}
           </div>
         </article>
       </section>

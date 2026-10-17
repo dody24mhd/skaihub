@@ -17,7 +17,12 @@ if (isVitest) {
     });
   });
 } else {
-  const ACADEMY_ROUTES = ["/academy"];
+  const ACADEMY_ROUTES = [
+    "/academy",
+    "/academy/attendance",
+    "/academy/attendance/new",
+    "/academy/schedules",
+  ];
 
   playwrightTest.describe("Responsive Layout & Shell", () => {
     for (const route of ACADEMY_ROUTES) {
@@ -52,7 +57,7 @@ if (isVitest) {
           }
 
           // 3. Sidebar terlihat HANYA di desktop
-          const sidebar = page.locator("aside");
+          const sidebar = page.locator("aside:not([aria-label*='Ringkasan'])");
           if (projectName === "desktop") {
             await playwrightExpect(sidebar).toBeVisible();
           } else {
@@ -79,4 +84,61 @@ if (isVitest) {
       );
     }
   });
+
+  playwrightTest.describe("Alur Pengisian Absensi Latihan (L3-B)", () => {
+    playwrightTest(
+      "alur isi absensi lengkap pada mobile dengan status sick",
+      async ({ page }, testInfo) => {
+        if (testInfo.project.name !== "mobile") return;
+
+        interface CapturedAttendancePayload {
+          status?: string;
+          material?: string;
+          attendances?: Array<{ id: number; status: string }>;
+        }
+        let capturedPayload: CapturedAttendancePayload | null = null;
+
+        await setAdminSession(page);
+        await setupMockApi(page);
+
+        // Intercept request PUT attendance untuk memeriksa payload
+        await page.route("**/api/akademi/training-sessions/1/attendance", async (route) => {
+          if (route.request().method() === "PUT") {
+            capturedPayload = route.request().postDataJSON() as CapturedAttendancePayload;
+          }
+          await route.fallback();
+        });
+
+        // Navigasi ke form absensi sesi 1
+        await page.goto("/academy/attendance/new?session=1");
+        await page.waitForLoadState("domcontentloaded");
+
+        // 1. Verifikasi kartu siswa terlihat
+        const studentCard = page.locator('[data-testid="attendance-card-1"]');
+        await playwrightExpect(studentCard).toBeVisible();
+
+        // 2. Klik tombol Sakit untuk siswa pertama
+        const sickBtn = studentCard.getByRole("button", { name: /^sakit/i });
+        await playwrightExpect(sickBtn).toBeVisible();
+        await sickBtn.click();
+        await playwrightExpect(sickBtn).toHaveAttribute("aria-pressed", "true");
+
+        // 3. Simpan Draft
+        const saveDraftBtn = page.getByRole("button", { name: /simpan draft/i });
+        await saveDraftBtn.click();
+
+        // 4. Verifikasi notifikasi berhasil
+        const successMsg = page.getByText(/absensi disimpan/i);
+        await playwrightExpect(successMsg).toBeVisible();
+
+        // 5. Validasi payload yang dikirim ke backend berisi status 'sick'
+        const payload = capturedPayload as CapturedAttendancePayload | null;
+        playwrightExpect(payload).not.toBeNull();
+        const studentAtt = payload?.attendances?.find((a) => a.id === 1);
+        playwrightExpect(studentAtt).toBeDefined();
+        playwrightExpect(studentAtt?.status).toBe("sick");
+      }
+    );
+  });
 }
+
