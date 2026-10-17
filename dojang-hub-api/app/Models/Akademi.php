@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\RankSystem;
 use App\Services\SubscriptionService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,11 +19,19 @@ class Akademi extends Model
         'name',
         'slug',
         'sport_type',
+        'rank_system',
         'logo_url',
         'status',
         'plan',
         'plan_expires_at',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (Akademi $akademi) {
+            $akademi->rank_system ??= RankSystem::defaultForSport($akademi->sport_type)->value;
+        });
+    }
 
     protected function casts(): array
     {
