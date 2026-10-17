@@ -53,4 +53,3 @@ dojang-hub-web/playwright-report/
 # E2E integrasi (L5-A): sqlite sementara
 dojang-hub-api/storage/testing/
 dojang-hub-web/test-results-integration/
-.neon
