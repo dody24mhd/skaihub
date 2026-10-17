@@ -15,15 +15,10 @@ class SportRankController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $akademiId = $request->user()->akademi_id;
-
         $ranks = SportRank::query()
-            ->where('sport_type', $request->user()->akademi->sport_type)
-            ->where(function ($query) use ($akademiId) {
-                $query->whereNull('akademi_id')
-                    ->orWhere('akademi_id', $akademiId);
-            })
+            ->visibleTo($request->user()->akademi)
             ->orderBy('sequence')
+            ->orderByRaw("CASE WHEN level_type = 'poom' THEN 0 ELSE 1 END")
             ->orderBy('label')
             ->get();
 
@@ -34,16 +29,14 @@ class SportRankController extends Controller
     {
         $this->ensureCanManageRanks($request);
 
-        $akademiId = $request->user()->akademi_id;
-        $sportType = $request->user()->akademi->sport_type;
-        $data = $request->validate($this->rules($sportType, $akademiId));
+        $akademi = $request->user()->akademi;
+        $data = $request->validate($this->rules($akademi->sport_type, $akademi->id));
 
         $rank = SportRank::create([
-            'akademi_id' => $akademiId,
-            'sport_type' => $sportType,
-            'code' => $data['code'],
-            'label' => $data['label'],
-            'sequence' => $data['sequence'],
+            ...$data,
+            'akademi_id' => $akademi->id,
+            'sport_type' => $akademi->sport_type,
+            'rank_system' => $akademi->rank_system,
         ]);
 
         return response()->json(['sport_rank' => $rank], 201);
@@ -98,6 +91,10 @@ class SportRankController extends Controller
             ],
             'label' => [$required, 'string', 'max:100'],
             'sequence' => [$required, 'integer', 'min:1', 'max:999'],
+            'level_type' => ['sometimes', 'nullable', Rule::in(SportRank::LEVEL_TYPES)],
+            'level_number' => ['sometimes', 'nullable', 'integer', 'min:1', 'max:10'],
+            'belt_color' => ['sometimes', 'nullable', Rule::in(SportRank::BELT_COLORS)],
+            'stripe_color' => ['sometimes', 'nullable', Rule::in(SportRank::BELT_COLORS)],
         ];
     }
 
@@ -113,7 +110,8 @@ class SportRankController extends Controller
     private function ensureCanModifyRank(Request $request, SportRank $sportRank): void
     {
         abort_unless(
-            $sportRank->sport_type === $request->user()->akademi->sport_type,
+            $sportRank->rank_system === $request->user()->akademi->rank_system
+                && $sportRank->sport_type === $request->user()->akademi->sport_type,
             404,
             'Tingkatan tidak ditemukan.'
         );

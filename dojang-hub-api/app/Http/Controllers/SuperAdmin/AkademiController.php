@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
+use App\Enums\RankSystem;
 use App\Http\Controllers\Controller;
 use App\Models\Akademi;
 use App\Models\User;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Laravel\Sanctum\PersonalAccessToken;
 
 class AkademiController extends Controller
@@ -47,6 +49,7 @@ class AkademiController extends Controller
             'name' => ['required', 'string', 'max:150'],
             'slug' => ['nullable', 'string', 'max:100', 'unique:akademi,slug', 'regex:/^[a-z0-9-]+$/'],
             'sport_type' => ['nullable', 'string', 'max:50'],
+            'rank_system' => $this->rankSystemRules($request->input('sport_type') ?? 'taekwondo'),
             'logo_url' => ['nullable', 'string', 'max:500'],
             'plan' => ['nullable', Rule::in(['starter', 'pro', 'scale'])],
             'plan_expires_at' => ['nullable', 'required_if:duration_type,custom', 'date', 'after_or_equal:starts_at'],
@@ -77,6 +80,8 @@ class AkademiController extends Controller
                 'name' => $request->name,
                 'slug' => $slug,
                 'sport_type' => $request->sport_type ?? 'taekwondo',
+                'rank_system' => $request->rank_system
+                    ?? RankSystem::defaultForSport($request->sport_type ?? 'taekwondo')?->value,
                 'logo_url' => $request->logo_url,
                 'plan' => $plan,
                 'status' => 'active',
@@ -159,13 +164,17 @@ class AkademiController extends Controller
             'name' => ['sometimes', 'string', 'max:150'],
             'slug' => ['sometimes', 'string', 'max:100', Rule::unique('akademi', 'slug')->ignore($id), 'regex:/^[a-z0-9-]+$/'],
             'sport_type' => ['sometimes', 'string', 'max:50'],
+            'rank_system' => ['sometimes', ...$this->rankSystemRules($request->input('sport_type') ?? $akademi->sport_type)],
             'logo_url' => ['sometimes', 'nullable', 'string', 'max:500'],
             'status' => ['sometimes', Rule::in(['active', 'inactive', 'suspended'])],
         ]);
 
-        $akademi->update($request->only([
-            'name', 'slug', 'sport_type', 'logo_url', 'status',
-        ]));
+        $rankSystem = $this->resolveRankSystemForUpdate($request, $akademi);
+
+        $akademi->update([
+            ...$request->only(['name', 'slug', 'sport_type', 'logo_url', 'status']),
+            'rank_system' => $rankSystem,
+        ]);
 
         if ($request->filled('status') && in_array($request->status, ['inactive', 'suspended'], true)) {
             PersonalAccessToken::whereIn('tokenable_id', $akademi->users()->select('id'))
@@ -187,6 +196,47 @@ class AkademiController extends Controller
         $akademi->delete();
 
         return response()->json(['message' => 'Akademi berhasil dihapus.']);
+    }
+
+    /**
+     * @return array<int, mixed>
+     */
+    private function rankSystemRules(string $sportType): array
+    {
+        return [
+            'nullable',
+            Rule::in(RankSystem::values()),
+            function (string $attribute, mixed $value, \Closure $fail) use ($sportType) {
+                $system = RankSystem::tryFrom((string) $value);
+
+                if ($system && $system->sportType() !== $sportType) {
+                    $fail('Sistem tingkatan tidak sesuai dengan cabang olahraga.');
+                }
+            },
+        ];
+    }
+
+    private function resolveRankSystemForUpdate(Request $request, Akademi $akademi): ?string
+    {
+        $sportType = $request->input('sport_type', $akademi->sport_type);
+        $current = RankSystem::tryFrom((string) $akademi->rank_system);
+        $target = $request->filled('rank_system')
+            ? $request->input('rank_system')
+            : ($current?->sportType() === $sportType ? $current->value : RankSystem::defaultForSport($sportType)?->value);
+
+        if ($target === $akademi->rank_system) {
+            return $target;
+        }
+
+        $hasRankedStudents = $akademi->siswa()->whereNotNull('current_rank_id')->exists();
+
+        if ($hasRankedStudents) {
+            throw ValidationException::withMessages([
+                'rank_system' => 'Sistem tingkatan tidak bisa diubah karena sudah ada siswa yang memiliki sabuk.',
+            ]);
+        }
+
+        return $target;
     }
 
     private function userSummary(User $user): array

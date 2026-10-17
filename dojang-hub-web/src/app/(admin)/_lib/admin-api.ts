@@ -79,6 +79,7 @@ export type AdminAkademi = {
   name: string;
   slug: string;
   sport_type: string;
+  rank_system?: string | null;
   logo_url: string | null;
   status: AkademiStatus;
   plan: AkademiPlan;
@@ -207,13 +208,24 @@ export type TrainingClass = {
   training_place?: TrainingPlace | null;
 };
 
+export type SportRankLevelType = "geup" | "kyu" | "poom" | "dan";
+
 export type SportRank = {
   id: number;
+  akademi_id?: number | null;
   sport_type: string;
+  rank_system?: string | null;
   code: string;
   label: string;
   sequence: number;
+  level_type?: SportRankLevelType | null;
+  level_number?: number | null;
+  belt_color?: string | null;
+  stripe_color?: string | null;
 };
+
+export type SportRankPayload = Pick<SportRank, "code" | "label" | "sequence"> &
+  Partial<Pick<SportRank, "belt_color" | "stripe_color">>;
 
 export type Student = {
   id: number;
@@ -464,6 +476,7 @@ export type AkademiPayload = {
   name: string;
   slug?: string;
   sport_type?: string;
+  rank_system?: string | null;
   logo_url?: string | null;
   plan?: AkademiPlan;
   plan_expires_at?: string | null;
@@ -481,7 +494,7 @@ export type AkademiPayload = {
 export type AkademiUpdatePayload = Partial<
   Pick<
     AdminAkademi,
-    "name" | "slug" | "sport_type" | "logo_url" | "status" | "plan" | "plan_expires_at"
+    "name" | "slug" | "sport_type" | "rank_system" | "logo_url" | "status" | "plan" | "plan_expires_at"
   >
 >;
 
@@ -700,7 +713,7 @@ export function getAkademiSportRanks(token: string) {
 
 export function createAkademiSportRank(
   token: string,
-  payload: Pick<SportRank, "code" | "label" | "sequence">,
+  payload: SportRankPayload,
 ) {
   return adminFetch<{ sport_rank: SportRank }>("/akademi/sport-ranks", token, {
     method: "POST",
@@ -711,7 +724,7 @@ export function createAkademiSportRank(
 export function updateAkademiSportRank(
   token: string,
   id: number,
-  payload: Partial<Pick<SportRank, "code" | "label" | "sequence">>,
+  payload: Partial<SportRankPayload>,
 ) {
   return adminFetch<{ sport_rank: SportRank }>(`/akademi/sport-ranks/${id}`, token, {
     method: "PUT",
@@ -1304,7 +1317,7 @@ export function addAkademiRankPromotionParticipant(
     notes?: string | null;
   },
 ) {
-  return adminFetch<{ rank_promotion_participant: RankPromotionParticipant }>(
+  return adminFetch<{ rank_promotion_participant: RankPromotionParticipant; warnings?: string[] }>(
     `/akademi/rank-promotions/${eventId}/participants`,
     token,
     {
@@ -1320,7 +1333,7 @@ export function updateAkademiRankPromotionParticipant(
   participantId: number,
   payload: Partial<Pick<RankPromotionParticipant, "to_rank_id" | "result" | "score" | "notes">>,
 ) {
-  return adminFetch<{ rank_promotion_participant: RankPromotionParticipant }>(
+  return adminFetch<{ rank_promotion_participant: RankPromotionParticipant; warnings?: string[] }>(
     `/akademi/rank-promotions/${eventId}/participants/${participantId}`,
     token,
     {

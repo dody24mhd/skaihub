@@ -11,6 +11,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Exists;
+use Illuminate\Validation\ValidationException;
 
 class RankPromotionController extends Controller
 {
@@ -87,21 +89,16 @@ class RankPromotionController extends Controller
         abort_if($rankPromotionEvent->status === 'cancelled', 422, 'Event kenaikan tingkat sudah dibatalkan.');
 
         $akademiId = $request->user()->akademi_id;
-        $sportType = $request->user()->akademi->sport_type;
         $data = $request->validate([
             'student_id' => ['required', Rule::exists(Student::class, 'id')->where('akademi_id', $akademiId)],
-            'to_rank_id' => [
-                'required',
-                Rule::exists(SportRank::class, 'id')
-                    ->where('sport_type', $sportType)
-                    ->where(fn ($q) => $q->whereNull('akademi_id')->orWhere('akademi_id', $akademiId)),
-            ],
+            'to_rank_id' => ['required', $this->visibleRankRule($request)],
             'result' => ['sometimes', Rule::in(['registered', 'passed', 'failed', 'absent'])],
             'score' => ['nullable', 'integer', 'min:0', 'max:100'],
             'notes' => ['nullable', 'string'],
         ]);
 
         $student = Student::where('akademi_id', $akademiId)->findOrFail($data['student_id']);
+        $warnings = $this->progressionWarnings($request, $student->current_rank_id, (int) $data['to_rank_id']);
         $participant = null;
 
         DB::transaction(function () use (&$participant, $akademiId, $data, $rankPromotionEvent, $request, $student) {
@@ -126,6 +123,7 @@ class RankPromotionController extends Controller
 
         return response()->json([
             'rank_promotion_participant' => $participant->load(['student.primaryClass', 'fromRank', 'toRank', 'assessor']),
+            'warnings' => $warnings,
         ], 201);
     }
 
@@ -138,20 +136,16 @@ class RankPromotionController extends Controller
         $this->ensureEventBelongsToCurrentAkademi($request, $rankPromotionEvent);
         $this->ensureParticipantBelongsToEvent($request, $rankPromotionEvent, $participant);
 
-        $akademiId = $request->user()->akademi_id;
-        $sportType = $request->user()->akademi->sport_type;
         $data = $request->validate([
-            'to_rank_id' => [
-                'sometimes',
-                'required',
-                Rule::exists(SportRank::class, 'id')
-                    ->where('sport_type', $sportType)
-                    ->where(fn ($q) => $q->whereNull('akademi_id')->orWhere('akademi_id', $akademiId)),
-            ],
+            'to_rank_id' => ['sometimes', 'required', $this->visibleRankRule($request)],
             'result' => ['sometimes', Rule::in(['registered', 'passed', 'failed', 'absent'])],
             'score' => ['nullable', 'integer', 'min:0', 'max:100'],
             'notes' => ['nullable', 'string'],
         ]);
+
+        $warnings = array_key_exists('to_rank_id', $data)
+            ? $this->progressionWarnings($request, $participant->from_rank_id, (int) $data['to_rank_id'])
+            : [];
 
         DB::transaction(function () use ($data, $participant, $request) {
             $participant->update([
@@ -164,6 +158,7 @@ class RankPromotionController extends Controller
 
         return response()->json([
             'rank_promotion_participant' => $participant->fresh()->load(['student.primaryClass', 'fromRank', 'toRank', 'assessor']),
+            'warnings' => $warnings,
         ]);
     }
 
@@ -195,6 +190,51 @@ class RankPromotionController extends Controller
         if ($student->current_rank_id === $participant->to_rank_id) {
             $student->update(['current_rank_id' => $participant->from_rank_id]);
         }
+    }
+
+    private function visibleRankRule(Request $request): Exists
+    {
+        $akademi = $request->user()->akademi;
+
+        return Rule::exists(SportRank::class, 'id')
+            ->where('sport_type', $akademi->sport_type)
+            ->where('rank_system', $akademi->rank_system)
+            ->where(fn ($q) => $q->whereNull('akademi_id')->orWhere('akademi_id', $akademi->id));
+    }
+
+    /**
+     * Satu-satunya aturan yang memblokir: sabuk tujuan harus lebih tinggi (sequence) dari sabuk asal.
+     * Syarat kelayakan/loncat tingkat adalah kebijakan tiap akademi (keputusan pemilik), jadi
+     * melewati tingkat hanya menghasilkan peringatan. Poom/Dan setara berbagi sequence.
+     *
+     * @return array<int, string>
+     */
+    private function progressionWarnings(Request $request, ?int $fromRankId, int $toRankId): array
+    {
+        $from = $fromRankId ? SportRank::query()->find($fromRankId) : null;
+
+        if ($from === null) {
+            return [];
+        }
+
+        $visible = SportRank::query()->visibleTo($request->user()->akademi);
+        $to = (clone $visible)->findOrFail($toRankId);
+
+        if ($to->sequence <= $from->sequence) {
+            throw ValidationException::withMessages([
+                'to_rank_id' => 'Tingkatan tujuan harus lebih tinggi dari tingkatan siswa saat ini.',
+            ]);
+        }
+
+        $skipped = (clone $visible)
+            ->where('sequence', '>', $from->sequence)
+            ->where('sequence', '<', $to->sequence)
+            ->distinct()
+            ->count('sequence');
+
+        return $skipped > 0
+            ? ["Melewati {$skipped} tingkat dari {$from->label} ke {$to->label}."]
+            : [];
     }
 
     private function ensureCanManage(Request $request): void

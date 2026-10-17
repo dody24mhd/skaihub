@@ -8,7 +8,8 @@ import {
   getAkademiSportRanks,
   updateAkademiSportRank,
 } from "../_lib/admin-api";
-import RankList from "./evaluation/rank-list";
+import { builtinRankLabel, rankSystemLabel } from "../_lib/rank-systems";
+import RankList, { isBuiltinRank } from "./evaluation/rank-list";
 import RankForm, { RankFormValues, emptyRankForm } from "./evaluation/rank-form";
 import { SheetModal } from "./ui";
 
@@ -32,6 +33,8 @@ export default function AcademyRanksManager() {
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+
+  const rankSystem = items.find(isBuiltinRank)?.rank_system ?? null;
 
   const filteredItems = useMemo(() => {
     const keyword = query.trim().toLowerCase();
@@ -81,6 +84,8 @@ export default function AcademyRanksManager() {
       code: item.code,
       label: item.label,
       sequence: String(item.sequence),
+      belt_color: item.belt_color ?? "",
+      stripe_color: item.stripe_color ?? "",
     });
     setMessage("");
     setError("");
@@ -100,6 +105,8 @@ export default function AcademyRanksManager() {
         code: form.code.trim(),
         label: form.label.trim(),
         sequence: Number(form.sequence),
+        belt_color: form.belt_color || null,
+        stripe_color: form.stripe_color || null,
       };
 
       if (editing) {
@@ -163,6 +170,10 @@ export default function AcademyRanksManager() {
           <div>
             <p className="label-caps text-secondary">Master Data</p>
             <h2 className="font-heading text-xl font-bold text-primary">Sabuk / Tingkatan</h2>
+            <p className="mt-1 text-sm text-muted">
+              Sistem {rankSystemLabel(rankSystem)}. Sabuk bawaan terkunci; tambahkan sabuk khusus
+              dengan urutan di sela-selanya.
+            </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
             <input
@@ -199,6 +210,7 @@ export default function AcademyRanksManager() {
         <div className="mt-5">
           <RankList
             rows={filteredItems}
+            builtinLabel={builtinRankLabel(rankSystem)}
             onEdit={(item) => startEdit(item, true)}
             onDelete={handleDelete}
           />

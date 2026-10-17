@@ -54,7 +54,7 @@ class StudentController extends Controller
         $this->ensureCanManageMasterData($request);
 
         $akademi = $request->user()->akademi;
-        $data = $request->validate($this->rules($akademi->id, $akademi->sport_type));
+        $data = $request->validate($this->rules($akademi->id, $akademi->sport_type, $akademi->rank_system));
         $status = $data['status'] ?? 'active';
 
         if ($status === 'active') {
@@ -177,7 +177,7 @@ class StudentController extends Controller
         $this->ensureBelongsToCurrentAkademi($request, $student);
 
         $akademi = $request->user()->akademi;
-        $data = $request->validate($this->rules($akademi->id, $akademi->sport_type, true, $student->id));
+        $data = $request->validate($this->rules($akademi->id, $akademi->sport_type, $akademi->rank_system, true, $student->id));
 
         if (($data['status'] ?? null) === 'active' && $student->status !== 'active') {
             $this->subscriptions->assertCanAddActiveStudent($akademi, $student->id);
@@ -212,7 +212,7 @@ class StudentController extends Controller
         return response()->json(['message' => 'Siswa berhasil dihapus.']);
     }
 
-    private function rules(int $akademiId, string $sportType, bool $partial = false, ?int $studentId = null): array
+    private function rules(int $akademiId, string $sportType, ?string $rankSystem, bool $partial = false, ?int $studentId = null): array
     {
         $required = $partial ? 'sometimes' : 'required';
 
@@ -221,6 +221,7 @@ class StudentController extends Controller
                 'nullable',
                 Rule::exists(SportRank::class, 'id')
                     ->where('sport_type', $sportType)
+                    ->where('rank_system', $rankSystem)
                     ->where(fn ($q) => $q->whereNull('akademi_id')->orWhere('akademi_id', $akademiId)),
             ],
             'primary_class_id' => [
