@@ -122,6 +122,28 @@ describe("EvaluationMobileScorer", () => {
     expect(screen.getByText("Dewi Lestari")).toBeInTheDocument();
   });
 
+  it("mengumumkan posisi siswa aktif lewat live region polite", () => {
+    render(
+      <EvaluationMobileScorer
+        filteredStudents={mockStudents}
+        selectedClass={mockClass}
+        activeAspects={mockAspects}
+        draftScores={{}}
+        setDraftScores={vi.fn()}
+        draftNotes={{}}
+        setDraftNotes={vi.fn()}
+      />
+    );
+
+    const region = screen.getByRole("status");
+    expect(region).toHaveTextContent(`Siswa 1 dari ${mockStudents.length}: Arya Pratama`);
+
+    fireEvent.click(screen.getByRole("button", { name: /Siswa Berikutnya/i }));
+
+    expect(screen.getByRole("status")).toBe(region);
+    expect(region).toHaveTextContent(`Siswa 2 dari ${mockStudents.length}: Dewi Lestari`);
+  });
+
   it("menampilkan legenda rentang predikat dan input numerik dengan label", () => {
     render(
       <EvaluationMobileScorer

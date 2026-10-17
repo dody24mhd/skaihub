@@ -40,8 +40,13 @@ export default function EvaluationMobileScorer({
     );
   }
 
+  const activePosition = Math.min(activeStudentIndex, filteredStudents.length - 1) + 1;
+
   return (
     <div className="space-y-4 md:hidden">
+      <p role="status" className="sr-only">
+        {activeStudent ? `Siswa ${activePosition} dari ${filteredStudents.length}: ${activeStudent.name}` : ""}
+      </p>
       {/* Pilihan Siswa */}
       <div className="rounded-lg border-2 border-border bg-surface-container-low p-4">
         <label
