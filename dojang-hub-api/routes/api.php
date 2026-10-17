@@ -16,6 +16,7 @@ use App\Http\Controllers\Akademi\PublicProfileController as AkademiPublicProfile
 use App\Http\Controllers\Akademi\RankPromotionController as AkademiRankPromotionController;
 use App\Http\Controllers\Akademi\SportRankController as AkademiSportRankController;
 use App\Http\Controllers\Akademi\SppBillController as AkademiSppBillController;
+use App\Http\Controllers\Akademi\SppReceiptController as AkademiSppReceiptController;
 use App\Http\Controllers\Akademi\SppSettingController as AkademiSppSettingController;
 use App\Http\Controllers\Akademi\StudentAchievementController as AkademiStudentAchievementController;
 use App\Http\Controllers\Akademi\StudentController as AkademiStudentController;
@@ -138,6 +139,7 @@ Route::prefix('akademi')
         Route::get('spp-bills/arrears', [AkademiSppBillController::class, 'arrears']);
         Route::get('spp-settings', [AkademiSppSettingController::class, 'show']);
         Route::put('spp-settings', [AkademiSppSettingController::class, 'update']);
+        Route::get('spp-payments/{sppPayment}/receipt', [AkademiSppReceiptController::class, 'show']);
         // end L4-B
         Route::get('evaluations/periods', [AkademiEvaluationController::class, 'periods']);
         Route::post('evaluations/periods', [AkademiEvaluationController::class, 'storePeriod']);

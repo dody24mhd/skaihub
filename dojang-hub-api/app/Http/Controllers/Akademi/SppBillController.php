@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Akademi;
 
 use App\Http\Controllers\Controller;
 use App\Models\AcademySppSetting;
+use App\Models\Akademi;
 use App\Models\SppBill;
 use App\Models\SppBillEvent;
+use App\Models\SppPayment;
 use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -258,8 +260,12 @@ class SppBillController extends Controller
                 ]);
             }
 
+            // Serialisasi nomor kwitansi per akademi agar dua pembayaran bersamaan tidak berebut nomor yang sama.
+            Akademi::whereKey($bill->akademi_id)->lockForUpdate()->first();
+
             $bill->payments()->create([
                 ...$data,
+                'receipt_number' => SppPayment::nextReceiptNumber($bill->akademi_id, $data['paid_at']),
                 'akademi_id' => $request->user()->akademi_id,
                 'created_by' => $request->user()->id,
             ]);
