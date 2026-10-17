@@ -112,4 +112,37 @@ class TrainingAttendanceSickTest extends TestCase
         $this->assertSame(1, $studentRes->json('summary.attendance_total'));
         $this->assertSame(0, $studentRes->json('summary.attendance_present'));
     }
+
+    public function test_migration_down_converts_sick_attendance_to_excused(): void
+    {
+        $student = $this->akademi->siswa()->create([
+            'primary_class_id' => $this->class->id,
+            'member_number' => 'RJW-DOWN',
+            'name' => 'Dimas Down',
+            'gender' => 'male',
+            'birth_date' => '2013-05-10',
+            'joined_date' => '2026-01-01',
+            'height_cm' => 150,
+            'weight_kg' => 45,
+            'status' => 'active',
+        ]);
+
+        $att = $this->session->attendances()->create([
+            'student_id' => $student->id,
+            'status' => 'sick',
+            'is_extra_participant' => false,
+        ]);
+
+        $migration = require database_path('migrations/2026_10_17_000002_add_sick_status_to_training_attendances_table.php');
+        $migration->down();
+
+        try {
+            $this->assertDatabaseHas('training_attendances', [
+                'id' => $att->id,
+                'status' => 'excused',
+            ]);
+        } finally {
+            $migration->up();
+        }
+    }
 }
