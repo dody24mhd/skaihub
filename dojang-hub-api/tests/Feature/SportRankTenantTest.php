@@ -144,6 +144,8 @@ class SportRankTenantTest extends TestCase
             'joined_date' => '2024-01-01',
             'height_cm' => 140,
             'weight_kg' => 35,
+            'guardian_name' => 'Wali Harimau',
+            'guardian_phone' => '081200000002',
         ];
 
         $this->postJson('/api/akademi/students', array_merge($baseStudent, [

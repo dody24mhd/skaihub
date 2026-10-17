@@ -9,11 +9,18 @@ use App\Models\TrainingClass;
 use App\Services\SubscriptionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator as ValidationValidator;
 
 class StudentController extends Controller
 {
+    public const GUARDIAN_REQUIRED_UNDER_AGE = 17;
+
+    private const CONTACT_FIELDS = ['birth_date', 'student_phone', 'guardian_name', 'guardian_phone'];
+
     public function __construct(private readonly SubscriptionService $subscriptions) {}
 
     public function index(Request $request): JsonResponse
@@ -54,7 +61,7 @@ class StudentController extends Controller
         $this->ensureCanManageMasterData($request);
 
         $akademi = $request->user()->akademi;
-        $data = $request->validate($this->rules($akademi->id, $akademi->sport_type));
+        $data = $this->validateStudent($request, $this->rules($akademi->id, $akademi->sport_type));
         $status = $data['status'] ?? 'active';
 
         if ($status === 'active') {
@@ -177,7 +184,7 @@ class StudentController extends Controller
         $this->ensureBelongsToCurrentAkademi($request, $student);
 
         $akademi = $request->user()->akademi;
-        $data = $request->validate($this->rules($akademi->id, $akademi->sport_type, true, $student->id));
+        $data = $this->validateStudent($request, $this->rules($akademi->id, $akademi->sport_type, true, $student->id), $student);
 
         if (($data['status'] ?? null) === 'active' && $student->status !== 'active') {
             $this->subscriptions->assertCanAddActiveStudent($akademi, $student->id);
@@ -240,8 +247,8 @@ class StudentController extends Controller
             'birth_date' => [$required, 'date'],
             'joined_date' => [$required, 'date'],
             'status' => ['sometimes', Rule::in(['active', 'inactive', 'alumni'])],
-            'height_cm' => [$required, 'integer', 'min:1', 'max:300'],
-            'weight_kg' => [$required, 'numeric', 'min:1', 'max:300'],
+            'height_cm' => ['nullable', 'integer', 'min:1', 'max:300'],
+            'weight_kg' => ['nullable', 'numeric', 'min:1', 'max:300'],
             'student_phone' => ['nullable', 'string', 'max:30'],
             'guardian_name' => ['nullable', 'string', 'max:150'],
             'guardian_phone' => ['nullable', 'string', 'max:30'],
@@ -253,6 +260,52 @@ class StudentController extends Controller
             'health_notes' => ['nullable', 'string'],
             'rank_notes' => ['nullable', 'string', 'max:500'],
         ];
+    }
+
+    private function validateStudent(Request $request, array $rules, ?Student $student = null): array
+    {
+        $validator = Validator::make($request->all(), $rules);
+
+        $validator->after(function (ValidationValidator $validator) use ($request, $student) {
+            if ($validator->errors()->hasAny(self::CONTACT_FIELDS)) {
+                return;
+            }
+
+            // Partial updates that do not touch contact data must not be blocked by legacy records.
+            if ($student && ! $request->hasAny(self::CONTACT_FIELDS)) {
+                return;
+            }
+
+            $values = array_merge($student?->only(self::CONTACT_FIELDS) ?? [], $request->only(self::CONTACT_FIELDS));
+            $this->validateContactRules($validator, $values);
+        });
+
+        return $validator->validate();
+    }
+
+    private function validateContactRules(ValidationValidator $validator, array $values): void
+    {
+        if (blank($values['student_phone'] ?? null) && blank($values['guardian_phone'] ?? null)) {
+            $validator->errors()->add('student_phone', 'Isi minimal satu nomor kontak: nomor siswa atau nomor wali.');
+        }
+
+        if (blank($values['birth_date'] ?? null)) {
+            return;
+        }
+
+        if (Carbon::parse($values['birth_date'])->age >= self::GUARDIAN_REQUIRED_UNDER_AGE) {
+            return;
+        }
+
+        $underAge = self::GUARDIAN_REQUIRED_UNDER_AGE;
+
+        if (blank($values['guardian_name'] ?? null)) {
+            $validator->errors()->add('guardian_name', "Nama wali wajib diisi untuk siswa di bawah {$underAge} tahun.");
+        }
+
+        if (blank($values['guardian_phone'] ?? null)) {
+            $validator->errors()->add('guardian_phone', "Nomor wali wajib diisi untuk siswa di bawah {$underAge} tahun.");
+        }
     }
 
     private function nextMemberNumber(string $slug): string

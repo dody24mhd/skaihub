@@ -93,6 +93,8 @@ class StudentRankHistoryTest extends TestCase
             'joined_date' => '2026-01-01',
             'height_cm' => 145,
             'weight_kg' => 40,
+            'guardian_name' => 'Wali Bintang',
+            'guardian_phone' => '081200000003',
             'status' => 'active',
             'current_rank_id' => $this->rankWhite->id,
         ])->assertCreated();
