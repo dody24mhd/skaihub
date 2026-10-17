@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import AcademyRanksManager from "../academy-ranks-manager";
 import * as adminApi from "../../_lib/admin-api";
@@ -41,5 +41,21 @@ describe("AcademyRanksManager", () => {
     // Dialog terbuka dengan heading
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Tambah Tingkatan/i })).toBeInTheDocument();
+  });
+
+  it("di desktop (xl) tombol Edit mengisi form samping tanpa membuka SheetModal", async () => {
+    vi.stubGlobal("matchMedia", () => ({ matches: true }));
+
+    try {
+      render(<AcademyRanksManager />);
+
+      const [editBtn] = await screen.findAllByRole("button", { name: "Edit" });
+      fireEvent.click(editBtn);
+
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: "Putih" })).toBeInTheDocument();
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 });
