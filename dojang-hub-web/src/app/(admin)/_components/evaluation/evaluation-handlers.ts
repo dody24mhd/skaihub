@@ -3,6 +3,7 @@ import {
   EvaluationAspect,
   EvaluationPeriod,
   Student,
+  copyAkademiEvaluationAspects,
   createAkademiEvaluationPeriod,
   createAkademiEvaluationPeriodAspect,
   deleteAkademiEvaluationAspect,
@@ -189,6 +190,40 @@ export async function submitDeleteAspect(
     ctx.setMessage(`Variabel ${aspect.name} dihapus.`);
   } catch (caught) {
     ctx.setError(caught instanceof Error ? caught.message : "Gagal menghapus variabel.");
+  } finally {
+    ctx.setIsSaving(false);
+  }
+}
+
+export async function submitCopyAspects(
+  source: EvaluationPeriod,
+  ctx: {
+    token: string;
+    selectedPeriodId: string;
+    setIsSaving: (saving: boolean) => void;
+    setError: (err: string) => void;
+    setMessage: (msg: string) => void;
+    refreshAll: () => Promise<void>;
+  }
+): Promise<boolean> {
+  if (!ctx.selectedPeriodId) return false;
+
+  ctx.setIsSaving(true);
+  ctx.setError("");
+  ctx.setMessage("");
+
+  try {
+    const result = await copyAkademiEvaluationAspects(ctx.token, Number(ctx.selectedPeriodId), source.id);
+    await ctx.refreshAll();
+    ctx.setMessage(
+      result.copied_count > 0
+        ? `${result.copied_count} variabel disalin dari ${source.name}.`
+        : `Semua variabel ${source.name} sudah ada di periode ini.`
+    );
+    return true;
+  } catch (caught) {
+    ctx.setError(caught instanceof Error ? caught.message : "Gagal menyalin variabel.");
+    return false;
   } finally {
     ctx.setIsSaving(false);
   }

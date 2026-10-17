@@ -2061,3 +2061,12 @@ export function deleteAkademiStudentAchievement(token: string, studentId: number
     method: "DELETE",
   });
 }
+
+// L4-E
+export function copyAkademiEvaluationAspects(token: string, periodId: number, sourcePeriodId: number) {
+  return adminFetch<{ data: EvaluationAspect[]; copied_count: number }>(
+    `/akademi/evaluations/periods/${periodId}/aspects/copy-from/${sourcePeriodId}`,
+    token,
+    { method: "POST" },
+  );
+}

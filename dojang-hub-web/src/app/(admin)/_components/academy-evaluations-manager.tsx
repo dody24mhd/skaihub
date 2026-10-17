@@ -53,6 +53,7 @@ export default function AcademyEvaluationsManager({
         onCancelEditAspect={data.cancelEditAspect}
         onUpdateAspect={data.handleUpdateAspect}
         onDeleteAspect={data.handleDeleteAspect}
+        onCopyAspects={data.handleCopyAspects}
       />
     );
   }
