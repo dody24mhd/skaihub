@@ -25,6 +25,7 @@ class TodaySessionController extends Controller
         $date = isset($data['date'])
             ? CarbonImmutable::createFromFormat('Y-m-d', $data['date'])->startOfDay()
             : CarbonImmutable::today();
+        $this->sessions->ensureWithinCoachWindow($user, $date);
 
         $sessions = $this->sessionsOn($user->akademi_id, $date);
         $schedules = TrainingSchedule::query()

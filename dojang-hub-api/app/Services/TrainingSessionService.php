@@ -6,6 +6,8 @@ use App\Models\Student;
 use App\Models\TrainingSchedule;
 use App\Models\TrainingSession;
 use App\Models\User;
+use Carbon\CarbonImmutable;
+use Carbon\CarbonInterface;
 
 class TrainingSessionService
 {
@@ -19,6 +21,23 @@ class TrainingSessionService
     public function coachBackfillDays(): int
     {
         return max(0, (int) config('training.coach_backfill_days', 7));
+    }
+
+    public function ensureWithinCoachWindow(User $user, CarbonInterface|string $date): void
+    {
+        if ($this->isAdminRole($user)) {
+            return;
+        }
+
+        $days = $this->coachBackfillDays();
+        $day = CarbonImmutable::parse($date)->startOfDay();
+        $today = CarbonImmutable::today();
+
+        abort_if(
+            $day->greaterThan($today) || $day->lessThan($today->subDays($days)),
+            403,
+            "Pelatih hanya bisa mengisi sesi hari ini hingga {$days} hari ke belakang."
+        );
     }
 
     public function isScheduleCoach(User $user, TrainingSchedule $schedule): bool

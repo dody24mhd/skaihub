@@ -34,6 +34,7 @@ class TrainingSessionActionController extends Controller
 
         $existing = $this->findScheduledSession($schedule, $date);
         $this->ensureCanOpenSchedule($request, $schedule, $existing);
+        $this->sessions->ensureWithinCoachWindow($request->user(), $date);
 
         if ($existing) {
             return response()->json(['training_session' => $existing->load($this->sessions->relations())]);
