@@ -1,6 +1,6 @@
 import { defineConfig } from "@playwright/test";
 
-const PORT = 3200;
+const PORT = Number(process.env.PLAYWRIGHT_PORT || 3200);
 const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
 
 export default defineConfig({
@@ -40,9 +40,10 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npm run build && npm run start -- -p 3200",
-    url: "http://localhost:3200",
-    reuseExistingServer: !process.env.CI,
+    command: `npm run build && npm run start -- -p ${PORT}`,
+    url: `http://localhost:${PORT}`,
+    // Worktrees run in parallel; never reuse a server that may belong to another checkout.
+    reuseExistingServer: false,
     timeout: 120000,
   },
 });

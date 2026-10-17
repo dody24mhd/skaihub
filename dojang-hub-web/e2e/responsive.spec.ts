@@ -17,7 +17,14 @@ if (isVitest) {
     });
   });
 } else {
-  const ACADEMY_ROUTES = ["/academy"];
+  const ACADEMY_ROUTES = [
+    "/academy",
+    "/academy/classes",
+    "/academy/coaches",
+    "/academy/users",
+    "/academy/places",
+    "/academy/public-profile",
+  ];
 
   playwrightTest.describe("Responsive Layout & Shell", () => {
     for (const route of ACADEMY_ROUTES) {

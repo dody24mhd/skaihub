@@ -223,6 +223,164 @@ export const MOCK_DASHBOARD_SUMMARY = {
   },
 };
 
+// --- L3-E Setup & Public Profile Fixtures ---
+export const MOCK_PLACES = [
+  {
+    id: 1,
+    akademi_id: 1,
+    name: "Dojang Utama Bulungan",
+    address: "Jl. Kyai Maja No. 2, Kebayoran Baru",
+    is_active: true,
+    created_at: "2026-01-01T00:00:00Z",
+    updated_at: "2026-01-01T00:00:00Z",
+  },
+  {
+    id: 2,
+    akademi_id: 1,
+    name: "Dojang Cabang Senayan",
+    address: "Jl. Asia Afrika No. 8, Senayan",
+    is_active: true,
+    created_at: "2026-01-02T00:00:00Z",
+    updated_at: "2026-01-02T00:00:00Z",
+  },
+];
+
+export const MOCK_COACHES = [
+  {
+    id: 1,
+    akademi_id: 1,
+    name: "Sabeum Nim Budi Hartono",
+    email: "budi.coach@dojang.test",
+    role: "pelatih" as const,
+    is_active: true,
+    photo_url: null,
+    show_on_public: true,
+    coach_profile: {
+      id: 1,
+      user_id: 1,
+      phone: "081298765432",
+      rank_label: "Dan 4 Kukkiwon",
+      license_number: "LIC-2024-KUK-012",
+      joined_date: "2022-03-01T00:00:00Z",
+      address: "Jakarta Selatan",
+    },
+  },
+  {
+    id: 2,
+    akademi_id: 1,
+    name: "Sabeum Agnes Monica",
+    email: "agnes.coach@dojang.test",
+    role: "pelatih" as const,
+    is_active: true,
+    photo_url: null,
+    show_on_public: false,
+    coach_profile: {
+      id: 2,
+      user_id: 2,
+      phone: "081298765433",
+      rank_label: "Dan 2 Kukkiwon",
+      license_number: "LIC-2025-PBTI-088",
+      joined_date: "2023-07-15T00:00:00Z",
+      address: "Jakarta Barat",
+    },
+  },
+];
+
+export const MOCK_USERS = [
+  {
+    id: 1,
+    akademi_id: 1,
+    name: "Ketua Dojang",
+    email: "ketua@dojang.test",
+    role: "ketua_akademi" as const,
+    is_active: true,
+    created_at: "2026-01-01T00:00:00Z",
+    coach_profile: null,
+  },
+  {
+    id: 2,
+    akademi_id: 1,
+    name: "Pengurus Administrasi",
+    email: "admin@dojang.test",
+    role: "admin_akademi" as const,
+    is_active: true,
+    created_at: "2026-01-02T00:00:00Z",
+    coach_profile: null,
+  },
+  {
+    id: 3,
+    akademi_id: 1,
+    name: "Sabeum Nim Budi Hartono",
+    email: "budi.coach@dojang.test",
+    role: "pelatih" as const,
+    is_active: true,
+    created_at: "2026-01-03T00:00:00Z",
+    coach_profile: { id: 1 },
+  },
+];
+
+export const MOCK_PUBLIC_PROFILE = {
+  id: 1,
+  akademi_id: 1,
+  about: "Pusat pembinaan atlet beladiri Taekwondo berprestasi tinggi.",
+  vision: "Menjadi dojang taekwondo terdepan dalam prestasi dan karakter atlet.",
+  mission: "Menyelenggarakan latihan terstruktur dengan instruktur bersertifikasi internasional.",
+  public_schedule: null,
+  whatsapp: "81234567890",
+  cta_label: "Hubungi via WhatsApp",
+  is_published: true,
+  primary_color: "#031636",
+  button_color: "#d32f2f",
+  background_color: "#f8fafc",
+  text_color: "#0f172a",
+  heading_font: "Montserrat",
+  body_font: "Inter",
+  button_radius: 8,
+  hero_images: [
+    {
+      id: 1,
+      image_url: "https://images.unsplash.com/photo-1555597673-b21d5c935865?w=800",
+      caption: "Latihan Poomsae & Kyorugi",
+      focal_x: 50,
+      focal_y: 50,
+      pan_x: 0,
+      pan_y: 0,
+      zoom: 100,
+      sort_order: 0,
+      is_active: true,
+    },
+  ],
+  gallery_items: [
+    {
+      id: 1,
+      image_url: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=600",
+      caption: "UKT Periode Genap 2026",
+      show_on_about: true,
+      sort_order: 0,
+    },
+  ],
+  achievements: [
+    {
+      id: 1,
+      title: "Juara Umum Kejurda DKI Jakarta 2025",
+      description: "Meraih 8 medali emas dan 4 medali perak",
+      achieved_on: "2025-11-20",
+      sort_order: 0,
+    },
+  ],
+  officials: [
+    {
+      id: 1,
+      name: "Master Hendra Wijaya",
+      position: "Ketua Dewan Pembina",
+      photo_url: null,
+      description: "Dan 7 Kukkiwon",
+      sort_order: 0,
+      is_active: true,
+    },
+  ],
+};
+
 export async function setupMockApi(page: Page) {
   // Tangkap semua request ke API (baik localhost:8000 maupun URL kustom)
   await page.route("**/api/**", async (route: Route) => {
@@ -261,11 +419,46 @@ export async function setupMockApi(page: Page) {
       });
     }
 
+    if (url.includes("/akademi/training-places")) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ data: MOCK_PLACES }),
+      });
+    }
+
     if (url.includes("/akademi/classes")) {
       return route.fulfill({
         status: 200,
         contentType: "application/json",
         body: JSON.stringify({ data: MOCK_CLASSES }),
+      });
+    }
+
+    if (url.includes("/akademi/coaches")) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ data: MOCK_COACHES }),
+      });
+    }
+
+    if (url.includes("/akademi/users")) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ data: MOCK_USERS }),
+      });
+    }
+
+    if (url.includes("/akademi/public-profile")) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          profile: MOCK_PUBLIC_PROFILE,
+          coaches: MOCK_COACHES,
+        }),
       });
     }
 
