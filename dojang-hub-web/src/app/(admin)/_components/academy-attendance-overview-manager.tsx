@@ -229,7 +229,7 @@ export default function AcademyAttendanceOverviewManager() {
               href={`/academy/attendance/new?date=${formatLocalDate(new Date())}`}
               className="min-h-11 inline-flex items-center justify-center border-2 border-primary bg-primary px-4 py-2 text-sm font-bold text-white transition hover:bg-primary-container active:bg-primary-container/90"
             >
-              + Buka Absensi
+              + Sesi Tambahan
             </Link>
 
             <div className="flex items-center border-2 border-border">
@@ -344,7 +344,7 @@ export default function AcademyAttendanceOverviewManager() {
             href={`/academy/attendance/new?date=${formatLocalDate(new Date())}`}
             className="min-h-11 inline-flex items-center justify-center border-2 border-border bg-white px-4 text-sm font-bold text-primary transition hover:border-primary hover:bg-surface-container-low"
           >
-            Buka Absensi Baru
+            Sesi Tambahan
           </Link>
         </div>
 
