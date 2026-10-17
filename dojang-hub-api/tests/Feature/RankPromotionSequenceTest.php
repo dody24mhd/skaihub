@@ -69,20 +69,23 @@ class RankPromotionSequenceTest extends TestCase
             ->assertJsonValidationErrors(['to_rank_id']);
     }
 
-    public function test_skipping_ranks_requires_allow_skip_and_notes(): void
+    public function test_skipping_ranks_is_allowed_with_non_blocking_warning(): void
     {
         $student = $this->student('tkd-geup-10');
 
         $this->addParticipant($student, 'tkd-geup-7')
-            ->assertUnprocessable()
-            ->assertJsonPath('errors.to_rank_id.0', 'Tingkatan tujuan melompati 2 tingkat. Aktifkan izin loncat tingkat dan isi catatan.');
+            ->assertCreated()
+            ->assertJsonPath('rank_promotion_participant.to_rank.code', 'tkd-geup-7')
+            ->assertJsonPath('warnings.0', 'Melewati 2 tingkat dari Geup 10 (Putih) ke Geup 7 (Hijau).');
+    }
 
-        $this->addParticipant($student, 'tkd-geup-7', ['allow_skip' => true])
-            ->assertUnprocessable()
-            ->assertJsonPath('errors.notes.0', 'Catatan wajib diisi saat loncat tingkat.');
+    public function test_next_rank_has_no_warning(): void
+    {
+        $student = $this->student('tkd-geup-10');
 
-        $this->addParticipant($student, 'tkd-geup-7', ['allow_skip' => true, 'notes' => 'Prestasi kejurda'])
-            ->assertCreated();
+        $this->addParticipant($student, 'tkd-geup-9')
+            ->assertCreated()
+            ->assertJsonCount(0, 'warnings');
     }
 
     public function test_poom_and_dan_of_same_level_are_one_step_from_geup_1(): void
@@ -107,10 +110,8 @@ class RankPromotionSequenceTest extends TestCase
         $student = $this->student('tkd-geup-10');
 
         $this->addParticipant($student, 'tkd-geup-9')
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['to_rank_id']);
-
-        $this->addParticipant($student, 'putih-strip')->assertCreated();
+            ->assertCreated()
+            ->assertJsonPath('warnings.0', 'Melewati 1 tingkat dari Geup 10 (Putih) ke Geup 9 (Kuning).');
     }
 
     public function test_target_rank_from_other_rank_system_is_rejected(): void
@@ -130,9 +131,14 @@ class RankPromotionSequenceTest extends TestCase
             ->json('rank_promotion_participant.id');
 
         $this->patchJson("/api/akademi/rank-promotions/{$this->event->id}/participants/{$participantId}", [
-            'to_rank_id' => $this->rankId('tkd-geup-5'),
+            'to_rank_id' => $this->rankId('tkd-geup-10'),
         ])->assertUnprocessable()
             ->assertJsonValidationErrors(['to_rank_id']);
+
+        $this->patchJson("/api/akademi/rank-promotions/{$this->event->id}/participants/{$participantId}", [
+            'to_rank_id' => $this->rankId('tkd-geup-5'),
+        ])->assertOk()
+            ->assertJsonPath('warnings.0', 'Melewati 4 tingkat dari Geup 10 (Putih) ke Geup 5 (Biru).');
 
         $this->patchJson("/api/akademi/rank-promotions/{$this->event->id}/participants/{$participantId}", [
             'result' => 'passed',
@@ -167,7 +173,7 @@ class RankPromotionSequenceTest extends TestCase
         $student = $this->student('tkd-geup-10');
         Sanctum::actingAs(User::factory()->pelatih($this->akademi->id)->create());
 
-        $this->addParticipant($student, 'tkd-geup-7', ['allow_skip' => true, 'notes' => 'x'])
+        $this->addParticipant($student, 'tkd-geup-9')
             ->assertForbidden();
     }
 

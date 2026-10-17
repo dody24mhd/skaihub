@@ -95,12 +95,10 @@ class RankPromotionController extends Controller
             'result' => ['sometimes', Rule::in(['registered', 'passed', 'failed', 'absent'])],
             'score' => ['nullable', 'integer', 'min:0', 'max:100'],
             'notes' => ['nullable', 'string'],
-            'allow_skip' => ['sometimes', 'boolean'],
         ]);
 
         $student = Student::where('akademi_id', $akademiId)->findOrFail($data['student_id']);
-        $this->ensureValidProgression($request, $student->current_rank_id, (int) $data['to_rank_id'], $data);
-        unset($data['allow_skip']);
+        $warnings = $this->progressionWarnings($request, $student->current_rank_id, (int) $data['to_rank_id']);
         $participant = null;
 
         DB::transaction(function () use (&$participant, $akademiId, $data, $rankPromotionEvent, $request, $student) {
@@ -125,6 +123,7 @@ class RankPromotionController extends Controller
 
         return response()->json([
             'rank_promotion_participant' => $participant->load(['student.primaryClass', 'fromRank', 'toRank', 'assessor']),
+            'warnings' => $warnings,
         ], 201);
     }
 
@@ -142,16 +141,11 @@ class RankPromotionController extends Controller
             'result' => ['sometimes', Rule::in(['registered', 'passed', 'failed', 'absent'])],
             'score' => ['nullable', 'integer', 'min:0', 'max:100'],
             'notes' => ['nullable', 'string'],
-            'allow_skip' => ['sometimes', 'boolean'],
         ]);
 
-        if (array_key_exists('to_rank_id', $data)) {
-            $this->ensureValidProgression($request, $participant->from_rank_id, (int) $data['to_rank_id'], [
-                'notes' => $participant->notes,
-                ...$data,
-            ]);
-        }
-        unset($data['allow_skip']);
+        $warnings = array_key_exists('to_rank_id', $data)
+            ? $this->progressionWarnings($request, $participant->from_rank_id, (int) $data['to_rank_id'])
+            : [];
 
         DB::transaction(function () use ($data, $participant, $request) {
             $participant->update([
@@ -164,6 +158,7 @@ class RankPromotionController extends Controller
 
         return response()->json([
             'rank_promotion_participant' => $participant->fresh()->load(['student.primaryClass', 'fromRank', 'toRank', 'assessor']),
+            'warnings' => $warnings,
         ]);
     }
 
@@ -208,50 +203,38 @@ class RankPromotionController extends Controller
     }
 
     /**
-     * Sabuk tujuan harus lebih tinggi (sequence) dari sabuk asal. Melewati tingkat lain di antaranya
-     * hanya boleh dengan allow_skip + catatan. Poom/Dan setara berbagi sequence dan dihitung satu tingkat.
+     * Satu-satunya aturan yang memblokir: sabuk tujuan harus lebih tinggi (sequence) dari sabuk asal.
+     * Syarat kelayakan/loncat tingkat adalah kebijakan tiap akademi (keputusan pemilik), jadi
+     * melewati tingkat hanya menghasilkan peringatan. Poom/Dan setara berbagi sequence.
+     *
+     * @return array<int, string>
      */
-    private function ensureValidProgression(Request $request, ?int $fromRankId, int $toRankId, array $data): void
+    private function progressionWarnings(Request $request, ?int $fromRankId, int $toRankId): array
     {
-        if ($fromRankId === null) {
-            return;
+        $from = $fromRankId ? SportRank::query()->find($fromRankId) : null;
+
+        if ($from === null) {
+            return [];
         }
 
         $visible = SportRank::query()->visibleTo($request->user()->akademi);
-        $toSequence = (clone $visible)->whereKey($toRankId)->value('sequence');
-        $fromSequence = SportRank::query()->whereKey($fromRankId)->value('sequence');
+        $to = (clone $visible)->findOrFail($toRankId);
 
-        if ($fromSequence === null) {
-            return;
-        }
-
-        if ($toSequence <= $fromSequence) {
+        if ($to->sequence <= $from->sequence) {
             throw ValidationException::withMessages([
                 'to_rank_id' => 'Tingkatan tujuan harus lebih tinggi dari tingkatan siswa saat ini.',
             ]);
         }
 
         $skipped = (clone $visible)
-            ->where('sequence', '>', $fromSequence)
-            ->where('sequence', '<', $toSequence)
+            ->where('sequence', '>', $from->sequence)
+            ->where('sequence', '<', $to->sequence)
             ->distinct()
             ->count('sequence');
 
-        if ($skipped === 0) {
-            return;
-        }
-
-        if (! ($data['allow_skip'] ?? false)) {
-            throw ValidationException::withMessages([
-                'to_rank_id' => "Tingkatan tujuan melompati {$skipped} tingkat. Aktifkan izin loncat tingkat dan isi catatan.",
-            ]);
-        }
-
-        if (blank($data['notes'] ?? null)) {
-            throw ValidationException::withMessages([
-                'notes' => 'Catatan wajib diisi saat loncat tingkat.',
-            ]);
-        }
+        return $skipped > 0
+            ? ["Melewati {$skipped} tingkat dari {$from->label} ke {$to->label}."]
+            : [];
     }
 
     private function ensureCanManage(Request $request): void
