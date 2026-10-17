@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import { setupMockApi } from "./fixtures/mock-api";
 import { setupStudentsSppMockApi } from "./fixtures/mock-api-students-spp";
+import { L4B_RECEIPT_NUMBER, setupSppL4bMockApi } from "./fixtures/mock-api-spp-l4b";
 import { setAdminSession } from "./fixtures/session";
 declare function describe(name: string, fn: () => void): void;
 declare function it(name: string, fn: () => void): void;
@@ -231,5 +232,69 @@ if (isVitest) {
       await playwrightExpect(dialog).toBeHidden();
     });
   });
-}
 
+  // L4-B
+  playwrightTest.describe("SPP: pengaturan, Terlambat, tunggakan, kwitansi di HP (L4-B)", () => {
+    playwrightTest.beforeEach(async ({ page }, testInfo) => {
+      playwrightTest.skip(testInfo.project.name !== "mobile", "Alur khusus HP");
+      await setAdminSession(page);
+      await setupMockApi(page);
+      await setupStudentsSppMockApi(page);
+      await setupSppL4bMockApi(page);
+    });
+
+    playwrightTest("pengaturan SPP disimpan dari SheetModal", async ({ page }) => {
+      await page.goto("/academy/spp");
+      await page.getByRole("button", { name: "Pengaturan SPP" }).click();
+      const dialog = page.getByRole("dialog");
+      await playwrightExpect(dialog.getByLabel(/Nominal SPP default/)).toHaveValue("150000");
+
+      await dialog.getByLabel(/Nominal SPP default/).fill("175000");
+      await dialog.getByLabel(/Tanggal jatuh tempo/).fill("5");
+      const saveRequest = page.waitForRequest((request) => request.method() === "PUT" && request.url().includes("/akademi/spp-settings"));
+      await dialog.getByRole("button", { name: /simpan pengaturan/i }).click();
+      playwrightExpect((await saveRequest).postDataJSON()).toEqual({ default_monthly_amount: 175000, due_day: 5 });
+
+      await playwrightExpect(page.getByText("Pengaturan SPP tersimpan.")).toBeVisible();
+      await playwrightExpect(dialog).toBeHidden();
+    });
+
+    playwrightTest("tagihan terlambat ditandai, tab Tunggakan tampil", async ({ page }) => {
+      await page.goto("/academy/spp");
+      await page.getByRole("button", { name: "Lihat Tagihan" }).first().click();
+      const cards = page.getByTestId("responsive-list-card");
+      await playwrightExpect(cards.first().getByText("Terlambat")).toBeVisible();
+      await playwrightExpect(cards.nth(1).getByText("Terlambat")).toHaveCount(0);
+
+      await page.getByRole("button", { name: "Tunggakan" }).click();
+      await playwrightExpect(page.getByTestId("responsive-list-card").first()).toContainText("2 bulan");
+
+      const hasHorizontalScroll = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+      playwrightExpect(hasHorizontalScroll).toBe(false);
+    });
+
+    playwrightTest("bayar lalu buka kwitansi yang bisa dibagikan via WhatsApp", async ({ page }) => {
+      await page.goto("/academy/spp");
+      await page.getByRole("button", { name: "Lihat Tagihan" }).first().click();
+      await page.getByTestId("responsive-list-card").first().getByRole("button", { name: "Bayar" }).click();
+      await page.getByRole("dialog").getByRole("button", { name: /simpan pembayaran/i }).click();
+
+      await page.getByRole("link", { name: "Lihat kwitansi" }).click();
+      await page.waitForURL("**/academy/spp/receipts/77");
+
+      const receipt = page.getByRole("article", { name: /Kwitansi SPP/ });
+      await playwrightExpect(receipt).toContainText(L4B_RECEIPT_NUMBER);
+      await playwrightExpect(receipt).toContainText("Oktober 2026");
+      await playwrightExpect(page.getByRole("button", { name: /Cetak/ })).toBeVisible();
+      const whatsapp = page.getByRole("link", { name: /Bagikan via WhatsApp/ });
+      await playwrightExpect(whatsapp).toHaveAttribute("href", /^https:\/\/wa\.me\/6281200000000\?text=/);
+
+      const hasHorizontalScroll = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+      playwrightExpect(hasHorizontalScroll).toBe(false);
+
+      await page.emulateMedia({ media: "print" });
+      await playwrightExpect(page.getByRole("button", { name: /Cetak/ })).toBeHidden();
+      await page.screenshot({ path: path.join(process.cwd(), "e2e", "__screenshots__", "academy-spp-receipt-print-mobile.png"), fullPage: true });
+    });
+  });
+}
