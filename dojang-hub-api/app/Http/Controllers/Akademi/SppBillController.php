@@ -8,7 +8,9 @@ use App\Models\Student;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class SppBillController extends Controller
 {
@@ -127,23 +129,50 @@ class SppBillController extends Controller
             'notes' => ['nullable', 'string'],
         ]);
 
+        if (! empty($data['proof_url'])) {
+            $allowedPrefix = Storage::disk('public')->url("akademi/{$request->user()->akademi_id}/");
+            $relativePrefix = "/storage/akademi/{$request->user()->akademi_id}/";
+            if (! str_starts_with($data['proof_url'], $allowedPrefix) && ! str_starts_with($data['proof_url'], $relativePrefix)) {
+                throw ValidationException::withMessages([
+                    'proof_url' => ['Bukti pembayaran harus berasal dari berkas unggahan akademi ini.'],
+                ]);
+            }
+        }
+
         DB::transaction(function () use ($data, $request, $sppBill) {
-            $sppBill->payments()->create([
+            $bill = SppBill::where('id', $sppBill->id)->lockForUpdate()->firstOrFail();
+
+            if (in_array($bill->status, ['paid', 'waived'], true)) {
+                throw ValidationException::withMessages([
+                    'status' => ['Tagihan ini sudah berstatus '.($bill->status === 'paid' ? 'lunas' : 'dikecualikan (waived)').' dan tidak bisa menerima pembayaran.'],
+                ]);
+            }
+
+            $currentPaid = (float) $bill->paid_amount;
+            $remaining = round((float) $bill->amount - $currentPaid, 2);
+
+            if (round((float) $data['amount'], 2) > $remaining) {
+                throw ValidationException::withMessages([
+                    'amount' => ['Jumlah pembayaran melebihi sisa tagihan (sisa: '.number_format($remaining, 0, ',', '.').').'],
+                ]);
+            }
+
+            $bill->payments()->create([
                 ...$data,
                 'created_by' => $request->user()->id,
             ]);
 
-            $paidAmount = $sppBill->payments()->sum('amount');
+            $newPaidAmount = round($bill->payments()->sum('amount'), 2);
             $status = 'partial';
 
-            if ($paidAmount <= 0) {
+            if ($newPaidAmount <= 0) {
                 $status = 'unpaid';
-            } elseif ($paidAmount >= (float) $sppBill->amount) {
+            } elseif ($newPaidAmount >= (float) $bill->amount) {
                 $status = 'paid';
             }
 
-            $sppBill->update([
-                'paid_amount' => $paidAmount,
+            $bill->update([
+                'paid_amount' => $newPaidAmount,
                 'status' => $status,
             ]);
         });
