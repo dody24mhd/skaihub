@@ -1,0 +1,503 @@
+{
+  "/compro/testimonials": [],
+  "/compro/faqs": [],
+  "/compro/settings": [],
+  "/compro/events": [
+    {
+      "id": 1,
+      "title": "PANGGILAN UNTUK PARA KESATRIA!",
+      "slug": "panggilan-untuk-para-kesatria",
+      "excerpt": "Mok's Taekwondo Championship 2026",
+      "description": "<p><strong>PANGGILAN&nbsp;UNTUK&nbsp;PARA&nbsp;KESATRIA!&nbsp;</strong></p><p>Kejuaraan&nbsp;Nasional&nbsp;Mok&#39;s&nbsp;Taekwondo&nbsp;Championship&nbsp;2026&nbsp;resmi&nbsp;hadir&nbsp;di&nbsp;Palembang!&nbsp;Saatnya&nbsp;buktikan&nbsp;hasil&nbsp;latihan&nbsp;kerasmu&nbsp;di&nbsp;atas&nbsp;matras&nbsp;dan&nbsp;bawa&nbsp;pulang&nbsp;gelar&nbsp;juara.&nbsp;</p><p>📍&nbsp;<strong>Lokasi:</strong>&nbsp;GOR&nbsp;Ranau,&nbsp;Jakabaring&nbsp;Sport&nbsp;City,&nbsp;Palembang&nbsp;</p><p>📅&nbsp;<strong>Waktu:</strong>&nbsp;19&nbsp;–&nbsp;21&nbsp;Juni&nbsp;2026&nbsp;</p><p>🥊&nbsp;<strong>Kategori:</strong>&nbsp;Kyorugi&nbsp;&amp;&nbsp;Poomsae&nbsp;(Festival&nbsp;&amp;&nbsp;Prestasi)&nbsp;</p><p>Kuota&nbsp;terbatas&nbsp;untuk&nbsp;dojang&nbsp;se-Indonesia!&nbsp;Jangan&nbsp;sampai&nbsp;ketinggalan,&nbsp;amankan&nbsp;slot&nbsp;kontingenmu&nbsp;sekarang&nbsp;juga.</p><p></p><p>Info&nbsp;&amp;&nbsp;Registrasi:&nbsp;bit.ly/KejurnasMoks2026&nbsp;atau&nbsp;DM&nbsp;ke&nbsp;akun&nbsp;ini.</p><p>#TaekwondoIndonesia&nbsp;#KejurnasTaekwondo2026&nbsp;#DojangSriwijaya&nbsp;#Kyorugi&nbsp;#Poomsae&nbsp;#PalembangEvent</p>",
+      "cover_image_url": "/demo-media/storage/uploads/images/QyxdlgTtLC0U38VQ8EvcIh1XFKjv95aiEswPhK11.jpg",
+      "location": "GOR Ranau, Jakabaring Sport City, Palembang",
+      "organizer_name": "Mok's Taekwondo Championship 2026",
+      "registration_url": null,
+      "status": "published",
+      "category": "Umum",
+      "is_featured": true,
+      "starts_at": "2026-12-21T00:00:00.000000Z",
+      "ends_at": "2026-12-24T00:00:00.000000Z",
+      "views_count": 3,
+      "published_at": "2026-10-17T16:30:20.000000Z",
+      "created_at": "2026-10-17T16:30:21.000000Z",
+      "updated_at": "2026-10-17T16:50:43.000000Z",
+      "deleted_at": null
+    },
+    {
+      "id": 2,
+      "title": "UJIAN KENAIKAN TINGKAT (UKT) & COACHING CLINIC SPESIAL",
+      "slug": "ujian-kenaikan-tingkat-ukt-coaching-clinic-spesial",
+      "excerpt": "Dojang Sriwijaya Taekwondo",
+      "description": "<p>Bukan&nbsp;sekadar&nbsp;berganti&nbsp;warna&nbsp;sabuk,&nbsp;tetapi&nbsp;tentang&nbsp;seberapa&nbsp;jauh&nbsp;kamu&nbsp;berkembang,&nbsp;mendisiplinkan&nbsp;diri,&nbsp;dan&nbsp;melampaui&nbsp;batas&nbsp;kemampuanmu&nbsp;selama&nbsp;berbulan-bulan&nbsp;latihan.</p><p></p><p>Catat&nbsp;jadwal&nbsp;dan&nbsp;persiapannya:</p><p>Hari&nbsp;/&nbsp;Tanggal:&nbsp;Minggu,&nbsp;15&nbsp;November&nbsp;2026</p><p>Waktu:&nbsp;08.00&nbsp;WIB&nbsp;s/d&nbsp;Selesai</p><p>Lokasi:&nbsp;GOR&nbsp;Dempo&nbsp;/&nbsp;Hall&nbsp;Serbaguna,&nbsp;Jakabaring&nbsp;Sport&nbsp;City</p><p>Pakaian:&nbsp;Dobok&nbsp;Resmi&nbsp;Lengkap&nbsp;&amp;&nbsp;Pelindung&nbsp;Mandiri&nbsp;(Dojang&nbsp;Sriwijaya)</p><p></p><p>Special&nbsp;Session:</p><p>Sesi&nbsp;Coaching&nbsp;Clinic&nbsp;teknik&nbsp;tendangan&nbsp;kompetisi&nbsp;modern&nbsp;bersama&nbsp;atlet&nbsp;tamu&nbsp;pelatnas!</p><p></p><p>Batas&nbsp;akhir&nbsp;pendaftaran&nbsp;administrasi:&nbsp;5&nbsp;November&nbsp;2026&nbsp;ke&nbsp;pengurus&nbsp;masing-masing&nbsp;kelas&nbsp;latihan.</p><p></p><p>Persiapkan&nbsp;fisik&nbsp;dan&nbsp;hafalan&nbsp;jurus&nbsp;kalian&nbsp;dari&nbsp;sekarang.&nbsp;Sampai&nbsp;jumpa&nbsp;di&nbsp;atas&nbsp;matras!&nbsp;</p><p></p><p>#UKTTaekwondo&nbsp;#DojangSriwijaya&nbsp;#UjianKenaikanTingkat&nbsp;#TaekwondoIndonesia&nbsp;#PantangMenyerah&nbsp;#Kyorugi&nbsp;#Poomsae</p>",
+      "cover_image_url": "/demo-media/storage/uploads/images/Gb5bRaVlHphVp3T5lzS1mJq2gIB6Fo5fnTnOiEkU.jpg",
+      "location": "Dojang Sriwijaya Taekwondo",
+      "organizer_name": "Dojang Sriwijaya Taekwondo",
+      "registration_url": null,
+      "status": "published",
+      "category": "Umum",
+      "is_featured": false,
+      "starts_at": "2026-10-26T00:00:00.000000Z",
+      "ends_at": "2026-10-26T00:00:00.000000Z",
+      "views_count": 0,
+      "published_at": "2026-10-17T16:48:11.000000Z",
+      "created_at": "2026-10-17T16:48:11.000000Z",
+      "updated_at": "2026-10-17T16:48:11.000000Z",
+      "deleted_at": null
+    },
+    {
+      "id": 3,
+      "title": "Piala Sriwijaya Open 2026",
+      "slug": "piala-sriwijaya-open-2026",
+      "excerpt": "Piala Sriwijaya Open 2026",
+      "description": "<p>Kejuaraan&nbsp;Nasional&nbsp;Karate&nbsp;<strong>&quot;Piala&nbsp;Sriwijaya&nbsp;Open&nbsp;2026&quot;</strong>&nbsp;resmi&nbsp;dibuka&nbsp;untuk&nbsp;seluruh&nbsp;dojo&nbsp;dan&nbsp;perguruan&nbsp;karate&nbsp;se-Indonesia!</p><p>Tunjukkan&nbsp;ketajaman&nbsp;gerak&nbsp;<em>Kata</em>&nbsp;dan&nbsp;ketangguhan&nbsp;teknik&nbsp;<em>Kumite</em>&nbsp;terbaikmu&nbsp;di&nbsp;kejuaraan&nbsp;paling&nbsp;bergengsi&nbsp;tahun&nbsp;ini.&nbsp;</p><p></p><p><strong>Detail&nbsp;Agenda:</strong></p><p><strong>Waktu:</strong>&nbsp;12&nbsp;–&nbsp;13&nbsp;Desember&nbsp;2026</p><p><strong>Lokasi:</strong>&nbsp;GOR&nbsp;Dempo,&nbsp;Jakabaring&nbsp;Sport&nbsp;City,&nbsp;Palembang</p><p><strong>Kategori:</strong>&nbsp;Kata&nbsp;&amp;&nbsp;Kumite&nbsp;(Festival&nbsp;&amp;&nbsp;Prestasi&nbsp;/&nbsp;Usia&nbsp;Dini&nbsp;–&nbsp;Senior)&nbsp;</p><p><strong>Perebutan:</strong>&nbsp;Juara&nbsp;Umum&nbsp;1,&nbsp;2,&nbsp;3&nbsp;&amp;&nbsp;Piala&nbsp;Bergilir&nbsp;Sriwijaya</p><p></p><p><em>Pendaftaran&nbsp;ditutup&nbsp;tanggal&nbsp;30&nbsp;November&nbsp;2026&nbsp;(Kuota&nbsp;Terbatas).</em></p><p>Siapkan&nbsp;fisik,&nbsp;mental,&nbsp;dan&nbsp;teknik&nbsp;perguruanmu.&nbsp;Amankan&nbsp;slot&nbsp;kontingen&nbsp;sekarang&nbsp;juga!</p><p></p><p><strong>Pendaftaran&nbsp;&amp;&nbsp;Buku&nbsp;Petunjuk&nbsp;Teknis:</strong></p><p>Link:&nbsp;bit.ly/PialaSriwijayaKarate2026&nbsp;atau&nbsp;hubungi&nbsp;Official&nbsp;WhatsApp&nbsp;di&nbsp;bio.</p><p>#KarateIndonesia&nbsp;#KejurnasKarate&nbsp;#PialaSriwijaya2026&nbsp;#FORKI&nbsp;#KataKarate&nbsp;#Kumite&nbsp;#KarateEventPalembang</p>",
+      "cover_image_url": "/demo-media/storage/uploads/images/wyA0wA5POwnsCtilIDTauvGeCUwSBDF9TljWf9y3.jpg",
+      "location": "GOR Dempo, Jakabaring",
+      "organizer_name": "Piala Sriwijaya Open 2026",
+      "registration_url": null,
+      "status": "published",
+      "category": "Umum",
+      "is_featured": false,
+      "starts_at": "2026-12-12T00:00:00.000000Z",
+      "ends_at": "2026-12-14T00:00:00.000000Z",
+      "views_count": 0,
+      "published_at": "2026-10-17T16:54:14.000000Z",
+      "created_at": "2026-10-17T16:54:14.000000Z",
+      "updated_at": "2026-10-17T16:54:14.000000Z",
+      "deleted_at": null
+    }
+  ],
+  "/compro/blog": [
+    {
+      "id": 3,
+      "title": "Lebih dari Sekadar Tempat Latihan, Kami Adalah Keluarga ❤️",
+      "slug": "lebih-dari-sekadar-tempat-latihan-kami-adalah-keluarga",
+      "excerpt": "Gathering Dojang Sriwijaya",
+      "content": "<p></p><p>Keseruan&nbsp;momen&nbsp;<em>Family&nbsp;Gathering&nbsp;&amp;&nbsp;Fun&nbsp;Games</em>&nbsp;Dojang&nbsp;Sriwijaya&nbsp;di&nbsp;akhir&nbsp;pekan&nbsp;kemarin!&nbsp;Mulai&nbsp;dari&nbsp;lomba&nbsp;tarik&nbsp;tambang&nbsp;antar-wali&nbsp;murid,&nbsp;<em>games</em>&nbsp;kekompakan&nbsp;bersama&nbsp;para&nbsp;pelatih,&nbsp;hingga&nbsp;santap&nbsp;tumpeng&nbsp;bersama.&nbsp;</p><p>Terima&nbsp;kasih&nbsp;banyak&nbsp;untuk&nbsp;seluruh&nbsp;orang&nbsp;tua&nbsp;siswa&nbsp;atas&nbsp;kehangatan&nbsp;dan&nbsp;kekompakannya.&nbsp;Sinergi&nbsp;yang&nbsp;kuat&nbsp;antara&nbsp;pelatih,&nbsp;murid,&nbsp;dan&nbsp;orang&nbsp;tua&nbsp;adalah&nbsp;kunci&nbsp;utama&nbsp;keberhasilan&nbsp;anak-anak&nbsp;kita.&nbsp;Sampai&nbsp;jumpa&nbsp;di&nbsp;agenda&nbsp;kebersamaan&nbsp;berikutnya!&nbsp;🙌🎉&nbsp;</p><p></p><p>#FamilyGathering&nbsp;#DojangFamily&nbsp;#Kebersamaan&nbsp;#FunGames&nbsp;#TaekwondoCommunity</p>",
+      "thumbnail_url": "/demo-media/storage/uploads/images/t05FYrAhenn3upUc6xoTTx98VRsySVSEgGkCedKI.jpg",
+      "category": "Artikel",
+      "author_name": "SKAIHUB",
+      "status": "published",
+      "meta_title": null,
+      "meta_description": null,
+      "og_image_url": null,
+      "views_count": 0,
+      "published_at": "2026-10-17T16:34:09.000000Z",
+      "created_at": "2026-10-17T16:34:10.000000Z",
+      "updated_at": "2026-10-17T16:34:10.000000Z",
+      "deleted_at": null
+    },
+    {
+      "id": 2,
+      "title": "Bangga Membawa Nama Baik Sekolah di Kancah Nasional!",
+      "slug": "bangga-membawa-nama-baik-sekolah-di-kancah-nasional",
+      "excerpt": "Dojang Sriwijaya",
+      "content": "<p>Apresiasi&nbsp;luar&nbsp;biasa&nbsp;diberikan&nbsp;pihak&nbsp;sekolah&nbsp;saat&nbsp;upacara&nbsp;bendera&nbsp;hari&nbsp;Senin&nbsp;kepada&nbsp;ananda&nbsp;yang&nbsp;berhasil&nbsp;meraih&nbsp;prestasi&nbsp;gemilang&nbsp;pada&nbsp;kejuaraan&nbsp;taekwondo&nbsp;tingkat&nbsp;nasional.&nbsp;</p><p></p><p>Menyeimbangkan&nbsp;waktu&nbsp;belajar&nbsp;akademik&nbsp;dan&nbsp;latihan&nbsp;fisik&nbsp;yang&nbsp;disiplin&nbsp;bukanlah&nbsp;hal&nbsp;yang&nbsp;mudah,&nbsp;namun&nbsp;ananda&nbsp;membuktikan&nbsp;bahwa&nbsp;keduanya&nbsp;bisa&nbsp;berjalan&nbsp;beriringan&nbsp;dengan&nbsp;penuh&nbsp;dedikasi.</p><p>Semoga&nbsp;pencapaian&nbsp;ini&nbsp;bisa&nbsp;memotivasi&nbsp;seluruh&nbsp;teman-teman&nbsp;untuk&nbsp;terus&nbsp;berani&nbsp;bermimpi&nbsp;dan&nbsp;berkarya&nbsp;sesuai&nbsp;bakat&nbsp;masing-masing!&nbsp;🌟</p><p>#PrestasiSiswa&nbsp;#BanggaPelajarIndonesia&nbsp;#TaekwondoPelajar&nbsp;#GenerasiEmas&nbsp;#SekolahBerprestasi</p>",
+      "thumbnail_url": "/demo-media/storage/uploads/images/YpVc9eM962IZ3xrWfURerN35JqDQQu79CvbjJA9o.jpg",
+      "category": "Artikel",
+      "author_name": "SKAIHUB",
+      "status": "published",
+      "meta_title": null,
+      "meta_description": null,
+      "og_image_url": null,
+      "views_count": 0,
+      "published_at": "2026-10-17T16:32:33.000000Z",
+      "created_at": "2026-10-17T16:32:33.000000Z",
+      "updated_at": "2026-10-17T16:33:04.000000Z",
+      "deleted_at": null
+    },
+    {
+      "id": 1,
+      "title": "Kerja Keras Tidak Pernah Mengkhianati Hasil!",
+      "slug": "kerja-keras-tidak-pernah-mengkhianati-hasil",
+      "excerpt": "Dojang Sriwijaya",
+      "content": "<p>Selamat&nbsp;dan&nbsp;apresiasi&nbsp;setinggi-tingginya&nbsp;kepada&nbsp;para&nbsp;atlet&nbsp;Dojang&nbsp;Sriwijaya&nbsp;yang&nbsp;berhasil&nbsp;memborong&nbsp;podium&nbsp;di&nbsp;ajang&nbsp;Kejuaraan&nbsp;Nasional!&nbsp;</p><p>Medali&nbsp;ini&nbsp;adalah&nbsp;buah&nbsp;dari&nbsp;tetesan&nbsp;keringat,&nbsp;disiplin&nbsp;tanpa&nbsp;henti,&nbsp;dan&nbsp;mental&nbsp;juara&nbsp;yang&nbsp;terus&nbsp;diasah&nbsp;setiap&nbsp;hari&nbsp;di&nbsp;tempat&nbsp;latihan.&nbsp;Terima&nbsp;kasih&nbsp;kepada&nbsp;para&nbsp;pelatih,&nbsp;orang&nbsp;tua,&nbsp;dan&nbsp;seluruh&nbsp;rekan&nbsp;yang&nbsp;senantiasa&nbsp;memberikan&nbsp;doa&nbsp;serta&nbsp;dukungan&nbsp;penuh.&nbsp;</p><p></p><p>Jadikan&nbsp;kemenangan&nbsp;ini&nbsp;sebagai&nbsp;pemacu&nbsp;semangat,&nbsp;tetap&nbsp;rendah&nbsp;hati,&nbsp;dan&nbsp;kembali&nbsp;bersiap&nbsp;untuk&nbsp;tantangan&nbsp;berikutnya!&nbsp;✊✨</p><p>#ProudDojangSriwijaya&nbsp;#JuaraTaekwondo&nbsp;#MentalJuara&nbsp;#PrestasiAnakBangsa&nbsp;#TaekwondoChamp</p>",
+      "thumbnail_url": "/demo-media/storage/uploads/images/tWm6nk172mZ84gAVONZb45x2MmDkG0aolPvdsdQS.jpg",
+      "category": "Pengumuman",
+      "author_name": "SKAIHUB",
+      "status": "published",
+      "meta_title": null,
+      "meta_description": null,
+      "og_image_url": null,
+      "views_count": 0,
+      "published_at": "2026-10-17T16:31:44.000000Z",
+      "created_at": "2026-10-17T16:31:45.000000Z",
+      "updated_at": "2026-10-17T16:31:45.000000Z",
+      "deleted_at": null
+    }
+  ],
+  "/compro/events/panggilan-untuk-para-kesatria": {
+    "id": 1,
+    "title": "PANGGILAN UNTUK PARA KESATRIA!",
+    "slug": "panggilan-untuk-para-kesatria",
+    "excerpt": "Mok's Taekwondo Championship 2026",
+    "description": "<p><strong>PANGGILAN&nbsp;UNTUK&nbsp;PARA&nbsp;KESATRIA!&nbsp;</strong></p><p>Kejuaraan&nbsp;Nasional&nbsp;Mok&#39;s&nbsp;Taekwondo&nbsp;Championship&nbsp;2026&nbsp;resmi&nbsp;hadir&nbsp;di&nbsp;Palembang!&nbsp;Saatnya&nbsp;buktikan&nbsp;hasil&nbsp;latihan&nbsp;kerasmu&nbsp;di&nbsp;atas&nbsp;matras&nbsp;dan&nbsp;bawa&nbsp;pulang&nbsp;gelar&nbsp;juara.&nbsp;</p><p>📍&nbsp;<strong>Lokasi:</strong>&nbsp;GOR&nbsp;Ranau,&nbsp;Jakabaring&nbsp;Sport&nbsp;City,&nbsp;Palembang&nbsp;</p><p>📅&nbsp;<strong>Waktu:</strong>&nbsp;19&nbsp;–&nbsp;21&nbsp;Juni&nbsp;2026&nbsp;</p><p>🥊&nbsp;<strong>Kategori:</strong>&nbsp;Kyorugi&nbsp;&amp;&nbsp;Poomsae&nbsp;(Festival&nbsp;&amp;&nbsp;Prestasi)&nbsp;</p><p>Kuota&nbsp;terbatas&nbsp;untuk&nbsp;dojang&nbsp;se-Indonesia!&nbsp;Jangan&nbsp;sampai&nbsp;ketinggalan,&nbsp;amankan&nbsp;slot&nbsp;kontingenmu&nbsp;sekarang&nbsp;juga.</p><p></p><p>Info&nbsp;&amp;&nbsp;Registrasi:&nbsp;bit.ly/KejurnasMoks2026&nbsp;atau&nbsp;DM&nbsp;ke&nbsp;akun&nbsp;ini.</p><p>#TaekwondoIndonesia&nbsp;#KejurnasTaekwondo2026&nbsp;#DojangSriwijaya&nbsp;#Kyorugi&nbsp;#Poomsae&nbsp;#PalembangEvent</p>",
+    "cover_image_url": "/demo-media/storage/uploads/images/QyxdlgTtLC0U38VQ8EvcIh1XFKjv95aiEswPhK11.jpg",
+    "location": "GOR Ranau, Jakabaring Sport City, Palembang",
+    "organizer_name": "Mok's Taekwondo Championship 2026",
+    "registration_url": null,
+    "status": "published",
+    "category": "Umum",
+    "is_featured": true,
+    "starts_at": "2026-12-21T00:00:00.000000Z",
+    "ends_at": "2026-12-24T00:00:00.000000Z",
+    "views_count": 3,
+    "published_at": "2026-10-17T16:30:20.000000Z",
+    "created_at": "2026-10-17T16:30:21.000000Z",
+    "updated_at": "2026-10-17T16:50:43.000000Z",
+    "deleted_at": null
+  },
+  "/compro/events/ujian-kenaikan-tingkat-ukt-coaching-clinic-spesial": {
+    "id": 2,
+    "title": "UJIAN KENAIKAN TINGKAT (UKT) & COACHING CLINIC SPESIAL",
+    "slug": "ujian-kenaikan-tingkat-ukt-coaching-clinic-spesial",
+    "excerpt": "Dojang Sriwijaya Taekwondo",
+    "description": "<p>Bukan&nbsp;sekadar&nbsp;berganti&nbsp;warna&nbsp;sabuk,&nbsp;tetapi&nbsp;tentang&nbsp;seberapa&nbsp;jauh&nbsp;kamu&nbsp;berkembang,&nbsp;mendisiplinkan&nbsp;diri,&nbsp;dan&nbsp;melampaui&nbsp;batas&nbsp;kemampuanmu&nbsp;selama&nbsp;berbulan-bulan&nbsp;latihan.</p><p></p><p>Catat&nbsp;jadwal&nbsp;dan&nbsp;persiapannya:</p><p>Hari&nbsp;/&nbsp;Tanggal:&nbsp;Minggu,&nbsp;15&nbsp;November&nbsp;2026</p><p>Waktu:&nbsp;08.00&nbsp;WIB&nbsp;s/d&nbsp;Selesai</p><p>Lokasi:&nbsp;GOR&nbsp;Dempo&nbsp;/&nbsp;Hall&nbsp;Serbaguna,&nbsp;Jakabaring&nbsp;Sport&nbsp;City</p><p>Pakaian:&nbsp;Dobok&nbsp;Resmi&nbsp;Lengkap&nbsp;&amp;&nbsp;Pelindung&nbsp;Mandiri&nbsp;(Dojang&nbsp;Sriwijaya)</p><p></p><p>Special&nbsp;Session:</p><p>Sesi&nbsp;Coaching&nbsp;Clinic&nbsp;teknik&nbsp;tendangan&nbsp;kompetisi&nbsp;modern&nbsp;bersama&nbsp;atlet&nbsp;tamu&nbsp;pelatnas!</p><p></p><p>Batas&nbsp;akhir&nbsp;pendaftaran&nbsp;administrasi:&nbsp;5&nbsp;November&nbsp;2026&nbsp;ke&nbsp;pengurus&nbsp;masing-masing&nbsp;kelas&nbsp;latihan.</p><p></p><p>Persiapkan&nbsp;fisik&nbsp;dan&nbsp;hafalan&nbsp;jurus&nbsp;kalian&nbsp;dari&nbsp;sekarang.&nbsp;Sampai&nbsp;jumpa&nbsp;di&nbsp;atas&nbsp;matras!&nbsp;</p><p></p><p>#UKTTaekwondo&nbsp;#DojangSriwijaya&nbsp;#UjianKenaikanTingkat&nbsp;#TaekwondoIndonesia&nbsp;#PantangMenyerah&nbsp;#Kyorugi&nbsp;#Poomsae</p>",
+    "cover_image_url": "/demo-media/storage/uploads/images/Gb5bRaVlHphVp3T5lzS1mJq2gIB6Fo5fnTnOiEkU.jpg",
+    "location": "Dojang Sriwijaya Taekwondo",
+    "organizer_name": "Dojang Sriwijaya Taekwondo",
+    "registration_url": null,
+    "status": "published",
+    "category": "Umum",
+    "is_featured": false,
+    "starts_at": "2026-10-26T00:00:00.000000Z",
+    "ends_at": "2026-10-26T00:00:00.000000Z",
+    "views_count": 0,
+    "published_at": "2026-10-17T16:48:11.000000Z",
+    "created_at": "2026-10-17T16:48:11.000000Z",
+    "updated_at": "2026-10-17T16:48:11.000000Z",
+    "deleted_at": null
+  },
+  "/compro/events/piala-sriwijaya-open-2026": {
+    "id": 3,
+    "title": "Piala Sriwijaya Open 2026",
+    "slug": "piala-sriwijaya-open-2026",
+    "excerpt": "Piala Sriwijaya Open 2026",
+    "description": "<p>Kejuaraan&nbsp;Nasional&nbsp;Karate&nbsp;<strong>&quot;Piala&nbsp;Sriwijaya&nbsp;Open&nbsp;2026&quot;</strong>&nbsp;resmi&nbsp;dibuka&nbsp;untuk&nbsp;seluruh&nbsp;dojo&nbsp;dan&nbsp;perguruan&nbsp;karate&nbsp;se-Indonesia!</p><p>Tunjukkan&nbsp;ketajaman&nbsp;gerak&nbsp;<em>Kata</em>&nbsp;dan&nbsp;ketangguhan&nbsp;teknik&nbsp;<em>Kumite</em>&nbsp;terbaikmu&nbsp;di&nbsp;kejuaraan&nbsp;paling&nbsp;bergengsi&nbsp;tahun&nbsp;ini.&nbsp;</p><p></p><p><strong>Detail&nbsp;Agenda:</strong></p><p><strong>Waktu:</strong>&nbsp;12&nbsp;–&nbsp;13&nbsp;Desember&nbsp;2026</p><p><strong>Lokasi:</strong>&nbsp;GOR&nbsp;Dempo,&nbsp;Jakabaring&nbsp;Sport&nbsp;City,&nbsp;Palembang</p><p><strong>Kategori:</strong>&nbsp;Kata&nbsp;&amp;&nbsp;Kumite&nbsp;(Festival&nbsp;&amp;&nbsp;Prestasi&nbsp;/&nbsp;Usia&nbsp;Dini&nbsp;–&nbsp;Senior)&nbsp;</p><p><strong>Perebutan:</strong>&nbsp;Juara&nbsp;Umum&nbsp;1,&nbsp;2,&nbsp;3&nbsp;&amp;&nbsp;Piala&nbsp;Bergilir&nbsp;Sriwijaya</p><p></p><p><em>Pendaftaran&nbsp;ditutup&nbsp;tanggal&nbsp;30&nbsp;November&nbsp;2026&nbsp;(Kuota&nbsp;Terbatas).</em></p><p>Siapkan&nbsp;fisik,&nbsp;mental,&nbsp;dan&nbsp;teknik&nbsp;perguruanmu.&nbsp;Amankan&nbsp;slot&nbsp;kontingen&nbsp;sekarang&nbsp;juga!</p><p></p><p><strong>Pendaftaran&nbsp;&amp;&nbsp;Buku&nbsp;Petunjuk&nbsp;Teknis:</strong></p><p>Link:&nbsp;bit.ly/PialaSriwijayaKarate2026&nbsp;atau&nbsp;hubungi&nbsp;Official&nbsp;WhatsApp&nbsp;di&nbsp;bio.</p><p>#KarateIndonesia&nbsp;#KejurnasKarate&nbsp;#PialaSriwijaya2026&nbsp;#FORKI&nbsp;#KataKarate&nbsp;#Kumite&nbsp;#KarateEventPalembang</p>",
+    "cover_image_url": "/demo-media/storage/uploads/images/wyA0wA5POwnsCtilIDTauvGeCUwSBDF9TljWf9y3.jpg",
+    "location": "GOR Dempo, Jakabaring",
+    "organizer_name": "Piala Sriwijaya Open 2026",
+    "registration_url": null,
+    "status": "published",
+    "category": "Umum",
+    "is_featured": false,
+    "starts_at": "2026-12-12T00:00:00.000000Z",
+    "ends_at": "2026-12-14T00:00:00.000000Z",
+    "views_count": 0,
+    "published_at": "2026-10-17T16:54:14.000000Z",
+    "created_at": "2026-10-17T16:54:14.000000Z",
+    "updated_at": "2026-10-17T16:54:14.000000Z",
+    "deleted_at": null
+  },
+  "/compro/blog/lebih-dari-sekadar-tempat-latihan-kami-adalah-keluarga": {
+    "id": 3,
+    "title": "Lebih dari Sekadar Tempat Latihan, Kami Adalah Keluarga ❤️",
+    "slug": "lebih-dari-sekadar-tempat-latihan-kami-adalah-keluarga",
+    "excerpt": "Gathering Dojang Sriwijaya",
+    "content": "<p></p><p>Keseruan&nbsp;momen&nbsp;<em>Family&nbsp;Gathering&nbsp;&amp;&nbsp;Fun&nbsp;Games</em>&nbsp;Dojang&nbsp;Sriwijaya&nbsp;di&nbsp;akhir&nbsp;pekan&nbsp;kemarin!&nbsp;Mulai&nbsp;dari&nbsp;lomba&nbsp;tarik&nbsp;tambang&nbsp;antar-wali&nbsp;murid,&nbsp;<em>games</em>&nbsp;kekompakan&nbsp;bersama&nbsp;para&nbsp;pelatih,&nbsp;hingga&nbsp;santap&nbsp;tumpeng&nbsp;bersama.&nbsp;</p><p>Terima&nbsp;kasih&nbsp;banyak&nbsp;untuk&nbsp;seluruh&nbsp;orang&nbsp;tua&nbsp;siswa&nbsp;atas&nbsp;kehangatan&nbsp;dan&nbsp;kekompakannya.&nbsp;Sinergi&nbsp;yang&nbsp;kuat&nbsp;antara&nbsp;pelatih,&nbsp;murid,&nbsp;dan&nbsp;orang&nbsp;tua&nbsp;adalah&nbsp;kunci&nbsp;utama&nbsp;keberhasilan&nbsp;anak-anak&nbsp;kita.&nbsp;Sampai&nbsp;jumpa&nbsp;di&nbsp;agenda&nbsp;kebersamaan&nbsp;berikutnya!&nbsp;🙌🎉&nbsp;</p><p></p><p>#FamilyGathering&nbsp;#DojangFamily&nbsp;#Kebersamaan&nbsp;#FunGames&nbsp;#TaekwondoCommunity</p>",
+    "thumbnail_url": "/demo-media/storage/uploads/images/t05FYrAhenn3upUc6xoTTx98VRsySVSEgGkCedKI.jpg",
+    "category": "Artikel",
+    "author_name": "SKAIHUB",
+    "status": "published",
+    "meta_title": null,
+    "meta_description": null,
+    "og_image_url": null,
+    "views_count": 0,
+    "published_at": "2026-10-17T16:34:09.000000Z",
+    "created_at": "2026-10-17T16:34:10.000000Z",
+    "updated_at": "2026-10-17T16:34:10.000000Z",
+    "deleted_at": null
+  },
+  "/compro/blog/bangga-membawa-nama-baik-sekolah-di-kancah-nasional": {
+    "id": 2,
+    "title": "Bangga Membawa Nama Baik Sekolah di Kancah Nasional!",
+    "slug": "bangga-membawa-nama-baik-sekolah-di-kancah-nasional",
+    "excerpt": "Dojang Sriwijaya",
+    "content": "<p>Apresiasi&nbsp;luar&nbsp;biasa&nbsp;diberikan&nbsp;pihak&nbsp;sekolah&nbsp;saat&nbsp;upacara&nbsp;bendera&nbsp;hari&nbsp;Senin&nbsp;kepada&nbsp;ananda&nbsp;yang&nbsp;berhasil&nbsp;meraih&nbsp;prestasi&nbsp;gemilang&nbsp;pada&nbsp;kejuaraan&nbsp;taekwondo&nbsp;tingkat&nbsp;nasional.&nbsp;</p><p></p><p>Menyeimbangkan&nbsp;waktu&nbsp;belajar&nbsp;akademik&nbsp;dan&nbsp;latihan&nbsp;fisik&nbsp;yang&nbsp;disiplin&nbsp;bukanlah&nbsp;hal&nbsp;yang&nbsp;mudah,&nbsp;namun&nbsp;ananda&nbsp;membuktikan&nbsp;bahwa&nbsp;keduanya&nbsp;bisa&nbsp;berjalan&nbsp;beriringan&nbsp;dengan&nbsp;penuh&nbsp;dedikasi.</p><p>Semoga&nbsp;pencapaian&nbsp;ini&nbsp;bisa&nbsp;memotivasi&nbsp;seluruh&nbsp;teman-teman&nbsp;untuk&nbsp;terus&nbsp;berani&nbsp;bermimpi&nbsp;dan&nbsp;berkarya&nbsp;sesuai&nbsp;bakat&nbsp;masing-masing!&nbsp;🌟</p><p>#PrestasiSiswa&nbsp;#BanggaPelajarIndonesia&nbsp;#TaekwondoPelajar&nbsp;#GenerasiEmas&nbsp;#SekolahBerprestasi</p>",
+    "thumbnail_url": "/demo-media/storage/uploads/images/YpVc9eM962IZ3xrWfURerN35JqDQQu79CvbjJA9o.jpg",
+    "category": "Artikel",
+    "author_name": "SKAIHUB",
+    "status": "published",
+    "meta_title": null,
+    "meta_description": null,
+    "og_image_url": null,
+    "views_count": 0,
+    "published_at": "2026-10-17T16:32:33.000000Z",
+    "created_at": "2026-10-17T16:32:33.000000Z",
+    "updated_at": "2026-10-17T16:33:04.000000Z",
+    "deleted_at": null
+  },
+  "/compro/blog/kerja-keras-tidak-pernah-mengkhianati-hasil": {
+    "id": 1,
+    "title": "Kerja Keras Tidak Pernah Mengkhianati Hasil!",
+    "slug": "kerja-keras-tidak-pernah-mengkhianati-hasil",
+    "excerpt": "Dojang Sriwijaya",
+    "content": "<p>Selamat&nbsp;dan&nbsp;apresiasi&nbsp;setinggi-tingginya&nbsp;kepada&nbsp;para&nbsp;atlet&nbsp;Dojang&nbsp;Sriwijaya&nbsp;yang&nbsp;berhasil&nbsp;memborong&nbsp;podium&nbsp;di&nbsp;ajang&nbsp;Kejuaraan&nbsp;Nasional!&nbsp;</p><p>Medali&nbsp;ini&nbsp;adalah&nbsp;buah&nbsp;dari&nbsp;tetesan&nbsp;keringat,&nbsp;disiplin&nbsp;tanpa&nbsp;henti,&nbsp;dan&nbsp;mental&nbsp;juara&nbsp;yang&nbsp;terus&nbsp;diasah&nbsp;setiap&nbsp;hari&nbsp;di&nbsp;tempat&nbsp;latihan.&nbsp;Terima&nbsp;kasih&nbsp;kepada&nbsp;para&nbsp;pelatih,&nbsp;orang&nbsp;tua,&nbsp;dan&nbsp;seluruh&nbsp;rekan&nbsp;yang&nbsp;senantiasa&nbsp;memberikan&nbsp;doa&nbsp;serta&nbsp;dukungan&nbsp;penuh.&nbsp;</p><p></p><p>Jadikan&nbsp;kemenangan&nbsp;ini&nbsp;sebagai&nbsp;pemacu&nbsp;semangat,&nbsp;tetap&nbsp;rendah&nbsp;hati,&nbsp;dan&nbsp;kembali&nbsp;bersiap&nbsp;untuk&nbsp;tantangan&nbsp;berikutnya!&nbsp;✊✨</p><p>#ProudDojangSriwijaya&nbsp;#JuaraTaekwondo&nbsp;#MentalJuara&nbsp;#PrestasiAnakBangsa&nbsp;#TaekwondoChamp</p>",
+    "thumbnail_url": "/demo-media/storage/uploads/images/tWm6nk172mZ84gAVONZb45x2MmDkG0aolPvdsdQS.jpg",
+    "category": "Pengumuman",
+    "author_name": "SKAIHUB",
+    "status": "published",
+    "meta_title": null,
+    "meta_description": null,
+    "og_image_url": null,
+    "views_count": 0,
+    "published_at": "2026-10-17T16:31:44.000000Z",
+    "created_at": "2026-10-17T16:31:45.000000Z",
+    "updated_at": "2026-10-17T16:31:45.000000Z",
+    "deleted_at": null
+  },
+  "/public/akademi/sriwijaya": {
+    "akademi": {
+      "name": "Akademi Sriwijaya",
+      "slug": "sriwijaya",
+      "sport_type": "taekwondo",
+      "logo_url": "/demo-media/storage/uploads/images/GQmh58zZny5xNkfD0EQVZ8wQhPLVaNonOzrLBaR7.jpg"
+    },
+    "profile": {
+      "about": "Akademi Sriwijaya adalah akademi taekwondo di kota Palembang yang berfokus membina siswa usia sekolah hingga atlet prestasi dengan latihan terstruktur, disiplin, dan suasana belajar yang positif.",
+      "vision": "Menjadi akademi taekwondo yang melahirkan pribadi tangguh, disiplin, dan berprestasi.",
+      "mission": "Membina teknik dasar dan karakter siswa secara konsisten.\nMendampingi atlet menuju kompetisi dengan program latihan terukur.\nMembangun lingkungan latihan yang aman dan suportif.",
+      "public_schedule": "Kelas Junior: Selasa 16.00-17.30\nKelas Prestasi: Sabtu 08.00-10.00",
+      "whatsapp": "6281234567800",
+      "cta_label": "Daftar Trial via WhatsApp",
+      "primary_color": "#031636",
+      "button_color": "#d32f2f",
+      "background_color": "#f8fafc",
+      "text_color": "#0f172a",
+      "heading_font": "Montserrat",
+      "body_font": "Inter",
+      "button_radius": 8
+    },
+    "coaches": [
+      {
+        "name": "Coach Hafidz",
+        "rank_label": "DAN 2",
+        "photo_url": null
+      },
+      {
+        "name": "Ketua Garuda",
+        "rank_label": "Dan1",
+        "photo_url": null
+      }
+    ],
+    "places": [
+      {
+        "name": "SDN-01 Palembang",
+        "address": "Jl. Merdeka No. 10, Palembang"
+      },
+      {
+        "name": "SDN 02 Palembang",
+        "address": "Jalan Palembang Sriwijaya No.1"
+      }
+    ],
+    "hero_images": [
+      {
+        "image_url": "/demo-media/storage/akademi/1/session-photos/jtoBTitT1Ruhr0WqLYv6sWRTxdBRZPFKzAkCI0sA.jpg",
+        "caption": null,
+        "focal_x": 50,
+        "focal_y": 50,
+        "pan_x": 26,
+        "pan_y": 1,
+        "zoom": 100,
+        "sort_order": 0
+      },
+      {
+        "image_url": "/demo-media/storage/akademi/1/session-photos/cIguHPquhcNjSO3gha6eTz6hcUZwT8NTG8yrPqjw.jpg",
+        "caption": null,
+        "focal_x": 50,
+        "focal_y": 50,
+        "pan_x": 13,
+        "pan_y": -1,
+        "zoom": 100,
+        "sort_order": 1
+      },
+      {
+        "image_url": "/demo-media/storage/akademi/1/session-photos/mU4NRqeKXVGQVhYpBJZXxyWMjMLFKyLusMyMj5Ua.jpg",
+        "caption": null,
+        "focal_x": 50,
+        "focal_y": 50,
+        "pan_x": 33,
+        "pan_y": 1,
+        "zoom": 100,
+        "sort_order": 2
+      }
+    ],
+    "gallery": [
+      {
+        "image_url": "/demo-media/storage/akademi/1/session-photos/5Bh1od7Eprwsgd10d6RfUmYFPlxIGLFF3n3cLote.jpg",
+        "caption": "Tempat Latihan",
+        "show_on_about": false,
+        "sort_order": 0
+      },
+      {
+        "image_url": "/demo-media/storage/akademi/1/session-photos/w8NoWQFVeiq7oUH2KavSlsfC5Ti9U1jBSKgV0alx.jpg",
+        "caption": "MOK'S Taekwondo Championship 2026",
+        "show_on_about": false,
+        "sort_order": 0
+      },
+      {
+        "image_url": "/demo-media/storage/akademi/1/session-photos/1yRysOjVRrmwJf0mmjZTQxnZt9CXaSm1knCFx9Xu.jpg",
+        "caption": "Gathering Bersama Orang Tua dan Siswa",
+        "show_on_about": false,
+        "sort_order": 0
+      }
+    ],
+    "achievements": [
+      {
+        "title": "Juara Umum Kejuaraan Kota 2026",
+        "description": "Capaian tim Garuda Sakti pada kategori junior dan prestasi.",
+        "achieved_on": "2026-05-20T00:00:00.000000Z",
+        "sort_order": 1
+      },
+      {
+        "title": "Program Atlet Prestasi",
+        "description": "Pembinaan rutin untuk siswa yang siap mengikuti kompetisi.",
+        "achieved_on": "2026-04-12T00:00:00.000000Z",
+        "sort_order": 2
+      }
+    ],
+    "officials": [
+      {
+        "name": "Ketua Garuda",
+        "position": "Ketua Akademi",
+        "photo_url": "/demo-media/storage/akademi/1/session-photos/85Ts2CI4ePzDtLhwe1107G9HMjahEwsNVNxqasCQ.png",
+        "description": "Penanggung jawab utama kegiatan akademi.",
+        "sort_order": 1
+      },
+      {
+        "name": "Pengurus Garuda",
+        "position": "Bendahara",
+        "photo_url": "/demo-media/storage/akademi/1/session-photos/jTHGHAott49oQsartEwQ9iQ7eG19MOpyFtnZRKBy.png",
+        "description": "Mengelola administrasi dan keuangan kegiatan.",
+        "sort_order": 2
+      }
+    ]
+  },
+  "/public/akademi/karate-musi": {
+    "akademi": {
+      "name": "Karate Musi",
+      "slug": "karate-musi",
+      "sport_type": "karate",
+      "logo_url": null
+    },
+    "profile": {
+      "about": "Karate Musi adalah akademi karate di kota Palembang yang berfokus membina siswa usia sekolah hingga atlet prestasi dengan latihan terstruktur, disiplin, dan suasana belajar yang positif.",
+      "vision": "Menjadi akademi karate yang melahirkan pribadi tangguh, disiplin, dan berprestasi.",
+      "mission": "Membina teknik dasar dan karakter siswa secara konsisten.\nMendampingi atlet menuju kompetisi dengan program latihan terukur.\nMembangun lingkungan latihan yang aman dan suportif.",
+      "public_schedule": "Kelas Junior: Selasa 16.00-17.30\nKelas Prestasi: Sabtu 08.00-10.00",
+      "whatsapp": "6281234567800",
+      "cta_label": "Daftar Trial via WhatsApp",
+      "primary_color": "#031636",
+      "button_color": "#d32f2f",
+      "background_color": "#f8fafc",
+      "text_color": "#0f172a",
+      "heading_font": "Montserrat",
+      "body_font": "Inter",
+      "button_radius": 8
+    },
+    "coaches": [
+      {
+        "name": "Coach Hafidz",
+        "rank_label": "DAN 2",
+        "photo_url": null
+      },
+      {
+        "name": "Ketua Garuda",
+        "rank_label": "Dan1",
+        "photo_url": null
+      }
+    ],
+    "places": [
+      {
+        "name": "SDN-01 Palembang",
+        "address": "Jl. Merdeka No. 10, Palembang"
+      },
+      {
+        "name": "SDN 02 Palembang",
+        "address": "Jalan Palembang Sriwijaya No.1"
+      }
+    ],
+    "hero_images": [
+      {
+        "image_url": "/demo-media/storage/akademi/3/public-profile/karate-latihan-kelas.webp",
+        "caption": null,
+        "focal_x": 50,
+        "focal_y": 50,
+        "pan_x": 26,
+        "pan_y": 1,
+        "zoom": 100,
+        "sort_order": 0
+      },
+      {
+        "image_url": "/demo-media/storage/akademi/3/public-profile/karate-latihan-tendangan.webp",
+        "caption": null,
+        "focal_x": 50,
+        "focal_y": 50,
+        "pan_x": 13,
+        "pan_y": -1,
+        "zoom": 100,
+        "sort_order": 1
+      },
+      {
+        "image_url": "/demo-media/storage/akademi/3/public-profile/karate-podium-kejurnas.webp",
+        "caption": null,
+        "focal_x": 50,
+        "focal_y": 50,
+        "pan_x": 33,
+        "pan_y": 1,
+        "zoom": 100,
+        "sort_order": 2
+      }
+    ],
+    "gallery": [
+      {
+        "image_url": "/demo-media/storage/akademi/3/public-profile/karate-latihan-kelas.webp",
+        "caption": "Tempat Latihan",
+        "show_on_about": false,
+        "sort_order": 0
+      },
+      {
+        "image_url": "/demo-media/storage/akademi/3/public-profile/poster-kejurnas-karate-2026.webp",
+        "caption": "MOK'S Karate Championship 2026",
+        "show_on_about": false,
+        "sort_order": 0
+      },
+      {
+        "image_url": "/demo-media/storage/akademi/3/public-profile/karate-family-gathering.webp",
+        "caption": "Gathering Bersama Orang Tua dan Siswa",
+        "show_on_about": false,
+        "sort_order": 0
+      }
+    ],
+    "achievements": [
+      {
+        "title": "Juara Umum Kejuaraan Kota 2026",
+        "description": "Capaian tim Karate Musi pada kategori junior dan prestasi.",
+        "achieved_on": "2026-05-20T00:00:00.000000Z",
+        "sort_order": 1
+      },
+      {
+        "title": "Program Atlet Prestasi",
+        "description": "Pembinaan rutin untuk siswa yang siap mengikuti kompetisi.",
+        "achieved_on": "2026-04-12T00:00:00.000000Z",
+        "sort_order": 2
+      }
+    ],
+    "officials": [
+      {
+        "name": "Ketua Garuda",
+        "position": "Ketua Akademi",
+        "photo_url": null,
+        "description": "Penanggung jawab utama kegiatan akademi.",
+        "sort_order": 1
+      },
+      {
+        "name": "Pengurus Garuda",
+        "position": "Bendahara",
+        "photo_url": null,
+        "description": "Mengelola administrasi dan keuangan kegiatan.",
+        "sort_order": 2
+      }
+    ]
+  }
+}

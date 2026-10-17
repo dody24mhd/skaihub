@@ -11,7 +11,8 @@
     "test:e2e": "playwright test",
     "test:integration": "playwright test -c playwright.integration.config.ts",
     "typecheck": "tsc --noEmit",
-    "icons": "node scripts/gen-icons.mjs"
+    "icons": "node scripts/gen-icons.mjs",
+    "demo:snapshot": "node scripts/snapshot-demo.mjs"
   },
   "dependencies": {
     "isomorphic-dompurify": "^3.19.0",

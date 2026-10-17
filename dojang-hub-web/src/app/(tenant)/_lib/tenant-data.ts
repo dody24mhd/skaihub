@@ -1,3 +1,5 @@
+import { IS_DEMO_SNAPSHOT, readSnapshot } from "@/lib/demo-snapshot";
+
 const DEFAULT_API_URL = "http://localhost:8000/api";
 
 const API_URL =
@@ -127,14 +129,11 @@ export type PublicAkademi = {
 
 export async function getPublicAkademi(slug: string): Promise<PublicAkademi | null> {
   try {
-    const response = await fetch(`${API_URL}/public/akademi/${slug}`, {
-      cache: "no-store",
-      headers: { Accept: "application/json" },
-    });
+    const data = IS_DEMO_SNAPSHOT
+      ? readSnapshot<ApiAkademiProfile>(`/public/akademi/${slug}`)
+      : await fetchAkademiProfile(slug);
 
-    if (!response.ok) return null;
-
-    const data: ApiAkademiProfile = await response.json();
+    if (!data) return null;
 
     return {
       name: data.akademi.name,
@@ -192,6 +191,15 @@ export async function getPublicAkademi(slug: string): Promise<PublicAkademi | nu
   } catch {
     return null;
   }
+}
+
+async function fetchAkademiProfile(slug: string): Promise<ApiAkademiProfile | null> {
+  const response = await fetch(`${API_URL}/public/akademi/${slug}`, {
+    cache: "no-store",
+    headers: { Accept: "application/json" },
+  });
+
+  return response.ok ? response.json() : null;
 }
 
 export function buildWhatsAppUrl(number: string, message: string): string {

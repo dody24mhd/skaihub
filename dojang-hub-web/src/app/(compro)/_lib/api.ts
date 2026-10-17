@@ -1,4 +1,6 @@
-﻿const DEFAULT_API_URL = "http://localhost:8000/api";
+import { IS_DEMO_SNAPSHOT } from "@/lib/demo-snapshot";
+
+const DEFAULT_API_URL = "http://localhost:8000/api";
 
 export const API_URL =
   process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || DEFAULT_API_URL;
@@ -13,6 +15,10 @@ type ContactInquiryPayload = {
 };
 
 export async function submitContactInquiry(payload: ContactInquiryPayload) {
+  if (IS_DEMO_SNAPSHOT) {
+    throw new Error("Ini versi demo, jadi pesan tidak disimpan. Silakan lanjutkan lewat WhatsApp.");
+  }
+
   const response = await fetch(`${API_URL}/compro/inquiries`, {
     method: "POST",
     headers: {

@@ -1,4 +1,5 @@
-﻿import { API_URL } from "./api";
+import { IS_DEMO_SNAPSHOT, readSnapshot } from "@/lib/demo-snapshot";
+import { API_URL } from "./api";
 
 // ─── Raw API types ────────────────────────────────────────────────────────────
 
@@ -82,6 +83,8 @@ export type PublicBlogPost = {
 // ─── Fetch helper ─────────────────────────────────────────────────────────────
 
 async function fetchJson<T>(path: string): Promise<T | null> {
+  if (IS_DEMO_SNAPSHOT) return readSnapshot<T>(path);
+
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 5000);
 
@@ -221,6 +224,8 @@ export async function getPublicBlogPostBySlug(slug: string): Promise<PublicBlogP
 }
 
 export async function incrementPublicBlogView(slug: string): Promise<boolean> {
+  if (IS_DEMO_SNAPSHOT) return false;
+
   try {
     const response = await fetch(`${API_URL}/compro/blog/${slug}/view`, {
       method: "POST",
@@ -236,6 +241,8 @@ export async function incrementPublicBlogView(slug: string): Promise<boolean> {
 }
 
 export async function incrementPublicEventView(slug: string): Promise<boolean> {
+  if (IS_DEMO_SNAPSHOT) return false;
+
   try {
     const response = await fetch(`${API_URL}/compro/events/${slug}/view`, {
       method: "POST",

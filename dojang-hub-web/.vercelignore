@@ -1,0 +1,9 @@
+.env*
+!.env.example
+.next
+node_modules
+design
+e2e
+e2e-integration
+test-results
+*.tsbuildinfo
