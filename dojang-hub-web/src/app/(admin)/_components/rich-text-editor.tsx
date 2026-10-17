@@ -21,6 +21,7 @@ export function RichTextEditor({ value, onChange, placeholder }: Props) {
         [{ header: [2, 3, 4, false] }],
         ["bold", "italic", "underline", "strike"],
         [{ color: [] }, { background: [] }],
+        [{ align: [] }],
         [{ list: "ordered" }, { list: "bullet" }],
         ["link", "image", "video"],
         ["clean"],
