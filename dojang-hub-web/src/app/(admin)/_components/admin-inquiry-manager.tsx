@@ -263,7 +263,7 @@ export default function AdminInquiryManager() {
                     <button
                       type="button"
                       onClick={() => setDeleteTarget(item)}
-                      className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-secondary/10 hover:text-secondary"
+                      className="inline-flex size-11 items-center justify-center rounded-md text-muted transition hover:bg-secondary/10 hover:text-secondary"
                       aria-label={`Hapus pesan ${item.person_name}`}
                     >
                       <Icon name="delete" className="text-[20px]" />

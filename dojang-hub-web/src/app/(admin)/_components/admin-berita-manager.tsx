@@ -347,7 +347,7 @@ export default function AdminBeritaManager() {
                     <button
                       type="button"
                       onClick={() => openForm(blog)}
-                      className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-primary/10 hover:text-primary"
+                      className="inline-flex size-11 items-center justify-center rounded-md text-muted transition hover:bg-primary/10 hover:text-primary"
                       aria-label={`Edit ${blog.title}`}
                     >
                       <Icon name="edit" className="text-[20px]" />
@@ -355,7 +355,7 @@ export default function AdminBeritaManager() {
                     <button
                       type="button"
                       onClick={() => setDeleteTarget(blog)}
-                      className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-secondary/10 hover:text-secondary"
+                      className="inline-flex size-11 items-center justify-center rounded-md text-muted transition hover:bg-secondary/10 hover:text-secondary"
                       aria-label={`Hapus ${blog.title}`}
                     >
                       <Icon name="delete" className="text-[20px]" />
@@ -408,7 +408,7 @@ export default function AdminBeritaManager() {
               <button
                 type="button"
                 onClick={() => setIsDrawerOpen(false)}
-                className="inline-flex size-10 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
+                className="inline-flex size-11 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
                 aria-label="Tutup"
               >
                 <Icon name="close" className="text-[20px]" />
@@ -471,7 +471,7 @@ export default function AdminBeritaManager() {
                       type="button"
                       aria-label="Hapus thumbnail"
                       onClick={() => setForm({ ...form, thumbnail_url: "" })}
-                      className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-md bg-white text-secondary opacity-0 shadow transition group-hover:opacity-100 hover:bg-secondary/10"
+                      className="absolute right-2 top-2 flex size-11 items-center justify-center rounded-md bg-white text-secondary opacity-0 shadow transition group-hover:opacity-100 focus-visible:opacity-100 hover:bg-secondary/10"
                     >
                       <Icon name="delete" className="text-[18px]" />
                     </button>

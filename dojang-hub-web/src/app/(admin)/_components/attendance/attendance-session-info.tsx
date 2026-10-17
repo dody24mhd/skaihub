@@ -202,7 +202,7 @@ export default function AttendanceSessionInfo({
                   <button
                     type="button"
                     onClick={() => onRemovePhoto(url)}
-                    className="min-h-8 border border-border px-2 text-xs font-bold text-primary hover:bg-surface-container"
+                    className="min-h-11 border border-border px-2 text-xs font-bold text-primary hover:bg-surface-container"
                   >
                     Hapus
                   </button>

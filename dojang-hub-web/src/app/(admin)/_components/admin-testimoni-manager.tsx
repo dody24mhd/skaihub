@@ -284,7 +284,7 @@ export default function AdminTestimoniManager() {
                     <button
                       type="button"
                       onClick={() => openForm(item)}
-                      className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-primary/10 hover:text-primary"
+                      className="inline-flex size-11 items-center justify-center rounded-md text-muted transition hover:bg-primary/10 hover:text-primary"
                       aria-label={`Edit`}
                     >
                       <Icon name="edit" className="text-[20px]" />
@@ -292,7 +292,7 @@ export default function AdminTestimoniManager() {
                     <button
                       type="button"
                       onClick={() => setDeleteTarget(item)}
-                      className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-secondary/10 hover:text-secondary"
+                      className="inline-flex size-11 items-center justify-center rounded-md text-muted transition hover:bg-secondary/10 hover:text-secondary"
                       aria-label={`Hapus`}
                     >
                       <Icon name="delete" className="text-[20px]" />
@@ -344,7 +344,7 @@ export default function AdminTestimoniManager() {
               <button
                 type="button"
                 onClick={() => setIsDrawerOpen(false)}
-                className="inline-flex size-10 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
+                className="inline-flex size-11 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
                 aria-label="Tutup"
               >
                 <Icon name="close" className="text-[20px]" />
@@ -404,7 +404,7 @@ export default function AdminTestimoniManager() {
                       type="button"
                       aria-label="Hapus foto profil"
                       onClick={() => setForm({ ...form, avatar_url: "" })}
-                      className="absolute inset-0 m-auto flex size-8 items-center justify-center rounded-md bg-white text-secondary opacity-0 shadow transition group-hover:opacity-100 hover:bg-secondary/10"
+                      className="absolute inset-0 m-auto flex size-11 items-center justify-center rounded-md bg-white text-secondary opacity-0 shadow transition group-hover:opacity-100 focus-visible:opacity-100 hover:bg-secondary/10"
                     >
                       <Icon name="delete" className="text-[18px]" />
                     </button>

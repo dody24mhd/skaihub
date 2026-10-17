@@ -227,7 +227,7 @@ export default function ProfileHeroSection({
                     type="button"
                     onClick={() => handleDelete(item)}
                     aria-label="Hapus gambar hero"
-                    className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-xs bg-primary/80 text-white transition hover:bg-secondary"
+                    className="absolute right-2 top-2 flex size-11 items-center justify-center rounded-xs bg-primary/80 text-white transition hover:bg-secondary"
                   >
                     <Icon name="delete" className="text-[18px]" />
                   </button>

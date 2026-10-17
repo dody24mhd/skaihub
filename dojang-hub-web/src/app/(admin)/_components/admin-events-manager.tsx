@@ -374,7 +374,7 @@ export default function AdminEventsManager() {
                     <button
                       type="button"
                       onClick={() => openForm(event)}
-                      className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-primary/10 hover:text-primary"
+                      className="inline-flex size-11 items-center justify-center rounded-md text-muted transition hover:bg-primary/10 hover:text-primary"
                       aria-label={`Edit ${event.title}`}
                     >
                       <Icon name="edit" className="text-[20px]" />
@@ -382,7 +382,7 @@ export default function AdminEventsManager() {
                     <button
                       type="button"
                       onClick={() => setDeleteTarget(event)}
-                      className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-secondary/10 hover:text-secondary"
+                      className="inline-flex size-11 items-center justify-center rounded-md text-muted transition hover:bg-secondary/10 hover:text-secondary"
                       aria-label={`Hapus ${event.title}`}
                     >
                       <Icon name="delete" className="text-[20px]" />
@@ -435,7 +435,7 @@ export default function AdminEventsManager() {
               <button
                 type="button"
                 onClick={() => setIsDrawerOpen(false)}
-                className="inline-flex size-10 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
+                className="inline-flex size-11 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
                 aria-label="Tutup"
               >
                 <Icon name="close" className="text-[20px]" />
@@ -516,7 +516,7 @@ export default function AdminEventsManager() {
                       type="button"
                       aria-label="Hapus poster"
                       onClick={() => setForm({ ...form, cover_image_url: "" })}
-                      className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-md bg-white text-secondary opacity-0 shadow transition group-hover:opacity-100 hover:bg-secondary/10"
+                      className="absolute right-2 top-2 flex size-11 items-center justify-center rounded-md bg-white text-secondary opacity-0 shadow transition group-hover:opacity-100 focus-visible:opacity-100 hover:bg-secondary/10"
                     >
                       <Icon name="delete" className="text-[18px]" />
                     </button>

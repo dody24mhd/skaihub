@@ -241,7 +241,7 @@ export default function AdminShell({
               <button
                 type="button"
                 onClick={handleLogout}
-                className="inline-flex size-10 items-center justify-center rounded-md border border-border bg-white text-primary transition hover:bg-secondary/10 hover:text-secondary"
+                className="inline-flex size-11 items-center justify-center rounded-md border border-border bg-white text-primary transition hover:bg-secondary/10 hover:text-secondary"
                 aria-label="Keluar"
               >
                 <Icon name="logout" className="text-[20px]" />

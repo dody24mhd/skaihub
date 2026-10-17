@@ -584,7 +584,7 @@ export default function AdminAkademiManager() {
                         <button
                           type="button"
                           onClick={() => openDetail(item)}
-                          className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-success/10 hover:text-success-strong"
+                          className="inline-flex size-11 items-center justify-center rounded-md text-muted transition hover:bg-success/10 hover:text-success-strong"
                           aria-label={`Detail ${item.name}`}
                           disabled={isLoadingDetail}
                         >
@@ -593,7 +593,7 @@ export default function AdminAkademiManager() {
                         <button
                           type="button"
                           onClick={() => setEditTarget(item)}
-                          className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-primary/10 hover:text-primary"
+                          className="inline-flex size-11 items-center justify-center rounded-md text-muted transition hover:bg-primary/10 hover:text-primary"
                           aria-label={`Edit ${item.name}`}
                         >
                           <Icon name="edit" className="text-[20px]" />
@@ -601,7 +601,7 @@ export default function AdminAkademiManager() {
                         <button
                           type="button"
                           onClick={() => setDeleteTarget(item)}
-                          className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-secondary/10 hover:text-secondary"
+                          className="inline-flex size-11 items-center justify-center rounded-md text-muted transition hover:bg-secondary/10 hover:text-secondary"
                           aria-label={`Hapus ${item.name}`}
                         >
                           <Icon name="delete" className="text-[20px]" />
@@ -655,7 +655,7 @@ export default function AdminAkademiManager() {
               <button
                 type="button"
                 onClick={() => setIsCreateOpen(false)}
-                className="inline-flex size-10 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
+                className="inline-flex size-11 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
                 aria-label="Tutup"
               >
                 <Icon name="close" className="text-[20px]" />
@@ -898,7 +898,7 @@ export default function AdminAkademiManager() {
               <button
                 type="button"
                 onClick={() => setEditTarget(null)}
-                className="inline-flex size-10 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
+                className="inline-flex size-11 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
                 aria-label="Tutup"
               >
                 <Icon name="close" className="text-[20px]" />
@@ -1077,7 +1077,7 @@ export default function AdminAkademiManager() {
               <button
                 type="button"
                 onClick={() => setDetailTarget(null)}
-                className="inline-flex size-10 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
+                className="inline-flex size-11 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
                 aria-label="Tutup"
               >
                 <Icon name="close" className="text-[20px]" />
