@@ -21,6 +21,25 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
   },
+  async redirects() {
+    return [
+      {
+        source: "/admin/academy/:path*",
+        destination: "/academy/:path*",
+        permanent: false,
+      },
+      {
+        source: "/admin",
+        destination: "/internal",
+        permanent: false,
+      },
+      {
+        source: "/admin/:path*",
+        destination: "/internal/:path*",
+        permanent: false,
+      },
+    ];
+  },
   async headers() {
     return [
       {
