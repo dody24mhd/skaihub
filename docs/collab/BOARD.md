@@ -15,22 +15,22 @@ Status: `TODO` → `IN_PROGRESS` → `REVIEW` → `CHANGES_REQUESTED` → `DONE`
 
 ## Tugas
 
-> Status per 2026-10-17 (lead). Resume: cek `git worktree list`, `git -C .worktrees/<wt> log main..HEAD`, dan `git status` per worktree.
+> Status per 2026-10-17 siang (lead). Gemini: kuota 5 jam habis → jalur dikerjakan agent Claude.
 
-| Jalur | Pemilik | Worktree / branch | Status | Catatan |
-|---|---|---|---|---|
-| Fase 0 | Gemini | main | DONE | `3b279d0` |
-| Audit 1A | Claude | main | DONE | `docs/AUDIT-2026-10.md` (D1–D17) |
-| L1-A (1.0, 1.6, 1.7) | Gemini-1 | fase1 / fase-1-backend | DONE (merged) | 55 test |
-| L1-B, L1-C | Gemini-1 | fase1 / fase-1-backend | CHANGES_REQUESTED | 92 test; perbaikan R1–R10 di `docs/collab/reviews/L1-BC.md` |
-| L2-A PWA | Gemini-2 | fase2 / fase-2-pwa | DONE (merged) | + fix reload pertama oleh lead |
-| L2-B sanitasi + rute admin | Gemini-2 | fase2 / fase-2-pwa | DONE (merged) | |
-| L3-A UI + shell + e2e | Gemini-3 | fase3-a / fase-3-shell | DONE (merged) | |
-| L3-B absensi | Gemini-4 | fase3-b / fase-3-attendance | IN_PROGRESS | PLAYWRIGHT_PORT=3300 |
-| L3-C siswa + SPP | Gemini-5 | fase3-c / fase-3-students-spp | TODO | mulai setelah L1-B/C merge |
-| L3-D evaluasi | Gemini-6 | fase3-d / fase-3-evaluation | IN_PROGRESS | PLAYWRIGHT_PORT=3500 |
-| L3-E setup | Gemini-7 | fase3-e / fase-3-setup | IN_PROGRESS | PLAYWRIGHT_PORT=3600 |
-| 3.9 E2E final, 3.10 a11y | Claude | main | TODO | setelah semua L3 merge |
+| Jalur | Pelaksana | Worktree / branch | Status |
+|---|---|---|---|
+| Fase 0–2, L1-*, L2-* | Gemini + lead | — | DONE (merged) |
+| L3-A…E (Fase 3) | Gemini + Claude agents | fase3-* | DONE (merged) — E2E 61 lulus / 0 gagal |
+| L3-F aksesibilitas (8 fix prioritas dari review WCAG) | Claude agent | (nanti) | TODO — setelah Fase 4 merge |
+| L4-A sesi & Kelas Hari Ini | Claude agent | fase4-a / fase-4-sessions | IN_PROGRESS |
+| L4-B SPP lanjutan | Claude agent | fase4-b / fase-4-spp | IN_PROGRESS |
+| L4-C sistem tingkatan | Claude agent | fase4-c / fase-4-ranks | IN_PROGRESS |
+| L4-D langganan & operator | Claude agent | fase4-d / fase-4-subscription | IN_PROGRESS |
+| L4-E data siswa & penilaian | Claude agent | fase4-e / fase-4-students | IN_PROGRESS |
+| L5-D ops & polish | Claude agent | fase5-d / fase-5-ops | IN_PROGRESS |
+| L5-B akun platform & password | Claude agent | — | TODO |
+| L5-C rapor & sertifikat | Claude agent | — | TODO |
+| L5-A E2E integrasi backend asli | Claude agent | — | TODO (terakhir) |
 
 ## Permintaan lintas wilayah
 
