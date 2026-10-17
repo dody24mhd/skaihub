@@ -78,4 +78,9 @@ class Student extends Model
     {
         return $this->hasMany(RankPromotionParticipant::class);
     }
+
+    public function rankHistories(): HasMany
+    {
+        return $this->hasMany(StudentRankHistory::class);
+    }
 }

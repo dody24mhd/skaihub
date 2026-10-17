@@ -67,7 +67,20 @@ class StudentController extends Controller
             ...$data,
             'akademi_id' => $akademi->id,
             'status' => $status,
-        ])->load(['currentRank', 'primaryClass.trainingPlace']);
+        ]);
+
+        if ($student->current_rank_id) {
+            $student->rankHistories()->create([
+                'akademi_id' => $akademi->id,
+                'sport_rank_id' => $student->current_rank_id,
+                'achieved_on' => now()->toDateString(),
+                'source_type' => 'manual',
+                'changed_by' => $request->user()->id,
+                'notes' => 'Pendaftaran siswa',
+            ]);
+        }
+
+        $student->load(['currentRank', 'primaryClass.trainingPlace']);
 
         return response()->json(['student' => $student], 201);
     }
@@ -108,6 +121,14 @@ class StudentController extends Controller
             ->limit(12)
             ->get();
 
+        $rankHistories = $student->rankHistories()
+            ->with(['sportRank', 'changedBy', 'promotionParticipant.event'])
+            ->where('akademi_id', $request->user()->akademi_id)
+            ->orderByDesc('achieved_on')
+            ->orderByDesc('id')
+            ->limit(12)
+            ->get();
+
         return response()->json([
             'student' => $student->load(['currentRank', 'primaryClass.trainingPlace']),
             'summary' => [
@@ -132,7 +153,22 @@ class StudentController extends Controller
             'spp_bills' => $sppBills,
             'evaluation_scores' => $evaluationScores,
             'rank_promotions' => $rankPromotions,
+            'rank_histories' => $rankHistories,
         ]);
+    }
+
+    public function rankHistories(Request $request, Student $student): JsonResponse
+    {
+        $this->ensureBelongsToCurrentAkademi($request, $student);
+
+        $histories = $student->rankHistories()
+            ->with(['sportRank', 'changedBy', 'promotionParticipant.event'])
+            ->where('akademi_id', $request->user()->akademi_id)
+            ->orderByDesc('achieved_on')
+            ->orderByDesc('id')
+            ->get();
+
+        return response()->json(['data' => $histories]);
     }
 
     public function update(Request $request, Student $student): JsonResponse
@@ -147,7 +183,19 @@ class StudentController extends Controller
             $this->subscriptions->assertCanAddActiveStudent($akademi, $student->id);
         }
 
+        $oldRankId = $student->current_rank_id;
         $student->update($data);
+
+        if (array_key_exists('current_rank_id', $data) && $data['current_rank_id'] && (int) $data['current_rank_id'] !== (int) $oldRankId) {
+            $student->rankHistories()->create([
+                'akademi_id' => $akademi->id,
+                'sport_rank_id' => $data['current_rank_id'],
+                'achieved_on' => now()->toDateString(),
+                'source_type' => 'manual',
+                'changed_by' => $request->user()->id,
+                'notes' => $data['notes'] ?? null,
+            ]);
+        }
 
         return response()->json([
             'student' => $student->fresh()->load(['currentRank', 'primaryClass.trainingPlace']),

@@ -112,6 +112,7 @@ Route::prefix('akademi')
         Route::apiResource('classes', AkademiTrainingClassController::class)->parameters([
             'classes' => 'class',
         ]);
+        Route::get('students/{student}/rank-histories', [AkademiStudentController::class, 'rankHistories']);
         Route::apiResource('students', AkademiStudentController::class);
         Route::apiResource('coaches', AkademiCoachController::class)->parameters([
             'coaches' => 'coach',
