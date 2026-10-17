@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\RankPromotionParticipant;
 use App\Models\SportRank;
 use App\Models\Student;
+use App\Models\StudentRankHistory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -71,7 +72,8 @@ class SportRankController extends Controller
             || RankPromotionParticipant::query()
                 ->where('from_rank_id', $sportRank->id)
                 ->orWhere('to_rank_id', $sportRank->id)
-                ->exists();
+                ->exists()
+            || StudentRankHistory::query()->where('sport_rank_id', $sportRank->id)->exists();
 
         abort_if($isUsed, 422, 'Tingkatan sudah dipakai dan tidak bisa dihapus.');
 

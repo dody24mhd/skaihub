@@ -154,4 +154,33 @@ class SportRankTenantTest extends TestCase
             'current_rank_id' => $this->rankA->id,
         ]))->assertCreated();
     }
+
+    public function test_cannot_delete_sport_rank_used_in_student_rank_histories(): void
+    {
+        Sanctum::actingAs($this->adminA);
+
+        $student = $this->akademiA->siswa()->create([
+            'member_number' => 'HRM-R2',
+            'name' => 'Siswa Riwayat',
+            'gender' => 'male',
+            'birth_date' => '2012-01-01',
+            'joined_date' => '2024-01-01',
+            'height_cm' => 140,
+            'weight_kg' => 35,
+            'status' => 'active',
+            'current_rank_id' => $this->globalRank->id,
+        ]);
+
+        \App\Models\StudentRankHistory::create([
+            'akademi_id' => $this->akademiA->id,
+            'student_id' => $student->id,
+            'sport_rank_id' => $this->rankA->id,
+            'achieved_on' => '2025-01-01',
+            'source_type' => 'manual',
+        ]);
+
+        $this->deleteJson("/api/akademi/sport-ranks/{$this->rankA->id}")
+            ->assertStatus(422)
+            ->assertJsonPath('message', 'Tingkatan sudah dipakai dan tidak bisa dihapus.');
+    }
 }

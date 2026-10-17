@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('akademi_id')->constrained('akademi')->cascadeOnDelete();
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
-            $table->foreignId('sport_rank_id')->constrained('sport_ranks')->cascadeOnDelete();
+            $table->foreignId('sport_rank_id')->constrained('sport_ranks')->restrictOnDelete();
             $table->date('achieved_on');
             $table->string('source_type', 30)->default('manual');
             $table->foreignId('rank_promotion_participant_id')->nullable()->constrained('rank_promotion_participants')->nullOnDelete();
