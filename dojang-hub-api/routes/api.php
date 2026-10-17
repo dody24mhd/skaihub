@@ -145,19 +145,21 @@ Route::prefix('akademi')
         Route::post('rank-promotions/{rankPromotionEvent}/participants', [AkademiRankPromotionController::class, 'storeParticipant']);
         Route::patch('rank-promotions/{rankPromotionEvent}/participants/{participant}', [AkademiRankPromotionController::class, 'updateParticipant']);
 
-        Route::get('public-profile', [AkademiPublicProfileController::class, 'show']);
-        Route::put('public-profile', [AkademiPublicProfileController::class, 'updateProfile']);
-        Route::post('public-profile/hero-images', [AkademiPublicProfileController::class, 'storeHeroImage']);
-        Route::put('public-profile/hero-images/{heroImage}', [AkademiPublicProfileController::class, 'updateHeroImage']);
-        Route::delete('public-profile/hero-images/{heroImage}', [AkademiPublicProfileController::class, 'destroyHeroImage']);
-        Route::post('public-profile/gallery', [AkademiPublicProfileController::class, 'storeGallery']);
-        Route::put('public-profile/gallery/{galleryItem}', [AkademiPublicProfileController::class, 'updateGallery']);
-        Route::delete('public-profile/gallery/{galleryItem}', [AkademiPublicProfileController::class, 'destroyGallery']);
-        Route::post('public-profile/achievements', [AkademiPublicProfileController::class, 'storeAchievement']);
-        Route::put('public-profile/achievements/{achievement}', [AkademiPublicProfileController::class, 'updateAchievement']);
-        Route::delete('public-profile/achievements/{achievement}', [AkademiPublicProfileController::class, 'destroyAchievement']);
-        Route::post('public-profile/officials', [AkademiPublicProfileController::class, 'storeOfficial']);
-        Route::put('public-profile/officials/{official}', [AkademiPublicProfileController::class, 'updateOfficial']);
-        Route::delete('public-profile/officials/{official}', [AkademiPublicProfileController::class, 'destroyOfficial']);
-        Route::patch('public-profile/coaches/visibility', [AkademiPublicProfileController::class, 'updateCoachVisibility']);
+        Route::middleware('feature:public_website')->group(function () {
+            Route::get('public-profile', [AkademiPublicProfileController::class, 'show']);
+            Route::put('public-profile', [AkademiPublicProfileController::class, 'updateProfile']);
+            Route::post('public-profile/hero-images', [AkademiPublicProfileController::class, 'storeHeroImage']);
+            Route::put('public-profile/hero-images/{heroImage}', [AkademiPublicProfileController::class, 'updateHeroImage']);
+            Route::delete('public-profile/hero-images/{heroImage}', [AkademiPublicProfileController::class, 'destroyHeroImage']);
+            Route::post('public-profile/gallery', [AkademiPublicProfileController::class, 'storeGallery']);
+            Route::put('public-profile/gallery/{galleryItem}', [AkademiPublicProfileController::class, 'updateGallery']);
+            Route::delete('public-profile/gallery/{galleryItem}', [AkademiPublicProfileController::class, 'destroyGallery']);
+            Route::post('public-profile/achievements', [AkademiPublicProfileController::class, 'storeAchievement']);
+            Route::put('public-profile/achievements/{achievement}', [AkademiPublicProfileController::class, 'updateAchievement']);
+            Route::delete('public-profile/achievements/{achievement}', [AkademiPublicProfileController::class, 'destroyAchievement']);
+            Route::post('public-profile/officials', [AkademiPublicProfileController::class, 'storeOfficial']);
+            Route::put('public-profile/officials/{official}', [AkademiPublicProfileController::class, 'updateOfficial']);
+            Route::delete('public-profile/officials/{official}', [AkademiPublicProfileController::class, 'destroyOfficial']);
+            Route::patch('public-profile/coaches/visibility', [AkademiPublicProfileController::class, 'updateCoachVisibility']);
+        });
     });
