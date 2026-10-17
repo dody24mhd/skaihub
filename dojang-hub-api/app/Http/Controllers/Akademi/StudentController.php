@@ -3,21 +3,27 @@
 namespace App\Http\Controllers\Akademi;
 
 use App\Http\Controllers\Controller;
+use App\Models\Akademi;
 use App\Models\SportRank;
 use App\Models\Student;
 use App\Models\TrainingClass;
 use App\Services\SubscriptionService;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Validator as ValidationValidator;
 
 class StudentController extends Controller
 {
     public const GUARDIAN_REQUIRED_UNDER_AGE = 17;
+
+    private const MEMBER_NUMBER_MAX_ATTEMPTS = 5;
 
     private const CONTACT_FIELDS = ['birth_date', 'student_phone', 'guardian_name', 'guardian_phone'];
 
@@ -68,24 +74,10 @@ class StudentController extends Controller
             $this->subscriptions->assertCanAddActiveStudent($akademi);
         }
 
-        $data['member_number'] = $data['member_number'] ?? $this->nextMemberNumber($akademi->slug);
-
-        $student = Student::create([
-            ...collect($data)->except(['rank_notes'])->all(),
-            'akademi_id' => $akademi->id,
+        $student = $this->createWithMemberNumber($akademi, [
+            ...$data,
             'status' => $status,
-        ]);
-
-        if ($student->current_rank_id) {
-            $student->rankHistories()->create([
-                'akademi_id' => $akademi->id,
-                'sport_rank_id' => $student->current_rank_id,
-                'achieved_on' => now()->toDateString(),
-                'source_type' => 'manual',
-                'changed_by' => $request->user()->id,
-                'notes' => $data['rank_notes'] ?? 'Pendaftaran siswa',
-            ]);
-        }
+        ], $request->user()->id);
 
         $student->load(['currentRank', 'primaryClass.trainingPlace']);
 
@@ -308,12 +300,59 @@ class StudentController extends Controller
         }
     }
 
-    private function nextMemberNumber(string $slug): string
+    private function createWithMemberNumber(Akademi $akademi, array $data, int $userId): Student
     {
-        $prefix = Str::upper(Str::substr(Str::slug($slug, ''), 0, 6)) ?: 'AKD';
-        $next = Student::withTrashed()->where('member_number', 'like', "{$prefix}-%")->count() + 1;
+        $hasManualNumber = filled($data['member_number'] ?? null);
 
-        return sprintf('%s-%04d', $prefix, $next);
+        for ($attempt = 1; ; $attempt++) {
+            try {
+                return DB::transaction(function () use ($akademi, $data, $userId, $hasManualNumber) {
+                    $student = Student::create([
+                        ...collect($data)->except(['rank_notes'])->all(),
+                        'member_number' => $hasManualNumber ? $data['member_number'] : $this->nextMemberNumber($akademi),
+                        'akademi_id' => $akademi->id,
+                    ]);
+
+                    if ($student->current_rank_id) {
+                        $student->rankHistories()->create([
+                            'akademi_id' => $akademi->id,
+                            'sport_rank_id' => $student->current_rank_id,
+                            'achieved_on' => now()->toDateString(),
+                            'source_type' => 'manual',
+                            'changed_by' => $userId,
+                            'notes' => $data['rank_notes'] ?? 'Pendaftaran siswa',
+                        ]);
+                    }
+
+                    return $student;
+                });
+            } catch (UniqueConstraintViolationException) {
+                if ($hasManualNumber || $attempt >= self::MEMBER_NUMBER_MAX_ATTEMPTS) {
+                    throw ValidationException::withMessages([
+                        'member_number' => 'Nomor anggota sudah dipakai. Silakan coba simpan lagi.',
+                    ]);
+                }
+            }
+        }
+    }
+
+    /**
+     * Highest numeric suffix for this akademi's prefix + 1. Soft-deleted students are
+     * included so a number is never handed out twice.
+     */
+    private function nextMemberNumber(Akademi $akademi): string
+    {
+        $prefix = Str::upper(Str::substr(Str::slug($akademi->slug, ''), 0, 6)) ?: 'AKD';
+        $pattern = '/^'.preg_quote($prefix, '/').'-(\d+)$/';
+
+        $highest = Student::withTrashed()
+            ->where('akademi_id', $akademi->id)
+            ->where('member_number', 'like', "{$prefix}-%")
+            ->pluck('member_number')
+            ->map(fn (string $number) => preg_match($pattern, $number, $matches) ? (int) $matches[1] : 0)
+            ->max() ?? 0;
+
+        return sprintf('%s-%04d', $prefix, $highest + 1);
     }
 
     private function ensureCanManageMasterData(Request $request): void
