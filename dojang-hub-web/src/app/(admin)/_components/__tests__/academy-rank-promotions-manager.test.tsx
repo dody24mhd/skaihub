@@ -78,6 +78,19 @@ describe("AcademyRankPromotionsManager", () => {
     expect(screen.getAllByRole("button", { name: /^Lulus$/i })).toHaveLength(2); // tombol aksi Lulus (1 di tabel, 1 di kartu)
   });
 
+  it("menautkan sertifikat hanya untuk peserta yang lulus", async () => {
+    const failed = { ...mockEvent.participants[0], id: 2, result: "failed" as const, student: { id: 2, name: "Citra", member_number: "TKD-102" } };
+    const eventWithFailed = { ...mockEvent, participants: [...mockEvent.participants, failed] };
+    vi.mocked(adminApi.getAkademiRankPromotionEvent).mockResolvedValue({
+      rank_promotion_event: eventWithFailed as unknown as adminApi.RankPromotionEvent,
+    });
+    render(<AcademyRankPromotionsManager />);
+
+    const links = await screen.findAllByRole("link", { name: /Sertifikat Bima Arya/ });
+    expect(links[0]).toHaveAttribute("href", "/academy/rank-promotions/1/certificates/1");
+    expect(screen.queryByRole("link", { name: /Sertifikat Citra/ })).not.toBeInTheDocument();
+  });
+
   it("membuka modal tambah peserta saat tombol diklik di mobile", async () => {
     render(<AcademyRankPromotionsManager />);
 
