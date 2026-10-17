@@ -120,6 +120,7 @@ class SppPaymentSecurityTest extends TestCase
 
     public function test_partial_payment_then_full_payment_updates_status_correctly(): void
     {
+        Storage::disk('public')->put("akademi/{$this->akademi->id}/spp-proofs/receipt.png", 'fake receipt');
         $validProof = Storage::disk('public')->url("akademi/{$this->akademi->id}/spp-proofs/receipt.png");
 
         // Partial payment 40,000 of 100,000
@@ -148,4 +149,68 @@ class SppPaymentSecurityTest extends TestCase
         $this->assertSame('paid', $res2->json('spp_bill.status'));
         $this->assertEquals(100000, (float) $res2->json('spp_bill.paid_amount'));
     }
+
+    public function test_proof_url_security_bypass_attempts_are_rejected(): void
+    {
+        $id = $this->akademi->id;
+        $otherId = $id + 99;
+
+        // Directory traversal with ..
+        $this->postJson("/api/akademi/spp-bills/{$this->bill->id}/payments", [
+            'amount' => 10000,
+            'paid_at' => '2026-05-10',
+            'proof_url' => "/storage/akademi/{$id}/../{$otherId}/x.jpg",
+        ])->assertStatus(422)->assertJsonValidationErrors(['proof_url']);
+
+        // URL encoded traversal %2e%2e
+        $this->postJson("/api/akademi/spp-bills/{$this->bill->id}/payments", [
+            'amount' => 10000,
+            'paid_at' => '2026-05-10',
+            'proof_url' => "/storage/akademi/{$id}/%2e%2e/{$otherId}/x.jpg",
+        ])->assertStatus(422)->assertJsonValidationErrors(['proof_url']);
+
+        // Backslash
+        $this->postJson("/api/akademi/spp-bills/{$this->bill->id}/payments", [
+            'amount' => 10000,
+            'paid_at' => '2026-05-10',
+            'proof_url' => "/storage/akademi/{$id}\\..\\{$otherId}\\x.jpg",
+        ])->assertStatus(422)->assertJsonValidationErrors(['proof_url']);
+
+        // Query string
+        $this->postJson("/api/akademi/spp-bills/{$this->bill->id}/payments", [
+            'amount' => 10000,
+            'paid_at' => '2026-05-10',
+            'proof_url' => "/storage/akademi/{$id}/spp-proofs/receipt.png?download=1",
+        ])->assertStatus(422)->assertJsonValidationErrors(['proof_url']);
+
+        // Fragment
+        $this->postJson("/api/akademi/spp-bills/{$this->bill->id}/payments", [
+            'amount' => 10000,
+            'paid_at' => '2026-05-10',
+            'proof_url' => "/storage/akademi/{$id}/spp-proofs/receipt.png#section",
+        ])->assertStatus(422)->assertJsonValidationErrors(['proof_url']);
+
+        // Other academy
+        $this->postJson("/api/akademi/spp-bills/{$this->bill->id}/payments", [
+            'amount' => 10000,
+            'paid_at' => '2026-05-10',
+            'proof_url' => "/storage/akademi/{$otherId}/spp-proofs/receipt.png",
+        ])->assertStatus(422)->assertJsonValidationErrors(['proof_url']);
+
+        // Non-existent file on public storage
+        $this->postJson("/api/akademi/spp-bills/{$this->bill->id}/payments", [
+            'amount' => 10000,
+            'paid_at' => '2026-05-10',
+            'proof_url' => "/storage/akademi/{$id}/spp-proofs/nonexistent.png",
+        ])->assertStatus(422)->assertJsonValidationErrors(['proof_url']);
+
+        // Valid file existing on public storage
+        Storage::disk('public')->put("akademi/{$id}/spp-proofs/legit.png", 'proof content');
+        $this->postJson("/api/akademi/spp-bills/{$this->bill->id}/payments", [
+            'amount' => 10000,
+            'paid_at' => '2026-05-10',
+            'proof_url' => "/storage/akademi/{$id}/spp-proofs/legit.png",
+        ])->assertOk();
+    }
 }
+
