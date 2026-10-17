@@ -328,7 +328,8 @@ class DemoAkademiSeeder extends Seeder
                 'training_schedule_id' => $juniorSchedule->id,
                 'training_place_id' => $placeId,
                 'coach_id' => $coachB->id,
-                'source_schedule_date' => $juniorDates[1]?->toDateString(),
+                // Sesi pengganti tidak memakai tanggal sumber jadwal (unique index per jadwal+tanggal sumber).
+                'source_schedule_date' => null,
                 'starts_at' => '17:00',
                 'ends_at' => '18:00',
                 'material' => 'Sesi pengganti: review teknik dasar dan pola tendangan.',
@@ -378,7 +379,8 @@ class DemoAkademiSeeder extends Seeder
                 'class_id' => $schedule->class_id,
                 'training_place_id' => $schedule->training_place_id,
                 'coach_id' => $schedule->coach_id,
-                'source_schedule_date' => null,
+                // Wajib diisi: "Kelas Hari Ini" mencocokkan sesi ke slot jadwal lewat source_schedule_date.
+                'source_schedule_date' => $date->toDateString(),
                 'starts_at' => $schedule->starts_at,
                 'ends_at' => $schedule->ends_at,
                 'material' => $material,
