@@ -9,13 +9,17 @@ use App\Models\TrainingPlace;
 use App\Models\TrainingSchedule;
 use App\Models\TrainingSession;
 use App\Models\User;
+use App\Services\TrainingSessionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class TrainingSessionController extends Controller
 {
+    public function __construct(private readonly TrainingSessionService $sessions) {}
+
     public function index(Request $request): JsonResponse
     {
         $query = TrainingSession::query()
@@ -145,6 +149,12 @@ class TrainingSessionController extends Controller
     {
         $this->ensureCanManageSessions($request, $trainingSession);
         $this->ensureBelongsToCurrentAkademi($request, $trainingSession);
+
+        if ($trainingSession->status === 'rescheduled') {
+            throw ValidationException::withMessages([
+                'status' => 'Sesi ini sudah dipindah. Isi absensi pada sesi pengganti.',
+            ]);
+        }
 
         $data = $request->validate([
             'material' => ['nullable', 'string', 'max:255'],
@@ -289,15 +299,7 @@ class TrainingSessionController extends Controller
 
     private function relations(): array
     {
-        return [
-            'schedule',
-            'schedule.coaches',
-            'class.trainingPlace',
-            'trainingPlace',
-            'coach.coachProfile',
-            'coaches',
-            'attendances.student.currentRank',
-        ];
+        return $this->sessions->relations();
     }
 
     private function normalizedCoachIds(array $data): array
