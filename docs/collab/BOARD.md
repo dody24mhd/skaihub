@@ -15,16 +15,22 @@ Status: `TODO` → `IN_PROGRESS` → `REVIEW` → `CHANGES_REQUESTED` → `DONE`
 
 ## Tugas
 
-| Tugas | Pemilik | Status | Catatan |
-|---|---|---|---|
-| 0.1–0.5 | Gemini | DONE | Commit `3b279d0` |
-| 1.1–1.5 | Claude | IN_PROGRESS | Audit read-only |
-| 1.0 | Gemini-1 | TODO | Hijaukan 5 test baseline |
-| 1.6 | Gemini-1 | TODO | Rate limit |
-| 1.7 | Gemini-1 | TODO | Kuota siswa |
-| 1.8–1.10 | Gemini-1 | TODO | Menunggu keputusan audit |
-| 2.1–2.10 | Gemini-2 | TODO | |
-| 3.1–3.10 | Gemini-3..n | TODO | Setelah Fase 2 merge |
+> Status per 2026-10-17 (lead). Resume: cek `git worktree list`, `git -C .worktrees/<wt> log main..HEAD`, dan `git status` per worktree.
+
+| Jalur | Pemilik | Worktree / branch | Status | Catatan |
+|---|---|---|---|---|
+| Fase 0 | Gemini | main | DONE | `3b279d0` |
+| Audit 1A | Claude | main | DONE | `docs/AUDIT-2026-10.md` (D1–D17) |
+| L1-A (1.0, 1.6, 1.7) | Gemini-1 | fase1 / fase-1-backend | DONE (merged) | 55 test |
+| L1-B, L1-C | Gemini-1 | fase1 / fase-1-backend | CHANGES_REQUESTED | 92 test; perbaikan R1–R10 di `docs/collab/reviews/L1-BC.md` |
+| L2-A PWA | Gemini-2 | fase2 / fase-2-pwa | DONE (merged) | + fix reload pertama oleh lead |
+| L2-B sanitasi + rute admin | Gemini-2 | fase2 / fase-2-pwa | DONE (merged) | |
+| L3-A UI + shell + e2e | Gemini-3 | fase3-a / fase-3-shell | DONE (merged) | |
+| L3-B absensi | Gemini-4 | fase3-b / fase-3-attendance | IN_PROGRESS | PLAYWRIGHT_PORT=3300 |
+| L3-C siswa + SPP | Gemini-5 | fase3-c / fase-3-students-spp | TODO | mulai setelah L1-B/C merge |
+| L3-D evaluasi | Gemini-6 | fase3-d / fase-3-evaluation | IN_PROGRESS | PLAYWRIGHT_PORT=3500 |
+| L3-E setup | Gemini-7 | fase3-e / fase-3-setup | IN_PROGRESS | PLAYWRIGHT_PORT=3600 |
+| 3.9 E2E final, 3.10 a11y | Claude | main | TODO | setelah semua L3 merge |
 
 ## Permintaan lintas wilayah
 
