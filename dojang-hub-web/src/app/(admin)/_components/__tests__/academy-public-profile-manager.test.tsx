@@ -2,6 +2,11 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import AcademyPublicProfileManager from "../academy-public-profile-manager";
 import * as adminApi from "../../_lib/admin-api";
+import type {
+  AcademyPublicProfile,
+  AkademiMeResponse,
+  PublicProfileCoach,
+} from "../../_lib/admin-api";
 
 vi.mock("../../_lib/admin-api", () => ({
   getAkademiMe: vi.fn(),
@@ -24,18 +29,46 @@ vi.mock("../../_lib/admin-api", () => ({
 }));
 
 describe("AcademyPublicProfileManager", () => {
-  const mockMe = {
-    user: { id: 1, name: "Ketua", role: "ketua_akademi" },
-    akademi: { id: 1, name: "Test Dojang" },
-    entitlements: { has_public_website: true },
+  const mockMe: AkademiMeResponse = {
+    user: {
+      id: 1,
+      name: "Ketua",
+      email: "ketua@test.com",
+      role: "ketua_akademi",
+      avatar_url: null,
+      is_active: true,
+      akademi_id: 1,
+    },
+    akademi: {
+      id: 1,
+      name: "Test Dojang",
+      slug: "test-dojang",
+      sport_type: "taekwondo",
+      logo_url: null,
+      status: "active",
+      plan: "pro",
+      plan_expires_at: null,
+      created_at: "2026-01-01T00:00:00Z",
+      updated_at: "2026-01-01T00:00:00Z",
+    },
+    subscription: null,
+    entitlements: {
+      student_limit: 100,
+      has_public_website: true,
+      has_subdomain: true,
+      has_rapor: true,
+      has_exam_events: true,
+      has_parent_portal: false,
+    },
   };
 
-  const mockProfile = {
+  const mockProfile: AcademyPublicProfile = {
     id: 1,
     akademi_id: 1,
     about: "Akademi Taekwondo terbaik.",
     vision: "Mencetak atlet handal.",
     mission: "Latihan rutin dan disiplin.",
+    public_schedule: null,
     whatsapp: "81234567890",
     cta_label: "Hubungi WhatsApp",
     is_published: true,
@@ -49,6 +82,7 @@ describe("AcademyPublicProfileManager", () => {
     hero_images: [
       {
         id: 1,
+        akademi_id: 1,
         image_url: "https://example.com/hero1.jpg",
         caption: "Latihan Poomsae",
         focal_x: 50,
@@ -56,38 +90,49 @@ describe("AcademyPublicProfileManager", () => {
         pan_x: 0,
         pan_y: 0,
         zoom: 100,
+        sort_order: 0,
         is_active: true,
+        created_at: "2026-01-01T00:00:00Z",
+        updated_at: "2026-01-01T00:00:00Z",
       },
     ],
     officials: [
       {
         id: 1,
+        akademi_id: 1,
         name: "Sabeum Budi",
         position: "Kepala Pelatih",
         description: "Dan 4 Kukkiwon",
         photo_url: null,
+        sort_order: 0,
         is_active: true,
       },
     ],
     gallery_items: [
       {
         id: 1,
+        akademi_id: 1,
         image_url: "https://example.com/gallery1.jpg",
         caption: "Ujian Kenaikan Tingkat",
         show_on_about: true,
+        sort_order: 0,
+        created_at: "2026-01-01T00:00:00Z",
+        updated_at: "2026-01-01T00:00:00Z",
       },
     ],
     achievements: [
       {
         id: 1,
+        akademi_id: 1,
         title: "Juara Umum Kejurda 2025",
         description: "Meraih 5 emas",
         achieved_on: "2025-08-17",
+        sort_order: 0,
       },
     ],
   };
 
-  const mockCoaches = [
+  const mockCoaches: PublicProfileCoach[] = [
     {
       id: 1,
       name: "Sabeum Budi",
@@ -100,11 +145,11 @@ describe("AcademyPublicProfileManager", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.setItem("skaihub_admin_token", "fake-token");
-    vi.mocked(adminApi.getAkademiMe).mockResolvedValue(mockMe as any);
+    vi.mocked(adminApi.getAkademiMe).mockResolvedValue(mockMe);
     vi.mocked(adminApi.getAkademiPublicProfile).mockResolvedValue({
       profile: mockProfile,
       coaches: mockCoaches,
-    } as any);
+    });
   });
 
   it("merender tab profil publik dan berpindah tab", async () => {

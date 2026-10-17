@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import AcademyUsersManager from "../academy-users-manager";
 import * as adminApi from "../../_lib/admin-api";
+import type { AcademyManagedUser, AkademiMeResponse } from "../../_lib/admin-api";
 
 vi.mock("../../_lib/admin-api", () => ({
   getAkademiMe: vi.fn(),
@@ -12,12 +13,40 @@ vi.mock("../../_lib/admin-api", () => ({
 }));
 
 describe("AcademyUsersManager", () => {
-  const mockMe = {
-    user: { id: 1, name: "Ketua Dojang", email: "ketua@test.com", role: "ketua_akademi" },
-    akademi: { id: 1, name: "Test Dojang" },
+  const mockMe: AkademiMeResponse = {
+    user: {
+      id: 1,
+      name: "Ketua Dojang",
+      email: "ketua@test.com",
+      role: "ketua_akademi",
+      avatar_url: null,
+      is_active: true,
+      akademi_id: 1,
+    },
+    akademi: {
+      id: 1,
+      name: "Test Dojang",
+      slug: "test-dojang",
+      sport_type: "taekwondo",
+      logo_url: null,
+      status: "active",
+      plan: "pro",
+      plan_expires_at: null,
+      created_at: "2026-01-01T00:00:00Z",
+      updated_at: "2026-01-01T00:00:00Z",
+    },
+    subscription: null,
+    entitlements: {
+      student_limit: 100,
+      has_public_website: true,
+      has_subdomain: true,
+      has_rapor: true,
+      has_exam_events: true,
+      has_parent_portal: false,
+    },
   };
 
-  const mockUsers = [
+  const mockUsers: AcademyManagedUser[] = [
     {
       id: 1,
       akademi_id: 1,
@@ -25,6 +54,7 @@ describe("AcademyUsersManager", () => {
       email: "ketua@test.com",
       role: "ketua_akademi",
       is_active: true,
+      created_at: "2026-01-01T00:00:00Z",
       coach_profile: null,
     },
     {
@@ -34,6 +64,7 @@ describe("AcademyUsersManager", () => {
       email: "staff@test.com",
       role: "admin_akademi",
       is_active: true,
+      created_at: "2026-01-02T00:00:00Z",
       coach_profile: null,
     },
     {
@@ -43,6 +74,7 @@ describe("AcademyUsersManager", () => {
       email: "joko@test.com",
       role: "pelatih",
       is_active: false,
+      created_at: "2026-01-03T00:00:00Z",
       coach_profile: { id: 1 },
     },
   ];
@@ -50,8 +82,8 @@ describe("AcademyUsersManager", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.setItem("skaihub_admin_token", "fake-token");
-    vi.mocked(adminApi.getAkademiMe).mockResolvedValue(mockMe as any);
-    vi.mocked(adminApi.getAkademiUsers).mockResolvedValue({ data: mockUsers } as any);
+    vi.mocked(adminApi.getAkademiMe).mockResolvedValue(mockMe);
+    vi.mocked(adminApi.getAkademiUsers).mockResolvedValue({ data: mockUsers });
   });
 
   it("merender daftar akun dan mendukung filter role", async () => {
@@ -65,7 +97,6 @@ describe("AcademyUsersManager", () => {
       expect(screen.getAllByText("Pelatih Joko").length).toBeGreaterThan(0);
     });
 
-    // Test filter role pelatih
     const roleSelect = screen.getByLabelText(/filter role/i);
     fireEvent.change(roleSelect, { target: { value: "pelatih" } });
 
@@ -95,7 +126,6 @@ describe("AcademyUsersManager", () => {
     });
 
     const editButtons = screen.getAllByRole("button", { name: "Edit" });
-    // edit button for Admin Staff (index 1)
     fireEvent.click(editButtons[1]);
 
     expect(screen.getByRole("heading", { name: "Edit Akun" })).toBeInTheDocument();

@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import AcademyCoachesManager from "../academy-coaches-manager";
 import * as adminApi from "../../_lib/admin-api";
+import type { AkademiMeResponse, Coach } from "../../_lib/admin-api";
 
 vi.mock("../../_lib/admin-api", () => ({
   getAkademiMe: vi.fn(),
@@ -10,21 +11,51 @@ vi.mock("../../_lib/admin-api", () => ({
 }));
 
 describe("AcademyCoachesManager", () => {
-  const mockMe = {
-    user: { id: 1, name: "Ketua", email: "ketua@test.com", role: "ketua_akademi" },
-    akademi: { id: 1, name: "Test Dojang" },
+  const mockMe: AkademiMeResponse = {
+    user: {
+      id: 1,
+      name: "Ketua",
+      email: "ketua@test.com",
+      role: "ketua_akademi",
+      avatar_url: null,
+      is_active: true,
+      akademi_id: 1,
+    },
+    akademi: {
+      id: 1,
+      name: "Test Dojang",
+      slug: "test-dojang",
+      sport_type: "taekwondo",
+      logo_url: null,
+      status: "active",
+      plan: "pro",
+      plan_expires_at: null,
+      created_at: "2026-01-01T00:00:00Z",
+      updated_at: "2026-01-01T00:00:00Z",
+    },
+    subscription: null,
+    entitlements: {
+      student_limit: 100,
+      has_public_website: true,
+      has_subdomain: true,
+      has_rapor: true,
+      has_exam_events: true,
+      has_parent_portal: false,
+    },
   };
 
-  const mockCoaches = [
+  const mockCoaches: Coach[] = [
     {
       id: 1,
       akademi_id: 1,
       name: "Sabeum Budi",
       email: "budi@test.com",
       role: "pelatih",
+      avatar_url: null,
       is_active: true,
       coach_profile: {
         id: 1,
+        user_id: 1,
         phone: "081234567890",
         rank_label: "Dan 3 Kukkiwon",
         license_number: "LIC-123",
@@ -38,6 +69,7 @@ describe("AcademyCoachesManager", () => {
       name: "Sabeum Agus",
       email: "agus@test.com",
       role: "pelatih",
+      avatar_url: null,
       is_active: false,
       coach_profile: null,
     },
@@ -46,8 +78,8 @@ describe("AcademyCoachesManager", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.setItem("skaihub_admin_token", "fake-token");
-    vi.mocked(adminApi.getAkademiMe).mockResolvedValue(mockMe as any);
-    vi.mocked(adminApi.getAkademiCoaches).mockResolvedValue({ data: mockCoaches } as any);
+    vi.mocked(adminApi.getAkademiMe).mockResolvedValue(mockMe);
+    vi.mocked(adminApi.getAkademiCoaches).mockResolvedValue({ data: mockCoaches });
   });
 
   it("merender daftar pelatih dan mendukung pencarian", async () => {

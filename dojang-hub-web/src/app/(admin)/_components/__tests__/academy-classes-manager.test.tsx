@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import AcademyClassesManager from "../academy-classes-manager";
 import * as adminApi from "../../_lib/admin-api";
+import type { AkademiMeResponse, TrainingClass, TrainingPlace } from "../../_lib/admin-api";
 
 vi.mock("../../_lib/admin-api", () => ({
   getAkademiMe: vi.fn(),
@@ -13,24 +14,53 @@ vi.mock("../../_lib/admin-api", () => ({
 }));
 
 describe("AcademyClassesManager", () => {
-  const mockMe = {
-    user: { id: 1, name: "Ketua", email: "ketua@test.com", role: "ketua_akademi" },
-    akademi: { id: 1, name: "Test Dojang" },
+  const mockMe: AkademiMeResponse = {
+    user: {
+      id: 1,
+      name: "Ketua",
+      email: "ketua@test.com",
+      role: "ketua_akademi",
+      avatar_url: null,
+      is_active: true,
+      akademi_id: 1,
+    },
+    akademi: {
+      id: 1,
+      name: "Test Dojang",
+      slug: "test-dojang",
+      sport_type: "taekwondo",
+      logo_url: null,
+      status: "active",
+      plan: "pro",
+      plan_expires_at: null,
+      created_at: "2026-01-01T00:00:00Z",
+      updated_at: "2026-01-01T00:00:00Z",
+    },
+    subscription: null,
+    entitlements: {
+      student_limit: 100,
+      has_public_website: true,
+      has_subdomain: true,
+      has_rapor: true,
+      has_exam_events: true,
+      has_parent_portal: false,
+    },
   };
 
-  const mockPlaces = [
+  const mockPlaces: TrainingPlace[] = [
     {
       id: 10,
       akademi_id: 1,
       name: "Dojang Pusat",
       address: "Jl. Sudirman No. 1",
+      notes: null,
       is_active: true,
       created_at: "2026-01-01T00:00:00Z",
       updated_at: "2026-01-01T00:00:00Z",
     },
   ];
 
-  const mockClasses = [
+  const mockClasses: TrainingClass[] = [
     {
       id: 1,
       akademi_id: 1,
@@ -40,7 +70,8 @@ describe("AcademyClassesManager", () => {
       spp_amount_override: "150000",
       target_sessions_per_month: 4,
       is_active: true,
-      students_count: 5,
+      created_at: "2026-01-01T00:00:00Z",
+      updated_at: "2026-01-01T00:00:00Z",
     },
     {
       id: 2,
@@ -51,16 +82,17 @@ describe("AcademyClassesManager", () => {
       spp_amount_override: null,
       target_sessions_per_month: 8,
       is_active: false,
-      students_count: 2,
+      created_at: "2026-01-02T00:00:00Z",
+      updated_at: "2026-01-02T00:00:00Z",
     },
   ];
 
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.setItem("skaihub_admin_token", "fake-token");
-    vi.mocked(adminApi.getAkademiMe).mockResolvedValue(mockMe as any);
-    vi.mocked(adminApi.getAkademiClasses).mockResolvedValue({ data: mockClasses } as any);
-    vi.mocked(adminApi.getAkademiTrainingPlaces).mockResolvedValue({ data: mockPlaces } as any);
+    vi.mocked(adminApi.getAkademiMe).mockResolvedValue(mockMe);
+    vi.mocked(adminApi.getAkademiClasses).mockResolvedValue({ data: mockClasses });
+    vi.mocked(adminApi.getAkademiTrainingPlaces).mockResolvedValue({ data: mockPlaces });
   });
 
   it("merender daftar kelas dan memfilter pencarian", async () => {

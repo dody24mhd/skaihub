@@ -174,14 +174,7 @@ export default function AcademyClassesManager() {
       key: "name",
       header: "Kelas",
       primary: true,
-      render: (item) => (
-        <div>
-          <span className="font-bold text-primary">{item.name}</span>
-          {item.students_count !== undefined ? (
-            <span className="ml-2 text-xs font-medium text-muted">({item.students_count} siswa)</span>
-          ) : null}
-        </div>
-      ),
+      render: (item) => <span className="font-bold text-primary">{item.name}</span>,
     },
     {
       key: "training_place",
