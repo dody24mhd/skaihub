@@ -9,6 +9,7 @@ import {
   filterNavSectionsByRole,
 } from "./ui/academy-nav";
 import BottomNav from "./ui/bottom-nav";
+import SubscriptionBanner from "./ui/subscription-banner";
 
 const TOKEN_KEY = "skaihub_admin_token";
 const EMAIL_KEY = "skaihub_admin_email";
@@ -160,6 +161,8 @@ export default function AcademyShell({ title, description, children }: AcademySh
             </button>
           </div>
         </header>
+
+        <SubscriptionBanner />
 
         {/* Konten halaman dengan pb-24 di bawah md untuk memberi ruang BottomNav */}
         <div className="px-5 py-6 pb-24 md:pb-8 lg:px-8 lg:py-8">

@@ -15,6 +15,7 @@ import ListPagination from "./students/list-pagination";
 import { buildStudentColumns } from "./students/student-columns";
 import StudentListToolbar, { StudentStatusFilter } from "./students/student-list-toolbar";
 import { PageHeader, ResponsiveList } from "./ui";
+import { useCanWrite } from "./ui/subscription-status";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -34,6 +35,8 @@ export default function AcademyStudentsManager() {
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [canManage, setCanManage] = useState(false);
+  const canWrite = useCanWrite();
+  const canEdit = canManage && canWrite;
   const [isLoading, setIsLoading] = useState(true);
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -157,7 +160,7 @@ export default function AcademyStudentsManager() {
 
   if (isLoading) return <p className="text-sm text-muted">Memuat siswa...</p>;
 
-  const columns = buildStudentColumns({ canManage, onDelete: handleDelete });
+  const columns = buildStudentColumns({ canManage: canEdit, onDelete: handleDelete });
 
   return (
     <div className="space-y-5">
@@ -165,7 +168,7 @@ export default function AcademyStudentsManager() {
         eyebrow="Master Data"
         title="Siswa"
         className="mb-0"
-        action={canManage ? (
+        action={canEdit ? (
           <div className="grid grid-cols-2 gap-2 sm:flex">
             <Link
               className="inline-flex min-h-11 items-center justify-center gap-2 bg-primary px-4 text-sm font-bold text-white transition hover:bg-primary-container"

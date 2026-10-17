@@ -6,6 +6,7 @@ use App\Http\Middleware\EnsureAkademiAccess;
 use App\Http\Middleware\EnsureAkademiUser;
 use App\Http\Middleware\EnsureFeature;
 use App\Http\Middleware\EnsurePlatformAdmin;
+use App\Http\Middleware\EnsureSubscriptionWritable;
 use App\Http\Middleware\EnsureSuperAdmin;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -32,6 +33,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'platform.admin' => EnsurePlatformAdmin::class,
             'feature' => EnsureFeature::class,
             'active' => EnsureActiveUser::class,
+            'subscription.writable' => EnsureSubscriptionWritable::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

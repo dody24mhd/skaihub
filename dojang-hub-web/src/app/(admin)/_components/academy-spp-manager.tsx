@@ -15,6 +15,7 @@ import SppGenerateModal from "./spp/spp-generate-modal";
 import SppPaymentModal from "./spp/spp-payment-modal";
 import { SPP_MONTH_LABELS, billsForClass, summarizeBills } from "./spp/spp-summary";
 import { ResponsiveList } from "./ui";
+import { useCanWrite } from "./ui/subscription-status";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -60,6 +61,8 @@ export default function AcademySppManager() {
   const [payTarget, setPayTarget] = useState<SppBill | null>(null);
   const [isGenerateOpen, setIsGenerateOpen] = useState(false);
   const [canManage, setCanManage] = useState(false);
+  const canWrite = useCanWrite();
+  const canEdit = canManage && canWrite;
   const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -138,7 +141,7 @@ export default function AcademySppManager() {
 
   if (isLoading) return <p className="text-sm text-muted">Memuat SPP...</p>;
 
-  const columns = buildSppBillColumns({ canManage, onPay: openPayment, onWaive: handleWaive });
+  const columns = buildSppBillColumns({ canManage: canEdit, onPay: openPayment, onWaive: handleWaive });
 
   return (
     <>
@@ -158,7 +161,7 @@ export default function AcademySppManager() {
                 <p className="label-caps text-secondary">Administrasi</p>
                 <h2 className="font-heading text-xl font-bold text-primary">Rekap SPP</h2>
               </div>
-              {canManage ? (
+              {canEdit ? (
                 <button
                   className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-4 text-sm font-bold text-white transition hover:bg-secondary-dark sm:w-auto"
                   onClick={() => setIsGenerateOpen(true)}

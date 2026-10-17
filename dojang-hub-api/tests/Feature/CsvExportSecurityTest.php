@@ -28,6 +28,8 @@ class CsvExportSecurityTest extends TestCase
             'plan' => 'pro',
         ]);
 
+        $this->giveActiveSubscription($this->akademi);
+
         $this->admin = User::factory()->akademiAdmin($this->akademi->id)->create();
         Sanctum::actingAs($this->admin);
     }

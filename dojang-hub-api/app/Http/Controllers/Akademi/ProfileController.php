@@ -15,7 +15,9 @@ class ProfileController extends Controller
     {
         $user = $request->user()->load('akademi');
         $akademi = $user->akademi;
-        $subscription = $this->subscriptions->activeForAkademi($akademi);
+        $lifecycle = $this->subscriptions->lifecycle($akademi);
+        $subscription = $lifecycle['entitled'];
+        $entitlements = $this->subscriptions->entitlements($subscription);
 
         return response()->json([
             'user' => [
@@ -38,7 +40,12 @@ class ProfileController extends Controller
                 'plan_expires_at' => $akademi->plan_expires_at,
             ],
             'subscription' => $subscription,
-            'entitlements' => $this->subscriptions->entitlements($subscription),
+            'entitlements' => $entitlements,
+            'subscription_state' => $lifecycle['state'],
+            'days_left' => $lifecycle['days_left'],
+            'subscription_ends_at' => $lifecycle['ends_at'],
+            'effective_student_limit' => $entitlements['student_limit'],
+            'active_students' => $this->subscriptions->activeStudentCount($akademi),
         ]);
     }
 }

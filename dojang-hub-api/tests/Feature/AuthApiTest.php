@@ -108,7 +108,7 @@ class AuthApiTest extends TestCase
             ->assertJsonPath('akademi.id', $akademi->id)
             ->assertJsonPath('akademi.slug', 'tenant-academy')
             ->assertJsonPath('subscription.plan', 'pro')
-            ->assertJsonPath('entitlements.student_limit', 200)
+            ->assertJsonPath('entitlements.student_limit', 250)
             ->assertJsonPath('entitlements.has_public_website', true)
             ->assertJsonPath('entitlements.has_exam_events', false);
     }
@@ -130,7 +130,7 @@ class AuthApiTest extends TestCase
             'sport_type' => 'taekwondo',
             'status' => 'active',
             'plan' => 'scale',
-            'plan_expires_at' => now()->subDay(),
+            'plan_expires_at' => now()->subDays(10),
         ]);
 
         Subscription::create([
@@ -141,7 +141,7 @@ class AuthApiTest extends TestCase
             'included_student_limit' => 300,
             'extra_student_blocks' => 1,
             'starts_at' => now()->subMonths(2),
-            'ends_at' => now()->subDay(),
+            'ends_at' => now()->subDays(10),
             'amount' => 349000,
             'payment_status' => 'paid',
             'status' => 'active',
@@ -253,6 +253,7 @@ class AuthApiTest extends TestCase
             'status' => 'active',
             'plan' => 'pro',
         ]);
+        $this->giveActiveSubscription($akademi);
 
         $admin = User::factory()->akademiAdmin($akademi->id)->create(['is_active' => true]);
         $adminToken = $admin->createToken('api-token')->plainTextToken;

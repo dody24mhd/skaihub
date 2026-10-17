@@ -19,7 +19,7 @@ class EnsureFeature
             return response()->json(['message' => 'Akses ditolak.'], 403);
         }
 
-        $subscription = $this->subscriptions->activeForAkademi($user->akademi);
+        $subscription = $this->subscriptions->entitledSubscription($user->akademi);
         $entitlements = $this->subscriptions->entitlements($subscription);
 
         $featureKey = match ($feature) {

@@ -16,6 +16,8 @@ import {
   uploadAdminImage,
 } from "../_lib/admin-api";
 import AdminShell from "./admin-shell";
+import SubscriptionPricePreview, { extraStudentsToBlocks } from "./subscription-price-preview";
+import { EXTRA_BLOCK_SIZE, PLAN_RULES, effectiveStudentLimit } from "@/lib/plan-pricing";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -29,12 +31,6 @@ const planColors: Record<AkademiPlan, string> = {
   starter: "bg-surface-container text-muted",
   pro: "bg-secondary/10 text-secondary",
   scale: "bg-primary/10 text-primary",
-};
-
-const planQuota: Record<AkademiPlan, number> = {
-  starter: 50,
-  pro: 150,
-  scale: 300,
 };
 
 const durationLabels: Record<SubscriptionDuration, string> = {
@@ -111,12 +107,7 @@ function formatMoney(value: string | number) {
 }
 
 function totalStudentLimit(sub: AdminSubscription) {
-  return sub.included_student_limit + sub.extra_student_blocks * 50;
-}
-
-/** Round up to nearest 50-student block */
-function siswaToBlocks(siswa: number): number {
-  return Math.ceil(Math.max(0, siswa) / 50);
+  return effectiveStudentLimit(sub.plan, sub.extra_student_blocks, sub.included_student_limit);
 }
 
 function paymentFormFromSubscription(subscription: AdminSubscription | null) {
@@ -201,13 +192,6 @@ export default function AdminSubscriptionManager() {
       null,
     [subscriptions],
   );
-
-  // Preview: total siswa based on current form selections
-  const previewTotalSiswa = useMemo(() => {
-    const base = planQuota[form.plan];
-    const extra = Number(form.extra_students || 0);
-    return base + extra;
-  }, [form.plan, form.extra_students]);
 
   // Load token + akademi on mount
   useEffect(() => {
@@ -313,8 +297,8 @@ export default function AdminSubscriptionManager() {
     }
 
     const extraStudents = Number(form.extra_students || 0);
-    if (extraStudents % 50 !== 0) {
-      setError("Jumlah siswa tambahan harus kelipatan 50.");
+    if (extraStudents % EXTRA_BLOCK_SIZE !== 0) {
+      setError(`Jumlah siswa tambahan harus kelipatan ${EXTRA_BLOCK_SIZE}.`);
       return;
     }
 
@@ -328,8 +312,8 @@ export default function AdminSubscriptionManager() {
         duration_type: form.duration_type,
         starts_at: form.starts_at || null,
         ends_at: form.duration_type === "custom" ? form.ends_at : null,
-        extra_student_blocks: siswaToBlocks(extraStudents),
-        amount: Number(form.amount || 0),
+        extra_student_blocks: extraStudentsToBlocks(form.extra_students),
+        amount: form.amount === "" ? undefined : Number(form.amount),
         payment_status: form.payment_status,
         payment_method: form.payment_method.trim() || null,
         payment_proof_url: form.payment_proof_url.trim() || null,
@@ -515,7 +499,8 @@ export default function AdminSubscriptionManager() {
                   ) : subscriptions.length > 0 ? (
                     subscriptions.map((item) => {
                       const base = item.included_student_limit;
-                      const addon = item.extra_student_blocks * 50;
+                      const addon = item.extra_student_blocks * EXTRA_BLOCK_SIZE;
+                      const bonus = PLAN_RULES[item.plan].freeExtraBlocks * EXTRA_BLOCK_SIZE;
                       const total = totalStudentLimit(item);
                       return (
                         <tr key={item.id} className="align-top hover:bg-surface/40">
@@ -532,8 +517,8 @@ export default function AdminSubscriptionManager() {
                           <td className="px-5 py-4">
                             <p className="font-bold text-primary">{total.toLocaleString("id-ID")} siswa</p>
                             <p className="mt-0.5 text-xs text-muted">
-                              {base} bawaan
-                              {addon > 0 ? ` + ${addon} add-on` : ""}
+                              {`${base} bawaan + ${bonus} bonus`}
+                              {addon > 0 ? ` + ${addon} berbayar` : ""}
                             </p>
                           </td>
                           <td className="px-5 py-4">
@@ -802,49 +787,16 @@ export default function AdminSubscriptionManager() {
                 ) : null}
               </div>
 
-              {/* Kuota preview + add-on */}
-              <div className="rounded-lg border border-border bg-surface p-3.5">
-                <p className="label-caps mb-2 text-muted">Kuota siswa</p>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-bold text-primary">
-                    {previewTotalSiswa.toLocaleString("id-ID")}
-                  </span>
-                  <span className="text-sm text-muted">siswa</span>
-                </div>
-                <p className="mt-0.5 text-xs text-muted">
-                  {planQuota[form.plan]} bawaan paket
-                  {Number(form.extra_students) > 0
-                    ? ` + ${Number(form.extra_students)} add-on`
-                    : ""}
-                </p>
-                <div className="mt-3">
-                  <FormField label="Siswa tambahan (add-on)" hint="Kelipatan 50 · opsional">
-                    <input
-                      type="number"
-                      min={0}
-                      step={50}
-                      value={form.extra_students}
-                      onChange={(e) =>
-                        setForm((cur) => ({ ...cur, extra_students: e.target.value }))
-                      }
-                      placeholder="0"
-                      className={inputCls}
-                    />
-                  </FormField>
-                </div>
-              </div>
-
-              {/* Nominal */}
-              <FormField label="Nominal tagihan (Rp)">
-                <input
-                  type="number"
-                  min={0}
-                  value={form.amount}
-                  onChange={(e) => setForm((cur) => ({ ...cur, amount: e.target.value }))}
-                  placeholder="0"
-                  className={inputCls}
-                />
-              </FormField>
+              <SubscriptionPricePreview
+                plan={form.plan}
+                duration={form.duration_type}
+                startsAt={form.starts_at}
+                endsAt={form.ends_at}
+                extraStudents={form.extra_students}
+                amount={form.amount}
+                onExtraStudentsChange={(value) => setForm((cur) => ({ ...cur, extra_students: value }))}
+                onAmountChange={(value) => setForm((cur) => ({ ...cur, amount: value }))}
+              />
 
               {/* Status + Metode */}
               <div className="grid gap-3 sm:grid-cols-2">

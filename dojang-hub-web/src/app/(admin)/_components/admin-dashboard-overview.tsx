@@ -11,14 +11,10 @@ import {
   getAdminEvents,
   getAdminSubscriptionAlerts,
 } from "../_lib/admin-api";
+import { PLAN_RULES } from "@/lib/plan-pricing";
+import OperatorDashboardPanel from "./operator-dashboard-panel";
 
 const TOKEN_KEY = "skaihub_admin_token";
-
-const planPrices: Record<AkademiPlan, number> = {
-  starter: 99000,
-  pro: 199000,
-  scale: 349000,
-};
 
 const planLabels: Record<AkademiPlan, string> = {
   starter: "Starter",
@@ -60,11 +56,13 @@ export default function AdminDashboardOverview() {
   const [akademi, setAkademi] = useState<AdminAkademi[]>([]);
   const [alerts, setAlerts] = useState<SubscriptionAlertsResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [token, setToken] = useState("");
 
   useEffect(() => {
     let active = true;
     queueMicrotask(() => {
       const token = localStorage.getItem(TOKEN_KEY) || "";
+      setToken(token);
 
       if (!token) {
         setIsLoading(false);
@@ -106,10 +104,6 @@ export default function AdminDashboardOverview() {
     (total, item) => total + Number(item.users_count || 0),
     0,
   );
-  const estimatedMrr = activeAkademi.reduce(
-    (total, item) => total + planPrices[item.plan],
-    0,
-  );
 
   const now = new Date();
   const monthlySignups = Array.from({ length: 5 }, (_, index) => {
@@ -133,7 +127,6 @@ export default function AdminDashboardOverview() {
   const stats = [
     { label: "Akademi Terdaftar", value: String(akademi.length), subtext: `${activeAkademi.length} aktif`, icon: "domain", color: "text-primary", bg: "bg-primary/10", trend: `${proScaleAkademi.length} Pro/Scale`, trendUp: true },
     { label: "User Terdaftar", value: String(totalUsers), subtext: "Dari seluruh akademi", icon: "groups", color: "text-secondary", bg: "bg-secondary/10", trend: "Aktif", trendUp: true },
-    { label: "Estimasi MRR", value: formatCurrency(estimatedMrr), subtext: "Berdasarkan paket aktif", icon: "payments", color: "text-success", bg: "bg-success/10", trend: "Manual", trendUp: true },
     {
       label: "Perlu Perhatian",
       value: String(expiringSoonCount + unpaidCount),
@@ -148,8 +141,10 @@ export default function AdminDashboardOverview() {
 
   return (
     <div className="space-y-6">
+      {token ? <OperatorDashboardPanel token={token} /> : null}
+
       {/* SaaS Stats Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {stats.map((s) => (
           <article key={s.label} className="card-soft flex items-center gap-4 rounded-lg bg-white p-5">
             <div className={`flex size-12 items-center justify-center rounded-md ${s.bg} ${s.color}`}>
@@ -333,7 +328,7 @@ export default function AdminDashboardOverview() {
                         </span>
                       </td>
                       <td className="py-3.5 text-right font-bold text-primary">
-                        {formatCurrency(planPrices[item.plan])}
+                        {formatCurrency(PLAN_RULES[item.plan].monthlyPrice)}
                       </td>
                     </tr>
                   ))

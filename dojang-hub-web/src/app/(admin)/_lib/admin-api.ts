@@ -2061,3 +2061,51 @@ export function deleteAkademiStudentAchievement(token: string, studentId: number
     method: "DELETE",
   });
 }
+
+// L4-D
+export type SubscriptionLifecycleState = "active" | "expiring" | "grace" | "read_only";
+
+export type AkademiSubscriptionStatusResponse = AkademiMeResponse & {
+  subscription_state: SubscriptionLifecycleState;
+  days_left: number;
+  subscription_ends_at: string | null;
+  effective_student_limit: number;
+  active_students: number;
+};
+
+export function getAkademiSubscriptionStatus(token: string) {
+  return adminFetch<AkademiSubscriptionStatusResponse>("/akademi/me", token);
+}
+
+export type OperatorDashboardAttention = {
+  akademi_id: number;
+  akademi_name: string;
+  akademi_slug: string;
+  plan: AkademiPlan;
+  state: SubscriptionLifecycleState;
+  days_left: number;
+  ends_at: string | null;
+  active_students: number;
+  student_limit: number;
+};
+
+export type OperatorDashboardQuota = {
+  akademi_id: number;
+  akademi_name: string;
+  akademi_slug: string;
+  plan: AkademiPlan;
+  active_students: number;
+  student_limit: number;
+  usage_percent: number;
+};
+
+export type OperatorDashboard = {
+  mrr: number;
+  state_counts: Record<SubscriptionLifecycleState, number>;
+  attention: OperatorDashboardAttention[];
+  near_quota: OperatorDashboardQuota[];
+};
+
+export function getOperatorDashboard(token: string) {
+  return adminFetch<OperatorDashboard>("/super-admin/dashboard", token);
+}

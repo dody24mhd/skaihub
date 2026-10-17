@@ -38,6 +38,8 @@ class TrainingSessionSecurityTest extends TestCase
             'plan' => 'pro',
         ]);
 
+        $this->giveActiveSubscription($this->akademi);
+
         $this->admin = User::factory()->akademiAdmin($this->akademi->id)->create();
         $this->coachA = User::factory()->pelatih($this->akademi->id)->create();
         $this->coachB = User::factory()->pelatih($this->akademi->id)->create();
