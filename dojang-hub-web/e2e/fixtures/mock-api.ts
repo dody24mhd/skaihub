@@ -246,11 +246,14 @@ export const MOCK_SPP_BILLS = [
 ];
 
 // L3-D mock data
+// L4-C: katalog bawaan Kukkiwon (akademi_id null) + satu sabuk tambahan akademi.
+const KUKKIWON_RANK = { akademi_id: null, sport_type: "taekwondo", rank_system: "taekwondo_kukkiwon", level_type: "geup" };
 export const MOCK_SPORT_RANKS = [
-  { id: 1, akademi_id: 1, sport_type: "taekwondo", code: "white", label: "Putih", sequence: 1 },
-  { id: 2, akademi_id: 1, sport_type: "taekwondo", code: "yellow", label: "Kuning", sequence: 2 },
-  { id: 3, akademi_id: 1, sport_type: "taekwondo", code: "green", label: "Hijau", sequence: 3 },
-];
+  { ...KUKKIWON_RANK, id: 1, code: "tkd-geup-10", label: "Geup 10 (Putih)", sequence: 10, level_number: 10, belt_color: "white", stripe_color: null },
+  { ...KUKKIWON_RANK, id: 2, code: "tkd-geup-9", label: "Geup 9 (Kuning)", sequence: 20, level_number: 9, belt_color: "yellow", stripe_color: null },
+  { ...KUKKIWON_RANK, id: 3, code: "tkd-geup-8", label: "Geup 8 (Kuning Strip Hijau)", sequence: 30, level_number: 8, belt_color: "yellow", stripe_color: "green" },
+  { id: 4, akademi_id: 1, sport_type: "taekwondo", rank_system: "taekwondo_kukkiwon", code: "geup-9-strip", label: "Geup 9 Strip Khusus", sequence: 25, level_type: null, level_number: null, belt_color: "yellow", stripe_color: "white" },
+].sort((a, b) => a.sequence - b.sequence);
 
 export const MOCK_EVALUATION_PERIODS = [
   {
