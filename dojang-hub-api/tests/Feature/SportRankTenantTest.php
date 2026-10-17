@@ -183,4 +183,17 @@ class SportRankTenantTest extends TestCase
             ->assertStatus(422)
             ->assertJsonPath('message', 'Tingkatan sudah dipakai dan tidak bisa dihapus.');
     }
+
+    public function test_global_sport_ranks_cannot_have_duplicate_code_for_same_sport_type(): void
+    {
+        $this->expectException(\Illuminate\Database\QueryException::class);
+
+        SportRank::create([
+            'sport_type' => 'taekwondo',
+            'code' => 'TKD-WH',
+            'label' => 'Sabuk Putih Duplikat',
+            'sequence' => 99,
+            'akademi_id' => null,
+        ]);
+    }
 }
