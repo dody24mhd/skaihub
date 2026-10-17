@@ -11,6 +11,7 @@ import {
 } from "../_lib/admin-api";
 import { FormField, PageHeader, ResponsiveColumn, ResponsiveList, SheetModal } from "./ui";
 import Icon from "./ui/icon";
+import StatusMessage from "./ui/status-message";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -229,16 +230,8 @@ export default function AcademyPlacesManager() {
         }
       />
 
-      {message ? (
-        <p className="border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">
-          {message}
-        </p>
-      ) : null}
-      {error ? (
-        <p className="border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">
-          {error}
-        </p>
-      ) : null}
+      <StatusMessage tone="success" message={message} />
+      <StatusMessage tone="error" message={error} />
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="w-full sm:max-w-xs">

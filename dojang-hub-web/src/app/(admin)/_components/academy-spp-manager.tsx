@@ -22,6 +22,7 @@ import SppWaiveModal from "./spp/spp-waive-modal";
 import { SPP_MONTH_LABELS, billsForClass, summarizeBills } from "./spp/spp-summary";
 import { useCanWrite } from "./ui/subscription-status";
 import Icon from "./ui/icon";
+import StatusMessage from "./ui/status-message";
 
 const TOKEN_KEY = "skaihub_admin_token";
 const DEFAULT_SPP_SETTINGS: SppSettings = { default_monthly_amount: null, due_day: 10 };
@@ -263,17 +264,14 @@ export default function AcademySppManager() {
             </div>
           ) : null}
 
-          {message ? (
-            <p className="mt-4 flex flex-wrap items-center justify-between gap-2 border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">
-              {message}
-              {receiptPaymentId ? (
-                <Link className="inline-flex min-h-11 items-center font-bold text-primary underline underline-offset-2" href={`/academy/spp/receipts/${receiptPaymentId}`}>
-                  Lihat kwitansi
-                </Link>
-              ) : null}
-            </p>
-          ) : null}
-          {error ? <p className="mt-4 border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">{error}</p> : null}
+          <StatusMessage tone="success" message={message} className="mt-4 flex flex-wrap items-center justify-between gap-2">
+            {receiptPaymentId ? (
+              <Link className="inline-flex min-h-11 items-center font-bold text-primary underline underline-offset-2" href={`/academy/spp/receipts/${receiptPaymentId}`}>
+                Lihat kwitansi
+              </Link>
+            ) : null}
+          </StatusMessage>
+          <StatusMessage tone="error" message={error} className="mt-4" />
 
           {view === "arrears" ? (
             <SppArrearsSection token={token} />

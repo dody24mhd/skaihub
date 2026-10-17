@@ -25,6 +25,7 @@ import {
 } from "./students/student-form-model";
 import { StudentContactSection, StudentMainSection, StudentTrainingSection } from "./students/student-form-sections";
 import Icon from "./ui/icon";
+import StatusMessage from "./ui/status-message";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -162,8 +163,8 @@ export default function AcademyStudentFormManager({ studentId }: { studentId?: n
         </button>
       </div>
 
-      {message ? <p className="border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">{message}</p> : null}
-      {error ? <p className="border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">{error}</p> : null}
+      <StatusMessage tone="success" message={message} />
+      <StatusMessage tone="error" message={error} />
 
       <StudentMainSection
         form={form}

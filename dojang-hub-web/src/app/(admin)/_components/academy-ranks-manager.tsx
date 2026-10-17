@@ -12,6 +12,7 @@ import { builtinRankLabel, rankSystemLabel } from "../_lib/rank-systems";
 import RankList, { isBuiltinRank } from "./evaluation/rank-list";
 import RankForm, { RankFormValues, emptyRankForm } from "./evaluation/rank-form";
 import { SheetModal } from "./ui";
+import StatusMessage from "./ui/status-message";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -196,16 +197,8 @@ export default function AcademyRanksManager() {
           </div>
         </div>
 
-        {message ? (
-          <p className="mt-4 rounded-md border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">
-            {message}
-          </p>
-        ) : null}
-        {error ? (
-          <p className="mt-4 rounded-md border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">
-            {error}
-          </p>
-        ) : null}
+        <StatusMessage tone="success" message={message} className="mt-4" />
+        <StatusMessage tone="error" message={error} className="mt-4" />
 
         <div className="mt-5">
           <RankList

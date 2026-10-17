@@ -19,6 +19,7 @@ import AttendanceSummaryBar from "./attendance/attendance-summary-bar";
 import AttendanceSessionCreate from "./attendance/attendance-session-create";
 import AttendanceSessionInfo from "./attendance/attendance-session-info";
 import AttendanceStudentList from "./attendance/attendance-student-list";
+import StatusMessage from "./ui/status-message";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -322,16 +323,8 @@ export default function AcademyAttendanceManager({
           ) : null}
         </div>
 
-        {message ? (
-          <p className="mt-4 border-2 border-success/30 bg-success/10 p-3 text-sm font-bold text-success">
-            {message}
-          </p>
-        ) : null}
-        {error ? (
-          <p className="mt-4 border-2 border-secondary/30 bg-secondary/10 p-3 text-sm font-bold text-secondary">
-            {error}
-          </p>
-        ) : null}
+        <StatusMessage tone="success" message={message} className="mt-4" />
+        <StatusMessage tone="error" message={error} className="mt-4" />
 
         {!selected && !isCreateFormOpen ? (
           <p className="mt-8 text-sm text-muted">

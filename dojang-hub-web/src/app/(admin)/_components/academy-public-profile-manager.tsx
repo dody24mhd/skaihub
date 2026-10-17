@@ -20,6 +20,7 @@ import {
 } from "./setup/public-profile";
 import { PageHeader } from "./ui";
 import Icon from "./ui/icon";
+import StatusMessage from "./ui/status-message";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -167,16 +168,8 @@ export default function AcademyPublicProfileManager() {
         description="Kelola informasi, tampilan warna, slider hero, pengurus, dan galeri untuk website publik akademi Anda."
       />
 
-      {error ? (
-        <div className="border border-secondary/20 bg-secondary/5 px-4 py-3 text-sm font-semibold text-secondary">
-          {error}
-        </div>
-      ) : null}
-      {success ? (
-        <div className="border border-success/20 bg-success/5 px-4 py-3 text-sm font-semibold text-success">
-          {success}
-        </div>
-      ) : null}
+      <StatusMessage tone="error" message={error} />
+      <StatusMessage tone="success" message={success} />
 
       {/* Tab navigation yang ramah mobile (bisa scroll horizontal jika layar sempit) */}
       <div className="flex gap-2 overflow-x-auto border-b border-border pb-1">

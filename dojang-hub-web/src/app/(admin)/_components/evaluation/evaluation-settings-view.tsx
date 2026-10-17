@@ -9,6 +9,7 @@ import EvaluationCopyAspectsModal from "./evaluation-copy-aspects-modal";
 import EvaluationPeriodModal from "./evaluation-period-modal";
 import EvaluationSettingsAside from "./evaluation-settings-aside";
 import { shortDate, statusLabels, statusStyles } from "./evaluation-types";
+import StatusMessage from "../ui/status-message";
 
 export type EvaluationSettingsViewProps = {
   periods: EvaluationPeriod[];
@@ -224,16 +225,8 @@ export default function EvaluationSettingsView({
               </div>
             </div>
 
-            {message ? (
-              <p className="mt-4 rounded-md border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">
-                {message}
-              </p>
-            ) : null}
-            {error ? (
-              <p className="mt-4 rounded-md border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">
-                {error}
-              </p>
-            ) : null}
+            <StatusMessage tone="success" message={message} className="mt-4" />
+            <StatusMessage tone="error" message={error} className="mt-4" />
 
             {isPeriodDetailOpen && selectedPeriod ? (
               <div className="mt-4 flex flex-col gap-3 rounded-md border border-border bg-surface-container-low p-4 sm:flex-row sm:items-center sm:justify-between">

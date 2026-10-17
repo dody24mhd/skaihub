@@ -13,6 +13,7 @@ import AttendanceCalendarDesktop from "./attendance/attendance-calendar-desktop"
 import AttendanceHistoryList from "./attendance/attendance-history-list";
 import { useCanWrite } from "./ui/subscription-status";
 import Icon from "./ui/icon";
+import StatusMessage from "./ui/status-message";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -281,11 +282,7 @@ export default function AcademyAttendanceOverviewManager() {
           </div>
         </div>
 
-        {error ? (
-          <p className="mt-4 border-2 border-secondary/30 bg-secondary/10 p-3 text-sm font-bold text-secondary">
-            {error}
-          </p>
-        ) : null}
+        <StatusMessage tone="error" message={error} className="mt-4" />
 
         {/* Filter Input */}
         <div className="mt-5 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">

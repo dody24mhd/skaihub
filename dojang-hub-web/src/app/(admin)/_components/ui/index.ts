@@ -1,6 +1,9 @@
 export { default as Icon } from "./icon";
 export type { IconProps } from "./icon";
 
+export { default as StatusMessage } from "./status-message";
+export type { StatusMessageProps, StatusTone } from "./status-message";
+
 export { default as BottomNav } from "./bottom-nav";
 export type { BottomNavProps } from "./bottom-nav";
 

@@ -17,6 +17,7 @@ import StudentListToolbar, { StudentStatusFilter } from "./students/student-list
 import { PageHeader, ResponsiveList } from "./ui";
 import { useCanWrite } from "./ui/subscription-status";
 import Icon from "./ui/icon";
+import StatusMessage from "./ui/status-message";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -196,15 +197,12 @@ export default function AcademyStudentsManager() {
         onClassChange={updateClass}
       />
 
-      {message ? <p className="border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">{message}</p> : null}
-      {error ? (
-        <div className="flex flex-col gap-2 border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary sm:flex-row sm:items-center sm:justify-between">
-          <p>{error}</p>
-          {token ? (
-            <button className="min-h-11 border border-secondary/30 bg-white px-4 text-xs font-bold" onClick={() => setReloadKey((current) => current + 1)} type="button">Coba lagi</button>
-          ) : null}
-        </div>
-      ) : null}
+      <StatusMessage tone="success" message={message} />
+      <StatusMessage tone="error" message={error} className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        {token ? (
+          <button className="min-h-11 border border-secondary/30 bg-white px-4 text-xs font-bold" onClick={() => setReloadKey((current) => current + 1)} type="button">Coba lagi</button>
+        ) : null}
+      </StatusMessage>
 
       {isTableLoading ? <p className="text-xs font-semibold text-muted">Memuat ulang daftar siswa...</p> : null}
 
