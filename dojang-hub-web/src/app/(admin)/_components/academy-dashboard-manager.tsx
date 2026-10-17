@@ -97,8 +97,8 @@ export default function AcademyDashboardManager() {
       <section className="grid gap-3 sm:grid-cols-3">
         <article className="border-2 border-border bg-white p-4 sm:p-5">
           <span className="block text-[11px] font-bold uppercase tracking-wider text-secondary">Siswa Aktif</span>
-          <p className="mt-1 font-heading text-3xl font-black text-primary">{summary.students?.active_count || 0}</p>
-          <p className="mt-1 text-xs text-muted">siswa aktif terdaftar</p>
+          <p className="mt-1 font-heading text-3xl font-black text-primary">{summary.students?.active_count ?? "-"}</p>
+          <p className="mt-1 text-xs text-muted">{summary.students ? "siswa aktif terdaftar" : "tidak ditampilkan untuk pelatih"}</p>
         </article>
         <article className="border-2 border-border bg-white p-4 sm:p-5">
           <span className="block text-[11px] font-bold uppercase tracking-wider text-secondary">Sesi Bulan Ini</span>
