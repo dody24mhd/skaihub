@@ -25,6 +25,7 @@ export default function AcademyRankPromotionsManager() {
     setEventDate,
     studentId,
     setStudentId,
+    selectedStudent,
     toRankId,
     setToRankId,
     participantResult,
@@ -267,6 +268,7 @@ export default function AcademyRankPromotionsManager() {
             setQuery={setQuery}
             studentId={studentId}
             setStudentId={setStudentId}
+            selectedStudent={selectedStudent}
             availableStudents={availableStudents}
             toRankId={toRankId}
             setToRankId={setToRankId}
@@ -304,6 +306,7 @@ export default function AcademyRankPromotionsManager() {
         setQuery={setQuery}
         studentId={studentId}
         setStudentId={setStudentId}
+        selectedStudent={selectedStudent}
         availableStudents={availableStudents}
         toRankId={toRankId}
         setToRankId={setToRankId}

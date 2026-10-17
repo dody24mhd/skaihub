@@ -1315,10 +1315,9 @@ export function addAkademiRankPromotionParticipant(
     result?: RankPromotionParticipant["result"];
     score?: number | null;
     notes?: string | null;
-    allow_skip?: boolean;
   },
 ) {
-  return adminFetch<{ rank_promotion_participant: RankPromotionParticipant }>(
+  return adminFetch<{ rank_promotion_participant: RankPromotionParticipant; warnings?: string[] }>(
     `/akademi/rank-promotions/${eventId}/participants`,
     token,
     {
@@ -1334,7 +1333,7 @@ export function updateAkademiRankPromotionParticipant(
   participantId: number,
   payload: Partial<Pick<RankPromotionParticipant, "to_rank_id" | "result" | "score" | "notes">>,
 ) {
-  return adminFetch<{ rank_promotion_participant: RankPromotionParticipant }>(
+  return adminFetch<{ rank_promotion_participant: RankPromotionParticipant; warnings?: string[] }>(
     `/akademi/rank-promotions/${eventId}/participants/${participantId}`,
     token,
     {

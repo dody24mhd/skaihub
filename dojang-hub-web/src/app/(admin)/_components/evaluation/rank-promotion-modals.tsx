@@ -7,6 +7,7 @@ import {
   SportRank,
   Student,
 } from "../../_lib/admin-api";
+import RankTargetField from "./rank-target-field";
 import { FormField, SheetModal } from "../ui";
 
 export type CreateEventModalProps = {
@@ -79,6 +80,7 @@ export type AddParticipantModalProps = {
   setQuery: (val: string) => void;
   studentId: string;
   setStudentId: (val: string) => void;
+  selectedStudent: Student | undefined;
   availableStudents: Student[];
   toRankId: string;
   setToRankId: (val: string) => void;
@@ -101,6 +103,7 @@ export function AddParticipantModal({
   setQuery,
   studentId,
   setStudentId,
+  selectedStudent,
   availableStudents,
   toRankId,
   setToRankId,
@@ -158,28 +161,14 @@ export function AddParticipantModal({
           </select>
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <label
-            htmlFor="modal-rank-select"
-            className="text-xs font-bold uppercase tracking-wide text-primary"
-          >
-            Naik ke Tingkatan <span className="text-secondary">*</span>
-          </label>
-          <select
-            id="modal-rank-select"
-            className="min-h-11 w-full rounded-md border border-border bg-white px-3 text-base text-primary focus:border-primary sm:text-sm"
-            value={toRankId}
-            onChange={(e) => setToRankId(e.target.value)}
-            required
-          >
-            <option value="">Pilih tingkatan</option>
-            {ranks.map((rank) => (
-              <option key={rank.id} value={rank.id}>
-                {rank.label}
-              </option>
-            ))}
-          </select>
-        </div>
+        <RankTargetField
+          id="modal-rank-select"
+          label="Naik ke Tingkatan"
+          ranks={ranks}
+          student={selectedStudent}
+          toRankId={toRankId}
+          setToRankId={setToRankId}
+        />
 
         <div className="grid gap-3 sm:grid-cols-2">
           <div className="flex flex-col gap-1.5">

@@ -7,6 +7,7 @@ import {
   SportRank,
   Student,
 } from "../../_lib/admin-api";
+import RankTargetField from "./rank-target-field";
 import { FormField } from "../ui";
 
 export type RankPromotionAsideProps = {
@@ -18,6 +19,7 @@ export type RankPromotionAsideProps = {
   setQuery: (val: string) => void;
   studentId: string;
   setStudentId: (val: string) => void;
+  selectedStudent: Student | undefined;
   availableStudents: Student[];
   toRankId: string;
   setToRankId: (val: string) => void;
@@ -43,6 +45,7 @@ export default function RankPromotionAside({
   setQuery,
   studentId,
   setStudentId,
+  selectedStudent,
   availableStudents,
   toRankId,
   setToRankId,
@@ -122,28 +125,14 @@ export default function RankPromotionAside({
               ))}
             </select>
           </div>
-          <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="aside-rank-select"
-              className="text-xs font-bold uppercase tracking-wide text-primary"
-            >
-              Naik ke <span className="text-secondary">*</span>
-            </label>
-            <select
-              id="aside-rank-select"
-              className="min-h-11 w-full rounded-md border border-border bg-white px-3 text-sm text-primary"
-              value={toRankId}
-              onChange={(e) => setToRankId(e.target.value)}
-              required
-            >
-              <option value="">Pilih tingkatan</option>
-              {ranks.map((r) => (
-                <option key={r.id} value={r.id}>
-                  {r.label}
-                </option>
-              ))}
-            </select>
-          </div>
+          <RankTargetField
+            id="aside-rank-select"
+            label="Naik ke"
+            ranks={ranks}
+            student={selectedStudent}
+            toRankId={toRankId}
+            setToRankId={setToRankId}
+          />
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="flex flex-col gap-1.5">
               <label

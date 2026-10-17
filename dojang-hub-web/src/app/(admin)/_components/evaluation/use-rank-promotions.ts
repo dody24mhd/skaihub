@@ -16,6 +16,7 @@ import {
   updateAkademiRankPromotionEvent,
   updateAkademiRankPromotionParticipant,
 } from "../../_lib/admin-api";
+import { ageOn, defaultNextRank } from "./rank-progression";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -57,6 +58,11 @@ export function useRankPromotions() {
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+
+  const selectedStudent = useMemo(
+    () => students.find((student) => String(student.id) === studentId),
+    [students, studentId]
+  );
 
   const participants = useMemo(() => selectedEvent?.participants || [], [selectedEvent]);
   const participantStudentIds = useMemo(
@@ -169,7 +175,7 @@ export function useRankPromotions() {
     setError("");
 
     try {
-      await addAkademiRankPromotionParticipant(tokenRef.current, selectedEvent.id, {
+      const result = await addAkademiRankPromotionParticipant(tokenRef.current, selectedEvent.id, {
         student_id: Number(studentId),
         to_rank_id: Number(toRankId),
         result: participantResult,
@@ -181,12 +187,19 @@ export function useRankPromotions() {
       setParticipantResult("registered");
       setParticipantScore("");
       setParticipantNotes("");
-      setMessage("Peserta kenaikan tingkat ditambahkan.");
+      setMessage(["Peserta kenaikan tingkat ditambahkan.", ...(result.warnings ?? [])].join(" "));
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Gagal menambah peserta.");
     } finally {
       setIsSaving(false);
     }
+  }
+
+  function selectStudent(id: string) {
+    setStudentId(id);
+    const student = students.find((item) => String(item.id) === id);
+    const next = student ? defaultNextRank(ranks, student.current_rank, ageOn(student.birth_date)) : null;
+    setToRankId(next ? String(next.id) : "");
   }
 
   async function handleParticipantResult(
@@ -245,7 +258,8 @@ export function useRankPromotions() {
     eventDate,
     setEventDate,
     studentId,
-    setStudentId,
+    setStudentId: selectStudent,
+    selectedStudent,
     toRankId,
     setToRankId,
     participantResult,
