@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AkademiController extends Controller
 {
@@ -167,9 +168,8 @@ class AkademiController extends Controller
         ]));
 
         if ($request->filled('status') && in_array($request->status, ['inactive', 'suspended'], true)) {
-            DB::table('personal_access_tokens')
-                ->where('tokenable_type', User::class)
-                ->whereIn('tokenable_id', $akademi->users()->select('id'))
+            PersonalAccessToken::whereIn('tokenable_id', $akademi->users()->select('id'))
+                ->where('tokenable_type', (new User)->getMorphClass())
                 ->delete();
         }
 
@@ -180,9 +180,8 @@ class AkademiController extends Controller
     {
         $akademi = Akademi::findOrFail($id);
 
-        DB::table('personal_access_tokens')
-            ->where('tokenable_type', User::class)
-            ->whereIn('tokenable_id', $akademi->users()->select('id'))
+        PersonalAccessToken::whereIn('tokenable_id', $akademi->users()->select('id'))
+            ->where('tokenable_type', (new User)->getMorphClass())
             ->delete();
 
         $akademi->delete();

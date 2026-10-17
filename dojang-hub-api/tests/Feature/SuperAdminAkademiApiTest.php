@@ -329,4 +329,37 @@ class SuperAdminAkademiApiTest extends TestCase
 
         $this->assertDatabaseCount('subscriptions', 1);
     }
+
+    public function test_suspending_akademi_revokes_tokens_respecting_user_morph_class(): void
+    {
+        \Illuminate\Database\Eloquent\Relations\Relation::morphMap([
+            'custom_user' => User::class,
+        ]);
+
+        try {
+            $akademi = Akademi::create([
+                'name' => 'Morph Test Academy',
+                'slug' => 'morph-test',
+                'sport_type' => 'taekwondo',
+                'status' => 'active',
+                'plan' => 'starter',
+            ]);
+
+            $user = User::factory()->akademiAdmin($akademi->id)->create();
+            $token = $user->createToken('test-token');
+
+            $this->assertSame('custom_user', $token->accessToken->tokenable_type);
+            $this->assertDatabaseHas('personal_access_tokens', ['id' => $token->accessToken->id]);
+
+            // Suspend akademi
+            $this->putJson("/api/super-admin/akademi/{$akademi->id}", [
+                'status' => 'suspended',
+            ])->assertOk();
+
+            // Token must be revoked
+            $this->assertDatabaseMissing('personal_access_tokens', ['id' => $token->accessToken->id]);
+        } finally {
+            \Illuminate\Database\Eloquent\Relations\Relation::morphMap([], false);
+        }
+    }
 }
