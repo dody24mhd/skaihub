@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Akademi;
 
 use App\Http\Controllers\Controller;
+use App\Models\AcademySppSetting;
 use App\Models\SppBill;
 use App\Models\Student;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -58,6 +60,10 @@ class SppBillController extends Controller
         ]);
 
         $akademiId = $request->user()->akademi_id;
+        $setting = AcademySppSetting::forAkademi($akademiId);
+        $data['default_amount'] = $data['default_amount'] ?? $setting->default_monthly_amount;
+        $data['due_date'] = $data['due_date']
+            ?? Carbon::create($data['billing_year'], $data['billing_month'], $setting->due_day)->toDateString();
         $created = 0;
         $skipped = 0;
         $missingAmount = 0;
