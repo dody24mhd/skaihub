@@ -10,21 +10,24 @@ const slides = [
     title: ["SATU PLATFORM", "BERBAGAI", "SOLUSI"],
     highlight: 1,
     desc: "Sistem manajemen operasional untuk absensi, rapor pengembangan, jadwal materi kurikulum, dan laporan SPP. Mendukung Taekwondo dan Karate.",
-    image: "/images/hero/slide-1.png",
+    image: "/images/hero/slide-1.webp",
+    focus: "55% center",
   },
   {
     label: "Reputasi Digital",
     title: ["PILIHAN UTAMA", "DI KOTA ANDA"],
     highlight: 0,
     desc: "Website profil menampilkan identitas, prestasi, dan form pendaftaran online langsung dari alamat web akademi Anda.",
-    image: "/images/hero/slide-2.png",
+    image: "/images/hero/slide-2.webp",
+    focus: "48% center",
   },
   {
     label: "Kurikulum & Prestasi",
     title: ["CETAK JUARA", "DENGAN SISTEM", "TERINTEGRASI"],
     highlight: 0,
     desc: "Dari kurikulum, jadwal materi latihan harian dan teknik per sabuk/kyu, hingga pencatatan prestasi akademi — semua dalam satu sistem.",
-    image: "/images/hero/slide-3.png",
+    image: "/images/hero/slide-3.webp",
+    focus: "62% center",
   },
 ];
 
@@ -90,12 +93,14 @@ export default function HeroSlider({ waNumber }: { waNumber?: string }) {
         {slides.map((item, i) => (
           <div
             key={i}
-            className={`absolute inset-0 transition-opacity duration-1000 ${i === active ? "opacity-100" : "opacity-0"}`}
+            // The photo only fills the panel from 45% to the right edge, so `focus` picks what stays visible.
+            // Same diagonal as before: 62%/52% of the full width, re-expressed inside the 55%-wide panel.
+            className={`absolute inset-y-0 left-[45%] right-0 transition-opacity duration-1000 ${i === active ? "opacity-100" : "opacity-0"}`}
             style={{
               backgroundImage: `url(${item.image})`,
               backgroundSize: "cover",
-              backgroundPosition: "center right",
-              clipPath: "polygon(62% 0%, 100% 0%, 100% 100%, 52% 100%)",
+              backgroundPosition: item.focus,
+              clipPath: "polygon(30.9% 0%, 100% 0%, 100% 100%, 12.7% 100%)",
             }}
           />
         ))}
