@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\RankSystem;
 use App\Models\AcademyGalleryItem;
 use App\Models\AcademyPublicAchievement;
 use App\Models\AcademyPublicHeroImage;
@@ -25,6 +26,7 @@ use App\Models\TrainingSession;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 
 class DemoAkademiSeeder extends Seeder
@@ -36,6 +38,7 @@ class DemoAkademiSeeder extends Seeder
             [
                 'name' => 'Garuda Sakti Academy',
                 'sport_type' => 'taekwondo',
+                'rank_system' => RankSystem::TaekwondoKukkiwon->value,
                 'status' => 'active',
                 'plan' => 'pro',
                 'plan_expires_at' => now()->addMonths(6),
@@ -200,46 +203,38 @@ class DemoAkademiSeeder extends Seeder
     }
 
     /**
-     * @return array<string, SportRank>
+     * Sabuk demo diambil dari katalog Kukkiwon (RankCatalogSeeder).
+     *
+     * @return Collection<string, SportRank>
      */
-    private function seedRanks(): array
+    private function seedRanks(): Collection
     {
-        $items = [
-            ['white', 'Sabuk Putih', 1],
-            ['yellow', 'Sabuk Kuning', 2],
-            ['green', 'Sabuk Hijau', 3],
-            ['blue', 'Sabuk Biru', 4],
-            ['red', 'Sabuk Merah', 5],
-            ['poom', 'Poom', 6],
-            ['black', 'Sabuk Hitam', 7],
-        ];
+        $this->call(RankCatalogSeeder::class);
 
-        return collect($items)
-            ->mapWithKeys(fn (array $item) => [
-                $item[0] => SportRank::updateOrCreate(
-                    ['sport_type' => 'taekwondo', 'code' => $item[0]],
-                    ['label' => $item[1], 'sequence' => $item[2]],
-                ),
-            ])
-            ->all();
+        return SportRank::query()
+            ->whereNull('akademi_id')
+            ->where('rank_system', RankSystem::TaekwondoKukkiwon->value)
+            ->orderBy('sequence')
+            ->get()
+            ->keyBy('code');
     }
 
     /**
      * @return array<int, Student>
      */
-    private function seedStudents(Akademi $akademi, int $juniorClassId, int $prestasiClassId, array $ranks): array
+    private function seedStudents(Akademi $akademi, int $juniorClassId, int $prestasiClassId, Collection $ranks): array
     {
         $rows = [
-            ['GARUDA-0001', 'Budi Santoso', 'male', '2014-01-12', 145, 38, 'white', $juniorClassId, '5', 'M'],
-            ['GARUDA-0002', 'Sari Aulia', 'female', '2014-03-20', 140, 35, 'white', $juniorClassId, '5', 'S'],
-            ['GARUDA-0003', 'Andi Pratama', 'male', '2013-07-05', 150, 43, 'yellow', $juniorClassId, '6', 'M'],
-            ['GARUDA-0004', 'Nadia Putri', 'female', '2012-11-18', 152, 44, 'yellow', $prestasiClassId, '6', 'M'],
-            ['GARUDA-0005', 'Rafi Alfarizi', 'male', '2011-09-02', 158, 49, 'green', $prestasiClassId, '7', 'L'],
-            ['GARUDA-0006', 'Alya Ramadhani', 'female', '2013-12-24', 148, 41, 'white', $juniorClassId, '5', 'S'],
-            ['GARUDA-0007', 'Fahri Maulana', 'male', '2012-05-15', 156, 46, 'blue', $prestasiClassId, '7', 'L'],
-            ['GARUDA-0008', 'Keisha Amanda', 'female', '2015-02-08', 136, 32, 'white', $juniorClassId, '4', 'S'],
-            ['GARUDA-0009', 'Rizky Saputra', 'male', '2011-06-30', 162, 52, 'red', $prestasiClassId, '8', 'XL'],
-            ['GARUDA-0010', 'Dewi Maharani', 'female', '2014-10-10', 142, 36, 'yellow', $juniorClassId, '5', 'M'],
+            ['GARUDA-0001', 'Budi Santoso', 'male', '2014-01-12', 145, 38, 'tkd-geup-10', $juniorClassId, '5', 'M'],
+            ['GARUDA-0002', 'Sari Aulia', 'female', '2014-03-20', 140, 35, 'tkd-geup-10', $juniorClassId, '5', 'S'],
+            ['GARUDA-0003', 'Andi Pratama', 'male', '2013-07-05', 150, 43, 'tkd-geup-9', $juniorClassId, '6', 'M'],
+            ['GARUDA-0004', 'Nadia Putri', 'female', '2012-11-18', 152, 44, 'tkd-geup-9', $prestasiClassId, '6', 'M'],
+            ['GARUDA-0005', 'Rafi Alfarizi', 'male', '2011-09-02', 158, 49, 'tkd-geup-7', $prestasiClassId, '7', 'L'],
+            ['GARUDA-0006', 'Alya Ramadhani', 'female', '2013-12-24', 148, 41, 'tkd-geup-10', $juniorClassId, '5', 'S'],
+            ['GARUDA-0007', 'Fahri Maulana', 'male', '2012-05-15', 156, 46, 'tkd-geup-5', $prestasiClassId, '7', 'L'],
+            ['GARUDA-0008', 'Keisha Amanda', 'female', '2015-02-08', 136, 32, 'tkd-geup-10', $juniorClassId, '4', 'S'],
+            ['GARUDA-0009', 'Rizky Saputra', 'male', '2011-06-30', 162, 52, 'tkd-geup-3', $prestasiClassId, '8', 'XL'],
+            ['GARUDA-0010', 'Dewi Maharani', 'female', '2014-10-10', 142, 36, 'tkd-geup-9', $juniorClassId, '5', 'M'],
         ];
 
         return collect($rows)->map(function (array $row) use ($akademi, $ranks) {
@@ -529,7 +524,7 @@ class DemoAkademiSeeder extends Seeder
         }
     }
 
-    private function seedRankPromotion(int $akademiId, array $students, array $ranks, User $creator, User $assessor): void
+    private function seedRankPromotion(int $akademiId, array $students, Collection $ranks, User $creator, User $assessor): void
     {
         $event = RankPromotionEvent::updateOrCreate(
             ['akademi_id' => $akademiId, 'name' => 'UKT Mei 2026'],
@@ -543,12 +538,7 @@ class DemoAkademiSeeder extends Seeder
 
         foreach (array_slice(array_values($students), 0, 6) as $index => $student) {
             $fromRank = $student->currentRank;
-            $toRank = match ($fromRank?->code) {
-                'white' => $ranks['yellow'],
-                'yellow' => $ranks['green'],
-                'green' => $ranks['blue'],
-                default => $ranks['red'],
-            };
+            $toRank = $ranks->first(fn (SportRank $rank) => $rank->sequence > ($fromRank?->sequence ?? 0));
             $result = $index === 5 ? 'failed' : 'passed';
 
             RankPromotionParticipant::updateOrCreate(

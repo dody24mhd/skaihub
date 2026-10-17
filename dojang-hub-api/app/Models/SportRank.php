@@ -26,6 +26,14 @@ class SportRank extends Model
         'stripe_color',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'sequence' => 'integer',
+            'level_number' => 'integer',
+        ];
+    }
+
     protected static function booted(): void
     {
         static::creating(function (SportRank $rank) {
