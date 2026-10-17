@@ -20,18 +20,18 @@ describe("evaluation-types helpers", () => {
       expect(getScoreLabel(59)).toBe("Kurang");
     });
 
-    it("mengembalikan 'Cukup' untuk nilai 60 - 69", () => {
+    it("mengembalikan 'Cukup' untuk nilai 60 - 74", () => {
       expect(getScoreLabel(60)).toBe("Cukup");
-      expect(getScoreLabel(69)).toBe("Cukup");
+      expect(getScoreLabel(74)).toBe("Cukup");
     });
 
-    it("mengembalikan 'Baik' untuk nilai 70 - 84", () => {
-      expect(getScoreLabel(70)).toBe("Baik");
-      expect(getScoreLabel(84)).toBe("Baik");
+    it("mengembalikan 'Baik' untuk nilai 75 - 89", () => {
+      expect(getScoreLabel(75)).toBe("Baik");
+      expect(getScoreLabel(89)).toBe("Baik");
     });
 
-    it("mengembalikan 'Sangat Baik' untuk nilai >= 85", () => {
-      expect(getScoreLabel(85)).toBe("Sangat Baik");
+    it("mengembalikan 'Sangat Baik' untuk nilai >= 90", () => {
+      expect(getScoreLabel(90)).toBe("Sangat Baik");
       expect(getScoreLabel(95)).toBe("Sangat Baik");
       expect(getScoreLabel(100)).toBe("Sangat Baik");
     });
@@ -40,7 +40,7 @@ describe("evaluation-types helpers", () => {
   describe("getScoreLabelStyle", () => {
     it("memberikan kelas warna yang tepat sesuai predikat", () => {
       expect(getScoreLabelStyle(90)).toContain("text-success");
-      expect(getScoreLabelStyle(75)).toContain("text-primary");
+      expect(getScoreLabelStyle(80)).toContain("text-primary");
       expect(getScoreLabelStyle(65)).toContain("text-secondary");
       expect(getScoreLabelStyle(50)).toContain("text-secondary-dark");
       expect(getScoreLabelStyle(null)).toContain("text-muted");

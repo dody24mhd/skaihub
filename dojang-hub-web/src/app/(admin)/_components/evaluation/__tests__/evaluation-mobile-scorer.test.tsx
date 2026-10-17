@@ -137,9 +137,9 @@ describe("EvaluationMobileScorer", () => {
 
     const legend = screen.getByRole("list", { name: /Rentang predikat nilai/i });
     expect(legend).toHaveTextContent("Kurang 1–59");
-    expect(legend).toHaveTextContent("Cukup 60–69");
-    expect(legend).toHaveTextContent("Baik 70–84");
-    expect(legend).toHaveTextContent("Sangat Baik 85–100");
+    expect(legend).toHaveTextContent("Cukup 60–74");
+    expect(legend).toHaveTextContent("Baik 75–89");
+    expect(legend).toHaveTextContent("Sangat Baik 90–100");
 
     const input = screen.getByLabelText("Nilai Kicking (Tae)");
     expect(input).toHaveAttribute("inputmode", "numeric");
