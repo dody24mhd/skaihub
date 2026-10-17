@@ -27,6 +27,11 @@ if (isVitest) {
     "/academy/users",
     "/academy/places",
     "/academy/public-profile",
+    "/academy/evaluations",
+    "/academy/evaluation-settings",
+    "/academy/rank-promotions",
+    "/academy/ranks",
+    "/academy/finance",
   ];
 
   playwrightTest.describe("Responsive Layout & Shell", () => {
@@ -62,7 +67,7 @@ if (isVitest) {
           }
 
           // 3. Sidebar terlihat HANYA di desktop
-          const sidebar = page.locator("aside:not([aria-label*='Ringkasan'])");
+          const sidebar = page.locator("main > aside");
           if (projectName === "desktop") {
             await playwrightExpect(sidebar).toBeVisible();
           } else {

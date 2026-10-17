@@ -218,10 +218,14 @@ export const MOCK_SPP_BILLS = [
     student_id: 1,
     month: 10,
     year: 2026,
-    amount: 150000,
-    status: "unpaid",
+    billing_month: 10,
+    billing_year: 2026,
+    amount: "150000",
+    paid_amount: "0",
+    status: "unpaid" as const,
     due_date: "2026-10-10",
     student: MOCK_STUDENTS[0],
+    class: MOCK_CLASSES[0],
   },
   {
     id: 2,
@@ -229,11 +233,90 @@ export const MOCK_SPP_BILLS = [
     student_id: 2,
     month: 10,
     year: 2026,
-    amount: 150000,
-    status: "paid",
+    billing_month: 10,
+    billing_year: 2026,
+    amount: "150000",
+    paid_amount: "150000",
+    status: "paid" as const,
     paid_at: "2026-10-05",
     due_date: "2026-10-10",
     student: MOCK_STUDENTS[1],
+    class: MOCK_CLASSES[0],
+  },
+];
+
+// L3-D mock data
+export const MOCK_SPORT_RANKS = [
+  { id: 1, akademi_id: 1, sport_type: "taekwondo", code: "white", label: "Putih", sequence: 1 },
+  { id: 2, akademi_id: 1, sport_type: "taekwondo", code: "yellow", label: "Kuning", sequence: 2 },
+  { id: 3, akademi_id: 1, sport_type: "taekwondo", code: "green", label: "Hijau", sequence: 3 },
+];
+
+export const MOCK_EVALUATION_PERIODS = [
+  {
+    id: 1,
+    akademi_id: 1,
+    name: "Semester Ganjil 2026/2027",
+    starts_at: "2026-07-01",
+    ends_at: "2026-12-31",
+    status: "active" as const,
+    aspects_count: 2,
+    created_at: "2026-07-01T00:00:00Z",
+    updated_at: "2026-07-01T00:00:00Z",
+  },
+];
+
+export const MOCK_EVALUATION_ASPECTS = [
+  {
+    id: 1,
+    akademi_id: 1,
+    evaluation_period_id: 1,
+    name: "Kicking (Tae)",
+    category: "Teknik",
+    sort_order: 1,
+    is_active: true,
+    description: null,
+  },
+  {
+    id: 2,
+    akademi_id: 1,
+    evaluation_period_id: 1,
+    name: "Poomsae",
+    category: "Teknik",
+    sort_order: 2,
+    is_active: true,
+    description: null,
+  },
+];
+
+export const MOCK_RANK_PROMOTION_EVENTS = [
+  {
+    id: 1,
+    akademi_id: 1,
+    name: "UKT Geup Periode Oktober 2026",
+    event_date: "2026-10-25",
+    status: "draft" as const,
+    notes: null,
+    created_by: 1,
+    participants_count: 1,
+    passed_count: 1,
+    participants: [
+      {
+        id: 1,
+        rank_promotion_event_id: 1,
+        akademi_id: 1,
+        student_id: 1,
+        from_rank_id: 1,
+        to_rank_id: 2,
+        result: "passed" as const,
+        score: 85,
+        notes: "Lulus memuaskan",
+        assessed_by: null,
+        student: MOCK_STUDENTS[0],
+        from_rank: MOCK_SPORT_RANKS[0],
+        to_rank: MOCK_SPORT_RANKS[1],
+      },
+    ],
   },
 ];
 
@@ -500,7 +583,14 @@ export async function setupMockApi(page: Page) {
       return route.fulfill({
         status: 200,
         contentType: "application/json",
-        body: JSON.stringify({ data: MOCK_STUDENTS }),
+        body: JSON.stringify({
+          data: {
+            data: MOCK_STUDENTS,
+            current_page: 1,
+            last_page: 1,
+            total: MOCK_STUDENTS.length,
+          },
+        }),
       });
     }
 
@@ -591,7 +681,63 @@ export async function setupMockApi(page: Page) {
       return route.fulfill({
         status: 200,
         contentType: "application/json",
-        body: JSON.stringify({ data: MOCK_SPP_BILLS }),
+        body: JSON.stringify({
+          data: {
+            data: MOCK_SPP_BILLS,
+            current_page: 1,
+            last_page: 1,
+            total: MOCK_SPP_BILLS.length,
+          },
+        }),
+      });
+    }
+
+    // L3-D routes
+    if (url.match(/\/akademi\/evaluations\/periods\/\d+\/scores/)) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ data: [] }),
+      });
+    }
+
+    if (url.match(/\/akademi\/evaluations\/periods\/\d+\/aspects/)) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ data: MOCK_EVALUATION_ASPECTS }),
+      });
+    }
+
+    if (url.includes("/akademi/evaluations/periods")) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ data: MOCK_EVALUATION_PERIODS }),
+      });
+    }
+
+    if (url.includes("/akademi/sport-ranks")) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ data: MOCK_SPORT_RANKS }),
+      });
+    }
+
+    if (url.match(/\/akademi\/rank-promotions\/\d+/)) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ rank_promotion_event: MOCK_RANK_PROMOTION_EVENTS[0] }),
+      });
+    }
+
+    if (url.includes("/akademi/rank-promotions")) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ data: MOCK_RANK_PROMOTION_EVENTS }),
       });
     }
 
