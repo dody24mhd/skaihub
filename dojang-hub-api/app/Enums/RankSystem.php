@@ -16,9 +16,16 @@ enum RankSystem: string
         };
     }
 
-    public static function defaultForSport(?string $sportType): self
+    /**
+     * Cabang olahraga tanpa katalog (judo, silat, dll.) tidak punya sistem tingkatan.
+     */
+    public static function defaultForSport(?string $sportType): ?self
     {
-        return $sportType === 'karate' ? self::KarateForki : self::TaekwondoKukkiwon;
+        return match ($sportType) {
+            'taekwondo' => self::TaekwondoKukkiwon,
+            'karate' => self::KarateForki,
+            default => null,
+        };
     }
 
     /**

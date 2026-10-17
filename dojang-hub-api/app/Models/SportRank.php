@@ -45,7 +45,7 @@ class SportRank extends Model
                 ? Akademi::query()->whereKey($rank->akademi_id)->value('rank_system')
                 : null;
 
-            $rank->rank_system = $akademiSystem ?? RankSystem::defaultForSport($rank->sport_type)->value;
+            $rank->rank_system = $akademiSystem ?? RankSystem::defaultForSport($rank->sport_type)?->value;
         });
     }
 
@@ -60,6 +60,7 @@ class SportRank extends Model
     public function scopeVisibleTo(Builder $query, Akademi $akademi): Builder
     {
         return $query
+            ->where('sport_type', $akademi->sport_type)
             ->where('rank_system', $akademi->rank_system)
             ->where(fn (Builder $q) => $q->whereNull('akademi_id')->orWhere('akademi_id', $akademi->id));
     }

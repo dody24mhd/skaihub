@@ -29,7 +29,7 @@ class Akademi extends Model
     protected static function booted(): void
     {
         static::creating(function (Akademi $akademi) {
-            $akademi->rank_system ??= RankSystem::defaultForSport($akademi->sport_type)->value;
+            $akademi->rank_system ??= RankSystem::defaultForSport($akademi->sport_type ?? 'taekwondo')?->value;
         });
     }
 

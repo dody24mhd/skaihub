@@ -10,7 +10,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('akademi', function (Blueprint $table) {
-            $table->string('rank_system', 50)->default('taekwondo_kukkiwon')->after('sport_type');
+            $table->string('rank_system', 50)->nullable()->after('sport_type');
         });
 
         Schema::table('sport_ranks', function (Blueprint $table) {
@@ -22,6 +22,7 @@ return new class extends Migration
             $table->index(['rank_system', 'akademi_id']);
         });
 
+        DB::table('akademi')->where('sport_type', 'taekwondo')->update(['rank_system' => 'taekwondo_kukkiwon']);
         DB::table('akademi')->where('sport_type', 'karate')->update(['rank_system' => 'karate_forki']);
 
         DB::table('sport_ranks')->whereNull('akademi_id')->where('sport_type', 'taekwondo')

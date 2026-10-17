@@ -125,6 +125,34 @@ class AkademiRankSystemTest extends TestCase
         $this->assertSame('karate_kki', $own->rank_system);
     }
 
+    public function test_sport_without_catalog_has_no_rank_system_and_sees_only_its_sport_ranks(): void
+    {
+        $this->postJson('/api/super-admin/akademi', $this->payload(['sport_type' => 'judo']))
+            ->assertCreated()
+            ->assertJsonPath('akademi.rank_system', null);
+
+        $this->postJson('/api/super-admin/akademi', $this->payload([
+            'slug' => 'judo-dua',
+            'ketua_email' => 'ketua2@example.test',
+            'sport_type' => 'judo',
+            'rank_system' => 'taekwondo_kukkiwon',
+        ]))->assertUnprocessable()
+            ->assertJsonValidationErrors(['rank_system']);
+
+        SportRank::create(['sport_type' => 'judo', 'code' => 'judo-white', 'label' => 'Putih', 'sequence' => 1]);
+        SportRank::create(['sport_type' => 'pencak_silat', 'code' => 'silat-1', 'label' => 'Dasar', 'sequence' => 1]);
+        SportRank::create(['sport_type' => 'taekwondo', 'code' => 'tkd-geup-10', 'label' => 'Geup 10', 'sequence' => 10]);
+
+        $judo = Akademi::where('slug', 'akademi-baru')->firstOrFail();
+        $judo->subscriptions()->update(['status' => 'active', 'payment_status' => 'paid']);
+        Sanctum::actingAs(User::factory()->akademiAdmin($judo->id)->create());
+
+        $this->getJson('/api/akademi/sport-ranks')
+            ->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.code', 'judo-white');
+    }
+
     private function payload(array $overrides = []): array
     {
         return array_merge([

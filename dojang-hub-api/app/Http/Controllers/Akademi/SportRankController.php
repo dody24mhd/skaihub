@@ -110,7 +110,8 @@ class SportRankController extends Controller
     private function ensureCanModifyRank(Request $request, SportRank $sportRank): void
     {
         abort_unless(
-            $sportRank->rank_system === $request->user()->akademi->rank_system,
+            $sportRank->rank_system === $request->user()->akademi->rank_system
+                && $sportRank->sport_type === $request->user()->akademi->sport_type,
             404,
             'Tingkatan tidak ditemukan.'
         );

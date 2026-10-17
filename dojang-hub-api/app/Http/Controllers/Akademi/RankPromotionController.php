@@ -202,6 +202,7 @@ class RankPromotionController extends Controller
         $akademi = $request->user()->akademi;
 
         return Rule::exists(SportRank::class, 'id')
+            ->where('sport_type', $akademi->sport_type)
             ->where('rank_system', $akademi->rank_system)
             ->where(fn ($q) => $q->whereNull('akademi_id')->orWhere('akademi_id', $akademi->id));
     }

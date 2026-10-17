@@ -81,7 +81,7 @@ class AkademiController extends Controller
                 'slug' => $slug,
                 'sport_type' => $request->sport_type ?? 'taekwondo',
                 'rank_system' => $request->rank_system
-                    ?? RankSystem::defaultForSport($request->sport_type ?? 'taekwondo')->value,
+                    ?? RankSystem::defaultForSport($request->sport_type ?? 'taekwondo')?->value,
                 'logo_url' => $request->logo_url,
                 'plan' => $plan,
                 'status' => 'active',
@@ -216,13 +216,13 @@ class AkademiController extends Controller
         ];
     }
 
-    private function resolveRankSystemForUpdate(Request $request, Akademi $akademi): string
+    private function resolveRankSystemForUpdate(Request $request, Akademi $akademi): ?string
     {
         $sportType = $request->input('sport_type', $akademi->sport_type);
         $current = RankSystem::tryFrom((string) $akademi->rank_system);
         $target = $request->filled('rank_system')
             ? $request->input('rank_system')
-            : ($current?->sportType() === $sportType ? $current->value : RankSystem::defaultForSport($sportType)->value);
+            : ($current?->sportType() === $sportType ? $current->value : RankSystem::defaultForSport($sportType)?->value);
 
         if ($target === $akademi->rank_system) {
             return $target;
