@@ -17,7 +17,14 @@ if (isVitest) {
     });
   });
 } else {
-  const ACADEMY_ROUTES = ["/academy"];
+  const ACADEMY_ROUTES = [
+    "/academy",
+    "/academy/evaluations",
+    "/academy/evaluation-settings",
+    "/academy/rank-promotions",
+    "/academy/ranks",
+    "/academy/finance",
+  ];
 
   playwrightTest.describe("Responsive Layout & Shell", () => {
     for (const route of ACADEMY_ROUTES) {
@@ -52,7 +59,7 @@ if (isVitest) {
           }
 
           // 3. Sidebar terlihat HANYA di desktop
-          const sidebar = page.locator("aside");
+          const sidebar = page.locator("main > aside");
           if (projectName === "desktop") {
             await playwrightExpect(sidebar).toBeVisible();
           } else {
