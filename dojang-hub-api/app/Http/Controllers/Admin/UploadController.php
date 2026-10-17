@@ -3,22 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\UploadStorage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class UploadController extends Controller
 {
-    public function image(Request $request)
+    public function image(Request $request, UploadStorage $uploads)
     {
         $request->validate([
             'image' => ['required', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'], // Max 5MB
         ]);
 
-        $path = $request->file('image')->store('uploads/images', 'public');
+        $path = $uploads->store($request->file('image'), 'uploads/images');
 
         // Return the full accessible URL
         return response()->json([
-            'url' => asset(Storage::url($path)),
+            'url' => $uploads->url($path),
         ]);
     }
 }

@@ -1,22 +1,13 @@
 import type { NextConfig } from "next";
+import { buildImageRemotePatterns } from "./src/lib/config/image-remote-patterns";
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["169.254.83.107", "localhost:3000"],
   images: {
-    remotePatterns: [
-      {
-        protocol: "http",
-        hostname: "localhost",
-        port: "8000",
-        pathname: "/storage/**",
-      },
-      {
-        protocol: "http",
-        hostname: "127.0.0.1",
-        port: "8000",
-        pathname: "/storage/**",
-      },
-    ],
+    remotePatterns: buildImageRemotePatterns({
+      NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+      NEXT_PUBLIC_ASSET_HOSTS: process.env.NEXT_PUBLIC_ASSET_HOSTS,
+    }),
   },
   turbopack: {
     root: __dirname,

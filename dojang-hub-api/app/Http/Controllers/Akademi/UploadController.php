@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Akademi;
 
 use App\Http\Controllers\Controller;
+use App\Services\UploadStorage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class UploadController extends Controller
 {
-    public function file(Request $request): JsonResponse
+    public function file(Request $request, UploadStorage $uploads): JsonResponse
     {
         $data = $request->validate([
             'file' => ['required', 'file', 'mimes:jpeg,png,jpg,webp,pdf', 'max:5120'],
@@ -26,13 +26,13 @@ class UploadController extends Controller
             'session_photo' => 'session-photos',
         };
 
-        $path = $request->file('file')->store(
-            "akademi/{$request->user()->akademi_id}/{$directory}",
-            'public'
+        $path = $uploads->store(
+            $request->file('file'),
+            "akademi/{$request->user()->akademi_id}/{$directory}"
         );
 
         return response()->json([
-            'url' => asset(Storage::url($path)),
+            'url' => $uploads->url($path),
             'path' => $path,
         ], 201);
     }
