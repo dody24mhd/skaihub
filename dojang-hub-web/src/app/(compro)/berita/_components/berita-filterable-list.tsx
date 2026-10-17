@@ -207,7 +207,7 @@ export function BeritaFilterableList({
         <p className="mt-4 text-center text-xs text-muted">
           Menampilkan{" "}
           <strong className="text-primary">
-            {(page - 1) * ITEMS_PER_PAGE + 1}–
+            {(page - 1) * ITEMS_PER_PAGE + 1}{" sampai "}
             {Math.min(page * ITEMS_PER_PAGE, filteredPosts.length)}
           </strong>{" "}
           dari <strong className="text-primary">{filteredPosts.length}</strong> artikel
