@@ -102,4 +102,19 @@ class RankCatalogSeederTest extends TestCase
     {
         return SportRank::whereNull('akademi_id')->where('rank_system', $system)->count();
     }
+
+    public function test_reseeding_repairs_mislabelled_rank_system_without_duplicates(): void
+    {
+        $this->seed(RankCatalogSeeder::class);
+        $kkiId = SportRank::whereNull('akademi_id')->where('code', 'kki-kyu-7')->value('id');
+        $count = SportRank::count();
+
+        // After migrate:rollback + migrate, the column backfill labels every global karate row as FORKI.
+        SportRank::whereNull('akademi_id')->where('sport_type', 'karate')->update(['rank_system' => 'karate_forki']);
+
+        $this->seed(RankCatalogSeeder::class);
+
+        $this->assertSame($count, SportRank::count());
+        $this->assertSame('karate_kki', SportRank::find($kkiId)->rank_system);
+    }
 }

@@ -41,8 +41,10 @@ class RankCatalogSeeder extends Seeder
         $this->remapLegacyTaekwondoRows();
 
         foreach (self::catalog() as $item) {
+            // Match the DB unique key for global rows (sport_type, code) so a re-run
+            // also repairs rows whose rank_system was re-backfilled after a rollback.
             SportRank::updateOrCreate(
-                ['akademi_id' => null, 'rank_system' => $item['rank_system'], 'code' => $item['code']],
+                ['akademi_id' => null, 'sport_type' => $item['sport_type'], 'code' => $item['code']],
                 $item,
             );
         }
