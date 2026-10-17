@@ -226,8 +226,8 @@ export type Student = {
   birth_date: string;
   joined_date: string;
   status: "active" | "inactive" | "alumni";
-  height_cm: number;
-  weight_kg: string;
+  height_cm: number | null;
+  weight_kg: string | null;
   student_phone: string | null;
   guardian_name: string | null;
   guardian_phone: string | null;
@@ -756,8 +756,8 @@ export function createAkademiStudent(
     gender: Student["gender"];
     birth_date: string;
     joined_date: string;
-    height_cm: number;
-    weight_kg: number;
+    height_cm: number | null;
+    weight_kg: number | null;
     primary_class_id?: number | null;
     current_rank_id?: number | null;
     student_phone?: string | null;
@@ -786,8 +786,8 @@ export function updateAkademiStudent(
     gender: Student["gender"];
     birth_date: string;
     joined_date: string;
-    height_cm: number;
-    weight_kg: number;
+    height_cm: number | null;
+    weight_kg: number | null;
     primary_class_id: number | null;
     current_rank_id: number | null;
     student_phone: string | null;

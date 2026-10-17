@@ -21,6 +21,13 @@ export type StudentFormState = {
   health_notes: string;
 };
 
+export type StudentFormErrors = Partial<Record<keyof StudentFormState, string>>;
+
+/** Sama dengan StudentController::GUARDIAN_REQUIRED_UNDER_AGE di API. */
+export const GUARDIAN_REQUIRED_UNDER_AGE = 17;
+
+export const CONTACT_REQUIRED_MESSAGE = "Isi minimal satu nomor kontak: nomor siswa atau nomor wali.";
+
 export type StudentFieldSetter = <K extends keyof StudentFormState>(key: K, value: StudentFormState[K]) => void;
 
 export const emptyStudentForm: StudentFormState = {
@@ -51,7 +58,7 @@ export function studentFormFromStudent(student: Student): StudentFormState {
     birth_date: student.birth_date?.slice(0, 10) || "",
     joined_date: student.joined_date?.slice(0, 10) || "",
     status: student.status,
-    height_cm: String(student.height_cm || ""),
+    height_cm: student.height_cm ? String(student.height_cm) : "",
     weight_kg: student.weight_kg ? String(Number(student.weight_kg)) : "",
     primary_class_id: student.primary_class_id ? String(student.primary_class_id) : "",
     current_rank_id: student.current_rank_id ? String(student.current_rank_id) : "",
@@ -74,8 +81,8 @@ export function studentPayloadFromForm(form: StudentFormState) {
     birth_date: form.birth_date,
     joined_date: form.joined_date,
     status: form.status,
-    height_cm: Number(form.height_cm),
-    weight_kg: Number(form.weight_kg),
+    height_cm: form.height_cm ? Number(form.height_cm) : null,
+    weight_kg: form.weight_kg ? Number(form.weight_kg) : null,
     primary_class_id: form.primary_class_id ? Number(form.primary_class_id) : null,
     current_rank_id: form.current_rank_id ? Number(form.current_rank_id) : null,
     student_phone: form.student_phone || null,
@@ -88,4 +95,40 @@ export function studentPayloadFromForm(form: StudentFormState) {
     school_grade: form.school_grade || null,
     health_notes: form.health_notes || null,
   };
+}
+
+export function ageOnDate(birthDate: string, today: Date): number | null {
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(birthDate);
+  if (!match) return null;
+
+  const [year, month, day] = match.slice(1).map(Number);
+  const hasHadBirthday =
+    today.getMonth() + 1 > month || (today.getMonth() + 1 === month && today.getDate() >= day);
+
+  return today.getFullYear() - year - (hasHadBirthday ? 0 : 1);
+}
+
+export function isGuardianRequired(birthDate: string, today: Date = new Date()): boolean {
+  const age = ageOnDate(birthDate, today);
+
+  return age !== null && age < GUARDIAN_REQUIRED_UNDER_AGE;
+}
+
+export function validateStudentForm(form: StudentFormState, today: Date = new Date()): StudentFormErrors {
+  const errors: StudentFormErrors = {};
+
+  if (!form.student_phone.trim() && !form.guardian_phone.trim()) {
+    errors.student_phone = CONTACT_REQUIRED_MESSAGE;
+  }
+
+  if (isGuardianRequired(form.birth_date, today)) {
+    if (!form.guardian_name.trim()) {
+      errors.guardian_name = `Nama wali wajib diisi untuk siswa di bawah ${GUARDIAN_REQUIRED_UNDER_AGE} tahun.`;
+    }
+    if (!form.guardian_phone.trim()) {
+      errors.guardian_phone = `Nomor wali wajib diisi untuk siswa di bawah ${GUARDIAN_REQUIRED_UNDER_AGE} tahun.`;
+    }
+  }
+
+  return errors;
 }

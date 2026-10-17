@@ -21,6 +21,7 @@ import {
   emptyStudentForm,
   studentFormFromStudent,
   studentPayloadFromForm,
+  validateStudentForm,
 } from "./students/student-form-model";
 import { StudentContactSection, StudentMainSection, StudentTrainingSection } from "./students/student-form-sections";
 
@@ -37,9 +38,12 @@ export default function AcademyStudentFormManager({ studentId }: { studentId?: n
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState("");
+  const [loadError, setLoadError] = useState("");
   const [message, setMessage] = useState("");
+  const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
 
   const isEditing = Boolean(studentId);
+  const fieldErrors = hasTriedSubmit ? validateStudentForm(form) : {};
 
   useEffect(() => {
     queueMicrotask(() => {
@@ -47,7 +51,7 @@ export default function AcademyStudentFormManager({ studentId }: { studentId?: n
       tokenRef.current = activeToken;
 
       if (!activeToken) {
-        setError("Sesi tidak ditemukan. Silakan login ulang.");
+        setLoadError("Sesi tidak ditemukan. Silakan login ulang.");
         setIsLoading(false);
         return;
       }
@@ -60,7 +64,7 @@ export default function AcademyStudentFormManager({ studentId }: { studentId?: n
       ])
         .then(([profileData, classData, rankData, detailData]) => {
           if (!["ketua_akademi", "admin_akademi"].includes(profileData.user.role)) {
-            setError("Akses ditolak. Hanya ketua atau admin akademi yang bisa mengubah data siswa.");
+            setLoadError("Akses ditolak. Hanya ketua atau admin akademi yang bisa mengubah data siswa.");
             return;
           }
 
@@ -71,7 +75,7 @@ export default function AcademyStudentFormManager({ studentId }: { studentId?: n
             setForm(studentFormFromStudent(detailData.student));
           }
         })
-        .catch((caught) => setError(caught instanceof Error ? caught.message : "Gagal memuat form siswa."))
+        .catch((caught) => setLoadError(caught instanceof Error ? caught.message : "Gagal memuat form siswa."))
         .finally(() => setIsLoading(false));
     });
   }, [studentId]);
@@ -100,9 +104,16 @@ export default function AcademyStudentFormManager({ studentId }: { studentId?: n
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setIsSaving(true);
+    setHasTriedSubmit(true);
     setError("");
     setMessage("");
+
+    if (Object.keys(validateStudentForm(form)).length) {
+      setError("Periksa kembali kontak dan data wali yang ditandai.");
+      return;
+    }
+
+    setIsSaving(true);
 
     try {
       if (studentId) {
@@ -123,14 +134,14 @@ export default function AcademyStudentFormManager({ studentId }: { studentId?: n
 
   if (isLoading) return <p className="text-sm text-muted">Memuat form siswa...</p>;
 
-  if (error && !classes.length) {
+  if (loadError) {
     return (
       <div className="space-y-4">
         <Link className="inline-flex min-h-11 items-center gap-2 border border-border bg-white px-3 text-sm font-bold text-primary" href="/academy/students">
           <span className="material-symbols-outlined text-[18px]">arrow_back</span>
           Daftar Siswa
         </Link>
-        <p className="border border-secondary/20 bg-secondary/5 p-4 text-sm font-semibold text-secondary">{error}</p>
+        <p className="border border-secondary/20 bg-secondary/5 p-4 text-sm font-semibold text-secondary">{loadError}</p>
       </div>
     );
   }
@@ -161,7 +172,7 @@ export default function AcademyStudentFormManager({ studentId }: { studentId?: n
         onPhotoSelected={handlePhotoUpload}
       />
       <StudentTrainingSection form={form} setField={setField} classes={classes} ranks={ranks} />
-      <StudentContactSection form={form} setField={setField} />
+      <StudentContactSection form={form} setField={setField} errors={fieldErrors} />
 
       <div className="sticky bottom-16 z-10 grid grid-cols-[auto_minmax(0,1fr)] gap-2 border-t border-border bg-surface py-3 md:bottom-0 md:flex md:justify-end md:py-4">
         <Link className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-4 text-sm font-bold text-primary" href={backHref}>
