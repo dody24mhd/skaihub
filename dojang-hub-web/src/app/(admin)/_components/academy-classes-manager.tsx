@@ -11,6 +11,7 @@ import {
   getAkademiTrainingPlaces,
   updateAkademiClass,
 } from "../_lib/admin-api";
+import { FormField, PageHeader, ResponsiveColumn, ResponsiveList, SheetModal } from "./ui";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -41,6 +42,7 @@ export default function AcademyClassesManager() {
   const [places, setPlaces] = useState<TrainingPlace[]>([]);
   const [form, setForm] = useState<ClassForm>(emptyForm);
   const [editing, setEditing] = useState<TrainingClass | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [canManage, setCanManage] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -91,6 +93,15 @@ export default function AcademyClassesManager() {
   function resetForm() {
     setForm(emptyForm);
     setEditing(null);
+    setIsFormOpen(false);
+  }
+
+  function openCreateModal() {
+    setEditing(null);
+    setForm(emptyForm);
+    setMessage("");
+    setError("");
+    setIsFormOpen(true);
   }
 
   function startEdit(item: TrainingClass) {
@@ -104,6 +115,7 @@ export default function AcademyClassesManager() {
     });
     setMessage("");
     setError("");
+    setIsFormOpen(true);
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -157,97 +169,233 @@ export default function AcademyClassesManager() {
     }
   }
 
+  const columns: ResponsiveColumn<TrainingClass>[] = [
+    {
+      key: "name",
+      header: "Kelas",
+      primary: true,
+      render: (item) => (
+        <div>
+          <span className="font-bold text-primary">{item.name}</span>
+          {item.students_count !== undefined ? (
+            <span className="ml-2 text-xs font-medium text-muted">({item.students_count} siswa)</span>
+          ) : null}
+        </div>
+      ),
+    },
+    {
+      key: "training_place",
+      header: "Tempat",
+      render: (item) => <span className="text-muted">{item.training_place?.name || "-"}</span>,
+    },
+    {
+      key: "target",
+      header: "Target Sesi",
+      render: (item) => <span className="text-muted">{item.target_sessions_per_month || 4}x/bulan</span>,
+    },
+    ...(canManage
+      ? [
+          {
+            key: "spp_override",
+            header: "Iuran SPP",
+            render: (item: TrainingClass) => (
+              <span className="text-muted">{money(item.spp_amount_override)}</span>
+            ),
+          },
+        ]
+      : []),
+    {
+      key: "status",
+      header: "Status",
+      render: (item) => (
+        <span
+          className={`inline-flex items-center px-2 py-0.5 text-xs font-bold ${
+            item.is_active ? "bg-success/10 text-success" : "bg-surface-container text-muted"
+          }`}
+        >
+          {item.is_active ? "Aktif" : "Nonaktif"}
+        </span>
+      ),
+    },
+    ...(canManage
+      ? [
+          {
+            key: "actions",
+            header: "Aksi",
+            headerClassName: "text-right",
+            className: "text-right",
+            render: (item: TrainingClass) => (
+              <div className="flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => startEdit(item)}
+                  className="inline-flex min-h-11 items-center justify-center border border-border px-3 py-1.5 text-xs font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(item)}
+                  className="inline-flex min-h-11 items-center justify-center border border-secondary/30 px-3 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary/10 focus:outline-hidden focus:ring-2 focus:ring-secondary/20"
+                >
+                  Hapus
+                </button>
+              </div>
+            ),
+          },
+        ]
+      : []),
+  ];
+
   if (isLoading) return <p className="text-sm text-muted">Memuat kelas...</p>;
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_420px]">
-      <section className="card-soft rounded-lg bg-white p-5">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="label-caps text-secondary">Master Data</p>
-            <h2 className="font-heading text-xl font-bold text-primary">Kelas / Unit</h2>
-          </div>
-          <input className="h-10 rounded-md border border-border px-3 text-sm outline-none focus:border-primary" placeholder="Cari kelas atau tempat" value={query} onChange={(event) => setQuery(event.target.value)} />
-        </div>
+    <div className="space-y-6">
+      <PageHeader
+        eyebrow="Master Data"
+        title="Kelas / Unit"
+        description="Kelola kelompok latihan utama siswa dan nominal SPP khusus jika ada."
+        action={
+          canManage ? (
+            <button
+              type="button"
+              onClick={openCreateModal}
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white shadow-xs transition hover:bg-secondary-dark focus:outline-hidden focus:ring-2 focus:ring-secondary/50 sm:w-auto"
+            >
+              <span className="material-symbols-outlined text-[20px]">add</span>
+              Tambah Kelas
+            </button>
+          ) : undefined
+        }
+      />
 
-        {message ? <p className="mt-4 rounded-md border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">{message}</p> : null}
-        {error ? <p className="mt-4 rounded-md border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">{error}</p> : null}
-
-        <div className="mt-5 overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b border-border text-xs font-bold uppercase text-muted">
-                <th className="pb-3">Kelas</th>
-                <th className="pb-3">Tempat</th>
-                <th className="pb-3">Target</th>
-                {canManage ? <th className="pb-3">Iuran SPP</th> : null}
-                <th className="pb-3">Status</th>
-                {canManage ? <th className="pb-3 text-right">Aksi</th> : null}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {filteredItems.map((item) => (
-                <tr key={item.id}>
-                  <td className="py-3 font-bold text-primary">{item.name}</td>
-                  <td className="py-3 text-muted">{item.training_place?.name || "-"}</td>
-                  <td className="py-3 text-muted">{item.target_sessions_per_month || 4}x/bulan</td>
-                  {canManage ? <td className="py-3 text-muted">{money(item.spp_amount_override)}</td> : null}
-                  <td className="py-3">
-                    <span className={`rounded-full px-2 py-1 text-xs font-bold ${item.is_active ? "bg-success/10 text-success" : "bg-surface-container text-muted"}`}>
-                      {item.is_active ? "Aktif" : "Nonaktif"}
-                    </span>
-                  </td>
-                  {canManage ? (
-                    <td className="py-3 text-right">
-                      <button className="mr-2 rounded-md border border-border px-3 py-1 text-xs font-bold text-primary" onClick={() => startEdit(item)} type="button">Edit</button>
-                      <button className="rounded-md border border-secondary/30 px-3 py-1 text-xs font-bold text-secondary" onClick={() => handleDelete(item)} type="button">Hapus</button>
-                    </td>
-                  ) : null}
-                </tr>
-              ))}
-              {!filteredItems.length ? (
-                <tr><td className="py-8 text-sm text-muted" colSpan={canManage ? 6 : 4}>Belum ada kelas.</td></tr>
-              ) : null}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {canManage ? (
-        <aside className="card-soft rounded-lg bg-white p-5">
-          <p className="label-caps text-secondary">{editing ? "Edit" : "Tambah"}</p>
-          <h2 className="font-heading text-lg font-bold text-primary">{editing ? editing.name : "Kelas Baru"}</h2>
-          <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
-            <label className="block text-sm font-semibold text-primary">
-              Nama kelas
-              <input className="mt-2 h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary" value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} required />
-            </label>
-            <label className="block text-sm font-semibold text-primary">
-              Tempat latihan
-              <select className="mt-2 h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary" value={form.training_place_id} onChange={(event) => setForm((current) => ({ ...current, training_place_id: event.target.value }))}>
-                <option value="">Belum dipilih</option>
-                {places.map((place) => <option key={place.id} value={place.id}>{place.name}</option>)}
-              </select>
-            </label>
-            <label className="block text-sm font-semibold text-primary">
-              Iuran SPP
-              <input className="mt-2 h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary" type="number" min="0" value={form.spp_amount_override} onChange={(event) => setForm((current) => ({ ...current, spp_amount_override: event.target.value }))} placeholder="Kosongkan jika ikut default" />
-            </label>
-            <label className="block text-sm font-semibold text-primary">
-              Target sesi per bulan
-              <input className="mt-2 h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary" type="number" min="1" max="31" value={form.target_sessions_per_month} onChange={(event) => setForm((current) => ({ ...current, target_sessions_per_month: event.target.value }))} required />
-            </label>
-            <label className="flex items-center gap-2 text-sm font-semibold text-primary">
-              <input type="checkbox" checked={form.is_active} onChange={(event) => setForm((current) => ({ ...current, is_active: event.target.checked }))} />
-              Aktif
-            </label>
-            <div className="flex gap-2">
-              <button className="h-11 flex-1 rounded-md bg-primary px-4 text-sm font-bold text-white disabled:bg-muted" disabled={isSaving} type="submit">{isSaving ? "Menyimpan..." : "Simpan"}</button>
-              {editing ? <button className="h-11 rounded-md border border-border px-4 text-sm font-bold text-primary" onClick={resetForm} type="button">Batal</button> : null}
-            </div>
-          </form>
-        </aside>
+      {message ? (
+        <p className="border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">
+          {message}
+        </p>
       ) : null}
+      {error ? (
+        <p className="border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">
+          {error}
+        </p>
+      ) : null}
+
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="w-full sm:max-w-xs">
+          <label htmlFor="classes-search" className="sr-only">
+            Cari kelas atau tempat
+          </label>
+          <input
+            id="classes-search"
+            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-sm text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            placeholder="Cari kelas atau tempat..."
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+        </div>
+      </div>
+
+      <ResponsiveList
+        columns={columns}
+        rows={filteredItems}
+        getRowKey={(item) => item.id}
+        ariaLabel="Daftar kelas atau unit latihan"
+        emptyState={
+          <div className="border-2 border-dashed border-border bg-white p-8 text-center text-sm font-medium text-muted">
+            {query ? "Tidak ada kelas yang cocok dengan pencarian." : "Belum ada kelas."}
+          </div>
+        }
+      />
+
+      <SheetModal
+        isOpen={isFormOpen}
+        onClose={resetForm}
+        title={editing ? "Edit Kelas" : "Tambah Kelas"}
+        description={editing ? `Perbarui data untuk ${editing.name}` : "Tambahkan kelompok kelas baru untuk siswa dan jadwal latihan."}
+      >
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          <FormField
+            id="class-name"
+            label="Nama Kelas"
+            required
+            value={form.name}
+            onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
+            placeholder="Contoh: Reguler Sore Sabuk Putih-Kuning"
+          />
+
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="class-place" className="text-xs font-bold uppercase tracking-wide text-primary">
+              Tempat Latihan
+            </label>
+            <select
+              id="class-place"
+              className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:text-sm"
+              value={form.training_place_id}
+              onChange={(event) => setForm((current) => ({ ...current, training_place_id: event.target.value }))}
+            >
+              <option value="">Belum dipilih</option>
+              {places.map((place) => (
+                <option key={place.id} value={place.id}>
+                  {place.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <FormField
+            id="class-spp"
+            label="Iuran SPP Khusus"
+            type="number"
+            min="0"
+            inputMode="numeric"
+            value={form.spp_amount_override}
+            onChange={(event) => setForm((current) => ({ ...current, spp_amount_override: event.target.value }))}
+            placeholder="Kosongkan jika mengikuti tarif default akademi"
+            hint="Isi jika kelas ini memiliki tarif SPP yang berbeda dari nominal default."
+          />
+
+          <FormField
+            id="class-target"
+            label="Target Sesi Per Bulan"
+            type="number"
+            min="1"
+            max="31"
+            inputMode="numeric"
+            required
+            value={form.target_sessions_per_month}
+            onChange={(event) => setForm((current) => ({ ...current, target_sessions_per_month: event.target.value }))}
+            hint="Standar jumlah pertemuan latihan bulanan (misal 4 atau 8 sesi)."
+          />
+
+          <label className="flex items-center gap-3 text-sm font-semibold text-primary">
+            <input
+              type="checkbox"
+              className="size-4 rounded-xs border-border text-primary focus:ring-2 focus:ring-primary/20"
+              checked={form.is_active}
+              onChange={(event) => setForm((current) => ({ ...current, is_active: event.target.checked }))}
+            />
+            <span>Kelas aktif</span>
+          </label>
+
+          <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <button
+              type="button"
+              className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              onClick={resetForm}
+              disabled={isSaving}
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              className="inline-flex min-h-11 items-center justify-center bg-primary px-6 text-sm font-bold text-white transition hover:bg-primary-container disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              disabled={isSaving}
+            >
+              {isSaving ? "Menyimpan..." : "Simpan"}
+            </button>
+          </div>
+        </form>
+      </SheetModal>
     </div>
   );
 }
