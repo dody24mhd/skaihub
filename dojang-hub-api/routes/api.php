@@ -34,6 +34,7 @@ use App\Http\Controllers\Compro\TestimonialController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\Public\AcademyProfileController as PublicAcademyProfileController;
 use App\Http\Controllers\SuperAdmin\AkademiController as SuperAdminAkademiController;
+use App\Http\Controllers\SuperAdmin\PlatformUserController as SuperAdminPlatformUserController;
 use App\Http\Controllers\SuperAdmin\SubscriptionAlertController as SuperAdminSubscriptionAlertController;
 use App\Http\Controllers\SuperAdmin\SubscriptionController as SuperAdminSubscriptionController;
 use Illuminate\Support\Facades\Route;
@@ -54,6 +55,9 @@ Route::prefix('auth')->group(function () {
     Route::middleware(['auth:sanctum', 'active'])->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
         Route::get('me', [AuthController::class, 'me']);
+
+        // L5-B: ganti password sendiri (semua role)
+        Route::put('password', [AuthController::class, 'changePassword'])->middleware('throttle:6,1');
     });
 });
 
@@ -65,6 +69,11 @@ Route::prefix('super-admin')
         Route::post('akademi/{akademi}/subscriptions', [SuperAdminSubscriptionController::class, 'store']);
         Route::patch('akademi/{akademi}/subscriptions/{subscription}/payment', [SuperAdminSubscriptionController::class, 'updatePayment']);
         Route::get('subscriptions/alerts', [SuperAdminSubscriptionAlertController::class, 'alerts']);
+
+        // L5-B: staf platform (role admin) dikelola super admin
+        Route::apiResource('platform-users', SuperAdminPlatformUserController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->parameters(['platform-users' => 'id']);
     });
 
 Route::prefix('public')->group(function () {
