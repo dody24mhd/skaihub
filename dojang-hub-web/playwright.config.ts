@@ -44,6 +44,7 @@ export default defineConfig({
     url: `http://localhost:${PORT}`,
     // Worktrees run in parallel; never reuse a server that may belong to another checkout.
     reuseExistingServer: false,
-    timeout: 120000,
+    // Production build alone takes ~3 minutes on dev laptops.
+    timeout: 600000,
   },
 });
