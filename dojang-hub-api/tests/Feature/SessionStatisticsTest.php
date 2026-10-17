@@ -61,4 +61,24 @@ class SessionStatisticsTest extends TestCase
             ->assertJsonPath('summary.attendance_total', 1)
             ->assertJsonPath('summary.attendance_present', 1);
     }
+
+    public function test_coach_dashboard_counts_sessions_from_coach_pivot(): void
+    {
+        $leadCoach = User::factory()->pelatih($this->akademi->id)->create();
+        $assistant = User::factory()->pelatih($this->akademi->id)->create();
+        $session = $this->makeSession($this->akademi, $this->class, [
+            'coach_id' => $leadCoach->id,
+            'session_date' => '2026-10-19',
+        ]);
+        $session->coaches()->attach([$leadCoach->id, $assistant->id]);
+        $session->attendances()->create(['student_id' => $this->student->id, 'status' => 'present']);
+
+        Sanctum::actingAs($assistant);
+
+        $this->getJson('/api/akademi/dashboard/summary')
+            ->assertOk()
+            ->assertJsonPath('sessions.month_count', 1)
+            ->assertJsonPath('sessions.attendance_total', 1)
+            ->assertJsonCount(1, 'sessions.latest');
+    }
 }

@@ -35,7 +35,9 @@ class DashboardController extends Controller
             ->whereBetween('session_date', [$monthStart, $monthEnd]);
 
         if ($user->role === 'pelatih') {
-            $sessionQuery->where('coach_id', $user->id);
+            $sessionQuery->where(fn ($query) => $query
+                ->where('coach_id', $user->id)
+                ->orWhereHas('coaches', fn ($coaches) => $coaches->where('users.id', $user->id)));
         }
 
         $countedSessionQuery = (clone $sessionQuery)->whereNotIn('status', TrainingSession::UNCOUNTED_STATUSES);
