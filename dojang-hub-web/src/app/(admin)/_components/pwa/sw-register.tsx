@@ -9,9 +9,11 @@ export default function SwRegister() {
       return;
     }
 
+    // First install also fires controllerchange (clients.claim); only reload when replacing an existing worker.
+    const hadController = Boolean(navigator.serviceWorker.controller);
     let refreshing = false;
     navigator.serviceWorker.addEventListener("controllerchange", () => {
-      if (refreshing) return;
+      if (!hadController || refreshing) return;
       refreshing = true;
       window.location.reload();
     });
