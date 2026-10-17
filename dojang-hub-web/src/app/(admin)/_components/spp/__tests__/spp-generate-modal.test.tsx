@@ -47,6 +47,27 @@ describe("SppGenerateModal", () => {
     expect(mockedApi.generateAkademiSppBills).not.toHaveBeenCalled();
   });
 
+  it("memakai pengaturan akademi: nominal opsional dan petunjuk tanggal jatuh tempo", async () => {
+    mockedApi.generateAkademiSppBills.mockResolvedValue({ message: "", created: 2, skipped: 0, missing_amount: 0 });
+    render(
+      <SppGenerateModal
+        token="token-uji"
+        classes={classes}
+        settings={{ default_monthly_amount: "120000.00", due_day: 15 }}
+        onClose={vi.fn()}
+        onGenerated={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByText(/Rp 120.000/)).toBeInTheDocument();
+    expect(screen.getByText(/tanggal 15/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /buat tagihan/i }));
+
+    await waitFor(() =>
+      expect(mockedApi.generateAkademiSppBills).toHaveBeenCalledWith("token-uji", expect.objectContaining({ default_amount: null, due_date: null })),
+    );
+  });
+
   it("nominal default opsional bila kelas terpilih sudah punya nominal SPP", async () => {
     mockedApi.generateAkademiSppBills.mockResolvedValue({ message: "", created: 3, skipped: 0, missing_amount: 0 });
     render(<SppGenerateModal token="token-uji" classes={classes} onClose={vi.fn()} onGenerated={vi.fn()} />);

@@ -26,8 +26,9 @@ export function initialGenerateForm(now: Date): SppGenerateForm {
   };
 }
 
-// Backend memakai spp_amount_override kelas utama siswa, lalu default_amount; tanpa keduanya siswa dilewati.
-export function needsDefaultAmount(classes: TrainingClass[], classId: string) {
+// Backend memakai spp_amount_override kelas utama siswa, lalu default_amount, lalu nominal default akademi.
+export function needsDefaultAmount(classes: TrainingClass[], classId: string, academyDefault: string | null = null) {
+  if (academyDefault) return false;
   const targetClasses = classId ? classes.filter((item) => String(item.id) === classId) : classes;
   return targetClasses.some((item) => !item.spp_amount_override);
 }

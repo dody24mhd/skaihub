@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,6 +12,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class SppBill extends Model
 {
     use SoftDeletes;
+
+    public const OPEN_STATUSES = ['unpaid', 'partial'];
+
+    protected $appends = ['is_overdue'];
 
     protected $fillable = [
         'akademi_id',
@@ -33,6 +39,20 @@ class SppBill extends Model
             'paid_amount' => 'decimal:2',
             'due_date' => 'date',
         ];
+    }
+
+    protected function isOverdue(): Attribute
+    {
+        return Attribute::get(fn (): bool => in_array($this->status, self::OPEN_STATUSES, true)
+            && $this->due_date !== null
+            && $this->due_date->lt(today()));
+    }
+
+    public function scopeOverdue(Builder $query): Builder
+    {
+        return $query->whereIn('status', self::OPEN_STATUSES)
+            ->whereNotNull('due_date')
+            ->whereDate('due_date', '<', today()->toDateString());
     }
 
     public function akademi(): BelongsTo

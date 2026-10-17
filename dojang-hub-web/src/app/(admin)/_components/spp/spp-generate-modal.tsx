@@ -1,7 +1,8 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { TrainingClass, generateAkademiSppBills } from "../../_lib/admin-api";
+import { SppSettings, TrainingClass, generateAkademiSppBills } from "../../_lib/admin-api";
+import { money } from "../students/format";
 import { FormField, SheetModal } from "../ui";
 import {
   SppGenerateForm,
@@ -41,14 +42,22 @@ function GenerateResult({ summary, onClose }: { summary: SppGenerateSummary; onC
   );
 }
 
+function amountHint(isAmountRequired: boolean, academyDefault: string | null) {
+  if (isAmountRequired) return "Wajib: ada kelas tanpa nominal SPP khusus. Nominal ini dipakai untuk siswa di kelas tersebut.";
+  if (academyDefault) return `Opsional: kosongkan untuk memakai nominal default akademi ${money(academyDefault)}.`;
+  return "Opsional: dipakai hanya untuk siswa yang kelasnya belum punya nominal SPP khusus.";
+}
+
 export default function SppGenerateModal({
   token,
   classes,
+  settings = null,
   onClose,
   onGenerated,
 }: {
   token: string;
   classes: TrainingClass[];
+  settings?: SppSettings | null;
   onClose: () => void;
   onGenerated: () => Promise<void> | void;
 }) {
@@ -58,7 +67,9 @@ export default function SppGenerateModal({
   const [error, setError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
-  const isAmountRequired = needsDefaultAmount(classes, form.class_id);
+  const academyDefault = settings?.default_monthly_amount ?? null;
+  const isAmountRequired = needsDefaultAmount(classes, form.class_id, academyDefault);
+  const dueHint = settings ? `Opsional. Kosongkan untuk memakai tanggal ${settings.due_day} bulan tagihan.` : "Opsional.";
 
   function setField(key: keyof SppGenerateForm, value: string) {
     setForm((current) => ({ ...current, [key]: value }));
@@ -115,14 +126,10 @@ export default function SppGenerateModal({
             required={isAmountRequired}
             value={form.default_amount}
             error={amountError}
-            hint={
-              isAmountRequired
-                ? "Wajib: ada kelas tanpa nominal SPP khusus. Nominal ini dipakai untuk siswa di kelas tersebut."
-                : "Opsional: dipakai hanya untuk siswa yang kelasnya belum punya nominal SPP khusus."
-            }
+            hint={amountHint(isAmountRequired, academyDefault)}
             onChange={(event) => setField("default_amount", event.target.value)}
           />
-          <FormField id="spp-generate-due" label="Jatuh tempo" type="date" hint="Opsional." value={form.due_date} onChange={(event) => setField("due_date", event.target.value)} />
+          <FormField id="spp-generate-due" label="Jatuh tempo" type="date" hint={dueHint} value={form.due_date} onChange={(event) => setField("due_date", event.target.value)} />
           {error ? <p role="alert" className="border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">{error}</p> : null}
           <div className="flex flex-col gap-2 sm:flex-row">
             <button className="min-h-11 flex-1 bg-primary px-4 text-sm font-bold text-white disabled:bg-muted" disabled={isSaving} type="submit">

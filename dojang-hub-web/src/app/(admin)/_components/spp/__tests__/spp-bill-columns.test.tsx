@@ -60,6 +60,31 @@ describe("buildSppBillColumns", () => {
     expect(within(paidCard).queryByRole("button", { name: /bayar/i })).not.toBeInTheDocument();
   });
 
+  it("menampilkan badge Terlambat hanya untuk tagihan yang lewat jatuh tempo", () => {
+    const rows = [bill({ is_overdue: true }), bill({ id: 2, is_overdue: false, student: { name: "Dewi" } as SppBill["student"] })];
+    render(
+      <ResponsiveList columns={buildSppBillColumns({ canManage: false, onPay: vi.fn(), onWaive: vi.fn() })} rows={rows} getRowKey={(row) => row.id} />,
+    );
+
+    const [lateCard, onTimeCard] = screen.getAllByTestId("responsive-list-card");
+    expect(within(lateCard).getByText("Terlambat")).toBeInTheDocument();
+    expect(within(onTimeCard).queryByText("Terlambat")).not.toBeInTheDocument();
+  });
+
+  it("menautkan setiap pembayaran ke halaman kwitansi", () => {
+    const payment = { id: 31, spp_bill_id: 1, receipt_number: "KW-202610-0001", amount: "50000.00", paid_at: "2026-10-05", method: "cash", proof_url: null, notes: null, created_by: 1 };
+    render(
+      <ResponsiveList
+        columns={buildSppBillColumns({ canManage: true, onPay: vi.fn(), onWaive: vi.fn() })}
+        rows={[bill({ payments: [payment] })]}
+        getRowKey={(row) => row.id}
+      />,
+    );
+
+    const card = screen.getByTestId("responsive-list-card");
+    expect(within(card).getByRole("link", { name: "KW-202610-0001" })).toHaveAttribute("href", "/academy/spp/receipts/31");
+  });
+
   it("tanpa hak kelola tidak ada kolom aksi", () => {
     renderBills(false);
 

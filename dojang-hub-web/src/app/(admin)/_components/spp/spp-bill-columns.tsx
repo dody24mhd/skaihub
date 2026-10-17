@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { SppBill } from "../../_lib/admin-api";
 import { money } from "../students/format";
 import { ResponsiveColumn } from "../ui";
@@ -43,10 +44,31 @@ export function buildSppBillColumns({
       key: "status",
       header: "Status",
       render: (item) => (
-        <span className={`inline-flex px-2 py-1 text-xs font-bold ${item.status === "paid" ? "bg-success/10 text-success" : "bg-secondary/10 text-secondary"}`}>
-          {sppStatusLabels[item.status]}
+        <span className="inline-flex flex-wrap gap-1">
+          <span className={`inline-flex px-2 py-1 text-xs font-bold ${item.status === "paid" ? "bg-success/10 text-success" : "bg-secondary/10 text-secondary"}`}>
+            {sppStatusLabels[item.status]}
+          </span>
+          {item.is_overdue ? (
+            <span className="inline-flex bg-secondary px-2 py-1 text-xs font-bold text-white">Terlambat</span>
+          ) : null}
         </span>
       ),
+    },
+    {
+      key: "receipts",
+      header: "Kwitansi",
+      render: (item) =>
+        item.payments?.length ? (
+          <span className="flex flex-col items-end gap-1 md:items-start">
+            {item.payments.map((payment) => (
+              <Link key={payment.id} className="text-xs font-bold text-secondary underline-offset-2 hover:underline" href={`/academy/spp/receipts/${payment.id}`}>
+                {payment.receipt_number || "Kwitansi"}
+              </Link>
+            ))}
+          </span>
+        ) : (
+          <span className="text-xs text-muted">-</span>
+        ),
     },
   ];
 

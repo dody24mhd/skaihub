@@ -335,6 +335,7 @@ export type TrainingSession = {
 export type SppPayment = {
   id: number;
   spp_bill_id: number;
+  receipt_number?: string | null;
   amount: string;
   paid_at: string;
   method: string | null;
@@ -356,6 +357,7 @@ export type SppBill = {
   due_date: string | null;
   status: "unpaid" | "partial" | "paid" | "waived";
   notes: string | null;
+  is_overdue?: boolean;
   student?: Student | null;
   class?: TrainingClass | null;
   payments?: SppPayment[];
@@ -1074,13 +1076,14 @@ export function updateAkademiTrainingSessionAttendance(
 
 export function getAkademiSppBills(
   token: string,
-  filters: { year?: number; month?: number | "all"; status?: string; class_id?: number | "all" } = {},
+  filters: { year?: number; month?: number | "all"; status?: string; class_id?: number | "all"; overdue?: boolean } = {},
 ) {
   const params = new URLSearchParams();
   if (filters.year) params.set("year", String(filters.year));
   if (filters.month && filters.month !== "all") params.set("month", String(filters.month));
   if (filters.status && filters.status !== "all") params.set("status", filters.status);
   if (filters.class_id && filters.class_id !== "all") params.set("class_id", String(filters.class_id));
+  if (filters.overdue) params.set("overdue", "1");
 
   const suffix = params.toString() ? `?${params.toString()}` : "";
   return adminFetch<{ data: PaginatedResponse<SppBill> }>(`/akademi/spp-bills${suffix}`, token);
@@ -1119,10 +1122,10 @@ export function payAkademiSppBill(
   });
 }
 
-export function waiveAkademiSppBill(token: string, billId: number, notes?: string | null) {
+export function waiveAkademiSppBill(token: string, billId: number, notes?: string | null, reason?: string | null) {
   return adminFetch<{ spp_bill: SppBill }>(`/akademi/spp-bills/${billId}/waive`, token, {
     method: "PATCH",
-    body: JSON.stringify({ notes }),
+    body: JSON.stringify({ notes, reason }),
   });
 }
 
@@ -2210,3 +2213,68 @@ export function updateAkademiTrainingSessionCoaches(token: string, id: number, c
   });
 }
 // end L4-A
+
+
+// L4-B
+export type SppSettings = {
+  default_monthly_amount: string | null;
+  due_day: number;
+};
+
+export type SppSettingsPayload = {
+  default_monthly_amount: number | null;
+  due_day: number;
+};
+
+export type SppArrear = {
+  student: Pick<
+    Student,
+    "id" | "name" | "member_number" | "primary_class_id" | "student_phone" | "guardian_name" | "guardian_phone"
+  > & { primary_class?: Pick<TrainingClass, "id" | "name"> | null };
+  months_count: number;
+  total_remaining: string;
+  oldest_due_date: string;
+};
+
+export type SppReceipt = {
+  id: number;
+  receipt_number: string | null;
+  akademi: { name: string; logo_url: string | null };
+  student: {
+    id: number;
+    name: string;
+    member_number: string | null;
+    student_phone: string | null;
+    guardian_name: string | null;
+    guardian_phone: string | null;
+  };
+  class_name: string | null;
+  billing_year: number;
+  billing_month: number;
+  amount: string;
+  bill_amount: string;
+  remaining_amount: string;
+  method: string | null;
+  paid_at: string;
+  received_by: string | null;
+  notes: string | null;
+};
+
+export function getAkademiSppSettings(token: string) {
+  return adminFetch<{ spp_settings: SppSettings }>("/akademi/spp-settings", token);
+}
+
+export function updateAkademiSppSettings(token: string, payload: SppSettingsPayload) {
+  return adminFetch<{ spp_settings: SppSettings }>("/akademi/spp-settings", token, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function getAkademiSppArrears(token: string) {
+  return adminFetch<{ data: SppArrear[] }>("/akademi/spp-bills/arrears", token);
+}
+
+export function getAkademiSppReceipt(token: string, paymentId: number) {
+  return adminFetch<{ receipt: SppReceipt }>(`/akademi/spp-payments/${paymentId}/receipt`, token);
+}

@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Akademi;
 
 use App\Http\Controllers\Controller;
+use App\Models\AcademySppSetting;
+use App\Models\Akademi;
 use App\Models\SppBill;
+use App\Models\SppBillEvent;
+use App\Models\SppPayment;
 use App\Models\Student;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -42,7 +47,46 @@ class SppBillController extends Controller
             $query->where('class_id', $request->integer('class_id'));
         }
 
+        if ($request->boolean('overdue')) {
+            $query->overdue();
+        }
+
         return response()->json(['data' => $query->paginate(50)]);
+    }
+
+    public function arrears(Request $request): JsonResponse
+    {
+        $this->ensureCanManageSpp($request);
+
+        $akademiId = $request->user()->akademi_id;
+
+        $rows = SppBill::query()
+            ->overdue()
+            ->where('akademi_id', $akademiId)
+            ->selectRaw('student_id, COUNT(*) as months_count, SUM(amount - paid_amount) as total_remaining, MIN(due_date) as oldest_due_date')
+            ->groupBy('student_id')
+            ->orderByDesc('total_remaining')
+            ->orderBy('student_id')
+            ->get();
+
+        $students = Student::query()
+            ->with('primaryClass:id,name')
+            ->where('akademi_id', $akademiId)
+            ->whereIn('id', $rows->pluck('student_id'))
+            ->get(['id', 'akademi_id', 'name', 'member_number', 'primary_class_id', 'student_phone', 'guardian_name', 'guardian_phone'])
+            ->keyBy('id');
+
+        $data = $rows
+            ->filter(fn ($row) => $students->has($row->student_id))
+            ->map(fn ($row) => [
+                'student' => $students->get($row->student_id),
+                'months_count' => (int) $row->months_count,
+                'total_remaining' => number_format((float) $row->total_remaining, 2, '.', ''),
+                'oldest_due_date' => substr((string) $row->oldest_due_date, 0, 10),
+            ])
+            ->values();
+
+        return response()->json(['data' => $data]);
     }
 
     public function generate(Request $request): JsonResponse
@@ -58,11 +102,16 @@ class SppBillController extends Controller
         ]);
 
         $akademiId = $request->user()->akademi_id;
+        $setting = AcademySppSetting::forAkademi($akademiId);
+        $data['default_amount'] = $data['default_amount'] ?? $setting->default_monthly_amount;
+        $data['due_date'] = $data['due_date']
+            ?? Carbon::create($data['billing_year'], $data['billing_month'], $setting->due_day)->toDateString();
+        $userId = $request->user()->id;
         $created = 0;
         $skipped = 0;
         $missingAmount = 0;
 
-        DB::transaction(function () use ($akademiId, $data, &$created, &$skipped, &$missingAmount) {
+        DB::transaction(function () use ($akademiId, $userId, $data, &$created, &$skipped, &$missingAmount) {
             Student::query()
                 ->with('primaryClass')
                 ->where('akademi_id', $akademiId)
@@ -70,7 +119,7 @@ class SppBillController extends Controller
                 ->when(! empty($data['class_id']), fn ($query) => $query->where('primary_class_id', $data['class_id']))
                 ->orderBy('name')
                 ->get()
-                ->each(function (Student $student) use ($akademiId, $data, &$created, &$skipped, &$missingAmount) {
+                ->each(function (Student $student) use ($akademiId, $userId, $data, &$created, &$skipped, &$missingAmount) {
                     $exists = SppBill::where('akademi_id', $akademiId)
                         ->where('student_id', $student->id)
                         ->where('billing_year', $data['billing_year'])
@@ -92,7 +141,7 @@ class SppBillController extends Controller
                         return;
                     }
 
-                    SppBill::create([
+                    $bill = SppBill::create([
                         'akademi_id' => $akademiId,
                         'student_id' => $student->id,
                         'class_id' => $student->primary_class_id,
@@ -103,6 +152,7 @@ class SppBillController extends Controller
                         'due_date' => $data['due_date'] ?? null,
                         'status' => ((float) $amount) <= 0 ? 'waived' : 'unpaid',
                     ]);
+                    SppBillEvent::record($bill, SppBillEvent::TYPE_CREATED, $amount, $userId);
 
                     $created++;
                 });
@@ -210,11 +260,16 @@ class SppBillController extends Controller
                 ]);
             }
 
+            // Serialisasi nomor kwitansi per akademi agar dua pembayaran bersamaan tidak berebut nomor yang sama.
+            Akademi::whereKey($bill->akademi_id)->lockForUpdate()->first();
+
             $bill->payments()->create([
                 ...$data,
+                'receipt_number' => SppPayment::nextReceiptNumber($bill->akademi_id, $data['paid_at']),
                 'akademi_id' => $request->user()->akademi_id,
                 'created_by' => $request->user()->id,
             ]);
+            SppBillEvent::record($bill, SppBillEvent::TYPE_PAYMENT, $data['amount'], $request->user()->id, $data['notes'] ?? null);
 
             $newPaidAmount = round($bill->payments()->sum('amount'), 2);
             $status = 'partial';
@@ -243,12 +298,33 @@ class SppBillController extends Controller
 
         $data = $request->validate([
             'notes' => ['nullable', 'string'],
+            'reason' => ['nullable', 'string', 'max:500'],
         ]);
 
-        $sppBill->update([
-            'status' => 'waived',
-            'notes' => $data['notes'] ?? $sppBill->notes,
-        ]);
+        DB::transaction(function () use ($data, $request, $sppBill) {
+            $bill = SppBill::where('id', $sppBill->id)->lockForUpdate()->firstOrFail();
+
+            if (! in_array($bill->status, SppBill::OPEN_STATUSES, true)) {
+                throw ValidationException::withMessages([
+                    'status' => ['Hanya tagihan yang belum lunas yang bisa dibebaskan.'],
+                ]);
+            }
+
+            if ((float) $bill->paid_amount > 0 && blank($data['reason'] ?? null)) {
+                throw ValidationException::withMessages([
+                    'reason' => ['Alasan wajib diisi karena tagihan ini sudah dibayar sebagian.'],
+                ]);
+            }
+
+            $note = $data['reason'] ?? $data['notes'] ?? null;
+            $remaining = round((float) $bill->amount - (float) $bill->paid_amount, 2);
+
+            $bill->update([
+                'status' => 'waived',
+                'notes' => $note ?? $bill->notes,
+            ]);
+            SppBillEvent::record($bill, SppBillEvent::TYPE_WAIVED, $remaining, $request->user()->id, $note);
+        });
 
         return response()->json([
             'spp_bill' => $sppBill->fresh()->load(['student.primaryClass', 'class', 'payments.creator']),
