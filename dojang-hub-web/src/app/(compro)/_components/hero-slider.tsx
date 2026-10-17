@@ -10,7 +10,7 @@ const slides = [
     title: ["SATU PLATFORM", "BERBAGAI", "SOLUSI"],
     highlight: 1,
     desc: "Sistem manajemen operasional untuk absensi, rapor pengembangan, jadwal materi kurikulum, dan laporan SPP. Mendukung Taekwondo dan Karate.",
-    image: "/images/hero/slide-1.webp",
+    image: "/images/photos/taekwondo-latihan-kelas.webp",
     focus: "55% center",
   },
   {
@@ -18,7 +18,7 @@ const slides = [
     title: ["PILIHAN UTAMA", "DI KOTA ANDA"],
     highlight: 0,
     desc: "Website profil menampilkan identitas, prestasi, dan form pendaftaran online langsung dari alamat web akademi Anda.",
-    image: "/images/hero/slide-2.webp",
+    image: "/images/photos/taekwondo-penghargaan-sekolah-1.webp",
     focus: "48% center",
   },
   {
@@ -26,7 +26,7 @@ const slides = [
     title: ["CETAK JUARA", "DENGAN SISTEM", "TERINTEGRASI"],
     highlight: 0,
     desc: "Dari kurikulum, jadwal materi latihan harian dan teknik per sabuk/kyu, hingga pencatatan prestasi akademi — semua dalam satu sistem.",
-    image: "/images/hero/slide-3.webp",
+    image: "/images/photos/taekwondo-podium-kejurnas.webp",
     focus: "62% center",
   },
 ];
