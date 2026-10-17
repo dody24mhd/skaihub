@@ -19,6 +19,12 @@ return new class extends Migration
         });
 
         DB::statement('UPDATE spp_payments SET akademi_id = (SELECT akademi_id FROM spp_bills WHERE spp_bills.id = spp_payments.spp_bill_id) WHERE akademi_id IS NULL');
+
+        DB::table('spp_payments')->whereNull('akademi_id')->delete();
+
+        Schema::table('spp_payments', function (Blueprint $table) {
+            $table->unsignedBigInteger('akademi_id')->nullable(false)->change();
+        });
     }
 
     public function down(): void

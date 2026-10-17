@@ -7,8 +7,10 @@ use App\Models\SppBill;
 use App\Models\SppPayment;
 use App\Models\Student;
 use App\Models\User;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -79,10 +81,24 @@ class SppPaymentAkademiIdTest extends TestCase
         $this->assertSame($this->akademi->id, $payment->akademi_id);
     }
 
-    public function test_backfill_updates_existing_null_akademi_id_from_bill(): void
+    public function test_backfill_updates_existing_null_akademi_id_from_bill_and_handles_soft_deleted(): void
     {
-        // Insert a payment with null akademi_id directly into DB
-        $paymentId = DB::table('spp_payments')->insertGetId([
+        Schema::table('spp_payments', function (Blueprint $table) {
+            $table->unsignedBigInteger('akademi_id')->nullable()->change();
+        });
+
+        // Bill yang soft-deleted
+        $billSoftDeleted = $this->akademi->sppBills()->create([
+            'student_id' => $this->student->id,
+            'billing_year' => 2026,
+            'billing_month' => 4,
+            'amount' => 100000,
+            'paid_amount' => 100000,
+            'status' => 'paid',
+        ]);
+        $billSoftDeleted->delete();
+
+        $paymentActiveId = DB::table('spp_payments')->insertGetId([
             'spp_bill_id' => $this->bill->id,
             'akademi_id' => null,
             'amount' => 30000,
@@ -91,12 +107,48 @@ class SppPaymentAkademiIdTest extends TestCase
             'updated_at' => now(),
         ]);
 
+        $paymentSoftDeletedBillId = DB::table('spp_payments')->insertGetId([
+            'spp_bill_id' => $billSoftDeleted->id,
+            'akademi_id' => null,
+            'amount' => 100000,
+            'paid_at' => '2026-04-12',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         // Run backfill SQL statement
         DB::statement('UPDATE spp_payments SET akademi_id = (SELECT akademi_id FROM spp_bills WHERE spp_bills.id = spp_payments.spp_bill_id) WHERE akademi_id IS NULL');
 
+        // Delete any remaining orphan payments
+        DB::table('spp_payments')->whereNull('akademi_id')->delete();
+
+        // Enforce NOT NULL
+        Schema::table('spp_payments', function (Blueprint $table) {
+            $table->unsignedBigInteger('akademi_id')->nullable(false)->change();
+        });
+
         $this->assertDatabaseHas('spp_payments', [
-            'id' => $paymentId,
+            'id' => $paymentActiveId,
             'akademi_id' => $this->akademi->id,
+        ]);
+
+        $this->assertDatabaseHas('spp_payments', [
+            'id' => $paymentSoftDeletedBillId,
+            'akademi_id' => $this->akademi->id,
+        ]);
+    }
+
+    public function test_spp_payments_akademi_id_column_is_not_null(): void
+    {
+        $this->expectException(\Illuminate\Database\QueryException::class);
+
+        DB::table('spp_payments')->insert([
+            'spp_bill_id' => $this->bill->id,
+            'akademi_id' => null,
+            'amount' => 10000,
+            'paid_at' => '2026-05-12',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }
