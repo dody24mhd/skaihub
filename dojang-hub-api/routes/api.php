@@ -135,6 +135,7 @@ Route::prefix('akademi')
         Route::post('spp-bills/{sppBill}/payments', [AkademiSppBillController::class, 'pay']);
         Route::patch('spp-bills/{sppBill}/waive', [AkademiSppBillController::class, 'waive']);
         // L4-B
+        Route::get('spp-bills/arrears', [AkademiSppBillController::class, 'arrears']);
         Route::get('spp-settings', [AkademiSppSettingController::class, 'show']);
         Route::put('spp-settings', [AkademiSppSettingController::class, 'update']);
         // end L4-B

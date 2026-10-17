@@ -44,7 +44,46 @@ class SppBillController extends Controller
             $query->where('class_id', $request->integer('class_id'));
         }
 
+        if ($request->boolean('overdue')) {
+            $query->overdue();
+        }
+
         return response()->json(['data' => $query->paginate(50)]);
+    }
+
+    public function arrears(Request $request): JsonResponse
+    {
+        $this->ensureCanManageSpp($request);
+
+        $akademiId = $request->user()->akademi_id;
+
+        $rows = SppBill::query()
+            ->overdue()
+            ->where('akademi_id', $akademiId)
+            ->selectRaw('student_id, COUNT(*) as months_count, SUM(amount - paid_amount) as total_remaining, MIN(due_date) as oldest_due_date')
+            ->groupBy('student_id')
+            ->orderByDesc('total_remaining')
+            ->orderBy('student_id')
+            ->get();
+
+        $students = Student::query()
+            ->with('primaryClass:id,name')
+            ->where('akademi_id', $akademiId)
+            ->whereIn('id', $rows->pluck('student_id'))
+            ->get(['id', 'akademi_id', 'name', 'member_number', 'primary_class_id', 'student_phone', 'guardian_name', 'guardian_phone'])
+            ->keyBy('id');
+
+        $data = $rows
+            ->filter(fn ($row) => $students->has($row->student_id))
+            ->map(fn ($row) => [
+                'student' => $students->get($row->student_id),
+                'months_count' => (int) $row->months_count,
+                'total_remaining' => number_format((float) $row->total_remaining, 2, '.', ''),
+                'oldest_due_date' => substr((string) $row->oldest_due_date, 0, 10),
+            ])
+            ->values();
+
+        return response()->json(['data' => $data]);
     }
 
     public function generate(Request $request): JsonResponse
