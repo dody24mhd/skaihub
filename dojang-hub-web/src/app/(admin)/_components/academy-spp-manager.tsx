@@ -3,20 +3,24 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   SppBill,
+  SppSettings,
   TrainingClass,
   getAkademiClasses,
   getAkademiMe,
   getAkademiSppBills,
+  getAkademiSppSettings,
   waiveAkademiSppBill,
 } from "../_lib/admin-api";
 import { buildSppBillColumns } from "./spp/spp-bill-columns";
 import SppClassSummaryList from "./spp/spp-class-summary-list";
 import SppGenerateModal from "./spp/spp-generate-modal";
 import SppPaymentModal from "./spp/spp-payment-modal";
+import SppSettingsModal from "./spp/spp-settings-modal";
 import { SPP_MONTH_LABELS, billsForClass, summarizeBills } from "./spp/spp-summary";
 import { ResponsiveList } from "./ui";
 
 const TOKEN_KEY = "skaihub_admin_token";
+const DEFAULT_SPP_SETTINGS: SppSettings = { default_monthly_amount: null, due_day: 10 };
 
 const filterClass =
   "min-h-11 w-full border border-border bg-white px-3 text-base text-primary outline-none focus:border-primary sm:text-sm";
@@ -59,6 +63,8 @@ export default function AcademySppManager() {
   const [selectedClassId, setSelectedClassId] = useState("");
   const [payTarget, setPayTarget] = useState<SppBill | null>(null);
   const [isGenerateOpen, setIsGenerateOpen] = useState(false);
+  const [settings, setSettings] = useState<SppSettings | null>(null);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [canManage, setCanManage] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState("");
@@ -100,9 +106,15 @@ export default function AcademySppManager() {
 
       fetchSppData(activeToken, { year, month, statusFilter })
         .then(({ profileData, billData, classData }) => {
-          setCanManage(["ketua_akademi", "admin_akademi"].includes(profileData.user.role));
+          const isManager = ["ketua_akademi", "admin_akademi"].includes(profileData.user.role);
+          setCanManage(isManager);
           setItems(billData.data.data);
           setClasses(classData.data);
+          if (isManager) {
+            getAkademiSppSettings(activeToken)
+              .then((result) => setSettings(result.spp_settings))
+              .catch(() => setError("Gagal memuat pengaturan SPP."));
+          }
         })
         .catch((caught) => setError(caught instanceof Error ? caught.message : "Gagal memuat SPP."))
         .finally(() => setIsLoading(false));
@@ -159,14 +171,25 @@ export default function AcademySppManager() {
                 <h2 className="font-heading text-xl font-bold text-primary">Rekap SPP</h2>
               </div>
               {canManage ? (
-                <button
-                  className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-4 text-sm font-bold text-white transition hover:bg-secondary-dark sm:w-auto"
-                  onClick={() => setIsGenerateOpen(true)}
-                  type="button"
-                >
-                  <span className="material-symbols-outlined text-[18px]">receipt_long</span>
-                  Buat Tagihan Bulan Ini
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 bg-secondary px-4 text-sm font-bold text-white transition hover:bg-secondary-dark sm:flex-none"
+                    onClick={() => setIsGenerateOpen(true)}
+                    type="button"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">receipt_long</span>
+                    Buat Tagihan Bulan Ini
+                  </button>
+                  <button
+                    aria-label="Pengaturan SPP"
+                    className="inline-flex size-11 shrink-0 items-center justify-center border border-border bg-white text-primary transition hover:border-primary"
+                    onClick={() => setIsSettingsOpen(true)}
+                    title="Pengaturan SPP"
+                    type="button"
+                  >
+                    <span aria-hidden="true" className="material-symbols-outlined text-[20px]">settings</span>
+                  </button>
+                </div>
               ) : null}
             </div>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -234,7 +257,20 @@ export default function AcademySppManager() {
       </section>
 
       {isGenerateOpen ? (
-        <SppGenerateModal token={token} classes={classes} onClose={() => setIsGenerateOpen(false)} onGenerated={() => loadData(token)} />
+        <SppGenerateModal token={token} classes={classes} settings={settings} onClose={() => setIsGenerateOpen(false)} onGenerated={() => loadData(token)} />
+      ) : null}
+
+      {isSettingsOpen ? (
+        <SppSettingsModal
+          token={token}
+          settings={settings ?? DEFAULT_SPP_SETTINGS}
+          onClose={() => setIsSettingsOpen(false)}
+          onSaved={(saved) => {
+            setSettings(saved);
+            setIsSettingsOpen(false);
+            setMessage("Pengaturan SPP tersimpan.");
+          }}
+        />
       ) : null}
 
       {payTarget ? (

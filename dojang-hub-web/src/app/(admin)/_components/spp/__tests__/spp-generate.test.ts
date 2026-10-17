@@ -26,6 +26,13 @@ describe("spp-generate", () => {
     expect(needsDefaultAmount([trainingClass(1, "150000.00")], "")).toBe(false);
   });
 
+  it("tidak mewajibkan nominal bila akademi punya nominal default", () => {
+    const classes = [trainingClass(1, "150000.00"), trainingClass(2, null)];
+
+    expect(needsDefaultAmount(classes, "", "120000.00")).toBe(false);
+    expect(needsDefaultAmount(classes, "2", null)).toBe(true);
+  });
+
   it("membentuk payload generate dengan field opsional null", () => {
     expect(
       generatePayloadFromForm({ billing_year: "2026", billing_month: "10", default_amount: "", due_date: "", class_id: "" }),
