@@ -1,0 +1,40 @@
+import { Student } from "../../../_lib/admin-api";
+
+export function makeStudent(overrides: Partial<Student> = {}): Student {
+  return {
+    id: 1,
+    akademi_id: 1,
+    current_rank_id: 2,
+    primary_class_id: 1,
+    member_number: "TKD-0001",
+    name: "Arya Pratama",
+    gender: "male",
+    birth_date: "2010-05-12",
+    joined_date: "2026-01-10",
+    status: "active",
+    height_cm: 150,
+    weight_kg: "42.50",
+    student_phone: "081234567891",
+    guardian_name: "Budi",
+    guardian_phone: "081200000000",
+    photo_url: null,
+    address: null,
+    shirt_size: "M",
+    school_name: null,
+    school_grade: null,
+    health_notes: null,
+    current_rank: { id: 2, sport_type: "taekwondo", code: "yellow", label: "Kuning (Geup 8)", sequence: 2 },
+    primary_class: {
+      id: 1,
+      akademi_id: 1,
+      training_place_id: null,
+      name: "Reguler Sore",
+      spp_amount_override: null,
+      target_sessions_per_month: 4,
+      is_active: true,
+      created_at: "2026-01-01T00:00:00Z",
+      updated_at: "2026-01-01T00:00:00Z",
+    },
+    ...overrides,
+  };
+}
