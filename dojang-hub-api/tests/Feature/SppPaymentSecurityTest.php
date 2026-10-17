@@ -213,4 +213,3 @@ class SppPaymentSecurityTest extends TestCase
         ])->assertOk();
     }
 }
-

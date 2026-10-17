@@ -4,8 +4,10 @@ namespace Tests\Feature;
 
 use App\Models\Akademi;
 use App\Models\SportRank;
+use App\Models\StudentRankHistory;
 use App\Models\Subscription;
 use App\Models\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
@@ -171,7 +173,7 @@ class SportRankTenantTest extends TestCase
             'current_rank_id' => $this->globalRank->id,
         ]);
 
-        \App\Models\StudentRankHistory::create([
+        StudentRankHistory::create([
             'akademi_id' => $this->akademiA->id,
             'student_id' => $student->id,
             'sport_rank_id' => $this->rankA->id,
@@ -186,7 +188,7 @@ class SportRankTenantTest extends TestCase
 
     public function test_global_sport_ranks_cannot_have_duplicate_code_for_same_sport_type(): void
     {
-        $this->expectException(\Illuminate\Database\QueryException::class);
+        $this->expectException(QueryException::class);
 
         SportRank::create([
             'sport_type' => 'taekwondo',

@@ -124,3 +124,84 @@ Hasil:
 
 Catatan/keputusan yang perlu pemilik project: tidak ada.
 Seluruh butir Brief L1-C (C1–C6) telah selesai diimplementasikan, diverifikasi, dan lulus pengujian.
+
+---
+
+## Perbaikan Review (L1-BC: R1–R10)
+
+Status review dari Lead (Claude) + Security Reviewer: **CHANGES_REQUESTED** → **RESOLVED**.
+
+### Rincian Perbaikan per Butir
+
+1. **R1 (HIGH — `SppBillController.php` & `SppPaymentSecurityTest.php`):**
+   - Menambahkan sanitasi ketat pada `proof_url`: parsing URL via `parse_url` dan `rawurldecode(path)`.
+   - Menolak input yang mengandung path traversal (`..`), `%2e%2e`, backslash (`\`), query (`?`), fragment (`#`), dan karakter kontrol.
+   - Memastikan prefix path wajib `/storage/akademi/{akademi_id}/` dan memeriksa keberadaan fisik file pada server via `Storage::disk('public')->exists(...)`.
+   - Commit: `14a531a` (`fix(spp): harden proof_url path traversal and storage validation (R1)`).
+
+2. **R2 (HIGH — `SportRankController.php` & migrasi `2026_10_17_000004`):**
+   - Menambahkan pengecekan `StudentRankHistory::query()->where('sport_rank_id', $sportRank->id)->exists()` pada kondisi `$isUsed` sebelum menghapus sabuk.
+   - Mengubah FK `sport_rank_id` pada migrasi `student_rank_histories` dari `cascadeOnDelete()` menjadi `restrictOnDelete()`.
+   - Penghapusan sabuk yang memiliki riwayat ditolak dengan status HTTP 422.
+   - Commit: `2ad6640` (`fix(ranks): restrict sport rank deletion when used in rank history (R2)`).
+
+3. **R3 (MEDIUM — `RankPromotionController.php` & `StudentRankHistoryTest.php`):**
+   - Menjadikan sinkronisasi riwayat sabuk UKT idempoten dengan `updateOrCreate` berkunci `rank_promotion_participant_id`.
+   - Ketika hasil UKT diubah/dikembalikan dari `passed` ke status lain (mis. `failed`), baris riwayat sabuk terkait otomatis dihapus dan `current_rank_id` siswa dikembalikan ke sabuk asal (`from_rank_id`).
+   - Commit: `bff383e` (`fix(promotions): ensure idempotent UKT rank history and revert on failure (R3)`).
+
+4. **R4 (MEDIUM — migrasi `2026_10_17_000001` & `SportRankTenantTest.php`):**
+   - Menambahkan partial unique index `CREATE UNIQUE INDEX sport_ranks_global_code_unique ON sport_ranks (sport_type, code) WHERE akademi_id IS NULL` yang kompatibel dengan PostgreSQL dan SQLite.
+   - Menggunakan `DROP CONSTRAINT IF EXISTS` untuk nama constraint lama pada PostgreSQL.
+   - Commit: `9e02e90` (`fix(db): add partial unique index for global sport ranks (R4)`).
+
+5. **R5 (MEDIUM — migrasi `2026_10_17_000002` & `TrainingAttendanceSickTest.php`):**
+   - Pada method `down()`, mengeksekusi `UPDATE training_attendances SET status='excused' WHERE status='sick'` sebelum mengembalikan CHECK constraint lama untuk mencegah kegagalan rollback pada PostgreSQL.
+   - Commit: `345cd7c` (`fix(db): convert sick attendance to excused on migration rollback (R5)`).
+
+6. **R6 (MEDIUM — migrasi `2026_10_17_000003`, `DemoAkademiSeeder.php`, & `SppPaymentAkademiIdTest.php`):**
+   - Backfill memperhitungkan tagihan yang di-soft-delete (`withTrashed` / tanpa filter `deleted_at`), menghapus data orphan bila ada, lalu menetapkan kolom `akademi_id` menjadi `NOT NULL` via `->change()`.
+   - Seeder `DemoAkademiSeeder` diperbarui menyertakan `akademi_id` saat membuat pembayaran demo.
+   - Commit: `97479fe` (`fix(db): enforce not null on spp_payments.akademi_id after cleanup (R6)`).
+
+7. **R7 (MEDIUM — `ExportController.php` & `CsvExportSecurityTest.php`):**
+   - Nilai angka negatif murni (`/^-?\d+(\.\d+)?$/`) tidak lagi diawali tanda kutip tunggal (`'`).
+   - Tetap melindungi karakter pemicu formula Excel/CSV (`=`, `+`, `-`, `@`, tab `\t`, CR `\r`), formula dengan spasi di depan, serta varian fullwidth (`＝`, `＋`, `－`, `＠`).
+   - Commit: `06111e4` (`fix(export): allow pure negative numbers in CSV and escape formula variants (R7)`).
+
+8. **R8 (MEDIUM — `EnsureActiveUser.php`, `EnsureSuperAdmin.php`, `routes/api.php`, `bootstrap/app.php`, & `AuthApiTest.php`):**
+   - Membuat middleware `EnsureActiveUser` (alias `'active'`) dan memasangnya pada semua grup rute `auth:sanctum` (`auth/me`, `auth/logout`, `super-admin`, `admin`, `akademi`).
+   - Memperbarui `EnsureSuperAdmin` untuk turut memastikan `is_active = true`. Akun nonaktif kini secara konsisten menerima respons 401 Unauthorized.
+   - Commit: `5e92741` (`fix(auth): enforce EnsureActiveUser middleware on all sanctum routes (R8)`).
+
+9. **R9 (LOW — `StudentController.php` & `StudentRankHistoryTest.php`):**
+   - Menghapus penggunaan `notes` siswa pada riwayat sabuk manual; field `notes` pada `student_rank_histories` kini bernilai `null` kecuali jika parameter opsional `rank_notes` disertakan dalam request.
+   - Commit: `f0f7bf4` (`fix(students): decouple manual rank history notes from student profile notes (R9)`).
+
+10. **R10 (LOW — `SuperAdmin\AkademiController.php` & `SuperAdminAkademiApiTest.php`):**
+    - Mengganti pemanggilan raw query `DB::table('personal_access_tokens')` dengan model Eloquent `PersonalAccessToken::whereIn('tokenable_id', ...)->where('tokenable_type', (new User)->getMorphClass())->delete()`, memastikan kompatibilitas penuh terhadap konfigurasi morph map.
+    - Commit: `09c5e3c` (`fix(super-admin): use PersonalAccessToken model and morph class for token cleanup (R10)`).
+
+### Catatan Arsitektur (MVP)
+- **Single session per user:** Mekanisme login menghapus token lama dengan nama yang sama sehingga membatasi satu sesi per user. Hal ini merupakan keputusan desain yang disengaja untuk fase MVP.
+
+### Verifikasi Akhir Pasca Review
+
+```
+cd dojang-hub-api
+php artisan test
+```
+Hasil:
+```
+Tests:    103 passed (514 assertions)
+Duration: 8.79s
+```
+
+```
+vendor/bin/pint --dirty
+```
+Hasil:
+```
+{"tool":"pint","result":"passed"}
+```
+

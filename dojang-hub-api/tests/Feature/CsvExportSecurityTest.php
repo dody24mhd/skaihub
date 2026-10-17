@@ -81,7 +81,7 @@ class CsvExportSecurityTest extends TestCase
 
         // Pure negative number MUST NOT be prepended with '
         $this->assertStringNotContainsString("'-125.50", $content);
-        $this->assertStringContainsString("-125.50", $content);
+        $this->assertStringContainsString('-125.50', $content);
 
         // Leading spaces before formula MUST be prepended with '
         $this->assertStringContainsString("'  =FORMULA()", $content);

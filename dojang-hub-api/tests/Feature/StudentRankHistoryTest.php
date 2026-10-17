@@ -6,6 +6,7 @@ use App\Models\Akademi;
 use App\Models\RankPromotionEvent;
 use App\Models\SportRank;
 use App\Models\Student;
+use App\Models\StudentRankHistory;
 use App\Models\User;
 use App\Services\SubscriptionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -221,7 +222,7 @@ class StudentRankHistoryTest extends TestCase
         // Harus tetap 1 baris riwayat
         $this->assertSame(
             1,
-            \App\Models\StudentRankHistory::where('rank_promotion_participant_id', $participant->id)->count()
+            StudentRankHistory::where('rank_promotion_participant_id', $participant->id)->count()
         );
         $this->assertSame($this->rankGreen->id, $student->fresh()->current_rank_id);
 
@@ -234,7 +235,7 @@ class StudentRankHistoryTest extends TestCase
         // Riwayat UKT harus 0 baris dan rank kembali ke from_rank_id (rankYellow)
         $this->assertSame(
             0,
-            \App\Models\StudentRankHistory::where('rank_promotion_participant_id', $participant->id)->count()
+            StudentRankHistory::where('rank_promotion_participant_id', $participant->id)->count()
         );
         $this->assertSame($this->rankYellow->id, $student->fresh()->current_rank_id);
     }

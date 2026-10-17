@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureActiveUser;
 use App\Http\Middleware\EnsureAdminApiToken;
 use App\Http\Middleware\EnsureAkademiAccess;
 use App\Http\Middleware\EnsureAkademiUser;
@@ -30,7 +31,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'super.admin' => EnsureSuperAdmin::class,
             'platform.admin' => EnsurePlatformAdmin::class,
             'feature' => EnsureFeature::class,
-            'active' => \App\Http\Middleware\EnsureActiveUser::class,
+            'active' => EnsureActiveUser::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

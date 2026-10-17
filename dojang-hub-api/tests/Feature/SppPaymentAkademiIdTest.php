@@ -7,6 +7,7 @@ use App\Models\SppBill;
 use App\Models\SppPayment;
 use App\Models\Student;
 use App\Models\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -140,7 +141,7 @@ class SppPaymentAkademiIdTest extends TestCase
 
     public function test_spp_payments_akademi_id_column_is_not_null(): void
     {
-        $this->expectException(\Illuminate\Database\QueryException::class);
+        $this->expectException(QueryException::class);
 
         DB::table('spp_payments')->insert([
             'spp_bill_id' => $this->bill->id,

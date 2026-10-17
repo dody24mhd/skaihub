@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Akademi;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
@@ -332,7 +333,7 @@ class SuperAdminAkademiApiTest extends TestCase
 
     public function test_suspending_akademi_revokes_tokens_respecting_user_morph_class(): void
     {
-        \Illuminate\Database\Eloquent\Relations\Relation::morphMap([
+        Relation::morphMap([
             'custom_user' => User::class,
         ]);
 
@@ -359,7 +360,7 @@ class SuperAdminAkademiApiTest extends TestCase
             // Token must be revoked
             $this->assertDatabaseMissing('personal_access_tokens', ['id' => $token->accessToken->id]);
         } finally {
-            \Illuminate\Database\Eloquent\Relations\Relation::morphMap([], false);
+            Relation::morphMap([], false);
         }
     }
 }
