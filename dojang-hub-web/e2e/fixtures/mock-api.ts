@@ -522,7 +522,7 @@ export async function setupMockApi(page: Page) {
     const url = route.request().url();
     const method = route.request().method();
 
-    if (method === "PUT" && url.includes("/attendance")) {
+    if (method === "PATCH" && url.includes("/attendance")) {
       const postData = (route.request().postDataJSON() || {}) as {
         status?: string;
         material?: string;

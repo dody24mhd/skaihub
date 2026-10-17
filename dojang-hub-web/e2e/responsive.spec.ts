@@ -111,9 +111,9 @@ if (isVitest) {
         await setAdminSession(page);
         await setupMockApi(page);
 
-        // Intercept request PUT attendance untuk memeriksa payload
+        // Intercept request PATCH attendance untuk memeriksa payload
         await page.route("**/api/akademi/training-sessions/1/attendance", async (route) => {
-          if (route.request().method() === "PUT") {
+          if (route.request().method() === "PATCH") {
             capturedPayload = route.request().postDataJSON() as CapturedAttendancePayload;
           }
           await route.fallback();
