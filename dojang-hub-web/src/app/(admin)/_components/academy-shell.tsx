@@ -96,6 +96,9 @@ export default function AcademyShell({ title, description, children }: AcademySh
   }, [router]);
 
   function handleLogout() {
+    if (typeof window !== "undefined" && "serviceWorker" in navigator && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({ type: "LOGOUT" });
+    }
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(EMAIL_KEY);
     localStorage.removeItem(NAME_KEY);
