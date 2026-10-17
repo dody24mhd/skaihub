@@ -239,6 +239,46 @@ class StudentRankHistoryTest extends TestCase
         $this->assertSame($this->rankYellow->id, $student->fresh()->current_rank_id);
     }
 
+    public function test_updating_student_rank_does_not_use_student_notes_for_rank_history(): void
+    {
+        Sanctum::actingAs($this->adminA);
+
+        $student = $this->akademiA->siswa()->create([
+            'member_number' => 'NGA-NOTES',
+            'name' => 'Siswa Notes',
+            'gender' => 'male',
+            'birth_date' => '2014-01-01',
+            'joined_date' => '2026-01-01',
+            'height_cm' => 145,
+            'weight_kg' => 40,
+            'status' => 'active',
+            'current_rank_id' => $this->rankWhite->id,
+        ]);
+
+        // Update dengan rank_notes
+        $this->putJson("/api/akademi/students/{$student->id}", [
+            'current_rank_id' => $this->rankYellow->id,
+            'rank_notes' => 'Kenaikan tingkat khusus dojang',
+        ])->assertOk();
+
+        $this->assertDatabaseHas('student_rank_histories', [
+            'student_id' => $student->id,
+            'sport_rank_id' => $this->rankYellow->id,
+            'notes' => 'Kenaikan tingkat khusus dojang',
+        ]);
+
+        // Update tanpa rank_notes menghasilkan notes = null
+        $this->putJson("/api/akademi/students/{$student->id}", [
+            'current_rank_id' => $this->rankGreen->id,
+        ])->assertOk();
+
+        $this->assertDatabaseHas('student_rank_histories', [
+            'student_id' => $student->id,
+            'sport_rank_id' => $this->rankGreen->id,
+            'notes' => null,
+        ]);
+    }
+
     public function test_tenant_isolation_on_rank_histories(): void
     {
         $studentA = $this->akademiA->siswa()->create([

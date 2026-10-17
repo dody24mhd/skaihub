@@ -64,7 +64,7 @@ class StudentController extends Controller
         $data['member_number'] = $data['member_number'] ?? $this->nextMemberNumber($akademi->slug);
 
         $student = Student::create([
-            ...$data,
+            ...collect($data)->except(['rank_notes'])->all(),
             'akademi_id' => $akademi->id,
             'status' => $status,
         ]);
@@ -76,7 +76,7 @@ class StudentController extends Controller
                 'achieved_on' => now()->toDateString(),
                 'source_type' => 'manual',
                 'changed_by' => $request->user()->id,
-                'notes' => 'Pendaftaran siswa',
+                'notes' => $data['rank_notes'] ?? 'Pendaftaran siswa',
             ]);
         }
 
@@ -184,7 +184,7 @@ class StudentController extends Controller
         }
 
         $oldRankId = $student->current_rank_id;
-        $student->update($data);
+        $student->update(collect($data)->except(['rank_notes'])->all());
 
         if (array_key_exists('current_rank_id', $data) && $data['current_rank_id'] && (int) $data['current_rank_id'] !== (int) $oldRankId) {
             $student->rankHistories()->create([
@@ -193,7 +193,7 @@ class StudentController extends Controller
                 'achieved_on' => now()->toDateString(),
                 'source_type' => 'manual',
                 'changed_by' => $request->user()->id,
-                'notes' => $data['notes'] ?? null,
+                'notes' => $data['rank_notes'] ?? null,
             ]);
         }
 
@@ -251,6 +251,7 @@ class StudentController extends Controller
             'school_name' => ['nullable', 'string', 'max:150'],
             'school_grade' => ['nullable', 'string', 'max:50'],
             'health_notes' => ['nullable', 'string'],
+            'rank_notes' => ['nullable', 'string', 'max:500'],
         ];
     }
 
