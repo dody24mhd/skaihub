@@ -60,6 +60,17 @@ describe("buildSppBillColumns", () => {
     expect(within(paidCard).queryByRole("button", { name: /bayar/i })).not.toBeInTheDocument();
   });
 
+  it("menampilkan badge Terlambat hanya untuk tagihan yang lewat jatuh tempo", () => {
+    const rows = [bill({ is_overdue: true }), bill({ id: 2, is_overdue: false, student: { name: "Dewi" } as SppBill["student"] })];
+    render(
+      <ResponsiveList columns={buildSppBillColumns({ canManage: false, onPay: vi.fn(), onWaive: vi.fn() })} rows={rows} getRowKey={(row) => row.id} />,
+    );
+
+    const [lateCard, onTimeCard] = screen.getAllByTestId("responsive-list-card");
+    expect(within(lateCard).getByText("Terlambat")).toBeInTheDocument();
+    expect(within(onTimeCard).queryByText("Terlambat")).not.toBeInTheDocument();
+  });
+
   it("tanpa hak kelola tidak ada kolom aksi", () => {
     renderBills(false);
 

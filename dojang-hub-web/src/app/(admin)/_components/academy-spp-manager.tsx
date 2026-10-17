@@ -9,18 +9,27 @@ import {
   getAkademiMe,
   getAkademiSppBills,
   getAkademiSppSettings,
-  waiveAkademiSppBill,
 } from "../_lib/admin-api";
 import { buildSppBillColumns } from "./spp/spp-bill-columns";
+import SppArrearsSection from "./spp/spp-arrears-section";
+import SppClassBills from "./spp/spp-class-bills";
 import SppClassSummaryList from "./spp/spp-class-summary-list";
 import SppGenerateModal from "./spp/spp-generate-modal";
 import SppPaymentModal from "./spp/spp-payment-modal";
 import SppSettingsModal from "./spp/spp-settings-modal";
+import SppWaiveModal from "./spp/spp-waive-modal";
 import { SPP_MONTH_LABELS, billsForClass, summarizeBills } from "./spp/spp-summary";
-import { ResponsiveList } from "./ui";
 
 const TOKEN_KEY = "skaihub_admin_token";
 const DEFAULT_SPP_SETTINGS: SppSettings = { default_monthly_amount: null, due_day: 10 };
+const OVERDUE_FILTER = "overdue";
+
+type SppView = "bills" | "arrears";
+
+const SPP_VIEWS: { value: SppView; label: string }[] = [
+  { value: "bills", label: "Tagihan" },
+  { value: "arrears", label: "Tunggakan" },
+];
 
 const filterClass =
   "min-h-11 w-full border border-border bg-white px-3 text-base text-primary outline-none focus:border-primary sm:text-sm";
@@ -34,7 +43,8 @@ async function fetchSppData(
     getAkademiSppBills(activeToken, {
       year: filters.year,
       month: filters.month,
-      status: filters.statusFilter,
+      status: filters.statusFilter === OVERDUE_FILTER ? "all" : filters.statusFilter,
+      overdue: filters.statusFilter === OVERDUE_FILTER,
     }),
     getAkademiClasses(activeToken),
   ]);
@@ -62,6 +72,8 @@ export default function AcademySppManager() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedClassId, setSelectedClassId] = useState("");
   const [payTarget, setPayTarget] = useState<SppBill | null>(null);
+  const [waiveTarget, setWaiveTarget] = useState<SppBill | null>(null);
+  const [view, setView] = useState<SppView>("bills");
   const [isGenerateOpen, setIsGenerateOpen] = useState(false);
   const [settings, setSettings] = useState<SppSettings | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -133,24 +145,21 @@ export default function AcademySppManager() {
     setMessage("Pembayaran SPP tersimpan.");
   }
 
-  async function handleWaive(item: SppBill) {
-    const confirmed = window.confirm(`Bebaskan tagihan SPP ${item.student?.name || "siswa ini"}?`);
-    if (!confirmed) return;
-
+  function openWaive(item: SppBill) {
+    setWaiveTarget(item);
     setError("");
     setMessage("");
-    try {
-      await waiveAkademiSppBill(token, item.id, "Dibebaskan oleh admin.");
-      await loadData(token);
-      setMessage("Tagihan dibebaskan.");
-    } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Gagal membebaskan tagihan.");
-    }
+  }
+
+  async function handleWaived() {
+    await loadData(token);
+    setWaiveTarget(null);
+    setMessage("Tagihan dibebaskan.");
   }
 
   if (isLoading) return <p className="text-sm text-muted">Memuat SPP...</p>;
 
-  const columns = buildSppBillColumns({ canManage, onPay: openPayment, onWaive: handleWaive });
+  const columns = buildSppBillColumns({ canManage, onPay: openPayment, onWaive: openWaive });
 
   return (
     <>
@@ -192,6 +201,7 @@ export default function AcademySppManager() {
                 </div>
               ) : null}
             </div>
+            {view === "bills" ? (
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
               <label>
                 <span className="sr-only">Tahun</span>
@@ -220,38 +230,44 @@ export default function AcademySppManager() {
                   <option value="partial">Sebagian</option>
                   <option value="paid">Lunas</option>
                   <option value="waived">Dibebaskan</option>
+                  <option value={OVERDUE_FILTER}>Terlambat</option>
                 </select>
               </label>
             </div>
+            ) : null}
           </div>
+
+          {canManage ? (
+            <div className="mt-4 grid grid-cols-2 border border-border sm:inline-grid" role="group" aria-label="Tampilan SPP">
+              {SPP_VIEWS.map((option) => (
+                <button
+                  key={option.value}
+                  aria-pressed={view === option.value}
+                  className={`min-h-11 px-5 text-sm font-bold transition ${view === option.value ? "bg-primary text-white" : "bg-white text-primary hover:bg-surface-container-low"}`}
+                  onClick={() => setView(option.value)}
+                  type="button"
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          ) : null}
 
           {message ? <p className="mt-4 border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">{message}</p> : null}
           {error ? <p className="mt-4 border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">{error}</p> : null}
 
-          {!selectedClass ? (
+          {view === "arrears" ? (
+            <SppArrearsSection token={token} />
+          ) : !selectedClass ? (
             <SppClassSummaryList classes={classes} bills={items} onSelect={(classId) => setSelectedClassId(String(classId))} />
           ) : (
-            <>
-              <div className="mt-5 flex flex-col gap-3 border border-border bg-surface-container-low p-4 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <p className="font-bold text-primary">{selectedClass.name}</p>
-                  <p className="mt-1 text-xs text-muted">
-                    {selectedClassBills.length} tagihan pada {SPP_MONTH_LABELS[month - 1]} {year}
-                  </p>
-                </div>
-                <button className="min-h-11 border border-border bg-white px-4 text-sm font-bold text-primary" onClick={() => setSelectedClassId("")} type="button">
-                  Kembali ke Daftar Kelas
-                </button>
-              </div>
-              <ResponsiveList
-                className="mt-5"
-                columns={columns}
-                rows={selectedClassBills}
-                getRowKey={(item) => item.id}
-                ariaLabel={`Tagihan SPP ${selectedClass.name}`}
-                emptyState={<p className="mt-5 border-2 border-dashed border-border p-8 text-center text-sm text-muted">Belum ada tagihan SPP untuk kelas ini.</p>}
-              />
-            </>
+            <SppClassBills
+              classItem={selectedClass}
+              bills={selectedClassBills}
+              columns={columns}
+              periodLabel={`${SPP_MONTH_LABELS[month - 1]} ${year}`}
+              onBack={() => setSelectedClassId("")}
+            />
           )}
         </section>
       </section>
@@ -271,6 +287,10 @@ export default function AcademySppManager() {
             setMessage("Pengaturan SPP tersimpan.");
           }}
         />
+      ) : null}
+
+      {waiveTarget ? (
+        <SppWaiveModal key={waiveTarget.id} token={token} bill={waiveTarget} onClose={() => setWaiveTarget(null)} onWaived={handleWaived} />
       ) : null}
 
       {payTarget ? (

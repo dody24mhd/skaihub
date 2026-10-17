@@ -55,6 +55,36 @@ describe("AcademySppManager", () => {
     expect(mockedApi.updateAkademiSppSettings).toHaveBeenCalledWith("token-uji", { default_monthly_amount: 130000, due_day: 5 });
   });
 
+  it("filter Terlambat meminta tagihan overdue tanpa filter status", async () => {
+    render(<AcademySppManager />);
+
+    fireEvent.change(await screen.findByLabelText("Status tagihan"), { target: { value: "overdue" } });
+
+    await waitFor(() =>
+      expect(mockedApi.getAkademiSppBills).toHaveBeenLastCalledWith("token-uji", expect.objectContaining({ status: "all", overdue: true })),
+    );
+  });
+
+  it("tab Tunggakan menampilkan daftar tunggakan per siswa", async () => {
+    mockedApi.getAkademiSppArrears.mockResolvedValue({
+      data: [
+        {
+          student: { id: 3, name: "Bima Satria", member_number: "TKD-0003", primary_class_id: null, student_phone: null, guardian_name: null, guardian_phone: null },
+          months_count: 2,
+          total_remaining: "175000.00",
+          oldest_due_date: "2026-08-10",
+        },
+      ],
+    });
+    render(<AcademySppManager />);
+
+    fireEvent.click(await screen.findByRole("button", { name: "Tunggakan" }));
+
+    expect((await screen.findAllByText("Bima Satria")).length).toBeGreaterThan(0);
+    expect(screen.getByRole("button", { name: "Tunggakan" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.queryByLabelText("Status tagihan")).not.toBeInTheDocument();
+  });
+
   it("pelatih tidak melihat tombol pengaturan dan tidak memuat pengaturan", async () => {
     mockedApi.getAkademiMe.mockResolvedValue(meResponse("pelatih"));
     render(<AcademySppManager />);
