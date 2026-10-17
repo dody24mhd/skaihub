@@ -31,6 +31,7 @@ use App\Http\Controllers\Compro\FaqController;
 use App\Http\Controllers\Compro\InquiryController;
 use App\Http\Controllers\Compro\SiteSettingController;
 use App\Http\Controllers\Compro\TestimonialController;
+use App\Http\Controllers\HealthController;
 use App\Http\Controllers\Public\AcademyProfileController as PublicAcademyProfileController;
 use App\Http\Controllers\SuperAdmin\AkademiController as SuperAdminAkademiController;
 use App\Http\Controllers\SuperAdmin\SubscriptionAlertController as SuperAdminSubscriptionAlertController;
@@ -169,3 +170,6 @@ Route::prefix('akademi')
             Route::patch('public-profile/coaches/visibility', [AkademiPublicProfileController::class, 'updateCoachVisibility']);
         });
     });
+
+// L5-D: health check untuk monitor uptime (tanpa auth, tanpa throttle ketat)
+Route::get('health', HealthController::class);
