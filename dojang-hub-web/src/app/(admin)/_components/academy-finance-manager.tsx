@@ -9,39 +9,9 @@ import {
   getAkademiMe,
   getAkademiSppBills,
 } from "../_lib/admin-api";
-import { ResponsiveColumn, ResponsiveList } from "./ui";
+import { FinanceBillList, FinanceSummaryCards, monthLabels } from "./finance/finance-bill-list";
 
 const TOKEN_KEY = "skaihub_admin_token";
-
-const monthLabels = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "Mei",
-  "Jun",
-  "Jul",
-  "Agu",
-  "Sep",
-  "Okt",
-  "Nov",
-  "Des",
-];
-
-const statusLabels: Record<SppBill["status"], string> = {
-  unpaid: "Belum lunas",
-  partial: "Sebagian",
-  paid: "Lunas",
-  waived: "Dibebaskan",
-};
-
-function money(value: string | number) {
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    maximumFractionDigits: 0,
-  }).format(Number(value || 0));
-}
 
 async function fetchFinanceData(
   activeToken: string,
@@ -97,8 +67,6 @@ export default function AcademyFinanceManager() {
     );
   }, [visibleItems]);
 
-  const remaining = Math.max(summary.bill - summary.paid, 0);
-
   useEffect(() => {
     queueMicrotask(() => {
       const activeToken = localStorage.getItem(TOKEN_KEY) || "";
@@ -148,69 +116,6 @@ export default function AcademyFinanceManager() {
     }
   }
 
-  const columns: ResponsiveColumn<SppBill>[] = [
-    {
-      key: "student",
-      header: "Siswa",
-      primary: true,
-      render: (item) => (
-        <div>
-          <p className="font-bold text-primary">{item.student?.name || "-"}</p>
-          <span className="block text-xs font-medium text-muted">
-            {monthLabels[item.billing_month - 1]} {item.billing_year}
-          </span>
-        </div>
-      ),
-    },
-    {
-      key: "class",
-      header: "Kelas",
-      render: (item) => (
-        <span className="text-muted">
-          {item.class?.name || item.student?.primary_class?.name || "-"}
-        </span>
-      ),
-    },
-    {
-      key: "amount",
-      header: "Tagihan",
-      render: (item) => (
-        <span className="font-semibold text-primary">{money(item.amount)}</span>
-      ),
-    },
-    {
-      key: "paid",
-      header: "Terbayar",
-      render: (item) => (
-        <span className="font-semibold text-success">{money(item.paid_amount)}</span>
-      ),
-    },
-    {
-      key: "remaining",
-      header: "Sisa",
-      render: (item) => (
-        <span className="font-semibold text-secondary">
-          {money(Math.max(Number(item.amount) - Number(item.paid_amount), 0))}
-        </span>
-      ),
-    },
-    {
-      key: "status",
-      header: "Status",
-      render: (item) => (
-        <span
-          className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-bold ${
-            item.status === "paid"
-              ? "bg-success/10 text-success"
-              : "bg-secondary/10 text-secondary"
-          }`}
-        >
-          {statusLabels[item.status]}
-        </span>
-      ),
-    },
-  ];
-
   if (isLoading) return <p className="text-sm text-muted">Memuat laporan keuangan...</p>;
 
   if (!isKetua) {
@@ -223,29 +128,7 @@ export default function AcademyFinanceManager() {
 
   return (
     <section className="space-y-6">
-      {/* Stat Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <article className="card-soft rounded-lg bg-white p-5">
-          <p className="label-caps text-secondary">Total Tagihan</p>
-          <p className="mt-2 text-2xl font-black text-primary">{money(summary.bill)}</p>
-          <p className="text-sm text-muted">{visibleItems.length} tagihan</p>
-        </article>
-        <article className="card-soft rounded-lg bg-white p-5">
-          <p className="label-caps text-secondary">Terbayar</p>
-          <p className="mt-2 text-2xl font-black text-success">{money(summary.paid)}</p>
-          <p className="text-sm text-muted">{summary.paidCount} lunas</p>
-        </article>
-        <article className="card-soft rounded-lg bg-white p-5">
-          <p className="label-caps text-secondary">Sisa Tagihan</p>
-          <p className="mt-2 text-2xl font-black text-secondary">{money(remaining)}</p>
-          <p className="text-sm text-muted">{summary.unpaidCount} belum selesai</p>
-        </article>
-        <article className="card-soft rounded-lg bg-white p-5">
-          <p className="label-caps text-secondary">Dibebaskan</p>
-          <p className="mt-2 text-2xl font-black text-primary">{summary.waivedCount}</p>
-          <p className="text-sm text-muted">tagihan tanpa pembayaran</p>
-        </article>
-      </div>
+      <FinanceSummaryCards summary={summary} billCount={visibleItems.length} />
 
       <section className="card-soft rounded-lg bg-white p-5">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
@@ -321,17 +204,7 @@ export default function AcademyFinanceManager() {
         ) : null}
 
         <div className="mt-5">
-          <ResponsiveList
-            columns={columns}
-            rows={visibleItems}
-            getRowKey={(item) => item.id}
-            ariaLabel="Rekap Laporan SPP"
-            emptyState={
-              <div className="border-2 border-dashed border-border bg-white p-8 text-center text-sm font-medium text-muted">
-                Belum ada data SPP pada filter ini.
-              </div>
-            }
-          />
+          <FinanceBillList rows={visibleItems} />
         </div>
       </section>
     </section>
