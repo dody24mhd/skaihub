@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import {
   checkIsIOS,
   getDismissedAt,
@@ -13,28 +13,13 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
+const emptySubscribe = () => () => {};
+
 export default function InstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isIOS, setIsIOS] = useState(false);
-  const [isStandalone, setIsStandalone] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const [manuallyDismissed, setManuallyDismissed] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-
-    const standaloneMedia = window.matchMedia("(display-mode: standalone)");
-    const checkStandalone = () => {
-      setIsStandalone(
-        standaloneMedia.matches ||
-        (navigator as unknown as { standalone?: boolean }).standalone === true
-      );
-    };
-    checkStandalone();
-    standaloneMedia.addEventListener("change", checkStandalone);
-
-    setIsIOS(checkIsIOS(navigator.userAgent));
-
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
@@ -43,31 +28,43 @@ export default function InstallPrompt() {
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     return () => {
-      standaloneMedia.removeEventListener("change", checkStandalone);
       window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     };
   }, []);
 
-  if (!mounted || dismissed) {
-    return null;
-  }
+  const isEligible = useSyncExternalStore(
+    emptySubscribe,
+    () => {
+      const isStandalone =
+        window.matchMedia("(display-mode: standalone)").matches ||
+        (navigator as unknown as { standalone?: boolean }).standalone === true;
+      const dismissedAt = getDismissedAt();
+      const isIOS = checkIsIOS(navigator.userAgent);
 
-  const dismissedAt = getDismissedAt();
-  const showPrompt = shouldShowInstallPrompt({
-    isStandalone,
-    dismissedAt,
-    currentTime: Date.now(),
-    hasPromptEvent: Boolean(deferredPrompt),
-    isIOS,
-  });
+      return shouldShowInstallPrompt({
+        isStandalone,
+        dismissedAt,
+        currentTime: Date.now(),
+        hasPromptEvent: Boolean(deferredPrompt),
+        isIOS,
+      });
+    },
+    () => false
+  );
 
-  if (!showPrompt) {
+  const isIOS = useSyncExternalStore(
+    emptySubscribe,
+    () => checkIsIOS(navigator.userAgent),
+    () => false
+  );
+
+  if (manuallyDismissed || !isEligible) {
     return null;
   }
 
   const handleDismiss = () => {
     setDismissedAt();
-    setDismissed(true);
+    setManuallyDismissed(true);
   };
 
   const handleInstallClick = async () => {
@@ -75,7 +72,7 @@ export default function InstallPrompt() {
     await deferredPrompt.prompt();
     const choice = await deferredPrompt.userChoice;
     if (choice.outcome === "accepted") {
-      setDismissed(true);
+      setManuallyDismissed(true);
     }
     setDeferredPrompt(null);
   };
