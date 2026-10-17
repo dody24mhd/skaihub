@@ -301,6 +301,7 @@ export default function AcademyAttendanceOverviewManager() {
             <option value="draft">Draft</option>
             <option value="completed">Selesai</option>
             <option value="cancelled">Batal</option>
+            <option value="rescheduled">Dipindah</option>
           </select>
         </div>
 

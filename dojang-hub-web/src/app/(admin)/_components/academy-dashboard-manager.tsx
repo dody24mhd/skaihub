@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { AkademiDashboardSummary, AdminUser, getAkademiDashboardSummary } from "../_lib/admin-api";
+import TodayClassesCard from "./sessions/today-classes-card";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -88,6 +89,8 @@ export default function AcademyDashboardManager() {
           </div>
         </div>
       </section>
+
+      <TodayClassesCard />
 
       {/* Ringkasan Statistik */}
       <section className="grid gap-3 sm:grid-cols-3">

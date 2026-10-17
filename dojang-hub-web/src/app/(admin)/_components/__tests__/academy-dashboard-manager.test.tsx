@@ -3,11 +3,16 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import AcademyDashboardManager from "../academy-dashboard-manager";
 import * as adminApi from "../../_lib/admin-api";
 
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
+}));
+
 vi.mock("../../_lib/admin-api", async (importOriginal) => {
   const actual = await importOriginal<typeof adminApi>();
   return {
     ...actual,
     getAkademiDashboardSummary: vi.fn(),
+    getAkademiTodaySessions: vi.fn().mockResolvedValue({ date: "2026-10-19", coach_backfill_days: 7, data: [] }),
   };
 });
 
@@ -93,5 +98,12 @@ describe("AcademyDashboardManager", () => {
     expect(screen.getByText(/sabeum budi/i)).toBeInTheDocument();
     const sessionLink = screen.getByRole("link", { name: /buka absensi/i });
     expect(sessionLink).toHaveAttribute("href", "/academy/attendance/new?session=7");
+  });
+
+  it("menampilkan kartu kelas hari ini", async () => {
+    render(<AcademyDashboardManager />);
+
+    expect(await screen.findByRole("heading", { name: "Kelas Hari Ini" })).toBeInTheDocument();
+    expect(await screen.findByText("Tidak ada jadwal latihan hari ini.")).toBeInTheDocument();
   });
 });

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import AcademyAttendanceOverviewManager from "../../_components/academy-attendance-overview-manager";
 import AcademyShell from "../../_components/academy-shell";
+import AttendanceTabs from "../../_components/attendance/attendance-tabs";
 
 export const metadata: Metadata = {
   title: "Absensi Latihan",
@@ -11,9 +11,9 @@ export default function AcademyAttendancePage() {
   return (
     <AcademyShell
       title="Absensi Latihan"
-      description="Pantau kalender dan riwayat absensi aktual dari berita acara latihan."
+      description="Buka absensi kelas hari ini, lalu pantau kalender dan riwayat berita acara latihan."
     >
-      <AcademyAttendanceOverviewManager />
+      <AttendanceTabs />
     </AcademyShell>
   );
 }

@@ -28,6 +28,7 @@ const statusLabels: Record<TrainingSession["status"], string> = {
   draft: "Draft",
   completed: "Selesai",
   cancelled: "Batal",
+  rescheduled: "Dipindah",
 };
 
 function shortTime(val: string) {

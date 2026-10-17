@@ -305,7 +305,11 @@ export type TrainingSession = {
   notes: string | null;
   photo_urls: string[] | null;
   session_type: "regular" | "replacement" | "extra";
-  status: "draft" | "completed" | "cancelled";
+  status: "draft" | "completed" | "cancelled" | "rescheduled";
+  reschedule_reason?: string | null;
+  cancel_reason?: string | null;
+  rescheduled_to_id?: number | null;
+  rescheduled_from_id?: number | null;
   attendances_count?: number;
   present_count?: number;
   schedule?: TrainingSchedule | null;
@@ -1984,3 +1988,78 @@ export function updateAkademiCoachVisibility(
 
 // L3-B
 export type AttendanceStatus = "present" | "excused" | "sick" | "absent";
+
+// L4-A
+export type TodaySlotStatus = "not_opened" | TrainingSession["status"];
+
+export type LinkedTrainingSession = {
+  id: number;
+  session_date: string;
+  starts_at: string;
+};
+
+export type TodaySlot = {
+  key: string;
+  date: string;
+  training_schedule_id: number | null;
+  session_id: number | null;
+  class_id: number;
+  class_name: string | null;
+  place_name: string | null;
+  starts_at: string;
+  ends_at: string;
+  coach_ids: number[];
+  coach_names: string[];
+  status: TodaySlotStatus;
+  session_type: TrainingSession["session_type"];
+  attendances_count: number;
+  present_count: number;
+  reschedule_reason: string | null;
+  cancel_reason: string | null;
+  rescheduled_to: LinkedTrainingSession | null;
+  rescheduled_from: LinkedTrainingSession | null;
+};
+
+export type TodaySlotsResponse = {
+  date: string;
+  coach_backfill_days: number;
+  data: TodaySlot[];
+};
+
+export function getAkademiTodaySessions(token: string, date?: string) {
+  const suffix = date ? `?date=${encodeURIComponent(date)}` : "";
+  return adminFetch<TodaySlotsResponse>(`/akademi/sessions/today${suffix}`, token);
+}
+
+export function openAkademiSessionFromSchedule(token: string, trainingScheduleId: number, date: string) {
+  return adminFetch<{ training_session: TrainingSession }>("/akademi/training-sessions/from-schedule", token, {
+    method: "POST",
+    body: JSON.stringify({ training_schedule_id: trainingScheduleId, date }),
+  });
+}
+
+export function rescheduleAkademiTrainingSession(
+  token: string,
+  id: number,
+  payload: { date: string; starts_at: string; ends_at: string; reason: string },
+) {
+  return adminFetch<{ training_session: TrainingSession }>(`/akademi/training-sessions/${id}/reschedule`, token, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function cancelAkademiTrainingSession(token: string, id: number, reason: string) {
+  return adminFetch<{ training_session: TrainingSession }>(`/akademi/training-sessions/${id}/cancel`, token, {
+    method: "POST",
+    body: JSON.stringify({ reason }),
+  });
+}
+
+export function updateAkademiTrainingSessionCoaches(token: string, id: number, coachIds: number[]) {
+  return adminFetch<{ training_session: TrainingSession }>(`/akademi/training-sessions/${id}`, token, {
+    method: "PUT",
+    body: JSON.stringify({ coach_ids: coachIds }),
+  });
+}
+// end L4-A
