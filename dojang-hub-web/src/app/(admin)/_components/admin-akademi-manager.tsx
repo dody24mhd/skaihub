@@ -16,6 +16,8 @@ import {
   updateAdminAkademi,
   uploadAdminImage,
 } from "../_lib/admin-api";
+import { defaultRankSystemForSport, rankSystemLabel } from "../_lib/rank-systems";
+import RankSystemSelect from "./akademi/rank-system-select";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -23,6 +25,7 @@ const emptyCreateForm: AkademiPayload = {
   name: "",
   slug: "",
   sport_type: "taekwondo",
+  rank_system: "taekwondo_kukkiwon",
   logo_url: "",
   plan: "starter",
   duration_type: "monthly",
@@ -277,6 +280,10 @@ export default function AdminAkademiManager() {
         };
       }
 
+      if (key === "sport_type") {
+        return { ...current, sport_type: value, rank_system: defaultRankSystemForSport(value) };
+      }
+
       return {
         ...current,
         [key]: value,
@@ -385,6 +392,7 @@ export default function AdminAkademiManager() {
         name: editTarget.name.trim(),
         slug: editTarget.slug.trim(),
         sport_type: editTarget.sport_type.trim(),
+        rank_system: editTarget.rank_system ?? null,
         logo_url: editTarget.logo_url?.trim() || null,
         status: editTarget.status,
       });
@@ -734,6 +742,12 @@ export default function AdminAkademiManager() {
                     ))}
                   </select>
                 </label>
+                <RankSystemSelect
+                  id="create-rank-system"
+                  sportType={createForm.sport_type ?? "taekwondo"}
+                  value={createForm.rank_system}
+                  onChange={(value) => updateCreateForm("rank_system", value)}
+                />
                 <label className="block">
                   <span className="label-caps mb-2 block text-muted">Durasi Langganan</span>
                   <select
@@ -924,7 +938,11 @@ export default function AdminAkademiManager() {
                 <select
                   value={editTarget.sport_type}
                   onChange={(event) =>
-                    setEditTarget({ ...editTarget, sport_type: event.target.value })
+                    setEditTarget({
+                      ...editTarget,
+                      sport_type: event.target.value,
+                      rank_system: defaultRankSystemForSport(event.target.value),
+                    })
                   }
                   className="h-11 rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
                 >
@@ -935,6 +953,12 @@ export default function AdminAkademiManager() {
                   ))}
                 </select>
               </div>
+              <RankSystemSelect
+                id="edit-rank-system"
+                sportType={editTarget.sport_type}
+                value={editTarget.rank_system}
+                onChange={(value) => setEditTarget({ ...editTarget, rank_system: value })}
+              />
               <div className="rounded-md border border-border p-4">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                   <div className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-md border border-border bg-surface-container-low">
@@ -1067,7 +1091,7 @@ export default function AdminAkademiManager() {
                   </h2>
                   <p className="mt-1 text-sm text-muted">
                     {detailTarget.akademi.slug}.skaihub.com /{" "}
-                    {detailTarget.akademi.sport_type}
+                    {detailTarget.akademi.sport_type} · {rankSystemLabel(detailTarget.akademi.rank_system)}
                   </p>
                 </div>
               </div>
