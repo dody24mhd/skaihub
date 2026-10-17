@@ -47,3 +47,5 @@ Thumbs.db
 
 # Multi-AI worktrees
 .worktrees/
+dojang-hub-web/test-results/
+dojang-hub-web/playwright-report/
