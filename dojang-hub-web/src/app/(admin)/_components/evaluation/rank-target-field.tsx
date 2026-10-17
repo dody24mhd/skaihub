@@ -32,7 +32,7 @@ export default function RankTargetField({ id, label, ranks, student, toRankId, s
       </label>
       <select
         id={id}
-        className="min-h-11 w-full rounded-md border border-border bg-white px-3 text-base text-primary focus:border-primary sm:text-sm"
+        className="min-h-11 w-full rounded-md border border-border-strong bg-white px-3 text-base text-primary focus:border-primary sm:text-sm"
         value={toRankId}
         onChange={(e) => setToRankId(e.target.value)}
         aria-describedby={warning ? `${id}-warning` : undefined}

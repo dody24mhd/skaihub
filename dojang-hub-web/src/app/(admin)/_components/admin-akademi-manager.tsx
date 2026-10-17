@@ -480,7 +480,7 @@ export default function AdminAkademiManager() {
                 <input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  className="h-10 w-full rounded-md border border-border bg-white pl-10 pr-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary sm:w-64"
+                  className="h-10 w-full rounded-md border border-border-strong bg-white pl-10 pr-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary sm:w-64"
                   placeholder="Cari akademi"
                 />
               </div>
@@ -490,7 +490,7 @@ export default function AdminAkademiManager() {
                 onChange={(event) =>
                   setStatusFilter(event.target.value as "all" | AkademiStatus)
                 }
-                className="h-10 rounded-md border border-border bg-white px-3 text-sm font-semibold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                className="h-10 rounded-md border border-border-strong bg-white px-3 text-sm font-semibold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary"
               >
                 <option value="all">Semua status</option>
                 <option value="active">Aktif</option>
@@ -503,7 +503,7 @@ export default function AdminAkademiManager() {
                 onChange={(event) =>
                   setPlanFilter(event.target.value as "all" | AkademiPlan)
                 }
-                className="h-10 rounded-md border border-border bg-white px-3 text-sm font-semibold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                className="h-10 rounded-md border border-border-strong bg-white px-3 text-sm font-semibold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary"
               >
                 <option value="all">Semua paket</option>
                 <option value="starter">Starter</option>
@@ -666,7 +666,7 @@ export default function AdminAkademiManager() {
               <input
                 value={createForm.name}
                 onChange={(event) => updateCreateForm("name", event.target.value)}
-                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 placeholder="Nama akademi"
               />
               <div className="rounded-md border border-border p-4">
@@ -720,7 +720,7 @@ export default function AdminAkademiManager() {
                   <select
                     value={createForm.sport_type}
                     onChange={(event) => updateCreateForm("sport_type", event.target.value)}
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   >
                     {sportOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -742,7 +742,7 @@ export default function AdminAkademiManager() {
                     onChange={(event) =>
                       updateCreateForm("duration_type", event.target.value as SubscriptionDuration)
                     }
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   >
                     {Object.entries(durationLabels).map(([value, label]) => (
                       <option key={value} value={value}>
@@ -761,7 +761,7 @@ export default function AdminAkademiManager() {
                     type="date"
                     value={createForm.plan_expires_at || ""}
                     onChange={(event) => updateCreateForm("plan_expires_at", event.target.value)}
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   />
                 </label>
               ) : null}
@@ -773,7 +773,7 @@ export default function AdminAkademiManager() {
                     onChange={(event) =>
                       updateCreateForm("plan", event.target.value as AkademiPlan)
                     }
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   >
                     <option value="starter">Starter</option>
                     <option value="pro">Pro</option>
@@ -825,21 +825,21 @@ export default function AdminAkademiManager() {
                   <input
                     value={createForm.ketua_name}
                     onChange={(event) => updateCreateForm("ketua_name", event.target.value)}
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                     placeholder="Nama ketua akademi"
                   />
                   <input
                     type="email"
                     value={createForm.ketua_email}
                     onChange={(event) => updateCreateForm("ketua_email", event.target.value)}
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                     placeholder="Email ketua"
                   />
                   <input
                     type="password"
                     value={createForm.ketua_password}
                     onChange={(event) => updateCreateForm("ketua_password", event.target.value)}
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                     placeholder="Password sementara minimal 8 karakter"
                   />
                 </div>
@@ -854,21 +854,21 @@ export default function AdminAkademiManager() {
                   <input
                     value={createForm.admin_name}
                     onChange={(event) => updateCreateForm("admin_name", event.target.value)}
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                     placeholder="Nama admin akademi"
                   />
                   <input
                     type="email"
                     value={createForm.admin_email}
                     onChange={(event) => updateCreateForm("admin_email", event.target.value)}
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                     placeholder="Email admin"
                   />
                   <input
                     type="password"
                     value={createForm.admin_password}
                     onChange={(event) => updateCreateForm("admin_password", event.target.value)}
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                     placeholder="Password admin minimal 8 karakter"
                   />
                 </div>
@@ -911,7 +911,7 @@ export default function AdminAkademiManager() {
                 onChange={(event) =>
                   setEditTarget({ ...editTarget, name: event.target.value })
                 }
-                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
               />
               <div className="grid gap-3 sm:grid-cols-2">
                 <input
@@ -920,7 +920,7 @@ export default function AdminAkademiManager() {
                     setEditTarget({ ...editTarget, slug: makeSlug(event.target.value) })
                   }
                   readOnly={editTarget.plan === "starter"}
-                  className="h-11 rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                  className="h-11 rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 />
                 <select
                   value={editTarget.sport_type}
@@ -931,7 +931,7 @@ export default function AdminAkademiManager() {
                       rank_system: defaultRankSystemForSport(event.target.value),
                     })
                   }
-                  className="h-11 rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                  className="h-11 rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 >
                   {sportOptions.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -1002,7 +1002,7 @@ export default function AdminAkademiManager() {
                         status: event.target.value as AkademiStatus,
                       })
                     }
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                    className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   >
                     <option value="active">Aktif</option>
                     <option value="inactive">Nonaktif</option>

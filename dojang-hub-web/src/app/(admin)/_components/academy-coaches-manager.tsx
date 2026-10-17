@@ -216,7 +216,7 @@ export default function AcademyCoachesManager() {
           </label>
           <input
             id="coaches-search"
-            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-sm text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
+            className="min-h-11 w-full border border-border-strong bg-white px-3.5 py-2.5 text-sm text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             placeholder="Cari pelatih..."
             value={query}
             onChange={(event) => setQuery(event.target.value)}
@@ -298,7 +298,7 @@ export default function AcademyCoachesManager() {
             <textarea
               id="coach-address"
               rows={3}
-              className="w-full border border-border bg-white p-3 text-base text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
+              className="w-full border border-border-strong bg-white p-3 text-base text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
               value={form.address}
               onChange={(event) => setForm((current) => ({ ...current, address: event.target.value }))}
               placeholder="Alamat domisili..."

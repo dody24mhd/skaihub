@@ -3,7 +3,7 @@ import { Student, TrainingClass } from "../../_lib/admin-api";
 export type StudentStatusFilter = "all" | Student["status"];
 
 const controlClass =
-  "min-h-11 w-full border border-border bg-white px-3 text-base text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary sm:text-sm";
+  "min-h-11 w-full border border-border-strong bg-white px-3 text-base text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary sm:text-sm";
 
 export default function StudentListToolbar({
   query,

@@ -161,7 +161,7 @@ function FormField({
 }
 
 const inputCls =
-  "h-11 w-full rounded-md border border-border bg-white px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary disabled:bg-surface disabled:text-muted";
+  "h-11 w-full rounded-md border border-border-strong bg-white px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary disabled:bg-surface disabled:text-muted";
 
 export default function AdminSubscriptionManager() {
   const [token, setToken] = useState("");
@@ -711,7 +711,7 @@ export default function AdminSubscriptionManager() {
                       value={paymentForm.notes}
                       onChange={(e) => setPaymentForm((cur) => ({ ...cur, notes: e.target.value }))}
                       rows={3}
-                      className="w-full rounded-md border border-border px-3 py-2.5 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary"
+                      className="w-full rounded-md border border-border-strong px-3 py-2.5 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary"
                     />
                   </FormField>
 
@@ -886,7 +886,7 @@ export default function AdminSubscriptionManager() {
                   onChange={(e) => setForm((cur) => ({ ...cur, notes: e.target.value }))}
                   rows={3}
                   placeholder="Deal khusus, alasan perubahan, dsb."
-                  className="w-full rounded-md border border-border px-3 py-2.5 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary"
+                  className="w-full rounded-md border border-border-strong px-3 py-2.5 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary"
                 />
               </FormField>
 

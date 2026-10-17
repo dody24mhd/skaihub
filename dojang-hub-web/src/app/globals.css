@@ -17,6 +17,7 @@
   --secondary-foreground: #ffffff;
   --muted: #44474e;
   --border: #e2e8f0;
+  --border-strong: #828c9e;
   --success: #10b981;
   --success-strong: #047857;
   --caution: #ea580c;
@@ -42,6 +43,7 @@
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
   --color-success: var(--success);
   --color-success-strong: var(--success-strong);
   --color-caution: var(--caution);

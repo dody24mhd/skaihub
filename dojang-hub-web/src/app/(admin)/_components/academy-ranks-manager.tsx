@@ -178,7 +178,7 @@ export default function AcademyRanksManager() {
           </div>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
             <input
-              className="min-h-11 rounded-md border border-border px-3 text-sm outline-none focus:border-primary"
+              className="min-h-11 rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary"
               placeholder="Cari tingkatan"
               value={query}
               onChange={(e) => setQuery(e.target.value)}

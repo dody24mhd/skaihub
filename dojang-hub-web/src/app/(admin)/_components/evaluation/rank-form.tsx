@@ -84,7 +84,7 @@ export default function RankForm({
         </label>
         <select
           id={`${idPrefix}-stripe`}
-          className="min-h-11 w-full rounded-md border border-border bg-white px-3 text-base text-primary focus:border-primary sm:text-sm"
+          className="min-h-11 w-full rounded-md border border-border-strong bg-white px-3 text-base text-primary focus:border-primary sm:text-sm"
           value={form.stripe_color}
           onChange={(e) => setForm((cur) => ({ ...cur, stripe_color: e.target.value }))}
         >

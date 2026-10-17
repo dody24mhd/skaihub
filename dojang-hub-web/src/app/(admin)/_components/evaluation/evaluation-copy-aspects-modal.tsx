@@ -65,7 +65,7 @@ function CopyAspectsForm({ onClose, periods, targetPeriod, isSaving, onCopy }: E
       <FormField id="copy-aspects-source" label="Periode sumber" required>
         <select
           id="copy-aspects-source"
-          className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary sm:text-sm"
+          className="min-h-11 w-full border border-border-strong bg-white px-3.5 py-2.5 text-base text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary sm:text-sm"
           value={sourceId}
           onChange={(event) => setSourceId(event.target.value)}
           required

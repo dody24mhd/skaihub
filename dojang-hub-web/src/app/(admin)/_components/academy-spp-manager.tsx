@@ -36,7 +36,7 @@ const SPP_VIEWS: { value: SppView; label: string }[] = [
 ];
 
 const filterClass =
-  "min-h-11 w-full border border-border bg-white px-3 text-base text-primary outline-none focus:border-primary sm:text-sm";
+  "min-h-11 w-full border border-border-strong bg-white px-3 text-base text-primary outline-none focus:border-primary sm:text-sm";
 
 async function fetchSppData(
   activeToken: string,

@@ -274,7 +274,7 @@ export default function AcademyClassesManager() {
           </label>
           <input
             id="classes-search"
-            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-sm text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
+            className="min-h-11 w-full border border-border-strong bg-white px-3.5 py-2.5 text-sm text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             placeholder="Cari kelas atau tempat..."
             value={query}
             onChange={(event) => setQuery(event.target.value)}
@@ -316,7 +316,7 @@ export default function AcademyClassesManager() {
             </label>
             <select
               id="class-place"
-              className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
+              className="min-h-11 w-full border border-border-strong bg-white px-3.5 py-2.5 text-base text-primary transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
               value={form.training_place_id}
               onChange={(event) => setForm((current) => ({ ...current, training_place_id: event.target.value }))}
             >

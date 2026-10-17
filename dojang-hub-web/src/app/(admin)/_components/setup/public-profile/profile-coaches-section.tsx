@@ -63,7 +63,7 @@ export default function ProfileCoachesSection({
                     onClick={() => onToggleCoach(coach)}
                     aria-label={`Ubah status tampilkan ${coach.name}`}
                     className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full transition-colors focus:outline-hidden focus:ring-2 focus:ring-secondary ${
-                      coach.show_on_public ? "bg-secondary" : "bg-border"
+                      coach.show_on_public ? "bg-secondary" : "bg-border-strong"
                     }`}
                   >
                     <span

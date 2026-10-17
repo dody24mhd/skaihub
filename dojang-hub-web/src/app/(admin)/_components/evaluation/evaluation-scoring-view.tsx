@@ -288,7 +288,7 @@ export default function EvaluationScoringView({
                           <td key={aspect.id} className="py-3 pr-3">
                             <div className="space-y-1">
                               <input
-                                className="min-h-11 w-24 rounded-md border border-border px-3 text-sm font-semibold outline-none transition focus:border-primary focus:ring-1 focus:ring-primary"
+                                className="min-h-11 w-24 rounded-md border border-border-strong px-3 text-sm font-semibold outline-none transition focus:border-primary focus:ring-1 focus:ring-primary"
                                 type="number"
                                 inputMode="numeric"
                                 min="1"
@@ -311,7 +311,7 @@ export default function EvaluationScoringView({
                       })}
                       <td className="py-3">
                         <input
-                          className="min-h-11 w-full rounded-md border border-border px-3 text-sm outline-none transition focus:border-primary"
+                          className="min-h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none transition focus:border-primary"
                           value={draftNotes[student.id] || ""}
                           onChange={(e) =>
                             setDraftNotes((cur) => ({ ...cur, [student.id]: e.target.value }))

@@ -262,7 +262,7 @@ export default function AdminBeritaManager() {
                 <input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  className="h-10 w-full rounded-md border border-border bg-white pl-10 pr-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary sm:w-64"
+                  className="h-10 w-full rounded-md border border-border-strong bg-white pl-10 pr-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary sm:w-64"
                   placeholder="Cari berita"
                 />
               </div>
@@ -272,7 +272,7 @@ export default function AdminBeritaManager() {
                 onChange={(event) =>
                   setStatusFilter(event.target.value as "all" | AdminBlog["status"])
                 }
-                className="h-10 rounded-md border border-border bg-white px-3 text-sm font-semibold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                className="h-10 rounded-md border border-border-strong bg-white px-3 text-sm font-semibold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary"
               >
                 <option value="all">Semua status</option>
                 <option value="published">Published</option>
@@ -430,13 +430,13 @@ export default function AdminBeritaManager() {
               <input
                 value={form.title}
                 onChange={(event) => setForm({ ...form, title: event.target.value })}
-                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 placeholder="Judul tulisan"
               />
               <input
                 value={form.excerpt}
                 onChange={(event) => setForm({ ...form, excerpt: event.target.value })}
-                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 placeholder="Label / Ringkasan Singkat"
               />
               
@@ -444,13 +444,13 @@ export default function AdminBeritaManager() {
                 <input
                   value={form.author_name}
                   onChange={(event) => setForm({ ...form, author_name: event.target.value })}
-                  className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                  className="h-11 w-full rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   placeholder="Nama Penulis"
                 />
                 <select
                   value={form.category}
                   onChange={(event) => setForm({ ...form, category: event.target.value })}
-                  className="h-11 rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                  className="h-11 rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 >
                   <option value="Artikel">Artikel</option>
                   <option value="Edukasi">Edukasi</option>
@@ -489,7 +489,7 @@ export default function AdminBeritaManager() {
                 </div>
               </div>
               
-              <div className="w-full overflow-hidden rounded-md border border-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary">
+              <div className="w-full overflow-hidden rounded-md border border-border-strong focus-within:border-primary focus-within:ring-2 focus-within:ring-primary">
                 <RichTextEditor
                   value={form.content}
                   onChange={(val) => setForm({ ...form, content: val })}
@@ -503,7 +503,7 @@ export default function AdminBeritaManager() {
                   onChange={(event) =>
                     setForm({ ...form, status: event.target.value as BlogPayload["status"] })
                   }
-                  className="h-11 rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                  className="h-11 rounded-md border border-border-strong px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 >
                   <option value="draft">Draft</option>
                   <option value="published">Published</option>

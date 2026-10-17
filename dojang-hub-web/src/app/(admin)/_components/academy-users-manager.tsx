@@ -266,7 +266,7 @@ export default function AcademyUsersManager() {
             </label>
             <input
               id="users-search"
-              className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-sm text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
+              className="min-h-11 w-full border border-border-strong bg-white px-3.5 py-2.5 text-sm text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
               placeholder="Cari nama atau email..."
               value={query}
               onChange={(event) => setQuery(event.target.value)}
@@ -278,7 +278,7 @@ export default function AcademyUsersManager() {
             </label>
             <select
               id="users-role-filter"
-              className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-sm text-primary transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
+              className="min-h-11 w-full border border-border-strong bg-white px-3.5 py-2.5 text-sm text-primary transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
               value={roleFilter}
               onChange={(event) => setRoleFilter(event.target.value)}
             >

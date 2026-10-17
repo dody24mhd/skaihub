@@ -52,7 +52,7 @@ export default function EvaluationMobileScorer({
         </label>
         <select
           id="mobile-student-picker"
-          className="mt-2 min-h-11 w-full rounded-md border border-border bg-white px-3 text-base font-bold text-primary focus:border-primary"
+          className="mt-2 min-h-11 w-full rounded-md border border-border-strong bg-white px-3 text-base font-bold text-primary focus:border-primary"
           value={activeStudentIndex}
           onChange={(e) => setActiveStudentIndex(Number(e.target.value))}
         >
@@ -157,7 +157,7 @@ export default function EvaluationMobileScorer({
                             [key]: e.target.value,
                           }))
                         }
-                        className="min-h-11 w-full rounded-md border border-border bg-white px-3.5 text-base font-bold text-primary placeholder:text-muted/50 focus:border-primary focus:ring-1 focus:ring-primary"
+                        className="min-h-11 w-full rounded-md border border-border-strong bg-white px-3.5 text-base font-bold text-primary placeholder:text-muted/50 focus:border-primary focus:ring-1 focus:ring-primary"
                       />
                     </div>
 
@@ -196,7 +196,7 @@ export default function EvaluationMobileScorer({
                 }))
               }
               placeholder="Catatan perkembangan atau rekomendasi"
-              className="mt-1.5 min-h-11 w-full rounded-md border border-border bg-white p-3 text-sm text-primary placeholder:text-muted/50 focus:border-primary focus:ring-1 focus:ring-primary"
+              className="mt-1.5 min-h-11 w-full rounded-md border border-border-strong bg-white p-3 text-sm text-primary placeholder:text-muted/50 focus:border-primary focus:ring-1 focus:ring-primary"
             />
           </div>
         </div>

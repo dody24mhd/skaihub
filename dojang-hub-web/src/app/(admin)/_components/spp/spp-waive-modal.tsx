@@ -63,7 +63,7 @@ export default function SppWaiveModal({ token, bill, onClose, onWaived }: SppWai
           <textarea
             id="spp-waive-reason"
             aria-invalid={Boolean(reasonError)}
-            className={`${controlClass} ${reasonError ? "border-secondary focus:ring-secondary" : "border-border focus:border-primary focus:ring-primary"}`}
+            className={`${controlClass} ${reasonError ? "border-secondary focus:ring-secondary" : "border-border-strong focus:border-primary focus:ring-primary"}`}
             maxLength={500}
             value={reason}
             onChange={(event) => setReason(event.target.value)}

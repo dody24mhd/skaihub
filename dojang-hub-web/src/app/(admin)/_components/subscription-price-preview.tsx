@@ -21,7 +21,7 @@ type SubscriptionPricePreviewProps = {
 };
 
 const inputCls =
-  "h-11 w-full rounded-md border border-border bg-white px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary";
+  "h-11 w-full rounded-md border border-border-strong bg-white px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary";
 
 function formatCurrency(value: number): string {
   return `Rp ${value.toLocaleString("id-ID")}`;
