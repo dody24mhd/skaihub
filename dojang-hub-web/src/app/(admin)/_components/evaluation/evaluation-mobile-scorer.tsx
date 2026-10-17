@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { EvaluationAspect, Student, TrainingClass } from "../../_lib/admin-api";
-import { getScoreLabel, getScoreLabelStyle } from "./evaluation-types";
+import { SCORE_BANDS, getScoreLabel, getScoreLabelStyle } from "./evaluation-types";
 
 export type EvaluationMobileScorerProps = {
   filteredStudents: Student[];
@@ -34,7 +34,7 @@ export default function EvaluationMobileScorer({
 
   if (!filteredStudents.length) {
     return (
-      <div className="border-2 border-dashed border-border bg-white p-6 text-center text-sm text-muted">
+      <div className="border-2 border-dashed border-border bg-white p-6 text-center text-sm text-muted md:hidden">
         Belum ada siswa aktif dalam filter ini.
       </div>
     );
@@ -103,6 +103,17 @@ export default function EvaluationMobileScorer({
             </p>
           </div>
 
+          <ul
+            aria-label="Rentang predikat nilai"
+            className="grid grid-cols-2 gap-1.5 text-xs text-muted"
+          >
+            {SCORE_BANDS.map((band) => (
+              <li key={band.label} className="rounded-sm bg-surface-container-low px-2 py-1">
+                <span className={band.style}>{band.label}</span> {band.min}–{band.max}
+              </li>
+            ))}
+          </ul>
+
           <div className="space-y-3">
             {activeAspects.map((aspect) => {
               const key = `${activeStudent.id}:${aspect.id}`;
@@ -114,7 +125,7 @@ export default function EvaluationMobileScorer({
               return (
                 <div
                   key={aspect.id}
-                  className="rounded-md border border-border bg-slate-50/50 p-3.5"
+                  className="rounded-md border border-border bg-surface-container-low p-3.5"
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className="font-heading text-sm font-bold text-primary">

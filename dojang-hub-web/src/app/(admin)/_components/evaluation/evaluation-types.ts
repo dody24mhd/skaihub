@@ -31,29 +31,23 @@ export function shortDate(value: string): string {
   }).format(new Date(value));
 }
 
-/**
- * Mengubah nilai skor angka 1-100 ke label predikat
- * (Kurang / Cukup / Baik / Sangat Baik).
- */
-export function getScoreLabel(score: number | null | undefined): string {
-  if (score === null || score === undefined || isNaN(score) || score <= 0) {
-    return "-";
-  }
-  if (score >= 85) return "Sangat Baik";
-  if (score >= 70) return "Baik";
-  if (score >= 60) return "Cukup";
-  return "Kurang";
+// Rentang predikat belum ditetapkan di PRD/SCHEMA; batas ini keputusan UI (lihat laporan L3-D).
+export const SCORE_BANDS = [
+  { label: "Kurang", min: 1, max: 59, style: "text-secondary-dark font-bold" },
+  { label: "Cukup", min: 60, max: 69, style: "text-secondary font-bold" },
+  { label: "Baik", min: 70, max: 84, style: "text-primary font-bold" },
+  { label: "Sangat Baik", min: 85, max: 100, style: "text-success font-bold" },
+] as const;
+
+function findScoreBand(score: number | null | undefined) {
+  if (score === null || score === undefined || isNaN(score) || score <= 0) return null;
+  return [...SCORE_BANDS].reverse().find((band) => score >= band.min) ?? null;
 }
 
-/**
- * Menghasilkan class CSS Tailwind untuk badge/label predikat nilai.
- */
+export function getScoreLabel(score: number | null | undefined): string {
+  return findScoreBand(score)?.label ?? "-";
+}
+
 export function getScoreLabelStyle(score: number | null | undefined): string {
-  if (score === null || score === undefined || isNaN(score) || score <= 0) {
-    return "text-muted";
-  }
-  if (score >= 85) return "text-success font-bold";
-  if (score >= 70) return "text-primary font-bold";
-  if (score >= 60) return "text-secondary font-bold";
-  return "text-secondary-dark font-bold";
+  return findScoreBand(score)?.style ?? "text-muted";
 }
