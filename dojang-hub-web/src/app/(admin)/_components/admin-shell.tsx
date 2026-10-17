@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
+import SheetModal from "./ui/sheet-modal";
 
 const TOKEN_KEY = "skaihub_admin_token";
 const EMAIL_KEY = "skaihub_admin_email";
@@ -92,6 +93,7 @@ export default function AdminShell({
 }: AdminShellProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   useEffect(() => {
     queueMicrotask(() => {
@@ -112,6 +114,7 @@ export default function AdminShell({
 
   return (
     <main className="min-h-screen bg-surface text-primary lg:grid lg:grid-cols-[280px_1fr]">
+      {/* Sidebar untuk Layar Besar (lg+) */}
       <aside className="hidden border-r border-border bg-primary text-white lg:flex lg:min-h-screen lg:flex-col">
         <div className="border-b border-white/10 p-5">
           <Link href="/internal" className="flex items-center gap-3">
@@ -186,23 +189,28 @@ export default function AdminShell({
       <section className="min-w-0">
         <header className="sticky top-0 z-20 border-b border-border bg-white/95 backdrop-blur">
           <div className="flex min-h-16 items-center justify-between gap-4 px-5 lg:px-8">
-            <div className="min-w-0">
-              <p className="label-caps text-secondary">{eyebrow}</p>
-              <h1 className="truncate text-xl font-bold text-primary sm:text-2xl">
-                {title}
-              </h1>
+            <div className="flex items-center gap-3 min-w-0">
+              {/* Tombol Hamburger di bawah lg */}
+              <button
+                type="button"
+                onClick={() => setIsDrawerOpen(true)}
+                className="inline-flex size-11 items-center justify-center rounded-md border border-border bg-white text-primary transition hover:bg-surface-container-low lg:hidden"
+                aria-label="Buka menu"
+              >
+                <span className="material-symbols-outlined text-[24px]">
+                  menu
+                </span>
+              </button>
+
+              <div className="min-w-0">
+                <p className="label-caps text-secondary">{eyebrow}</p>
+                <h1 className="truncate text-xl font-bold text-primary sm:text-2xl">
+                  {title}
+                </h1>
+              </div>
             </div>
 
             <div className="flex items-center gap-2">
-              <Link
-                href="/internal"
-                className="inline-flex size-10 items-center justify-center rounded-md border border-border bg-white text-primary transition hover:bg-surface-container-low lg:hidden"
-                aria-label="Dashboard"
-              >
-                <span className="material-symbols-outlined text-[20px]">
-                  dashboard
-                </span>
-              </Link>
               <button
                 type="button"
                 onClick={handleLogout}
@@ -215,34 +223,6 @@ export default function AdminShell({
               </button>
             </div>
           </div>
-
-          <nav className="flex gap-2 overflow-x-auto border-t border-border px-5 py-3 lg:hidden">
-            {navSections
-              .flatMap((section) => section.items)
-              .map((item) => {
-                const isActive =
-                  item.href === "/internal"
-                    ? pathname === item.href
-                    : pathname.startsWith(item.href);
-
-                return (
-                  <Link
-                    key={item.title}
-                    href={item.href}
-                    className={`inline-flex h-9 shrink-0 items-center gap-2 rounded-md px-3 text-sm font-semibold ${
-                      isActive
-                        ? "bg-primary text-white"
-                        : "bg-surface-container-low text-primary"
-                    }`}
-                  >
-                    <span className="material-symbols-outlined text-[18px]">
-                      {item.icon}
-                    </span>
-                    {item.title}
-                  </Link>
-                );
-              })}
-          </nav>
         </header>
 
         <div className="px-5 py-6 lg:px-8 lg:py-8">
@@ -254,6 +234,71 @@ export default function AdminShell({
           {children}
         </div>
       </section>
+
+      {/* Drawer menu kiri di bawah lg */}
+      <SheetModal
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        title="Menu Admin"
+        side="left"
+      >
+        <div className="space-y-6">
+          {navSections.map((section) => (
+            <div key={section.title}>
+              <p className="mb-2 px-1 text-xs font-bold uppercase tracking-wider text-muted/70">
+                {section.title}
+              </p>
+              <div className="space-y-1">
+                {section.items.map((item) => {
+                  const isActive =
+                    item.href === "/internal"
+                      ? pathname === item.href
+                      : pathname.startsWith(item.href);
+
+                  return (
+                    <Link
+                      key={item.title}
+                      href={item.href}
+                      onClick={() => setIsDrawerOpen(false)}
+                      className={`flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold transition ${
+                        isActive
+                          ? "bg-primary text-white"
+                          : "text-primary hover:bg-surface-container-low"
+                      }`}
+                    >
+                      <span className="material-symbols-outlined text-[20px]">
+                        {item.icon}
+                      </span>
+                      {item.title}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+
+          <div className="space-y-2 border-t border-border pt-4">
+            <Link
+              href="https://skaihub.com"
+              className="flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold text-primary hover:bg-surface-container-low"
+            >
+              <span className="material-symbols-outlined text-[20px]">home</span>
+              Lihat Web
+            </Link>
+            <button
+              type="button"
+              onClick={() => {
+                setIsDrawerOpen(false);
+                handleLogout();
+              }}
+              className="flex h-11 w-full items-center gap-3 rounded-md px-3 text-sm font-semibold text-secondary hover:bg-secondary/10"
+            >
+              <span className="material-symbols-outlined text-[20px]">logout</span>
+              Logout
+            </button>
+          </div>
+        </div>
+      </SheetModal>
     </main>
   );
 }
