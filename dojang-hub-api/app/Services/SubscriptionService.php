@@ -3,9 +3,11 @@
 namespace App\Services;
 
 use App\Models\Akademi;
+use App\Models\Student;
 use App\Models\Subscription;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class SubscriptionService
 {
@@ -77,6 +79,23 @@ class SubscriptionService
             ->latest('starts_at')
             ->latest()
             ->first();
+    }
+
+    public function assertCanAddActiveStudent(Akademi $akademi, ?int $ignoreStudentId = null): void
+    {
+        $subscription = $this->activeForAkademi($akademi);
+        $limit = $this->entitlements($subscription)['student_limit'];
+
+        $activeCount = Student::where('akademi_id', $akademi->id)
+            ->where('status', 'active')
+            ->when($ignoreStudentId !== null, fn ($query) => $query->where('id', '!=', $ignoreStudentId))
+            ->count();
+
+        if ($activeCount >= $limit) {
+            throw ValidationException::withMessages([
+                'status' => ["Kuota siswa aktif paket Anda ({$limit}) sudah penuh. Hubungi SKAIHUB untuk menambah kuota."],
+            ]);
+        }
     }
 
     public function updatePayment(Subscription $subscription, array $data): Subscription

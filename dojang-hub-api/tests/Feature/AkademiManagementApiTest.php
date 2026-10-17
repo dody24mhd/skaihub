@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Akademi;
 use App\Models\SportRank;
 use App\Models\User;
+use App\Services\SubscriptionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -16,6 +17,7 @@ class AkademiManagementApiTest extends TestCase
     use RefreshDatabase;
 
     private Akademi $akademi;
+
     private User $admin;
 
     protected function setUp(): void
@@ -32,6 +34,11 @@ class AkademiManagementApiTest extends TestCase
 
         $this->admin = User::factory()->akademiAdmin($this->akademi->id)->create();
         Sanctum::actingAs($this->admin);
+
+        app(SubscriptionService::class)->createInitial($this->akademi, [
+            'plan' => 'starter',
+            'duration_type' => 'monthly',
+        ]);
     }
 
     public function test_admin_akademi_can_manage_training_places_classes_and_students(): void
@@ -132,6 +139,7 @@ class AkademiManagementApiTest extends TestCase
         ]);
 
         $aspect = $this->akademi->evaluationAspects()->create([
+            'evaluation_period_id' => $period->id,
             'name' => 'Teknik Dasar',
             'sort_order' => 1,
         ]);
@@ -276,12 +284,11 @@ class AkademiManagementApiTest extends TestCase
 
         $this->deleteJson("/api/akademi/coaches/{$coachId}")
             ->assertOk()
-            ->assertJsonPath('message', 'Pelatih berhasil dinonaktifkan.');
+            ->assertJsonPath('message', 'Profil pelatih berhasil dinonaktifkan.');
 
-        $this->assertDatabaseHas('users', [
-            'id' => $coachId,
-            'role' => 'pelatih',
-            'is_active' => false,
+        $this->assertDatabaseHas('coach_profiles', [
+            'user_id' => $coachId,
+            'status' => 'inactive',
         ]);
     }
 
@@ -327,7 +334,7 @@ class AkademiManagementApiTest extends TestCase
 
         $this->getJson('/api/akademi/users')
             ->assertOk()
-            ->assertJsonCount(3, 'data');
+            ->assertJsonCount(4, 'data');
 
         Sanctum::actingAs(User::findOrFail($adminId));
 
@@ -400,6 +407,7 @@ class AkademiManagementApiTest extends TestCase
         ]);
 
         $aspect = $this->akademi->evaluationAspects()->create([
+            'evaluation_period_id' => $period->id,
             'name' => 'Teknik Dasar',
             'category' => 'Teknik',
         ]);
@@ -420,6 +428,17 @@ class AkademiManagementApiTest extends TestCase
 
         $this->assertStringContainsString('Budi', $studentExport->streamedContent());
         $this->assertStringContainsString('GARUDA-0001', $studentExport->streamedContent());
+
+        $this->getJson('/api/akademi/exports/spp?year=2026&month=5')
+            ->assertForbidden()
+            ->assertJsonPath('message', 'Akses ditolak. Hanya ketua akademi yang bisa export laporan keuangan.');
+
+        $ketua = User::factory()->create([
+            'akademi_id' => $this->akademi->id,
+            'role' => 'ketua_akademi',
+            'is_active' => true,
+        ]);
+        Sanctum::actingAs($ketua);
 
         $sppExport = $this->get('/api/akademi/exports/spp?year=2026&month=5')->assertOk();
         $this->assertStringContainsString('150000', $sppExport->streamedContent());
@@ -974,6 +993,7 @@ class AkademiManagementApiTest extends TestCase
             ->json('evaluation_period.id');
 
         $aspectId = $this->postJson('/api/akademi/evaluations/aspects', [
+            'evaluation_period_id' => $periodId,
             'name' => 'Teknik Dasar',
             'category' => 'Teknik',
             'sort_order' => 1,
