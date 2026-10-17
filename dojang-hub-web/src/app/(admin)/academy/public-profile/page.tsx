@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 export default function AcademyPublicProfilePage() {
   return (
     <AcademyShell
+      hasPageHeader
       title="Halaman Publik"
       description="Kelola konten yang ditampilkan di halaman publik akademi Anda. Aktifkan publish agar dapat diakses oleh calon siswa."
     >

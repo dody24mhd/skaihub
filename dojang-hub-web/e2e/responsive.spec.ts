@@ -78,14 +78,19 @@ if (isVitest) {
           }
 
           // 3. Sidebar terlihat HANYA di desktop
-          const sidebar = page.locator("main > aside");
+          const sidebar = page.getByTestId("app-shell").locator(":scope > aside");
           if (projectName === "desktop") {
             await playwrightExpect(sidebar).toBeVisible();
           } else {
             await playwrightExpect(sidebar).toBeHidden();
           }
 
-          // 4. Simpan screenshot ke e2e/__screenshots__/
+          // 4. Satu landmark main untuk area konten + skip link
+          await playwrightExpect(page.locator("main")).toHaveCount(1);
+          await playwrightExpect(page.locator("main#konten")).toHaveCount(1);
+          await playwrightExpect(page.getByRole("link", { name: "Lewati ke konten" })).toHaveAttribute("href", "#konten");
+
+          // 5. Simpan screenshot ke e2e/__screenshots__/
           const screenshotsDir = path.join(
             process.cwd(),
             "e2e",

@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 export default function AcademySchedulesPage() {
   return (
     <AcademyShell
+      hasPageHeader
       title="Jadwal Latihan"
       description="Kelola pola jadwal reguler tiap kelas. Sesi aktual dan daftar hadir dicatat dari menu Absensi."
     >

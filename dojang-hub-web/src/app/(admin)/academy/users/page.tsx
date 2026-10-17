@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 export default function AcademyUsersPage() {
   return (
     <AcademyShell
+      hasPageHeader
       title="Akun Akademi"
       description="Kelola pengurus akademi dan pelatih sesuai batas akses masing-masing jenis akun."
     >

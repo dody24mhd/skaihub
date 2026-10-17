@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function AcademyCoachesPage() {
   return (
-    <AcademyShell title="Pelatih" description="Lengkapi profil pelatih dari akun pelatih yang dibuat melalui Akun Akademi.">
+    <AcademyShell hasPageHeader title="Pelatih" description="Lengkapi profil pelatih dari akun pelatih yang dibuat melalui Akun Akademi.">
       <AcademyCoachesManager />
     </AcademyShell>
   );

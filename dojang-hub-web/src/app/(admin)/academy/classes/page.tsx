@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function AcademyClassesPage() {
   return (
-    <AcademyShell title="Kelas / Unit" description="Kelola kelompok latihan utama siswa dan nominal SPP khusus jika ada.">
+    <AcademyShell hasPageHeader title="Kelas / Unit" description="Kelola kelompok latihan utama siswa dan nominal SPP khusus jika ada.">
       <AcademyClassesManager />
     </AcademyShell>
   );

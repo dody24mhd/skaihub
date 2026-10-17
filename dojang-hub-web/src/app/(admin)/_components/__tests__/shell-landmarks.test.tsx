@@ -1,0 +1,70 @@
+import { render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import AcademyShell from "../academy-shell";
+import AdminShell from "../admin-shell";
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
+  usePathname: () => "/academy",
+}));
+
+const shells = [
+  { name: "AcademyShell", Shell: AcademyShell, role: "pelatih" },
+  { name: "AdminShell", Shell: AdminShell, role: "super_admin" },
+] as const;
+
+describe.each(shells)("$name landmarks", ({ Shell, role }) => {
+  beforeEach(() => {
+    localStorage.clear();
+    localStorage.setItem("skaihub_admin_role", role);
+  });
+
+  it("renders a skip link to the content main as the first focusable element", () => {
+    const { container } = render(
+      <Shell title="Dashboard">
+        <p>Isi halaman</p>
+      </Shell>
+    );
+
+    const skipLink = screen.getByRole("link", { name: "Lewati ke konten" });
+    expect(skipLink).toHaveAttribute("href", "#konten");
+    expect(container.querySelector("a, button")).toBe(skipLink);
+  });
+
+  it("wraps only the page content in a single main#konten", () => {
+    render(
+      <Shell title="Dashboard">
+        <p>Isi halaman</p>
+      </Shell>
+    );
+
+    const main = screen.getByRole("main");
+    expect(main).toHaveAttribute("id", "konten");
+    expect(main).toHaveTextContent("Isi halaman");
+    expect(main.querySelector("aside, header")).toBeNull();
+  });
+
+  it("uses the shell title as h1 when the page has no PageHeader", () => {
+    render(
+      <Shell title="Dashboard">
+        <p>Isi halaman</p>
+      </Shell>
+    );
+
+    const headings = screen.getAllByRole("heading", { level: 1 });
+    expect(headings.length).toBeGreaterThan(0);
+    headings.forEach((heading) => expect(heading).toHaveTextContent("Dashboard"));
+  });
+
+  it("demotes the shell title when the page renders its own PageHeader", () => {
+    render(
+      <Shell title="Kelas" hasPageHeader>
+        <h1>Kelas / Unit</h1>
+      </Shell>
+    );
+
+    const headings = screen.getAllByRole("heading", { level: 1 });
+    expect(headings).toHaveLength(1);
+    expect(headings[0]).toHaveTextContent("Kelas / Unit");
+  });
+});

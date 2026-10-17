@@ -20,10 +20,13 @@ const ROLE_KEY = "skaihub_admin_role";
 type AcademyShellProps = {
   title: string;
   description?: string;
+  /** Halaman merender PageHeader (h1) sendiri; judul shell menjadi teks biasa. */
+  hasPageHeader?: boolean;
   children: ReactNode;
 };
 
-export default function AcademyShell({ title, description, children }: AcademyShellProps) {
+export default function AcademyShell({ title, description, hasPageHeader = false, children }: AcademyShellProps) {
+  const TitleTag = hasPageHeader ? "p" : "h1";
   const pathname = usePathname();
   const router = useRouter();
   const [role, setRole] = useState<AdminUser["role"] | "">("");
@@ -73,7 +76,13 @@ export default function AcademyShell({ title, description, children }: AcademySh
   }
 
   return (
-    <main className="min-h-screen bg-surface text-primary lg:grid lg:grid-cols-[260px_1fr]">
+    <div data-testid="app-shell" className="min-h-screen bg-surface text-primary lg:grid lg:grid-cols-[260px_1fr]">
+      <a
+        href="#konten"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-white focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-primary focus:ring-2 focus:ring-primary"
+      >
+        Lewati ke konten
+      </a>
       {/* Sidebar untuk Layar Besar (lg+) */}
       <aside className="hidden border-r border-border bg-primary text-white lg:flex lg:min-h-screen lg:flex-col">
         <div className="border-b border-white/10 p-5">
@@ -132,9 +141,9 @@ export default function AcademyShell({ title, description, children }: AcademySh
               <p className="truncate text-xs font-bold uppercase tracking-wider text-muted">
                 {academyName}
               </p>
-              <h1 className="truncate font-heading text-sm font-bold text-primary">
+              <TitleTag className="truncate font-heading text-sm font-bold text-primary">
                 {title}
-              </h1>
+              </TitleTag>
             </div>
             <button
               type="button"
@@ -150,7 +159,7 @@ export default function AcademyShell({ title, description, children }: AcademySh
           <div className="hidden lg:flex min-h-16 items-center justify-between gap-4 px-8">
             <div className="min-w-0">
               <p className="label-caps text-secondary">Operasional Akademi</p>
-              <h1 className="truncate text-xl font-bold text-primary sm:text-2xl">{title}</h1>
+              <TitleTag className="truncate font-heading text-xl font-bold text-primary sm:text-2xl">{title}</TitleTag>
             </div>
             <button
               type="button"
@@ -166,14 +175,14 @@ export default function AcademyShell({ title, description, children }: AcademySh
         <SubscriptionBanner />
 
         {/* Konten halaman dengan pb-24 di bawah md untuk memberi ruang BottomNav */}
-        <div className="px-5 py-6 pb-24 md:pb-8 lg:px-8 lg:py-8">
+        <main id="konten" tabIndex={-1} className="px-5 py-6 pb-24 focus:outline-hidden md:pb-8 lg:px-8 lg:py-8">
           {description ? <p className="mb-6 max-w-3xl text-sm leading-6 text-muted">{description}</p> : null}
           {children}
-        </div>
+        </main>
       </section>
 
       {/* Navigasi Bawah di Mobile (< md) */}
       <BottomNav role={role} plan={plan} onLogout={handleLogout} />
-    </main>
+    </div>
   );
 }

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function AcademyStudentsPage() {
   return (
-    <AcademyShell title="Siswa" description="Kelola data siswa aktif, profil wali, kelas utama, dan tingkatan.">
+    <AcademyShell hasPageHeader title="Siswa" description="Kelola data siswa aktif, profil wali, kelas utama, dan tingkatan.">
       <AcademyStudentsManager />
     </AcademyShell>
   );

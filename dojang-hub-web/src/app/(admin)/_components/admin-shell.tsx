@@ -84,6 +84,8 @@ type AdminShellProps = {
   title: string;
   eyebrow?: string;
   description?: string;
+  /** Halaman merender PageHeader (h1) sendiri; judul shell menjadi teks biasa. */
+  hasPageHeader?: boolean;
   children: ReactNode;
 };
 
@@ -91,8 +93,10 @@ export default function AdminShell({
   title,
   eyebrow = "Admin CMS",
   description,
+  hasPageHeader = false,
   children,
 }: AdminShellProps) {
+  const TitleTag = hasPageHeader ? "p" : "h1";
   const pathname = usePathname();
   const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -123,7 +127,13 @@ export default function AdminShell({
   }
 
   return (
-    <main className="min-h-screen bg-surface text-primary lg:grid lg:grid-cols-[280px_1fr]">
+    <div data-testid="app-shell" className="min-h-screen bg-surface text-primary lg:grid lg:grid-cols-[280px_1fr]">
+      <a
+        href="#konten"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-white focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-primary focus:ring-2 focus:ring-primary"
+      >
+        Lewati ke konten
+      </a>
       {/* Sidebar untuk Layar Besar (lg+) */}
       <aside className="hidden border-r border-border bg-primary text-white lg:flex lg:min-h-screen lg:flex-col">
         <div className="border-b border-white/10 p-5">
@@ -219,9 +229,9 @@ export default function AdminShell({
 
               <div className="min-w-0">
                 <p className="label-caps text-secondary">{eyebrow}</p>
-                <h1 className="truncate text-xl font-bold text-primary sm:text-2xl">
+                <TitleTag className="truncate font-heading text-xl font-bold text-primary sm:text-2xl">
                   {title}
-                </h1>
+                </TitleTag>
               </div>
             </div>
 
@@ -238,14 +248,14 @@ export default function AdminShell({
           </div>
         </header>
 
-        <div className="px-5 py-6 lg:px-8 lg:py-8">
+        <main id="konten" tabIndex={-1} className="px-5 py-6 focus:outline-hidden lg:px-8 lg:py-8">
           {description ? (
             <p className="mb-6 max-w-3xl text-sm leading-6 text-muted">
               {description}
             </p>
           ) : null}
           {children}
-        </div>
+        </main>
       </section>
 
       {/* Drawer menu kiri di bawah lg */}
@@ -318,6 +328,6 @@ export default function AdminShell({
           </div>
         </div>
       </SheetModal>
-    </main>
+    </div>
   );
 }
