@@ -13,6 +13,7 @@ use App\Http\Controllers\Akademi\EvaluationController as AkademiEvaluationContro
 use App\Http\Controllers\Akademi\ExportController as AkademiExportController;
 use App\Http\Controllers\Akademi\ProfileController as AkademiProfileController;
 use App\Http\Controllers\Akademi\PublicProfileController as AkademiPublicProfileController;
+use App\Http\Controllers\Akademi\RankPromotionCertificateController as AkademiRankPromotionCertificateController;
 use App\Http\Controllers\Akademi\RankPromotionController as AkademiRankPromotionController;
 use App\Http\Controllers\Akademi\SportRankController as AkademiSportRankController;
 use App\Http\Controllers\Akademi\SppBillController as AkademiSppBillController;
@@ -185,6 +186,7 @@ Route::prefix('akademi')
         Route::patch('rank-promotions/{rankPromotionEvent}/participants/{participant}', [AkademiRankPromotionController::class, 'updateParticipant']);
         // L5-C: rapor & sertifikat siap cetak (GET, tetap tersedia saat baca-saja)
         Route::get('students/{student}/report', [AkademiStudentReportController::class, 'show']);
+        Route::get('rank-promotions/{rankPromotionEvent}/participants/{participant}/certificate', [AkademiRankPromotionCertificateController::class, 'show']);
         // end L5-C
 
         Route::middleware('feature:public_website')->group(function () {
