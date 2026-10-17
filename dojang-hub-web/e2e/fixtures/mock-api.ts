@@ -1,0 +1,295 @@
+import { Page, Route } from "@playwright/test";
+
+export const MOCK_AKADEMI = {
+  id: 1,
+  name: "Taekwondo Nusantara",
+  slug: "taekwondo-nusantara",
+  sport_type: "taekwondo",
+  logo_url: null,
+  status: "active" as const,
+  plan: "pro" as const,
+  plan_expires_at: null,
+  created_at: "2026-01-01T00:00:00Z",
+  updated_at: "2026-01-01T00:00:00Z",
+};
+
+export const MOCK_USER = {
+  id: 1,
+  name: "Ketua Dojang",
+  email: "ketua@dojang.test",
+  role: "ketua_akademi" as const,
+  avatar_url: null,
+  is_active: true,
+  akademi_id: 1,
+};
+
+export const MOCK_ME_RESPONSE = {
+  user: MOCK_USER,
+  akademi: MOCK_AKADEMI,
+  subscription: {
+    id: 1,
+    akademi_id: 1,
+    plan: "pro" as const,
+    duration: "yearly" as const,
+    status: "active" as const,
+    payment_status: "paid" as const,
+    starts_at: "2026-01-01",
+    ends_at: "2027-01-01",
+    included_student_limit: 100,
+    extra_student_blocks: 0,
+  },
+  entitlements: {
+    student_limit: 100,
+    has_public_website: true,
+    has_subdomain: true,
+    has_rapor: true,
+    has_exam_events: true,
+    has_parent_portal: false,
+  },
+};
+
+export const MOCK_STUDENTS = [
+  {
+    id: 1,
+    akademi_id: 1,
+    name: "Arya Pratama",
+    email: "arya@example.com",
+    phone: "081234567891",
+    birth_date: "2010-05-12",
+    gender: "male",
+    status: "active",
+    rank: { id: 1, name: "Kuning (Geup 8)", color: "yellow" },
+    training_class: { id: 1, name: "Reguler Sore" },
+    created_at: "2026-01-01T00:00:00Z",
+  },
+  {
+    id: 2,
+    akademi_id: 1,
+    name: "Dewi Lestari",
+    email: "dewi@example.com",
+    phone: "081234567892",
+    birth_date: "2011-08-20",
+    gender: "female",
+    status: "active",
+    rank: { id: 2, name: "Hijau (Geup 6)", color: "green" },
+    training_class: { id: 1, name: "Reguler Sore" },
+    created_at: "2026-01-02T00:00:00Z",
+  },
+  {
+    id: 3,
+    akademi_id: 1,
+    name: "Bima Satria",
+    email: "bima@example.com",
+    phone: "081234567893",
+    birth_date: "2009-02-14",
+    gender: "male",
+    status: "active",
+    rank: { id: 3, name: "Biru (Geup 4)", color: "blue" },
+    training_class: { id: 2, name: "Prestasi Malam" },
+    created_at: "2026-01-03T00:00:00Z",
+  },
+];
+
+export const MOCK_CLASSES = [
+  {
+    id: 1,
+    akademi_id: 1,
+    name: "Reguler Sore",
+    description: "Kelas pembinaan dasar sabuk putih - hijau",
+    is_active: true,
+    students_count: 2,
+  },
+  {
+    id: 2,
+    akademi_id: 1,
+    name: "Prestasi Malam",
+    description: "Kelas persiapan turnamen kyorugi dan poomsae",
+    is_active: true,
+    students_count: 1,
+  },
+];
+
+export const MOCK_TRAINING_SESSIONS = [
+  {
+    id: 1,
+    akademi_id: 1,
+    training_schedule_id: 1,
+    class_id: 1,
+    training_place_id: 1,
+    coach_id: 1,
+    session_date: "2026-10-17",
+    source_schedule_date: null,
+    starts_at: "16:00:00",
+    ends_at: "18:00:00",
+    material: "Poomsae Taegeuk 1",
+    notes: null,
+    photo_urls: null,
+    session_type: "regular" as const,
+    status: "completed" as const,
+    attendances_count: 2,
+    present_count: 1,
+    class: {
+      id: 1,
+      akademi_id: 1,
+      training_place_id: 1,
+      name: "Reguler Sore",
+      description: "Kelas reguler",
+      age_category: null,
+      max_students: 20,
+      is_active: true,
+      created_at: "2026-01-01T00:00:00Z",
+      updated_at: "2026-01-01T00:00:00Z",
+    },
+    coach: {
+      id: 1,
+      name: "Sabeum Nim",
+      email: "coach@example.com",
+      phone: "08123456789",
+    },
+    training_place: {
+      id: 1,
+      name: "Dojang Utama",
+      address: "Jl. Sudirman No. 1",
+      is_active: true,
+    },
+    attendances: [
+      { id: 1, student_id: 1, status: "hadir", student: MOCK_STUDENTS[0] },
+      { id: 2, student_id: 2, status: "izin", student: MOCK_STUDENTS[1] },
+    ],
+  },
+];
+
+export const MOCK_SPP_BILLS = [
+  {
+    id: 1,
+    akademi_id: 1,
+    student_id: 1,
+    month: 10,
+    year: 2026,
+    amount: 150000,
+    status: "unpaid",
+    due_date: "2026-10-10",
+    student: MOCK_STUDENTS[0],
+  },
+  {
+    id: 2,
+    akademi_id: 1,
+    student_id: 2,
+    month: 10,
+    year: 2026,
+    amount: 150000,
+    status: "paid",
+    paid_at: "2026-10-05",
+    due_date: "2026-10-10",
+    student: MOCK_STUDENTS[1],
+  },
+];
+
+export const MOCK_DASHBOARD_SUMMARY = {
+  profile: MOCK_ME_RESPONSE,
+  period: {
+    year: 2026,
+    month: 10,
+    month_label: "Oktober 2026",
+  },
+  students: {
+    active_count: 3,
+    inactive_count: 0,
+    alumni_count: 0,
+    latest: MOCK_STUDENTS,
+  },
+  setup: {
+    places_count: 1,
+    classes_count: 2,
+    active_schedules_count: 2,
+  },
+  spp: {
+    bill_count: 2,
+    total_amount: 300000,
+    paid_amount: 150000,
+    unpaid_count: 1,
+  },
+  sessions: {
+    month_count: 1,
+    completed_count: 1,
+    attendance_total: 2,
+    attendance_present: 1,
+    attendance_rate: 50,
+    latest: MOCK_TRAINING_SESSIONS,
+  },
+  evaluation: {
+    active_period: null,
+    active_scores_count: 0,
+  },
+};
+
+export async function setupMockApi(page: Page) {
+  // Tangkap semua request ke API (baik localhost:8000 maupun URL kustom)
+  await page.route("**/api/**", async (route: Route) => {
+    const url = route.request().url();
+    const method = route.request().method();
+
+    if (method !== "GET") {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ message: "Berhasil", data: {} }),
+      });
+    }
+
+    if (url.includes("/akademi/me")) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(MOCK_ME_RESPONSE),
+      });
+    }
+
+    if (url.includes("/akademi/dashboard/summary")) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(MOCK_DASHBOARD_SUMMARY),
+      });
+    }
+
+    if (url.includes("/akademi/students")) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ data: MOCK_STUDENTS }),
+      });
+    }
+
+    if (url.includes("/akademi/classes")) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ data: MOCK_CLASSES }),
+      });
+    }
+
+    if (url.includes("/akademi/training-sessions")) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ data: MOCK_TRAINING_SESSIONS }),
+      });
+    }
+
+    if (url.includes("/akademi/spp-bills")) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ data: MOCK_SPP_BILLS }),
+      });
+    }
+
+    // Fallback data kosong untuk rute akademi lainnya
+    return route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ data: [] }),
+    });
+  });
+}

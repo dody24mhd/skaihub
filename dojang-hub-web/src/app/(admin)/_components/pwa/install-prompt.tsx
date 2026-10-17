@@ -80,7 +80,7 @@ export default function InstallPrompt() {
   return (
     <aside
       aria-label="Prompt instalasi aplikasi"
-      className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-white/95 px-4 py-3 shadow-lg backdrop-blur pb-[max(0.75rem,env(safe-area-inset-bottom))] md:bottom-4 md:left-auto md:right-6 md:max-w-md md:rounded-lg md:border md:pb-3"
+      className="fixed bottom-[calc(3.5rem+env(safe-area-inset-bottom,0px))] left-0 right-0 z-40 border-t border-border bg-white/95 px-4 py-3 shadow-lg backdrop-blur md:bottom-4 md:left-auto md:right-6 md:max-w-md md:rounded-lg md:border md:pb-3"
     >
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
