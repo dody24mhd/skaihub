@@ -47,7 +47,7 @@ export default function AdminComingSoon({
           <div className="space-y-3">
             {checklist.map((item) => (
               <div key={item} className="flex gap-3 rounded-md bg-surface px-3 py-3">
-                <Icon name="check_circle" className="text-[20px] text-success" />
+                <Icon name="check_circle" className="text-[20px] text-success-strong" />
                 <p className="text-sm font-medium leading-6 text-primary">{item}</p>
               </div>
             ))}

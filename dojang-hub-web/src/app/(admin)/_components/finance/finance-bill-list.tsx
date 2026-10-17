@@ -65,7 +65,7 @@ const columns: ResponsiveColumn<SppBill>[] = [
     key: "paid",
     header: "Terbayar",
     render: (item) => (
-      <span className="font-semibold text-success">{money(item.paid_amount)}</span>
+      <span className="font-semibold text-success-strong">{money(item.paid_amount)}</span>
     ),
   },
   {
@@ -83,7 +83,7 @@ const columns: ResponsiveColumn<SppBill>[] = [
     render: (item) => (
       <span
         className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-bold ${
-          item.status === "paid" ? "bg-success/10 text-success" : "bg-secondary/10 text-secondary"
+          item.status === "paid" ? "bg-success/10 text-success-strong" : "bg-secondary/10 text-secondary"
         }`}
       >
         {statusLabels[item.status]}
@@ -133,7 +133,7 @@ export function FinanceSummaryCards({ summary, billCount }: FinanceSummaryCardsP
       </article>
       <article className="card-soft rounded-lg bg-white p-5">
         <p className="label-caps text-secondary">Terbayar</p>
-        <p className="mt-2 text-2xl font-black text-success">{money(summary.paid)}</p>
+        <p className="mt-2 text-2xl font-black text-success-strong">{money(summary.paid)}</p>
         <p className="text-sm text-muted">{summary.paidCount} lunas</p>
       </article>
       <article className="card-soft rounded-lg bg-white p-5">

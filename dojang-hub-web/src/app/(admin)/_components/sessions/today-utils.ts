@@ -21,7 +21,7 @@ export const SLOT_STATUS_LABELS: Record<TodaySlotStatus, string> = {
 export const SLOT_STATUS_STYLES: Record<TodaySlotStatus, string> = {
   not_opened: "border-border bg-surface-container-low text-primary",
   draft: "border-primary/30 bg-primary/10 text-primary",
-  completed: "border-success/30 bg-success/10 text-success",
+  completed: "border-success/30 bg-success/10 text-success-strong",
   rescheduled: "border-orange-300 bg-orange-100 text-orange-700",
   cancelled: "border-secondary/30 bg-secondary/10 text-secondary",
 };

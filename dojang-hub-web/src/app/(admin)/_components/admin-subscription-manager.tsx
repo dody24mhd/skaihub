@@ -52,7 +52,7 @@ const paymentLabels: Record<SubscriptionPaymentStatus, string> = {
 
 const paymentStatusColors: Record<SubscriptionPaymentStatus, string> = {
   unpaid: "text-warning",
-  paid: "text-success",
+  paid: "text-success-strong",
   waived: "text-muted",
   refunded: "text-secondary",
 };
@@ -66,7 +66,7 @@ const statusLabels: Record<AdminSubscription["status"], string> = {
 };
 
 const statusColors: Record<AdminSubscription["status"], string> = {
-  active: "bg-success/10 text-success",
+  active: "bg-success/10 text-success-strong",
   trialing: "bg-secondary/10 text-secondary",
   past_due: "bg-warning/15 text-warning",
   expired: "bg-surface-container text-muted",
@@ -128,7 +128,7 @@ function EntitlementRow({ label, active }: { label: string; active: boolean }) {
     <div className="flex items-center justify-between py-2 text-sm">
       <span className="text-muted">{label}</span>
       {active ? (
-        <span className="flex items-center gap-1 font-medium text-success">
+        <span className="flex items-center gap-1 font-medium text-success-strong">
           <Icon name="check_circle" className="text-[15px]" />
           Aktif
         </span>
@@ -441,7 +441,7 @@ export default function AdminSubscriptionManager() {
               </div>
             ) : null}
             {message ? (
-              <div className="mt-4 rounded-lg border border-success/20 bg-success/10 px-4 py-3 text-sm font-medium text-success">
+              <div className="mt-4 rounded-lg border border-success/20 bg-success/10 px-4 py-3 text-sm font-medium text-success-strong">
                 {message}
               </div>
             ) : null}
@@ -666,7 +666,7 @@ export default function AdminSubscriptionManager() {
                     <div className="space-y-2">
                       {paymentForm.payment_proof_url ? (
                         <div className="flex items-center gap-2 rounded-lg border border-success/30 bg-success/5 px-3 py-2">
-                          <Icon name="check_circle" className="text-[18px] text-success" />
+                          <Icon name="check_circle" className="text-[18px] text-success-strong" />
                           <a
                             href={paymentForm.payment_proof_url}
                             target="_blank"
@@ -837,7 +837,7 @@ export default function AdminSubscriptionManager() {
                 <div className="space-y-2">
                   {form.payment_proof_url ? (
                     <div className="flex items-center gap-2 rounded-lg border border-success/30 bg-success/5 px-3 py-2">
-                      <Icon name="check_circle" className="text-[18px] text-success" />
+                      <Icon name="check_circle" className="text-[18px] text-success-strong" />
                       <a
                         href={form.payment_proof_url}
                         target="_blank"

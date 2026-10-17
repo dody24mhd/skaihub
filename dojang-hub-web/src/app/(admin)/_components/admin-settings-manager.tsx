@@ -93,7 +93,7 @@ export default function AdminSettingsManager() {
   return (
     <div className="space-y-6">
       {message ? (
-        <div className="rounded-md bg-success/10 px-4 py-3 text-sm font-semibold text-success">
+        <div className="rounded-md bg-success/10 px-4 py-3 text-sm font-semibold text-success-strong">
           {message}
         </div>
       ) : null}

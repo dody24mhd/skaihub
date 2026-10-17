@@ -157,7 +157,7 @@ export default function AdminInquiryManager() {
       </div>
 
       {message ? (
-        <div className="mb-4 rounded-md bg-success/10 px-4 py-3 text-sm font-semibold text-success">
+        <div className="mb-4 rounded-md bg-success/10 px-4 py-3 text-sm font-semibold text-success-strong">
           {message}
         </div>
       ) : null}
@@ -216,7 +216,7 @@ export default function AdminInquiryManager() {
                     <div className="mb-3 flex flex-wrap items-center gap-2">
                       <span
                         className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                          item.is_followed_up ? "bg-success/10 text-success" : "bg-secondary/10 text-secondary"
+                          item.is_followed_up ? "bg-success/10 text-success-strong" : "bg-secondary/10 text-secondary"
                         }`}
                       >
                         {item.is_followed_up ? "Sudah follow up" : "Belum follow up"}

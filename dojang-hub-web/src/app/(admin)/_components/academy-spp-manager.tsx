@@ -177,7 +177,7 @@ export default function AcademySppManager() {
       <section className="space-y-5 sm:space-y-6">
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
           <StatCard label="Siswa Tertagih" value={items.length} caption={`${SPP_MONTH_LABELS[month - 1]} ${year}`} tone="text-primary" />
-          <StatCard label="Lunas" value={summary.paidCount} caption={`${summary.waivedCount} dibebaskan`} tone="text-success" />
+          <StatCard label="Lunas" value={summary.paidCount} caption={`${summary.waivedCount} dibebaskan`} tone="text-success-strong" />
           <div className="col-span-2 sm:col-span-1">
             <StatCard label="Perlu Ditindaklanjuti" value={summary.unpaidCount} caption={`${summary.partialCount} pembayaran sebagian`} tone="text-secondary" />
           </div>

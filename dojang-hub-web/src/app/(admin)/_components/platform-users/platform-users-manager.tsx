@@ -151,7 +151,7 @@ export default function PlatformUsersManager() {
       render: (item) => (
         <span
           className={`inline-flex items-center px-2 py-0.5 text-xs font-bold ${
-            item.is_active ? "bg-success/10 text-success" : "bg-secondary/10 text-secondary"
+            item.is_active ? "bg-success/10 text-success-strong" : "bg-secondary/10 text-secondary"
           }`}
         >
           {item.is_active ? "Aktif" : "Nonaktif"}
@@ -229,7 +229,7 @@ export default function PlatformUsersManager() {
       />
 
       {message ? (
-        <p role="status" className="border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">
+        <p role="status" className="border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success-strong">
           {message}
         </p>
       ) : null}

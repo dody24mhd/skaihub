@@ -42,7 +42,7 @@ function statusLabel(status: AdminAkademi["status"]) {
 }
 
 function statusClass(status: AdminAkademi["status"]) {
-  if (status === "active") return "bg-success/10 text-success";
+  if (status === "active") return "bg-success/10 text-success-strong";
   if (status === "suspended") return "bg-secondary/10 text-secondary";
   return "bg-surface-container text-muted";
 }
@@ -133,7 +133,7 @@ export default function AdminDashboardOverview() {
       value: String(expiringSoonCount + unpaidCount),
       subtext: `${expiringSoonCount} expired - ${unpaidCount} belum lunas`,
       icon: "warning",
-      color: expiringSoonCount + unpaidCount > 0 ? "text-secondary" : "text-success",
+      color: expiringSoonCount + unpaidCount > 0 ? "text-secondary" : "text-success-strong",
       bg: expiringSoonCount + unpaidCount > 0 ? "bg-secondary/10" : "bg-success/10",
       trend: "Alert",
       trendUp: expiringSoonCount + unpaidCount === 0,
@@ -157,7 +157,7 @@ export default function AdminDashboardOverview() {
                 <p className={`font-heading text-2xl font-black ${s.color}`}>
                   {s.value}
                 </p>
-                <div className={`flex items-center text-[10px] font-bold ${s.trendUp ? "text-success" : "text-secondary"}`}>
+                <div className={`flex items-center text-[10px] font-bold ${s.trendUp ? "text-success-strong" : "text-secondary"}`}>
                   <Icon name={s.trendUp ? "trending_up" : "trending_down"} className="text-[12px]" />
                   <span className="ml-0.5">{s.trend}</span>
                 </div>
@@ -383,7 +383,7 @@ export default function AdminDashboardOverview() {
           </Link>
 
           <Link href="/internal/users" className="card-soft flex items-start gap-4 rounded-lg bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-[0_12px_26px_rgba(15,23,42,0.08)]">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded bg-success/10 text-success">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded bg-success/10 text-success-strong">
               <Icon name="manage_accounts" />
             </div>
             <div>

@@ -7,7 +7,7 @@ export const studentStatusLabels: Record<Student["status"], string> = {
 };
 
 export const studentStatusStyles: Record<Student["status"], string> = {
-  active: "bg-success/10 text-success",
+  active: "bg-success/10 text-success-strong",
   inactive: "bg-yellow-100 text-yellow-700",
   alumni: "bg-surface-container text-muted",
 };

@@ -19,7 +19,7 @@ const controlClass =
 
 function GenerateResult({ summary, onClose }: { summary: SppGenerateSummary; onClose: () => void }) {
   const rows = [
-    { label: "Dibuat", value: summary.created, tone: "text-success" },
+    { label: "Dibuat", value: summary.created, tone: "text-success-strong" },
     { label: "Dilewati karena sudah ada", value: summary.alreadyExists, tone: "text-primary" },
     { label: "Dilewati karena nominal kosong", value: summary.missingAmount, tone: "text-secondary" },
   ];

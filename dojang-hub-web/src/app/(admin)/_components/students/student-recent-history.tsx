@@ -42,7 +42,7 @@ function HistoryCard({ title, rows, total, emptyText, unit }: { title: string; r
           <div key={row.id} className="py-3">
             <div className="flex items-start justify-between gap-3">
               <p className="min-w-0 break-words font-bold text-primary">{row.title}</p>
-              <span className={`shrink-0 px-2 py-1 text-xs font-bold ${row.isPositive ? "bg-success/10 text-success" : "bg-secondary/10 text-secondary"}`}>
+              <span className={`shrink-0 px-2 py-1 text-xs font-bold ${row.isPositive ? "bg-success/10 text-success-strong" : "bg-secondary/10 text-secondary"}`}>
                 {row.badge}
               </span>
             </div>

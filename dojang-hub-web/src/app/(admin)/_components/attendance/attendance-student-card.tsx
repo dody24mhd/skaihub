@@ -21,7 +21,7 @@ const STATUS_CONFIG: Array<{
   {
     status: "present",
     label: "Hadir",
-    activeClass: "bg-success text-white border-success shadow-sm",
+    activeClass: "bg-success-strong text-white border-success-strong shadow-sm",
   },
   {
     status: "excused",
@@ -31,7 +31,7 @@ const STATUS_CONFIG: Array<{
   {
     status: "sick",
     label: "Sakit",
-    activeClass: "bg-amber-500 text-white border-amber-500 shadow-sm",
+    activeClass: "bg-amber-700 text-white border-amber-700 shadow-sm",
   },
   {
     status: "absent",

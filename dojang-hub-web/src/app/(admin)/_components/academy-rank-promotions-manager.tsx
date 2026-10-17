@@ -93,7 +93,7 @@ export default function AcademyRankPromotionsManager() {
         <span
           className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-bold ${
             item.result === "passed"
-              ? "bg-success/10 text-success"
+              ? "bg-success/10 text-success-strong"
               : "bg-secondary/10 text-secondary"
           }`}
         >
@@ -149,7 +149,7 @@ export default function AcademyRankPromotionsManager() {
         </article>
         <article className="card-soft rounded-lg bg-white p-5">
           <p className="label-caps text-secondary">Lulus</p>
-          <p className="mt-2 text-2xl font-black text-success">
+          <p className="mt-2 text-2xl font-black text-success-strong">
             {participants.filter((item) => item.result === "passed").length}
           </p>
           <p className="text-sm text-muted">Otomatis update tingkatan</p>

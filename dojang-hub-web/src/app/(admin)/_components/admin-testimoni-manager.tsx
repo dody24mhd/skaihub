@@ -260,7 +260,7 @@ export default function AdminTestimoniManager() {
 
                   <div>
                     <div className="mb-2 flex flex-wrap items-center gap-2">
-                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${item.is_active ? 'bg-success/10 text-success' : 'bg-surface-container text-muted'}`}>
+                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${item.is_active ? 'bg-success/10 text-success-strong' : 'bg-surface-container text-muted'}`}>
                         {item.is_active ? 'Ditampilkan' : 'Disembunyikan'}
                       </span>
                       <span className="text-xs font-bold uppercase tracking-widest text-muted">
@@ -352,7 +352,7 @@ export default function AdminTestimoniManager() {
             </div>
 
             {message ? (
-              <div className="mx-5 mt-5 rounded-md bg-success/10 px-4 py-3 text-sm font-semibold text-success">
+              <div className="mx-5 mt-5 rounded-md bg-success/10 px-4 py-3 text-sm font-semibold text-success-strong">
                 {message}
               </div>
             ) : null}

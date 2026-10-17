@@ -34,7 +34,7 @@ function formatDate(value: string | null) {
 }
 
 function statusClass(status: AdminBlog["status"]) {
-  if (status === "published") return "bg-success/10 text-success";
+  if (status === "published") return "bg-success/10 text-success-strong";
   if (status === "archived") return "bg-secondary/10 text-secondary";
   return "bg-surface-container text-muted";
 }
@@ -335,7 +335,7 @@ export default function AdminBeritaManager() {
                     <p className="mt-1 text-muted">Penulis</p>
                   </div>
 
-                  <div className="text-sm text-success flex flex-col gap-1">
+                  <div className="text-sm text-success-strong flex flex-col gap-1">
                     <div className="flex items-center gap-1.5 font-bold">
                       <Icon name="visibility" className="text-[18px]" />
                       {blog.views_count || 0}
@@ -416,7 +416,7 @@ export default function AdminBeritaManager() {
             </div>
 
             {message ? (
-              <div className="mx-5 mt-5 rounded-md bg-success/10 px-4 py-3 text-sm font-semibold text-success">
+              <div className="mx-5 mt-5 rounded-md bg-success/10 px-4 py-3 text-sm font-semibold text-success-strong">
                 {message}
               </div>
             ) : null}

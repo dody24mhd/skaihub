@@ -120,7 +120,7 @@ export default function SppReceiptView({ paymentId }: { paymentId: number }) {
                 Cetak / PDF
               </button>
               {whatsappUrl ? (
-                <a className="inline-flex min-h-11 items-center justify-center gap-2 bg-success px-4 text-sm font-bold text-white" href={whatsappUrl} rel="noreferrer" target="_blank">
+                <a className="inline-flex min-h-11 items-center justify-center gap-2 bg-success-strong px-4 text-sm font-bold text-white" href={whatsappUrl} rel="noreferrer" target="_blank">
                   <Icon name="share" className="text-[18px]" />
                   Bagikan via WhatsApp
                 </a>

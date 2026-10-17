@@ -26,7 +26,7 @@ export function buildAspectColumns({ isSaving, onEdit, onDelete }: AspectColumnO
       render: (a) => (
         <span
           className={`inline-block rounded-full px-2.5 py-1 text-xs font-bold ${
-            a.is_active ? "bg-success/10 text-success" : "bg-muted/10 text-muted"
+            a.is_active ? "bg-success/10 text-success-strong" : "bg-muted/10 text-muted"
           }`}
         >
           {a.is_active ? "Aktif" : "Nonaktif"}

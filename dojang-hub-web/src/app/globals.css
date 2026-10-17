@@ -18,6 +18,7 @@
   --muted: #44474e;
   --border: #e2e8f0;
   --success: #10b981;
+  --success-strong: #047857;
   --caution: #ea580c;
   --belt-blue: #2563eb;
   --belt-yellow: #facc15;
@@ -42,6 +43,7 @@
   --color-muted: var(--muted);
   --color-border: var(--border);
   --color-success: var(--success);
+  --color-success-strong: var(--success-strong);
   --color-caution: var(--caution);
   --color-belt-blue: var(--belt-blue);
   --color-belt-yellow: var(--belt-yellow);

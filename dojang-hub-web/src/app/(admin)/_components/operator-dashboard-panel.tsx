@@ -11,7 +11,7 @@ import {
 import { PLAN_RULES } from "@/lib/plan-pricing";
 
 const STATE_META: Record<SubscriptionLifecycleState, { label: string; badge: string }> = {
-  active: { label: "Aktif", badge: "bg-success/10 text-success" },
+  active: { label: "Aktif", badge: "bg-success/10 text-success-strong" },
   expiring: { label: "Akan habis", badge: "bg-belt-yellow/25 text-primary" },
   grace: { label: "Masa tenggang", badge: "bg-caution/10 text-caution" },
   read_only: { label: "Baca-saja", badge: "bg-secondary/10 text-secondary" },
@@ -75,7 +75,7 @@ export default function OperatorDashboardPanel({ token }: OperatorDashboardPanel
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
         <article className="card-soft col-span-2 rounded-lg bg-white p-4 lg:col-span-1">
           <p className="text-xs font-bold uppercase tracking-widest text-muted">MRR</p>
-          <p className="mt-1 font-heading text-2xl font-black text-success">{formatCurrency(dashboard.mrr)}</p>
+          <p className="mt-1 font-heading text-2xl font-black text-success-strong">{formatCurrency(dashboard.mrr)}</p>
           <p className="text-[11px] text-muted">Perkiraan pendapatan bulanan langganan aktif</p>
         </article>
         {STATE_ORDER.map((state) => (

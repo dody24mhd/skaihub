@@ -200,7 +200,7 @@ export default function AcademyUsersManager() {
       render: (item) => (
         <span
           className={`inline-flex items-center px-2 py-0.5 text-xs font-bold ${
-            item.is_active ? "bg-success/10 text-success" : "bg-secondary/10 text-secondary"
+            item.is_active ? "bg-success/10 text-success-strong" : "bg-secondary/10 text-secondary"
           }`}
         >
           {item.is_active ? "Aktif" : "Nonaktif"}

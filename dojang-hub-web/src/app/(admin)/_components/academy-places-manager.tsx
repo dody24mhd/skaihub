@@ -171,7 +171,7 @@ export default function AcademyPlacesManager() {
       render: (item) => (
         <span
           className={`inline-flex items-center px-2 py-0.5 text-xs font-bold ${
-            item.is_active ? "bg-success/10 text-success" : "bg-surface-container text-muted"
+            item.is_active ? "bg-success/10 text-success-strong" : "bg-surface-container text-muted"
           }`}
         >
           {item.is_active ? "Aktif" : "Nonaktif"}

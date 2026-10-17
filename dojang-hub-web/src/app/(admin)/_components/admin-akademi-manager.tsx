@@ -87,7 +87,7 @@ const sportOptions = [
 ];
 
 function statusClass(status: AkademiStatus) {
-  if (status === "active") return "bg-success/10 text-success";
+  if (status === "active") return "bg-success/10 text-success-strong";
   if (status === "suspended") return "bg-secondary/10 text-secondary";
   return "bg-surface-container text-muted";
 }
@@ -456,7 +456,7 @@ export default function AdminAkademiManager() {
       </div>
 
       {message ? (
-        <div className="mb-5 rounded-md bg-success/10 px-4 py-3 text-sm font-semibold text-success">
+        <div className="mb-5 rounded-md bg-success/10 px-4 py-3 text-sm font-semibold text-success-strong">
           {message}
         </div>
       ) : null}
@@ -584,7 +584,7 @@ export default function AdminAkademiManager() {
                         <button
                           type="button"
                           onClick={() => openDetail(item)}
-                          className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-success/10 hover:text-success"
+                          className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-success/10 hover:text-success-strong"
                           aria-label={`Detail ${item.name}`}
                           disabled={isLoadingDetail}
                         >
