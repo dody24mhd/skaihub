@@ -11,6 +11,8 @@ use Illuminate\Validation\ValidationException;
 
 class SubscriptionService
 {
+    public function __construct(private readonly PlanPricingService $pricing) {}
+
     public function createInitial(Akademi $akademi, array $data, ?int $createdBy = null): Subscription
     {
         return $this->createForAkademi($akademi, $data, $createdBy, expireCurrent: false);
@@ -39,7 +41,8 @@ class SubscriptionService
                     ->update(['status' => 'expired']);
             }
 
-            $subtotalAmount = (float) ($data['subtotal_amount'] ?? $data['amount'] ?? 0);
+            $extraBlocks = (int) ($data['extra_student_blocks'] ?? 0);
+            $subtotalAmount = $this->resolveSubtotal($data, $plan, $durationType, $durationMonths, $startsAt, $endsAt, $extraBlocks);
 
             $subscription = Subscription::create([
                 'akademi_id' => $akademi->id,
@@ -47,7 +50,7 @@ class SubscriptionService
                 'duration_type' => $durationType,
                 'duration_months' => $durationMonths,
                 'included_student_limit' => $this->includedStudentLimit($plan),
-                'extra_student_blocks' => (int) ($data['extra_student_blocks'] ?? 0),
+                'extra_student_blocks' => $extraBlocks,
                 'starts_at' => $startsAt,
                 'ends_at' => $endsAt,
                 'subtotal_amount' => $subtotalAmount,
@@ -132,8 +135,8 @@ class SubscriptionService
 
         return [
             'student_limit' => $subscription->totalStudentLimit(),
-            'has_public_website' => in_array($plan, ['pro', 'scale'], true),
-            'has_subdomain' => in_array($plan, ['pro', 'scale'], true),
+            'has_public_website' => $this->pricing->hasPublicWebsite($plan),
+            'has_subdomain' => $this->pricing->hasPublicWebsite($plan),
             'has_rapor' => true,
             'has_exam_events' => false,
             'has_parent_portal' => false,
@@ -142,11 +145,24 @@ class SubscriptionService
 
     public function includedStudentLimit(string $plan): int
     {
-        return match ($plan) {
-            'pro' => 150,
-            'scale' => 300,
-            default => 50,
-        };
+        return $this->pricing->includedStudents($plan);
+    }
+
+    public function calculatedSubtotal(
+        string $plan,
+        string $durationType,
+        ?int $durationMonths,
+        CarbonImmutable $startsAt,
+        CarbonImmutable $endsAt,
+        int $paidBlocks,
+    ): int {
+        if ($durationType === 'trial') {
+            return 0;
+        }
+
+        $months = $durationMonths ?? max(1, (int) round($startsAt->diffInMonths($endsAt)));
+
+        return $this->pricing->subscriptionSubtotal($plan, $months, $paidBlocks);
     }
 
     public function period(string $durationType, ?string $startsAtInput, ?string $endsAtInput): array
@@ -172,6 +188,31 @@ class SubscriptionService
         };
 
         return [$durationMonths, $startsAt, $endsAt];
+    }
+
+    private function resolveSubtotal(
+        array $data,
+        string $plan,
+        string $durationType,
+        ?int $durationMonths,
+        CarbonImmutable $startsAt,
+        CarbonImmutable $endsAt,
+        int $paidBlocks,
+    ): float {
+        $calculated = $this->calculatedSubtotal($plan, $durationType, $durationMonths, $startsAt, $endsAt, $paidBlocks);
+        $manual = $data['subtotal_amount'] ?? $data['amount'] ?? null;
+
+        if ($manual === null || $manual === '') {
+            return (float) $calculated;
+        }
+
+        if (round((float) $manual, 2) !== (float) $calculated && blank($data['notes'] ?? null)) {
+            throw ValidationException::withMessages([
+                'notes' => ['Catatan wajib diisi bila nominal berbeda dari harga otomatis.'],
+            ]);
+        }
+
+        return (float) $manual;
     }
 
     private function syncAkademiSnapshot(Akademi $akademi, Subscription $subscription): void

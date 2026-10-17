@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\PlanPricingService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -57,6 +58,10 @@ class Subscription extends Model
 
     public function totalStudentLimit(): int
     {
-        return $this->included_student_limit + ($this->extra_student_blocks * 50);
+        return app(PlanPricingService::class)->effectiveStudentLimit(
+            $this->plan,
+            $this->extra_student_blocks,
+            $this->included_student_limit,
+        );
     }
 }

@@ -96,10 +96,10 @@ class StudentQuotaTest extends TestCase
             'duration_type' => 'monthly',
         ]);
 
-        $this->createStudents(50, $this->akademi->id, 'active');
+        $this->createStudents(100, $this->akademi->id, 'active');
 
         $this->postJson('/api/akademi/students', $this->validStudentPayload([
-            'name' => 'Siswa Ke-51',
+            'name' => 'Siswa Ke-101',
         ]))->assertStatus(422)
             ->assertJsonValidationErrors(['status']);
     }
@@ -112,12 +112,12 @@ class StudentQuotaTest extends TestCase
             'extra_student_blocks' => 1,
         ]);
 
-        $this->createStudents(50, $this->akademi->id, 'active');
+        $this->createStudents(100, $this->akademi->id, 'active');
 
         $this->postJson('/api/akademi/students', $this->validStudentPayload([
-            'name' => 'Siswa Ke-51',
+            'name' => 'Siswa Ke-101',
         ]))->assertCreated()
-            ->assertJsonPath('student.name', 'Siswa Ke-51');
+            ->assertJsonPath('student.name', 'Siswa Ke-101');
     }
 
     public function test_alumni_and_inactive_students_do_not_count_towards_quota(): void
@@ -127,15 +127,15 @@ class StudentQuotaTest extends TestCase
             'duration_type' => 'monthly',
         ]);
 
-        $this->createStudents(49, $this->akademi->id, 'active');
+        $this->createStudents(99, $this->akademi->id, 'active');
         $this->createStudents(10, $this->akademi->id, 'alumni');
         $this->createStudents(10, $this->akademi->id, 'inactive');
 
         $this->postJson('/api/akademi/students', $this->validStudentPayload([
-            'name' => 'Siswa Ke-50',
+            'name' => 'Siswa Ke-100',
             'gender' => 'female',
         ]))->assertCreated()
-            ->assertJsonPath('student.name', 'Siswa Ke-50');
+            ->assertJsonPath('student.name', 'Siswa Ke-100');
     }
 
     public function test_reactivating_inactive_student_to_active_fails_when_quota_is_full(): void
@@ -145,7 +145,7 @@ class StudentQuotaTest extends TestCase
             'duration_type' => 'monthly',
         ]);
 
-        $this->createStudents(50, $this->akademi->id, 'active');
+        $this->createStudents(100, $this->akademi->id, 'active');
         $inactiveStudent = $this->createStudent($this->akademi->id, 'inactive');
 
         $this->putJson("/api/akademi/students/{$inactiveStudent->id}", [

@@ -4,21 +4,52 @@ namespace App\Services;
 
 class PlanPricingService
 {
-    public function subscriptionSubtotal(string $plan, string $durationType): int
+    public function plan(string $plan): array
     {
-        $monthlyPrice = match ($plan) {
-            'pro' => 199000,
-            'scale' => 349000,
-            default => 99000,
-        };
+        $plans = config('skaihub.plans');
 
-        $months = match ($durationType) {
-            'quarterly' => 3,
-            'semester' => 6,
-            'yearly' => 12,
-            default => 1,
-        };
+        return $plans[$plan] ?? $plans[config('skaihub.default_plan')];
+    }
 
-        return $monthlyPrice * $months;
+    public function monthlyPrice(string $plan): int
+    {
+        return (int) $this->plan($plan)['monthly_price'];
+    }
+
+    public function includedStudents(string $plan): int
+    {
+        return (int) $this->plan($plan)['included_students'];
+    }
+
+    public function freeExtraBlocks(string $plan): int
+    {
+        return (int) $this->plan($plan)['free_extra_blocks'];
+    }
+
+    public function hasPublicWebsite(string $plan): bool
+    {
+        return (bool) $this->plan($plan)['public_website'];
+    }
+
+    public function blockSize(): int
+    {
+        return (int) config('skaihub.extra_block_size');
+    }
+
+    public function effectiveStudentLimit(string $plan, int $paidBlocks, ?int $includedStudents = null): int
+    {
+        $included = $includedStudents ?? $this->includedStudents($plan);
+
+        return $included + ($this->freeExtraBlocks($plan) + $paidBlocks) * $this->blockSize();
+    }
+
+    /**
+     * Harga = harga bulanan × bulan × (1 + persen tambahan × blok berbayar).
+     */
+    public function subscriptionSubtotal(string $plan, int $months, int $paidBlocks): int
+    {
+        $percent = 100 + (int) config('skaihub.extra_block_surcharge_percent') * $paidBlocks;
+
+        return (int) round($this->monthlyPrice($plan) * $months * $percent / 100);
     }
 }

@@ -108,7 +108,7 @@ class AuthApiTest extends TestCase
             ->assertJsonPath('akademi.id', $akademi->id)
             ->assertJsonPath('akademi.slug', 'tenant-academy')
             ->assertJsonPath('subscription.plan', 'pro')
-            ->assertJsonPath('entitlements.student_limit', 200)
+            ->assertJsonPath('entitlements.student_limit', 250)
             ->assertJsonPath('entitlements.has_public_website', true)
             ->assertJsonPath('entitlements.has_exam_events', false);
     }
