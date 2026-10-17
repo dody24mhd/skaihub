@@ -89,3 +89,17 @@ export function durationMonths(duration: DurationKey, startsAt?: string, endsAt?
 
   return Math.max(1, Math.round(days / AVERAGE_DAYS_PER_MONTH));
 }
+
+export function formatPlanPrice(plan: PlanKey): string {
+  return `Rp ${PLAN_RULES[plan].monthlyPrice.toLocaleString("id-ID")}`;
+}
+
+/** Ringkasan aturan kuota untuk halaman /harga. */
+export function quotaNote(): string {
+  const limit = (plan: PlanKey) => effectiveStudentLimit(plan, 0);
+
+  return (
+    `Starter hingga ${limit("starter")} siswa, Pro hingga ${limit("pro")}, Scale hingga ${limit("scale")} tanpa biaya tambahan; ` +
+    `setiap tambahan ${EXTRA_BLOCK_SIZE} siswa +${EXTRA_BLOCK_SURCHARGE_PERCENT}% harga paket per bulan.`
+  );
+}

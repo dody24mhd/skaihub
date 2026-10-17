@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { createWhatsAppUrl } from "../_lib/whatsapp";
 import { getHomeFaqs, getSiteSettings } from "../_lib/compro-data";
+import { effectiveStudentLimit, formatPlanPrice, quotaNote } from "@/lib/plan-pricing";
 
 export const metadata: Metadata = {
   title: "Harga Paket SKAIHUB",
@@ -23,11 +24,11 @@ const prices = [
     name: "Starter",
     tag: null,
     desc: "Untuk akademi yang baru mulai digital",
-    price: "Rp 99.000",
+    price: formatPlanPrice("starter"),
     access: "app.skaihub.com",
-    forWho: "Akademi kecil < 50 siswa yang baru mulai digitalisasi",
+    forWho: `Akademi kecil hingga ${effectiveStudentLimit("starter", 0)} siswa yang baru mulai digitalisasi`,
     features: [
-      { text: "Kuota 50 siswa aktif", included: true },
+      { text: `Kuota ${effectiveStudentLimit("starter", 0)} siswa aktif`, included: true },
       { text: "Data Siswa & Pelatih", included: true },
       { text: "Jadwal, Sesi & Absensi", included: true },
       { text: "Iuran Siswa / Rekap SPP", included: true },
@@ -42,11 +43,11 @@ const prices = [
     name: "Pro",
     tag: "Paling Populer",
     desc: "Tampil profesional dengan website akademi",
-    price: "Rp 199.000",
+    price: formatPlanPrice("pro"),
     access: "namaakademi.skaihub.com",
-    forWho: "Akademi menengah 50-150 siswa yang butuh manajemen dan promosi",
+    forWho: `Akademi menengah hingga ${effectiveStudentLimit("pro", 0)} siswa yang butuh manajemen dan promosi`,
     features: [
-      { text: "Kuota 150 siswa aktif", included: true },
+      { text: `Kuota ${effectiveStudentLimit("pro", 0)} siswa aktif`, included: true },
       { text: "Data Siswa & Pelatih", included: true },
       { text: "Jadwal, Sesi & Absensi", included: true },
       { text: "Iuran Siswa / Rekap SPP", included: true },
@@ -61,11 +62,11 @@ const prices = [
     name: "Scale",
     tag: null,
     desc: "Untuk akademi besar dengan operasional lebih padat",
-    price: "Rp 349.000",
+    price: formatPlanPrice("scale"),
     access: "namaakademi.skaihub.com",
-    forWho: "Akademi sampai 300 siswa aktif yang butuh kapasitas lebih besar",
+    forWho: `Akademi sampai ${effectiveStudentLimit("scale", 0)} siswa aktif yang butuh kapasitas lebih besar`,
     features: [
-      { text: "Kuota 300 siswa aktif", included: true },
+      { text: `Kuota ${effectiveStudentLimit("scale", 0)} siswa aktif`, included: true },
       { text: "Data Siswa & Pelatih", included: true },
       { text: "Jadwal, Sesi & Absensi", included: true },
       { text: "Iuran Siswa / Rekap SPP", included: true },
@@ -247,6 +248,10 @@ export default async function HargaPage() {
               </article>
             ))}
           </div>
+          <p data-testid="quota-note" className="mt-10 border-l-4 border-secondary bg-slate-50 px-4 py-3 text-sm leading-relaxed text-slate-700">
+            <span className="font-bold text-primary">Kuota siswa aktif: </span>
+            {quotaNote()}
+          </p>
         </div>
       </section>
 

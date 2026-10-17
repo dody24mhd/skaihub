@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   durationMonths,
   effectiveStudentLimit,
+  quotaNote,
   priceBreakdown,
   subscriptionSubtotal,
 } from "../plan-pricing";
@@ -46,5 +47,11 @@ describe("plan-pricing", () => {
     expect(durationMonths("custom", "2026-01-01", "2026-03-31")).toBe(3);
     expect(durationMonths("custom", "2026-01-01", "2026-01-10")).toBe(1);
     expect(durationMonths("custom", "", "")).toBe(1);
+  });
+
+  it("summarises the quota rule for the pricing page", () => {
+    expect(quotaNote()).toBe(
+      "Starter hingga 100 siswa, Pro hingga 200, Scale hingga 350 tanpa biaya tambahan; setiap tambahan 50 siswa +15% harga paket per bulan.",
+    );
   });
 });

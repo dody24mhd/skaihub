@@ -9,6 +9,7 @@ import {
   getSiteSettings,
 } from "./_lib/compro-data";
 import { createWhatsAppUrl } from "./_lib/whatsapp";
+import { effectiveStudentLimit } from "@/lib/plan-pricing";
 
 export const metadata: Metadata = {
   alternates: {
@@ -24,7 +25,7 @@ const prices = [
     price: "Rp 99.000",
     access: "app.skaihub.com",
     features: [
-      { text: "Kuota 50 siswa aktif", included: true },
+      { text: `Kuota ${effectiveStudentLimit("starter", 0)} siswa aktif`, included: true },
       { text: "Data Siswa & Pelatih", included: true },
       { text: "Jadwal, Sesi & Absensi", included: true },
       { text: "Iuran Siswa / Rekap SPP", included: true },
@@ -41,7 +42,7 @@ const prices = [
     price: "Rp 199.000",
     access: "namaakademi.skaihub.com",
     features: [
-      { text: "Kuota 150 siswa aktif", included: true },
+      { text: `Kuota ${effectiveStudentLimit("pro", 0)} siswa aktif`, included: true },
       { text: "Data Siswa & Pelatih", included: true },
       { text: "Jadwal, Sesi & Absensi", included: true },
       { text: "Iuran Siswa / Rekap SPP", included: true },
@@ -58,7 +59,7 @@ const prices = [
     price: "Rp 349.000",
     access: "namaakademi.skaihub.com",
     features: [
-      { text: "Kuota 300 siswa aktif", included: true },
+      { text: `Kuota ${effectiveStudentLimit("scale", 0)} siswa aktif`, included: true },
       { text: "Data Siswa & Pelatih", included: true },
       { text: "Jadwal, Sesi & Absensi", included: true },
       { text: "Iuran Siswa / Rekap SPP", included: true },
