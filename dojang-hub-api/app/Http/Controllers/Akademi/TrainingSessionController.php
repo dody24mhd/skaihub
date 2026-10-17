@@ -74,6 +74,18 @@ class TrainingSessionController extends Controller
                 'session_type' => $data['session_type'] ?? 'regular',
                 'source_schedule_date' => $data['source_schedule_date'] ?? $data['session_date'],
             ];
+
+            $isDuplicate = TrainingSession::query()
+                ->where('akademi_id', $akademiId)
+                ->where('training_schedule_id', $schedule->id)
+                ->whereDate('source_schedule_date', $data['source_schedule_date'])
+                ->exists();
+
+            if ($isDuplicate) {
+                throw ValidationException::withMessages([
+                    'training_schedule_id' => 'Sesi untuk jadwal dan tanggal ini sudah ada.',
+                ]);
+            }
         }
 
         if ($request->user()->role === 'pelatih' && empty($data['coach_ids']) && empty($data['coach_id'])) {

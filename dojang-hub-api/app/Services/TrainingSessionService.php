@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Student;
+use App\Models\TrainingSchedule;
 use App\Models\TrainingSession;
 use App\Models\User;
 
@@ -13,6 +14,20 @@ class TrainingSessionService
     public function isAdminRole(User $user): bool
     {
         return in_array($user->role, self::ADMIN_ROLES, true);
+    }
+
+    public function isScheduleCoach(User $user, TrainingSchedule $schedule): bool
+    {
+        return $user->role === 'pelatih'
+            && ((int) $schedule->coach_id === (int) $user->id
+                || $schedule->coaches()->where('users.id', $user->id)->exists());
+    }
+
+    public function isSessionCoach(User $user, TrainingSession $session): bool
+    {
+        return $user->role === 'pelatih'
+            && ((int) $session->coach_id === (int) $user->id
+                || $session->coaches()->where('users.id', $user->id)->exists());
     }
 
     /**

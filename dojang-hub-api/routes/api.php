@@ -129,6 +129,7 @@ Route::prefix('akademi')
         // L4-A
         Route::post('training-sessions/{trainingSession}/reschedule', [AkademiTrainingSessionActionController::class, 'reschedule']);
         Route::post('training-sessions/{trainingSession}/cancel', [AkademiTrainingSessionActionController::class, 'cancel']);
+        Route::post('training-sessions/from-schedule', [AkademiTrainingSessionActionController::class, 'fromSchedule']);
         // end L4-A
         Route::patch('training-sessions/{trainingSession}/attendance', [AkademiTrainingSessionController::class, 'updateAttendance']);
         Route::apiResource('training-sessions', AkademiTrainingSessionController::class)->parameters([

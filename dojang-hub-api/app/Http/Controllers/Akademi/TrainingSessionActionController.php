@@ -3,16 +3,57 @@
 namespace App\Http\Controllers\Akademi;
 
 use App\Http\Controllers\Controller;
+use App\Models\TrainingSchedule;
 use App\Models\TrainingSession;
 use App\Services\TrainingSessionService;
+use Carbon\CarbonImmutable;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class TrainingSessionActionController extends Controller
 {
     public function __construct(private readonly TrainingSessionService $sessions) {}
+
+    public function fromSchedule(Request $request): JsonResponse
+    {
+        $akademiId = $request->user()->akademi_id;
+        $data = $request->validate([
+            'training_schedule_id' => ['required', 'integer', Rule::exists(TrainingSchedule::class, 'id')->where('akademi_id', $akademiId)->whereNull('deleted_at')],
+            'date' => ['required', 'date_format:Y-m-d'],
+        ]);
+        $schedule = TrainingSchedule::with('coaches')->where('akademi_id', $akademiId)->findOrFail($data['training_schedule_id']);
+        $date = CarbonImmutable::createFromFormat('Y-m-d', $data['date'])->startOfDay();
+
+        if ($date->dayOfWeekIso !== $schedule->day_of_week) {
+            throw ValidationException::withMessages(['date' => 'Tanggal tidak sesuai dengan hari jadwal latihan.']);
+        }
+
+        $existing = $this->findScheduledSession($schedule, $date);
+        $this->ensureCanOpenSchedule($request, $schedule, $existing);
+
+        if ($existing) {
+            return response()->json(['training_session' => $existing->load($this->sessions->relations())]);
+        }
+
+        if (! $schedule->is_active) {
+            throw ValidationException::withMessages(['training_schedule_id' => 'Jadwal latihan tidak aktif.']);
+        }
+
+        try {
+            $session = DB::transaction(fn () => $this->createScheduledSession($schedule, $date));
+        } catch (UniqueConstraintViolationException) {
+            $session = $this->findScheduledSession($schedule, $date);
+            abort_unless($session !== null, 409, 'Sesi latihan sedang dibuat. Silakan coba lagi.');
+
+            return response()->json(['training_session' => $session->load($this->sessions->relations())]);
+        }
+
+        return response()->json(['training_session' => $session->load($this->sessions->relations())], 201);
+    }
 
     public function reschedule(Request $request, TrainingSession $trainingSession): JsonResponse
     {
@@ -76,6 +117,51 @@ class TrainingSessionActionController extends Controller
         return response()->json([
             'training_session' => $trainingSession->fresh()->load($this->sessions->relations()),
         ]);
+    }
+
+    private function findScheduledSession(TrainingSchedule $schedule, CarbonImmutable $date): ?TrainingSession
+    {
+        return TrainingSession::query()
+            ->where('akademi_id', $schedule->akademi_id)
+            ->where('training_schedule_id', $schedule->id)
+            ->whereDate('source_schedule_date', $date->toDateString())
+            ->first();
+    }
+
+    private function createScheduledSession(TrainingSchedule $schedule, CarbonImmutable $date): TrainingSession
+    {
+        $coachIds = $schedule->coaches->pluck('id')->all() ?: array_filter([$schedule->coach_id]);
+        $session = TrainingSession::create([
+            'akademi_id' => $schedule->akademi_id,
+            'training_schedule_id' => $schedule->id,
+            'class_id' => $schedule->class_id,
+            'training_place_id' => $schedule->training_place_id,
+            'coach_id' => $coachIds[0] ?? null,
+            'session_date' => $date->toDateString(),
+            'source_schedule_date' => $date->toDateString(),
+            'starts_at' => substr((string) $schedule->starts_at, 0, 5),
+            'ends_at' => substr((string) $schedule->ends_at, 0, 5),
+            'session_type' => 'regular',
+            'status' => 'draft',
+            'photo_urls' => [],
+        ]);
+        $session->coaches()->sync($coachIds);
+        $this->sessions->syncRoster($session);
+
+        return $session;
+    }
+
+    private function ensureCanOpenSchedule(Request $request, TrainingSchedule $schedule, ?TrainingSession $existing): void
+    {
+        $user = $request->user();
+
+        abort_unless(
+            $this->sessions->isAdminRole($user)
+                || $this->sessions->isScheduleCoach($user, $schedule)
+                || ($existing && $this->sessions->isSessionCoach($user, $existing)),
+            403,
+            'Akses ditolak. Pelatih hanya bisa membuka sesi dari jadwal yang ia ampu.'
+        );
     }
 
     private function ensureAdmin(Request $request, string $action): void
