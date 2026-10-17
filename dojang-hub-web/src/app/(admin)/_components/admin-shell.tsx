@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 import SheetModal from "./ui/sheet-modal";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 const EMAIL_KEY = "skaihub_admin_email";
@@ -128,9 +129,7 @@ export default function AdminShell({
         <div className="border-b border-white/10 p-5">
           <Link href="/internal" className="flex items-center gap-3">
             <div className="flex size-11 items-center justify-center rounded-md bg-white text-primary">
-              <span className="material-symbols-outlined text-[26px]">
-                sports_martial_arts
-              </span>
+              <Icon name="sports_martial_arts" className="text-[26px]" />
             </div>
             <div>
               <p className="text-sm font-semibold text-white/65">SKAIHUB</p>
@@ -164,9 +163,7 @@ export default function AdminShell({
                           : "text-white/72 hover:bg-white/10 hover:text-white"
                       }`}
                     >
-                      <span className="material-symbols-outlined text-[20px]">
-                        {item.icon}
-                      </span>
+                      <Icon name={item.icon} className="text-[20px]" />
                       {item.title}
                     </Link>
                   );
@@ -185,14 +182,14 @@ export default function AdminShell({
                 : "text-white/72 hover:bg-white/10 hover:text-white"
             }`}
           >
-            <span className="material-symbols-outlined text-[20px]">lock_reset</span>
+            <Icon name="lock_reset" className="text-[20px]" />
             Ganti Password
           </Link>
           <Link
             href="https://skaihub.com"
             className="flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold text-white/72 transition hover:bg-white/10 hover:text-white"
           >
-            <span className="material-symbols-outlined text-[20px]">home</span>
+            <Icon name="home" className="text-[20px]" />
             Lihat Web
           </Link>
           <button
@@ -200,7 +197,7 @@ export default function AdminShell({
             onClick={handleLogout}
             className="flex h-11 w-full items-center gap-3 rounded-md px-3 text-sm font-semibold text-white/72 transition hover:bg-secondary hover:text-white"
           >
-            <span className="material-symbols-outlined text-[20px]">logout</span>
+            <Icon name="logout" className="text-[20px]" />
             Logout
           </button>
         </div>
@@ -217,9 +214,7 @@ export default function AdminShell({
                 className="inline-flex size-11 items-center justify-center rounded-md border border-border bg-white text-primary transition hover:bg-surface-container-low lg:hidden"
                 aria-label="Buka menu"
               >
-                <span className="material-symbols-outlined text-[24px]">
-                  menu
-                </span>
+                <Icon name="menu" className="text-[24px]" />
               </button>
 
               <div className="min-w-0">
@@ -237,9 +232,7 @@ export default function AdminShell({
                 className="inline-flex size-10 items-center justify-center rounded-md border border-border bg-white text-primary transition hover:bg-secondary/10 hover:text-secondary"
                 aria-label="Logout"
               >
-                <span className="material-symbols-outlined text-[20px]">
-                  logout
-                </span>
+                <Icon name="logout" className="text-[20px]" />
               </button>
             </div>
           </div>
@@ -286,9 +279,7 @@ export default function AdminShell({
                           : "text-primary hover:bg-surface-container-low"
                       }`}
                     >
-                      <span className="material-symbols-outlined text-[20px]">
-                        {item.icon}
-                      </span>
+                      <Icon name={item.icon} className="text-[20px]" />
                       {item.title}
                     </Link>
                   );
@@ -303,14 +294,14 @@ export default function AdminShell({
               onClick={() => setIsDrawerOpen(false)}
               className="flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold text-primary hover:bg-surface-container-low"
             >
-              <span className="material-symbols-outlined text-[20px]">lock_reset</span>
+              <Icon name="lock_reset" className="text-[20px]" />
               Ganti Password
             </Link>
             <Link
               href="https://skaihub.com"
               className="flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold text-primary hover:bg-surface-container-low"
             >
-              <span className="material-symbols-outlined text-[20px]">home</span>
+              <Icon name="home" className="text-[20px]" />
               Lihat Web
             </Link>
             <button
@@ -321,7 +312,7 @@ export default function AdminShell({
               }}
               className="flex h-11 w-full items-center gap-3 rounded-md px-3 text-sm font-semibold text-secondary hover:bg-secondary/10"
             >
-              <span className="material-symbols-outlined text-[20px]">logout</span>
+              <Icon name="logout" className="text-[20px]" />
               Logout
             </button>
           </div>

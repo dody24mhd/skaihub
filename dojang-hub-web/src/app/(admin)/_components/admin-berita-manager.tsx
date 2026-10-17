@@ -11,6 +11,7 @@ import {
   deleteAdminBlog,
 } from "../_lib/admin-api";
 import { RichTextEditor } from "./rich-text-editor";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -241,9 +242,7 @@ export default function AdminBeritaManager() {
                   {item.value}
                 </p>
               </div>
-              <span className="material-symbols-outlined text-[26px] text-secondary">
-                {item.icon}
-              </span>
+              <Icon name={item.icon} className="text-[26px] text-secondary" />
             </div>
           </article>
         ))}
@@ -259,9 +258,7 @@ export default function AdminBeritaManager() {
 
             <div className="flex flex-col gap-3 sm:flex-row">
               <div className="relative">
-                <span className="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-muted">
-                  search
-                </span>
+                <Icon name="search" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-muted" />
                 <input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
@@ -288,7 +285,7 @@ export default function AdminBeritaManager() {
                 onClick={refreshData}
                 className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-semibold text-primary transition hover:bg-surface-container-low"
               >
-                <span className="material-symbols-outlined text-[20px]">refresh</span>
+                <Icon name="refresh" className="text-[20px]" />
                 Refresh
               </button>
 
@@ -297,7 +294,7 @@ export default function AdminBeritaManager() {
                 onClick={() => openForm()}
                 className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-white transition hover:bg-primary-container"
               >
-                <span className="material-symbols-outlined text-[20px]">add</span>
+                <Icon name="add" className="text-[20px]" />
                 Tulis Berita
               </button>
             </div>
@@ -340,7 +337,7 @@ export default function AdminBeritaManager() {
 
                   <div className="text-sm text-success flex flex-col gap-1">
                     <div className="flex items-center gap-1.5 font-bold">
-                      <span className="material-symbols-outlined text-[18px]">visibility</span>
+                      <Icon name="visibility" className="text-[18px]" />
                       {blog.views_count || 0}
                     </div>
                     <p className="text-muted text-xs font-semibold uppercase tracking-widest">Views</p>
@@ -353,7 +350,7 @@ export default function AdminBeritaManager() {
                       className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-primary/10 hover:text-primary"
                       aria-label={`Edit ${blog.title}`}
                     >
-                      <span className="material-symbols-outlined text-[20px]">edit</span>
+                      <Icon name="edit" className="text-[20px]" />
                     </button>
                     <button
                       type="button"
@@ -361,7 +358,7 @@ export default function AdminBeritaManager() {
                       className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-secondary/10 hover:text-secondary"
                       aria-label={`Hapus ${blog.title}`}
                     >
-                      <span className="material-symbols-outlined text-[20px]">delete</span>
+                      <Icon name="delete" className="text-[20px]" />
                     </button>
                   </div>
                 </div>
@@ -371,7 +368,7 @@ export default function AdminBeritaManager() {
             <div className="p-8">
               <div className="flex max-w-xl gap-4">
                 <div className="flex size-12 shrink-0 items-center justify-center rounded-md bg-primary text-white">
-                  <span className="material-symbols-outlined text-[26px]">article</span>
+                  <Icon name="article" className="text-[26px]" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-primary">Belum ada berita</h3>
@@ -384,7 +381,7 @@ export default function AdminBeritaManager() {
                     onClick={() => setIsDrawerOpen(true)}
                     className="mt-4 inline-flex h-10 items-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-white transition hover:bg-primary-container"
                   >
-                    <span className="material-symbols-outlined text-[20px]">add</span>
+                    <Icon name="add" className="text-[20px]" />
                     Tulis Berita
                   </button>
                 </div>
@@ -414,7 +411,7 @@ export default function AdminBeritaManager() {
                 className="inline-flex size-10 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
                 aria-label="Tutup"
               >
-                <span className="material-symbols-outlined text-[20px]">close</span>
+                <Icon name="close" className="text-[20px]" />
               </button>
             </div>
 
@@ -472,10 +469,11 @@ export default function AdminBeritaManager() {
                     <img src={form.thumbnail_url} alt="Thumbnail" className="w-full object-cover" />
                     <button
                       type="button"
+                      aria-label="Hapus thumbnail"
                       onClick={() => setForm({ ...form, thumbnail_url: "" })}
                       className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-md bg-white text-secondary opacity-0 shadow transition group-hover:opacity-100 hover:bg-secondary/10"
                     >
-                      <span className="material-symbols-outlined text-[18px]">delete</span>
+                      <Icon name="delete" className="text-[18px]" />
                     </button>
                   </div>
                 ) : null}
@@ -517,7 +515,7 @@ export default function AdminBeritaManager() {
                 disabled={!canSubmit || isSaving || isUploading}
                 className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-white transition hover:bg-primary-container disabled:cursor-not-allowed disabled:bg-muted"
               >
-                <span className="material-symbols-outlined text-[20px]">save</span>
+                <Icon name="save" className="text-[20px]" />
                 {isSaving ? "Menyimpan..." : "Simpan Berita"}
               </button>
             </form>
@@ -529,7 +527,7 @@ export default function AdminBeritaManager() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-primary/35 px-5 backdrop-blur-sm">
           <section className="card-soft w-full max-w-[420px] rounded-lg bg-white p-5">
             <div className="mb-4 flex size-12 items-center justify-center rounded-md bg-secondary/10 text-secondary">
-              <span className="material-symbols-outlined text-[26px]">warning</span>
+              <Icon name="warning" className="text-[26px]" />
             </div>
             <h2 className="text-xl font-bold text-primary">Hapus berita?</h2>
             <p className="mt-2 text-sm leading-6 text-muted">

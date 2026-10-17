@@ -18,6 +18,7 @@ import {
 import AdminShell from "./admin-shell";
 import SubscriptionPricePreview, { extraStudentsToBlocks } from "./subscription-price-preview";
 import { EXTRA_BLOCK_SIZE, PLAN_RULES, effectiveStudentLimit } from "@/lib/plan-pricing";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -128,12 +129,12 @@ function EntitlementRow({ label, active }: { label: string; active: boolean }) {
       <span className="text-muted">{label}</span>
       {active ? (
         <span className="flex items-center gap-1 font-medium text-success">
-          <span className="material-symbols-outlined text-[15px]">check_circle</span>
+          <Icon name="check_circle" className="text-[15px]" />
           Aktif
         </span>
       ) : (
         <span className="flex items-center gap-1 text-muted/60">
-          <span className="material-symbols-outlined text-[15px]">cancel</span>
+          <Icon name="cancel" className="text-[15px]" />
           Tidak aktif
         </span>
       )}
@@ -536,7 +537,7 @@ export default function AdminSubscriptionManager() {
                                 rel="noreferrer"
                                 className="mt-0.5 inline-flex items-center gap-1 text-xs text-primary hover:underline"
                               >
-                                <span className="material-symbols-outlined text-[13px]">receipt_long</span>
+                                <Icon name="receipt_long" className="text-[13px]" />
                                 Bukti
                               </a>
                             ) : null}
@@ -665,7 +666,7 @@ export default function AdminSubscriptionManager() {
                     <div className="space-y-2">
                       {paymentForm.payment_proof_url ? (
                         <div className="flex items-center gap-2 rounded-lg border border-success/30 bg-success/5 px-3 py-2">
-                          <span className="material-symbols-outlined text-[18px] text-success">check_circle</span>
+                          <Icon name="check_circle" className="text-[18px] text-success" />
                           <a
                             href={paymentForm.payment_proof_url}
                             target="_blank"
@@ -676,18 +677,19 @@ export default function AdminSubscriptionManager() {
                           </a>
                           <button
                             type="button"
+                            aria-label="Hapus bukti pembayaran"
                             onClick={() => {
                               setPaymentForm((cur) => ({ ...cur, payment_proof_url: "" }));
                               if (fileInputRef.current) fileInputRef.current.value = "";
                             }}
                             className="text-muted hover:text-secondary"
                           >
-                            <span className="material-symbols-outlined text-[18px]">close</span>
+                            <Icon name="close" className="text-[18px]" />
                           </button>
                         </div>
                       ) : null}
                       <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-border px-4 py-3 text-sm text-muted transition hover:border-primary hover:text-primary">
-                        <span className="material-symbols-outlined text-[20px]">upload_file</span>
+                        <Icon name="upload_file" className="text-[20px]" />
                         <span>{isUploading ? "Mengupload..." : "Upload / ganti bukti"}</span>
                         <input
                           ref={fileInputRef}
@@ -718,7 +720,7 @@ export default function AdminSubscriptionManager() {
                     disabled={isSaving || isUploading}
                     className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    <span className="material-symbols-outlined text-[18px]">receipt_long</span>
+                    <Icon name="receipt_long" className="text-[18px]" />
                     {isSaving ? "Menyimpan..." : "Simpan Pembayaran"}
                   </button>
                 </form>
@@ -835,7 +837,7 @@ export default function AdminSubscriptionManager() {
                 <div className="space-y-2">
                   {form.payment_proof_url ? (
                     <div className="flex items-center gap-2 rounded-lg border border-success/30 bg-success/5 px-3 py-2">
-                      <span className="material-symbols-outlined text-[18px] text-success">check_circle</span>
+                      <Icon name="check_circle" className="text-[18px] text-success" />
                       <a
                         href={form.payment_proof_url}
                         target="_blank"
@@ -846,19 +848,20 @@ export default function AdminSubscriptionManager() {
                       </a>
                       <button
                         type="button"
+                        aria-label="Hapus bukti pembayaran"
                         onClick={() => {
                           setForm((cur) => ({ ...cur, payment_proof_url: "" }));
                           if (fileInputRef.current) fileInputRef.current.value = "";
                         }}
                         className="text-muted hover:text-secondary"
                       >
-                        <span className="material-symbols-outlined text-[18px]">close</span>
+                        <Icon name="close" className="text-[18px]" />
                       </button>
                     </div>
                   ) : null}
 
                   <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-border px-4 py-3 text-sm text-muted transition hover:border-primary hover:text-primary">
-                    <span className="material-symbols-outlined text-[20px]">upload_file</span>
+                    <Icon name="upload_file" className="text-[20px]" />
                     <span>{isUploading ? "Mengupload..." : form.payment_proof_url ? "Ganti bukti" : "Upload bukti bayar"}</span>
                     <input
                       ref={fileInputRef}
@@ -898,7 +901,7 @@ export default function AdminSubscriptionManager() {
                 disabled={!selectedAkademiId || isSaving || isUploading}
                 className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                <span className="material-symbols-outlined text-[18px]">payments</span>
+                <Icon name="payments" className="text-[18px]" />
                 {isSaving ? "Menyimpan..." : "Simpan Langganan"}
               </button>
             </form>

@@ -3,6 +3,7 @@
 import { SportRank } from "../../_lib/admin-api";
 import AcademyRankBeltBadge from "../academy-rank-belt-badge";
 import { ResponsiveColumn, ResponsiveList } from "../ui";
+import Icon from "../ui/icon";
 
 type RankListProps = {
   rows: SportRank[];
@@ -39,9 +40,7 @@ export default function RankList({ rows, builtinLabel, onEdit, onDelete }: RankL
       render: (item) =>
         isBuiltinRank(item) ? (
           <span className="inline-flex items-center gap-1 rounded-sm bg-surface-container px-2 py-0.5 text-xs font-bold text-muted">
-            <span className="material-symbols-outlined text-[14px]" aria-hidden="true">
-              lock
-            </span>
+            <Icon name="lock" className="text-[14px]" />
             {builtinLabel}
           </span>
         ) : (

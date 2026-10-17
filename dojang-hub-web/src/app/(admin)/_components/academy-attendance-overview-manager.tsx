@@ -12,6 +12,7 @@ import AttendanceCalendarMobile from "./attendance/attendance-calendar-mobile";
 import AttendanceCalendarDesktop from "./attendance/attendance-calendar-desktop";
 import AttendanceHistoryList from "./attendance/attendance-history-list";
 import { useCanWrite } from "./ui/subscription-status";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -263,7 +264,7 @@ export default function AcademyAttendanceOverviewManager() {
                 aria-label="Bulan sebelumnya"
                 className="min-h-11 flex size-11 items-center justify-center text-primary transition hover:bg-surface-container-low"
               >
-                <span className="material-symbols-outlined text-[20px]">chevron_left</span>
+                <Icon name="chevron_left" className="text-[20px]" />
               </button>
               <p className="min-w-32 px-2 text-center text-xs font-black uppercase tracking-wider text-primary sm:min-w-36 sm:text-sm">
                 {monthTitle(calendarMonth)}
@@ -274,7 +275,7 @@ export default function AcademyAttendanceOverviewManager() {
                 aria-label="Bulan berikutnya"
                 className="min-h-11 flex size-11 items-center justify-center text-primary transition hover:bg-surface-container-low"
               >
-                <span className="material-symbols-outlined text-[20px]">chevron_right</span>
+                <Icon name="chevron_right" className="text-[20px]" />
               </button>
             </div>
           </div>

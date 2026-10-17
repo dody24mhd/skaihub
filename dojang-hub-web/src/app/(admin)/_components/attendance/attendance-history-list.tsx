@@ -4,6 +4,7 @@ import Link from "next/link";
 import React, { useMemo } from "react";
 import { TrainingSession } from "../../_lib/admin-api";
 import { ResponsiveColumn, ResponsiveList } from "../ui";
+import Icon from "../ui/icon";
 
 export type AttendanceHistoryListProps = {
   sessions: TrainingSession[];
@@ -152,7 +153,7 @@ export default function AttendanceHistoryList({
               onClick={() => onPageChange(Math.max(1, activePage - 1))}
               className="min-h-11 inline-flex items-center gap-1.5 border-2 border-border bg-white px-4 text-sm font-bold text-primary transition hover:bg-surface-container-low disabled:cursor-not-allowed disabled:opacity-40"
             >
-              <span className="material-symbols-outlined text-[18px]">chevron_left</span>
+              <Icon name="chevron_left" className="text-[18px]" />
               Prev
             </button>
             <button
@@ -162,7 +163,7 @@ export default function AttendanceHistoryList({
               className="min-h-11 inline-flex items-center gap-1.5 border-2 border-border bg-white px-4 text-sm font-bold text-primary transition hover:bg-surface-container-low disabled:cursor-not-allowed disabled:opacity-40"
             >
               Next
-              <span className="material-symbols-outlined text-[18px]">chevron_right</span>
+              <Icon name="chevron_right" className="text-[18px]" />
             </button>
           </div>
         </div>

@@ -21,6 +21,7 @@ import SppSettingsModal from "./spp/spp-settings-modal";
 import SppWaiveModal from "./spp/spp-waive-modal";
 import { SPP_MONTH_LABELS, billsForClass, summarizeBills } from "./spp/spp-summary";
 import { useCanWrite } from "./ui/subscription-status";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 const DEFAULT_SPP_SETTINGS: SppSettings = { default_monthly_amount: null, due_day: 10 };
@@ -195,7 +196,7 @@ export default function AcademySppManager() {
                     onClick={() => setIsGenerateOpen(true)}
                     type="button"
                   >
-                    <span className="material-symbols-outlined text-[18px]">receipt_long</span>
+                    <Icon name="receipt_long" className="text-[18px]" />
                     Buat Tagihan Bulan Ini
                   </button>
                   <button
@@ -205,7 +206,7 @@ export default function AcademySppManager() {
                     title="Pengaturan SPP"
                     type="button"
                   >
-                    <span aria-hidden="true" className="material-symbols-outlined text-[20px]">settings</span>
+                    <Icon name="settings" className="text-[20px]" />
                   </button>
                 </div>
               ) : null}

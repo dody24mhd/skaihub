@@ -10,6 +10,7 @@ import {
   filterNavSectionsByRole,
 } from "./academy-nav";
 import SheetModal from "./sheet-modal";
+import Icon from "./icon";
 
 export type BottomNavProps = {
   role: AdminUser["role"] | string | null;
@@ -61,9 +62,7 @@ export default function BottomNav({
                   className="flex min-h-[56px] flex-col items-center justify-center gap-1 py-1 text-center text-muted transition hover:text-primary active:bg-surface-container-low focus:outline-hidden"
                   aria-label="Lainnya"
                 >
-                  <span className="material-symbols-outlined text-[22px]">
-                    {item.icon}
-                  </span>
+                  <Icon name={item.icon} className="text-[22px]" />
                   <span className="text-[10px] font-bold leading-tight">
                     {item.title}
                   </span>
@@ -87,14 +86,10 @@ export default function BottomNav({
                     : "text-muted hover:text-primary"
                 }`}
               >
-                <span
-                  className="material-symbols-outlined text-[22px]"
-                  style={
-                    isActive ? { fontVariationSettings: "'FILL' 1" } : undefined
-                  }
-                >
-                  {item.icon}
-                </span>
+                <Icon
+                  name={item.icon}
+                  className={isActive ? "text-[22px] [font-variation-settings:'FILL'_1]" : "text-[22px]"}
+                />
                 <span className="text-[10px] font-bold leading-tight">
                   {item.title}
                 </span>
@@ -134,9 +129,7 @@ export default function BottomNav({
                           : "text-primary hover:bg-surface-container-low"
                       }`}
                     >
-                      <span className="material-symbols-outlined text-[20px]">
-                        {item.icon}
-                      </span>
+                      <Icon name={item.icon} className="text-[20px]" />
                       {item.title}
                     </Link>
                   );
@@ -154,7 +147,7 @@ export default function BottomNav({
               }}
               className="flex min-h-11 w-full items-center justify-center gap-2 border-2 border-secondary bg-secondary/5 text-sm font-bold uppercase tracking-wider text-secondary transition hover:bg-secondary hover:text-white"
             >
-              <span className="material-symbols-outlined text-[20px]">logout</span>
+              <Icon name="logout" className="text-[20px]" />
               Keluar
             </button>
           </div>

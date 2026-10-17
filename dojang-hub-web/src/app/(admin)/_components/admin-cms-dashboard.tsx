@@ -10,6 +10,7 @@ import {
   getAdminEvents,
   getAdminInquiries,
 } from "../_lib/admin-api";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -78,7 +79,7 @@ export default function AdminCmsDashboard() {
         {stats.map((s) => (
           <article key={s.label} className="card-soft flex items-center gap-4 rounded-lg bg-white p-5">
             <div className={`flex size-12 items-center justify-center rounded-md ${s.bg} ${s.color}`}>
-              <span className="material-symbols-outlined text-[24px]">{s.icon}</span>
+              <Icon name={s.icon} className="text-[24px]" />
             </div>
             <div className="flex-1">
               <p className="text-xs font-bold uppercase tracking-widest text-muted">{s.label}</p>
@@ -88,9 +89,7 @@ export default function AdminCmsDashboard() {
                 </p>
                 {/* Trend Indicator */}
                 <div className={`flex items-center text-[10px] font-bold ${s.trendUp ? "text-success" : "text-secondary"}`}>
-                  <span className="material-symbols-outlined text-[14px]">
-                    {s.trendUp ? "trending_up" : "trending_down"}
-                  </span>
+                  <Icon name={s.trendUp ? "trending_up" : "trending_down"} className="text-[14px]" />
                   <span className="ml-0.5">{s.trend}</span>
                 </div>
               </div>

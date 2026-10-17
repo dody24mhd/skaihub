@@ -8,6 +8,7 @@ import { useCanWrite } from "../ui/subscription-status";
 import TodaySlotCard from "./today-slot-card";
 import { addDays, canManageSlot, dateBounds, dateLabel, formatLocalDate, isAdminRole } from "./today-utils";
 import { useAdminSession, useOpenSlot, useTodaySlots } from "./use-today-slots";
+import Icon from "../ui/icon";
 
 const navButtonClass =
   "inline-flex size-11 items-center justify-center border-2 border-border bg-white text-primary transition hover:bg-surface-container-low disabled:cursor-not-allowed disabled:text-muted/50";
@@ -75,7 +76,7 @@ export default function TodayClasses() {
 
       <div className="mt-4 flex items-center gap-2">
         <button type="button" aria-label="Hari sebelumnya" disabled={!canGoBack} onClick={() => changeDate(addDays(date, -1))} className={navButtonClass}>
-          <span className="material-symbols-outlined text-[20px]" aria-hidden="true">chevron_left</span>
+          <Icon name="chevron_left" className="text-[20px]" />
         </button>
         <label htmlFor="today-classes-date" className="sr-only">Tanggal latihan</label>
         <input
@@ -88,7 +89,7 @@ export default function TodayClasses() {
           className="min-h-11 min-w-0 flex-1 border-2 border-border bg-white px-3 text-base text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:max-w-56 sm:text-sm"
         />
         <button type="button" aria-label="Hari berikutnya" disabled={!canGoForward} onClick={() => changeDate(addDays(date, 1))} className={navButtonClass}>
-          <span className="material-symbols-outlined text-[20px]" aria-hidden="true">chevron_right</span>
+          <Icon name="chevron_right" className="text-[20px]" />
         </button>
         {date !== todayKey ? (
           <button type="button" onClick={() => changeDate(todayKey)} className="min-h-11 border-2 border-border px-3 text-sm font-bold text-primary hover:bg-surface-container-low">

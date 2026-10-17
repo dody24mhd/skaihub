@@ -10,6 +10,7 @@ import {
   uploadAkademiFile,
 } from "../../../_lib/admin-api";
 import { FormField, SheetModal } from "../../ui";
+import Icon from "../../ui/icon";
 
 type ProfileOfficialsSectionProps = {
   officials: PublicOfficial[];
@@ -145,7 +146,7 @@ export default function ProfileOfficialsSection({
             onClick={openCreateModal}
             className="inline-flex min-h-11 items-center justify-center gap-2 bg-secondary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-secondary-dark focus:outline-hidden focus:ring-2 focus:ring-secondary/50 sm:w-auto"
           >
-            <span className="material-symbols-outlined text-[20px]">person_add</span>
+            <Icon name="person_add" className="text-[20px]" />
             Tambah Pengurus
           </button>
         </div>
@@ -170,7 +171,7 @@ export default function ProfileOfficialsSection({
                     />
                   ) : (
                     <div className="flex size-14 shrink-0 items-center justify-center rounded-xs bg-surface-container border border-border text-muted">
-                      <span className="material-symbols-outlined text-2xl">person</span>
+                      <Icon name="person" className="text-2xl" />
                     </div>
                   )}
                   <div>

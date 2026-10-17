@@ -3,6 +3,7 @@
 import { FormEvent, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginAdmin } from "../_lib/admin-api";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 const EMAIL_KEY = "skaihub_admin_email";
@@ -61,9 +62,7 @@ export default function AdminLoginForm() {
           Email admin
         </label>
         <div className="relative">
-          <span className="material-symbols-outlined pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[20px] text-muted">
-            alternate_email
-          </span>
+          <Icon name="alternate_email" className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[20px] text-muted" />
           <input
             id="email"
             name="email"
@@ -85,9 +84,7 @@ export default function AdminLoginForm() {
           Password
         </label>
         <div className="relative">
-          <span className="material-symbols-outlined pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[20px] text-muted">
-            lock
-          </span>
+          <Icon name="lock" className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[20px] text-muted" />
           <input
             id="password"
             name="password"
@@ -107,9 +104,7 @@ export default function AdminLoginForm() {
             className="absolute right-2 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-md text-muted transition hover:bg-surface-container-low hover:text-primary"
             aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
           >
-            <span className="material-symbols-outlined text-[20px]">
-              {showPassword ? "visibility_off" : "visibility"}
-            </span>
+            <Icon name={showPassword ? "visibility_off" : "visibility"} className="text-[20px]" />
           </button>
         </div>
       </div>
@@ -125,7 +120,7 @@ export default function AdminLoginForm() {
         className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(3,22,54,0.18)] transition hover:bg-primary-container disabled:cursor-not-allowed disabled:bg-muted disabled:shadow-none"
         disabled={!canSubmit || isSubmitting}
       >
-        <span className="material-symbols-outlined text-[20px]">login</span>
+        <Icon name="login" className="text-[20px]" />
         {isSubmitting ? "Memeriksa akses..." : "Masuk ke Admin"}
       </button>
     </form>

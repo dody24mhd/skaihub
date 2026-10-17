@@ -16,6 +16,7 @@ import { buildStudentColumns } from "./students/student-columns";
 import StudentListToolbar, { StudentStatusFilter } from "./students/student-list-toolbar";
 import { PageHeader, ResponsiveList } from "./ui";
 import { useCanWrite } from "./ui/subscription-status";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -175,7 +176,7 @@ export default function AcademyStudentsManager() {
                 className="inline-flex min-h-11 items-center justify-center gap-2 bg-primary px-4 text-sm font-bold text-white transition hover:bg-primary-container"
                 href="/academy/students/new"
               >
-                <span className="material-symbols-outlined text-[18px]">add</span>
+                <Icon name="add" className="text-[18px]" />
                 Tambah Siswa
               </Link>
             ) : null}

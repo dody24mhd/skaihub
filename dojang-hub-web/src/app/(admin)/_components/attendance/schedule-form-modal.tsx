@@ -3,6 +3,7 @@
 import React, { FormEvent } from "react";
 import { Coach, TrainingClass, TrainingPlace, TrainingSchedule } from "../../_lib/admin-api";
 import { FormField, SheetModal } from "../ui";
+import Icon from "../ui/icon";
 
 export type ScheduleFormData = {
   class_id: string;
@@ -161,7 +162,7 @@ export default function ScheduleFormModal({
                   checked={form.coach_ids.includes(String(c.id))}
                   onChange={() => toggleCoach(c.id)}
                 />
-                <span className="material-symbols-outlined text-[18px]">sports_martial_arts</span>
+                <Icon name="sports_martial_arts" className="text-[18px]" />
                 {c.name}
               </label>
             ))}

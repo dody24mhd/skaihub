@@ -10,6 +10,7 @@ import {
   uploadAkademiFile,
 } from "../../../_lib/admin-api";
 import { FormField, SheetModal } from "../../ui";
+import Icon from "../../ui/icon";
 
 type ProfileGallerySectionProps = {
   galleryItems: GalleryItem[];
@@ -96,14 +97,14 @@ export default function ProfileGallerySection({
             onClick={() => setShowModal(true)}
             className="inline-flex min-h-11 items-center justify-center gap-2 bg-secondary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-secondary-dark focus:outline-hidden focus:ring-2 focus:ring-secondary/50 sm:w-auto"
           >
-            <span className="material-symbols-outlined text-[20px]">add_photo_alternate</span>
+            <Icon name="add_photo_alternate" className="text-[20px]" />
             Tambah Foto
           </button>
         </div>
 
         {galleryItems.length === 0 ? (
           <div className="mt-5 border-2 border-dashed border-border p-10 text-center text-sm font-medium text-muted">
-            <span className="material-symbols-outlined text-4xl text-muted/60">photo_library</span>
+            <Icon name="photo_library" className="text-4xl text-muted/60" />
             <p className="mt-2">Belum ada foto dalam galeri. Unggah foto pertama kegiatan akademi Anda.</p>
           </div>
         ) : (
@@ -122,7 +123,7 @@ export default function ProfileGallerySection({
                     aria-label="Hapus foto"
                     className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-xs bg-primary/80 text-white transition hover:bg-secondary"
                   >
-                    <span className="material-symbols-outlined text-[18px]">delete</span>
+                    <Icon name="delete" className="text-[18px]" />
                   </button>
                 </div>
                 <div className="border-t border-border p-2.5">
@@ -136,13 +137,7 @@ export default function ProfileGallerySection({
                     onClick={() => handleToggleAbout(item)}
                     className="flex w-full items-center gap-2 text-left text-xs font-semibold text-primary"
                   >
-                    <span
-                      className={`material-symbols-outlined text-[20px] ${
-                        item.show_on_about ? "text-secondary" : "text-muted"
-                      }`}
-                    >
-                      {item.show_on_about ? "check_box" : "check_box_outline_blank"}
-                    </span>
+                    <Icon name={item.show_on_about ? "check_box" : "check_box_outline_blank"} className={`text-[20px] ${item.show_on_about ? "text-secondary" : "text-muted"}`} />
                     <span>Tampil di About Us</span>
                   </button>
                 </div>
@@ -197,7 +192,7 @@ export default function ProfileGallerySection({
               disabled={uploading || !galleryFile}
               className="inline-flex min-h-11 items-center justify-center gap-2 bg-secondary px-6 text-sm font-bold text-white transition hover:bg-secondary-dark disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-secondary/50"
             >
-              {uploading && <span className="material-symbols-outlined animate-spin text-[18px]">refresh</span>}
+              {uploading && <Icon name="refresh" className="animate-spin text-[18px]" />}
               {uploading ? "Mengunggah..." : "Simpan Foto"}
             </button>
           </div>

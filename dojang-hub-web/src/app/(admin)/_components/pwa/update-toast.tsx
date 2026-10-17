@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { handleApplyUpdate } from "@/lib/pwa/update-manager";
+import Icon from "../ui/icon";
 
 export default function UpdateToast() {
   const [waitingRegistration, setWaitingRegistration] = useState<ServiceWorkerRegistration | null>(null);
@@ -30,9 +31,7 @@ export default function UpdateToast() {
       className="fixed bottom-4 left-4 right-4 z-50 mx-auto flex max-w-md items-center justify-between gap-3 rounded-lg border border-border bg-primary p-4 text-white shadow-lg sm:left-auto sm:right-6 sm:bottom-6"
     >
       <div className="flex items-center gap-3">
-        <span className="material-symbols-outlined text-secondary text-[24px]">
-          system_update
-        </span>
+        <Icon name="system_update" className="text-secondary text-[24px]" />
         <div>
           <p className="text-sm font-semibold">Versi baru tersedia</p>
           <p className="text-xs text-white/70">Muat ulang untuk memperbarui aplikasi.</p>

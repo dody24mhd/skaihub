@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode, useEffect, useRef } from "react";
+import Icon from "./icon";
 
 export type SheetModalProps = {
   isOpen: boolean;
@@ -155,7 +156,7 @@ export default function SheetModal({
             aria-label="Tutup dialog"
             className="inline-flex size-11 shrink-0 items-center justify-center border border-border bg-white text-primary transition hover:bg-secondary/10 hover:text-secondary focus:outline-hidden focus:ring-2 focus:ring-secondary"
           >
-            <span className="material-symbols-outlined text-[20px]">close</span>
+            <Icon name="close" className="text-[20px]" />
           </button>
         </div>
 

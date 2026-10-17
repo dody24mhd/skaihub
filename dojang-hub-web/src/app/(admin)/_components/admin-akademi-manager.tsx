@@ -18,6 +18,7 @@ import {
 } from "../_lib/admin-api";
 import { defaultRankSystemForSport, rankSystemLabel } from "../_lib/rank-systems";
 import RankSystemSelect from "./akademi/rank-system-select";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -448,9 +449,7 @@ export default function AdminAkademiManager() {
                   {item.value}
                 </p>
               </div>
-              <span className="material-symbols-outlined text-[26px] text-secondary">
-                {item.icon}
-              </span>
+              <Icon name={item.icon} className="text-[26px] text-secondary" />
             </div>
           </article>
         ))}
@@ -477,9 +476,7 @@ export default function AdminAkademiManager() {
 
             <div className="flex flex-col gap-3 sm:flex-row">
               <div className="relative">
-                <span className="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-muted">
-                  search
-                </span>
+                <Icon name="search" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-muted" />
                 <input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
@@ -519,7 +516,7 @@ export default function AdminAkademiManager() {
                 onClick={() => refreshList()}
                 className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-semibold text-primary transition hover:bg-surface-container-low"
               >
-                <span className="material-symbols-outlined text-[20px]">refresh</span>
+                <Icon name="refresh" className="text-[20px]" />
                 Refresh
               </button>
 
@@ -528,7 +525,7 @@ export default function AdminAkademiManager() {
                 onClick={() => setIsCreateOpen(true)}
                 className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-white transition hover:bg-primary-container"
               >
-                <span className="material-symbols-outlined text-[20px]">add_business</span>
+                <Icon name="add_business" className="text-[20px]" />
                 Tambah Akademi
               </button>
             </div>
@@ -591,9 +588,7 @@ export default function AdminAkademiManager() {
                           aria-label={`Detail ${item.name}`}
                           disabled={isLoadingDetail}
                         >
-                          <span className="material-symbols-outlined text-[20px]">
-                            visibility
-                          </span>
+                          <Icon name="visibility" className="text-[20px]" />
                         </button>
                         <button
                           type="button"
@@ -601,7 +596,7 @@ export default function AdminAkademiManager() {
                           className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-primary/10 hover:text-primary"
                           aria-label={`Edit ${item.name}`}
                         >
-                          <span className="material-symbols-outlined text-[20px]">edit</span>
+                          <Icon name="edit" className="text-[20px]" />
                         </button>
                         <button
                           type="button"
@@ -609,7 +604,7 @@ export default function AdminAkademiManager() {
                           className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-secondary/10 hover:text-secondary"
                           aria-label={`Hapus ${item.name}`}
                         >
-                          <span className="material-symbols-outlined text-[20px]">delete</span>
+                          <Icon name="delete" className="text-[20px]" />
                         </button>
                       </div>
                     </td>
@@ -620,9 +615,7 @@ export default function AdminAkademiManager() {
                   <td colSpan={7} className="px-5 py-8">
                     <div className="flex max-w-xl gap-4">
                       <div className="flex size-12 shrink-0 items-center justify-center rounded-md bg-primary text-white">
-                        <span className="material-symbols-outlined text-[26px]">
-                          domain_disabled
-                        </span>
+                        <Icon name="domain_disabled" className="text-[26px]" />
                       </div>
                       <div>
                         <h3 className="text-lg font-bold text-primary">
@@ -665,7 +658,7 @@ export default function AdminAkademiManager() {
                 className="inline-flex size-10 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
                 aria-label="Tutup"
               >
-                <span className="material-symbols-outlined text-[20px]">close</span>
+                <Icon name="close" className="text-[20px]" />
               </button>
             </div>
 
@@ -687,18 +680,14 @@ export default function AdminAkademiManager() {
                         style={{ backgroundImage: `url(${createForm.logo_url})` }}
                       />
                     ) : (
-                      <span className="material-symbols-outlined text-[28px] text-muted">
-                        image
-                      </span>
+                      <Icon name="image" className="text-[28px] text-muted" />
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="label-caps mb-2 text-muted">Logo Akademi</p>
                     <div className="flex flex-wrap gap-2">
                       <label className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-md border border-border px-3 text-sm font-semibold text-primary transition hover:bg-surface-container-low">
-                        <span className="material-symbols-outlined text-[20px]">
-                          upload
-                        </span>
+                        <Icon name="upload" className="text-[20px]" />
                         {isUploadingCreateLogo ? "Mengunggah..." : "Upload logo"}
                         <input
                           type="file"
@@ -714,9 +703,7 @@ export default function AdminAkademiManager() {
                           onClick={() => updateCreateForm("logo_url", "")}
                           className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border px-3 text-sm font-semibold text-muted transition hover:bg-surface-container-low"
                         >
-                          <span className="material-symbols-outlined text-[20px]">
-                            delete
-                          </span>
+                          <Icon name="delete" className="text-[20px]" />
                           Hapus
                         </button>
                       ) : null}
@@ -892,7 +879,7 @@ export default function AdminAkademiManager() {
                 disabled={!canCreate || isSaving || isUploadingCreateLogo}
                 className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-white transition hover:bg-primary-container disabled:cursor-not-allowed disabled:bg-muted"
               >
-                <span className="material-symbols-outlined text-[20px]">save</span>
+                <Icon name="save" className="text-[20px]" />
                 {isSaving ? "Menyimpan..." : "Buat Akademi"}
               </button>
             </form>
@@ -914,7 +901,7 @@ export default function AdminAkademiManager() {
                 className="inline-flex size-10 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
                 aria-label="Tutup"
               >
-                <span className="material-symbols-outlined text-[20px]">close</span>
+                <Icon name="close" className="text-[20px]" />
               </button>
             </div>
 
@@ -970,18 +957,14 @@ export default function AdminAkademiManager() {
                         style={{ backgroundImage: `url(${editTarget.logo_url})` }}
                       />
                     ) : (
-                      <span className="material-symbols-outlined text-[28px] text-muted">
-                        image
-                      </span>
+                      <Icon name="image" className="text-[28px] text-muted" />
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="label-caps mb-2 text-muted">Logo Akademi</p>
                     <div className="flex flex-wrap gap-2">
                       <label className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-md border border-border px-3 text-sm font-semibold text-primary transition hover:bg-surface-container-low">
-                        <span className="material-symbols-outlined text-[20px]">
-                          upload
-                        </span>
+                        <Icon name="upload" className="text-[20px]" />
                         {isUploadingEditLogo ? "Mengunggah..." : "Upload logo"}
                         <input
                           type="file"
@@ -997,9 +980,7 @@ export default function AdminAkademiManager() {
                           onClick={() => setEditTarget({ ...editTarget, logo_url: null })}
                           className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border px-3 text-sm font-semibold text-muted transition hover:bg-surface-container-low"
                         >
-                          <span className="material-symbols-outlined text-[20px]">
-                            delete
-                          </span>
+                          <Icon name="delete" className="text-[20px]" />
                           Hapus
                         </button>
                       ) : null}
@@ -1079,9 +1060,7 @@ export default function AdminAkademiManager() {
                       style={{ backgroundImage: `url(${detailTarget.akademi.logo_url})` }}
                     />
                   ) : (
-                    <span className="material-symbols-outlined text-[28px] text-muted">
-                      domain
-                    </span>
+                    <Icon name="domain" className="text-[28px] text-muted" />
                   )}
                 </div>
                 <div className="min-w-0">
@@ -1101,7 +1080,7 @@ export default function AdminAkademiManager() {
                 className="inline-flex size-10 items-center justify-center rounded-md border border-border text-primary transition hover:bg-surface-container-low"
                 aria-label="Tutup"
               >
-                <span className="material-symbols-outlined text-[20px]">close</span>
+                <Icon name="close" className="text-[20px]" />
               </button>
             </div>
 
@@ -1234,7 +1213,7 @@ export default function AdminAkademiManager() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-primary/35 px-5 backdrop-blur-sm">
           <section className="card-soft w-full max-w-[420px] rounded-lg bg-white p-5">
             <div className="mb-4 flex size-12 items-center justify-center rounded-md bg-secondary/10 text-secondary">
-              <span className="material-symbols-outlined text-[26px]">warning</span>
+              <Icon name="warning" className="text-[26px]" />
             </div>
             <h2 className="text-xl font-bold text-primary">Hapus akademi?</h2>
             <p className="mt-2 text-sm leading-6 text-muted">

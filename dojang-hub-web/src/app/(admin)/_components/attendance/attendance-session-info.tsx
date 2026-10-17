@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Coach, TrainingSession } from "../../_lib/admin-api";
+import Icon from "../ui/icon";
 
 export type AttendanceSessionInfoProps = {
   selected: TrainingSession;
@@ -98,7 +99,7 @@ export default function AttendanceSessionInfo({
                   checked={selectedCoachIds.includes(String(c.id))}
                   onChange={() => onToggleCoach(c.id)}
                 />
-                <span className="material-symbols-outlined text-[18px]">sports_martial_arts</span>
+                <Icon name="sports_martial_arts" className="text-[18px]" />
                 {c.name}
               </label>
             ))}
@@ -164,7 +165,7 @@ export default function AttendanceSessionInfo({
           </label>
           <label className="mt-1.5 flex min-h-11 cursor-pointer items-center justify-between border-2 border-dashed border-border bg-surface-container-low/40 px-3.5 py-2 text-sm text-muted transition hover:border-primary hover:bg-white">
             <span className="inline-flex items-center gap-2 text-primary font-medium">
-              <span className="material-symbols-outlined text-[20px]">upload</span>
+              <Icon name="upload" className="text-[20px]" />
               Upload foto sesi latihan
             </span>
             <span className="text-xs font-bold text-secondary uppercase tracking-wider">

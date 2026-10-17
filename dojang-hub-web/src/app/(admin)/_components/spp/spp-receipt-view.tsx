@@ -5,6 +5,7 @@ import { ReactNode, useCallback, useEffect, useState } from "react";
 import { SppReceipt, getAkademiSppReceipt } from "../../_lib/admin-api";
 import { money } from "../students/format";
 import { paymentMethodLabel, receiptDateLabel, receiptPeriodLabel, receiptWhatsappUrl } from "./spp-receipt";
+import Icon from "../ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -109,18 +110,18 @@ export default function SppReceiptView({ paymentId }: { paymentId: number }) {
       <div className="mx-auto max-w-xl space-y-4">
         <div className="flex flex-col gap-2 print:hidden sm:flex-row sm:items-center sm:justify-between">
           <Link className="inline-flex min-h-11 items-center gap-2 text-sm font-bold text-primary" href="/academy/spp">
-            <span aria-hidden="true" className="material-symbols-outlined text-[18px]">arrow_back</span>
+            <Icon name="arrow_back" className="text-[18px]" />
             Kembali ke SPP
           </Link>
           {receipt ? (
             <div className="grid grid-cols-2 gap-2 sm:flex">
               <button className="inline-flex min-h-11 items-center justify-center gap-2 bg-primary px-4 text-sm font-bold text-white" onClick={() => window.print()} type="button">
-                <span aria-hidden="true" className="material-symbols-outlined text-[18px]">print</span>
+                <Icon name="print" className="text-[18px]" />
                 Cetak / PDF
               </button>
               {whatsappUrl ? (
                 <a className="inline-flex min-h-11 items-center justify-center gap-2 bg-success px-4 text-sm font-bold text-white" href={whatsappUrl} rel="noreferrer" target="_blank">
-                  <span aria-hidden="true" className="material-symbols-outlined text-[18px]">share</span>
+                  <Icon name="share" className="text-[18px]" />
                   Bagikan via WhatsApp
                 </a>
               ) : null}

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { AkademiDashboardSummary, AdminUser, getAkademiDashboardSummary } from "../_lib/admin-api";
 import TodayClassesCard from "./sessions/today-classes-card";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -122,7 +123,7 @@ export default function AcademyDashboardManager() {
               className="flex min-h-28 flex-col justify-between border-2 border-border bg-white p-4 transition hover:border-primary/40 hover:shadow-md active:bg-surface-container-low"
             >
               <div className="flex size-11 items-center justify-center border border-primary/20 bg-primary/10 text-primary">
-                <span className="material-symbols-outlined text-[24px]">{item.icon}</span>
+                <Icon name={item.icon} className="text-[24px]" />
               </div>
               <div className="mt-3">
                 <h3 className="font-heading text-base font-bold uppercase tracking-tight text-primary">{item.title}</h3>

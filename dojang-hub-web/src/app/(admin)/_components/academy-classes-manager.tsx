@@ -12,6 +12,7 @@ import {
   updateAkademiClass,
 } from "../_lib/admin-api";
 import { FormField, PageHeader, ResponsiveColumn, ResponsiveList, SheetModal } from "./ui";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -255,7 +256,7 @@ export default function AcademyClassesManager() {
               onClick={openCreateModal}
               className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white shadow-xs transition hover:bg-secondary-dark focus:outline-hidden focus:ring-2 focus:ring-secondary/50 sm:w-auto"
             >
-              <span className="material-symbols-outlined text-[20px]">add</span>
+              <Icon name="add" className="text-[20px]" />
               Tambah Kelas
             </button>
           ) : undefined

@@ -7,6 +7,7 @@ import StudentAchievementsSection from "./students/student-achievements-section"
 import StudentProfileCard from "./students/student-profile-card";
 import StudentRankHistorySection from "./students/student-rank-history-section";
 import StudentRecentHistory from "./students/student-recent-history";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -46,7 +47,7 @@ export default function AcademyStudentDetailManager({ studentId }: { studentId: 
     return (
       <div className="space-y-4">
         <Link className={`${linkClass} w-fit border border-border bg-white px-3 text-primary`} href="/academy/students">
-          <span className="material-symbols-outlined text-[18px]">arrow_back</span>
+          <Icon name="arrow_back" className="text-[18px]" />
           Kembali
         </Link>
         <p className="border border-secondary/20 bg-secondary/5 p-4 text-sm font-semibold text-secondary">{error}</p>
@@ -58,22 +59,22 @@ export default function AcademyStudentDetailManager({ studentId }: { studentId: 
     <div className="space-y-5 sm:space-y-6">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <Link className={`${linkClass} w-fit border border-border bg-white px-3 text-primary`} href="/academy/students">
-          <span className="material-symbols-outlined text-[18px]">arrow_back</span>
+          <Icon name="arrow_back" className="text-[18px]" />
           Daftar Siswa
         </Link>
         <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
           {canManage ? (
             <Link className={`${linkClass} col-span-2 border border-border bg-white text-primary sm:col-span-1`} href={`/academy/students/${data.student.id}/edit`}>
-              <span className="material-symbols-outlined text-[18px]">edit</span>
+              <Icon name="edit" className="text-[18px]" />
               Edit Siswa
             </Link>
           ) : null}
           <Link className={`${linkClass} bg-primary text-white`} href="/academy/evaluations">
-            <span className="material-symbols-outlined text-[18px]">grading</span>
+            <Icon name="grading" className="text-[18px]" />
             Input Penilaian
           </Link>
           <Link className={`${linkClass} border border-border bg-white text-primary`} href="/academy/rank-promotions">
-            <span className="material-symbols-outlined text-[18px]">military_tech</span>
+            <Icon name="military_tech" className="text-[18px]" />
             Kenaikan Tingkat
           </Link>
         </div>

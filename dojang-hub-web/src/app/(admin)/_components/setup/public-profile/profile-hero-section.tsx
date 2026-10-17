@@ -10,6 +10,7 @@ import {
   uploadAkademiFile,
 } from "../../../_lib/admin-api";
 import { FormField, SheetModal } from "../../ui";
+import Icon from "../../ui/icon";
 
 type ProfileHeroSectionProps = {
   heroImages: HeroImage[];
@@ -198,7 +199,7 @@ export default function ProfileHeroSection({
                 : "bg-secondary hover:bg-secondary-dark"
             }`}
           >
-            <span className="material-symbols-outlined text-[20px]">add_photo_alternate</span>
+            <Icon name="add_photo_alternate" className="text-[20px]" />
             Tambah Hero
           </button>
         </div>
@@ -228,7 +229,7 @@ export default function ProfileHeroSection({
                     aria-label="Hapus gambar hero"
                     className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-xs bg-primary/80 text-white transition hover:bg-secondary"
                   >
-                    <span className="material-symbols-outlined text-[18px]">delete</span>
+                    <Icon name="delete" className="text-[18px]" />
                   </button>
                 </div>
                 <div className="border-t border-border p-3 space-y-2">
@@ -241,7 +242,7 @@ export default function ProfileHeroSection({
                       onClick={() => openModal(item)}
                       className="inline-flex min-h-11 flex-1 items-center justify-center gap-1 border border-border px-3 text-xs font-bold text-primary transition hover:bg-slate-50"
                     >
-                      <span className="material-symbols-outlined text-[18px]">crop</span>
+                      <Icon name="crop" className="text-[18px]" />
                       Atur Posisi
                     </button>
                     <button
@@ -349,7 +350,7 @@ export default function ProfileHeroSection({
                   className="absolute inset-0 flex items-center justify-end pr-10 text-white/30"
                   style={{ clipPath: "polygon(58% 0%, 100% 0%, 100% 100%, 48% 100%)" }}
                 >
-                  <span className="material-symbols-outlined text-5xl">wallpaper</span>
+                  <Icon name="wallpaper" className="text-5xl" />
                 </div>
               )}
 
@@ -423,7 +424,7 @@ export default function ProfileHeroSection({
               disabled={uploading || (!editingHero && !heroFile)}
               className="inline-flex min-h-11 items-center justify-center gap-2 bg-secondary px-6 text-sm font-bold text-white transition hover:bg-secondary-dark disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-secondary/50"
             >
-              {uploading && <span className="material-symbols-outlined animate-spin text-[18px]">refresh</span>}
+              {uploading && <Icon name="refresh" className="animate-spin text-[18px]" />}
               {uploading ? "Menyimpan..." : "Simpan Hero"}
             </button>
           </div>

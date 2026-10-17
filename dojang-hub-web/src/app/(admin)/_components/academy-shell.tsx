@@ -10,6 +10,7 @@ import {
 } from "./ui/academy-nav";
 import BottomNav from "./ui/bottom-nav";
 import SubscriptionBanner from "./ui/subscription-banner";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 const EMAIL_KEY = "skaihub_admin_email";
@@ -78,7 +79,7 @@ export default function AcademyShell({ title, description, children }: AcademySh
         <div className="border-b border-white/10 p-5">
           <Link href="/academy" className="flex items-center gap-3">
             <div className="flex size-11 items-center justify-center rounded-md bg-white text-primary">
-              <span className="material-symbols-outlined text-[26px]">sports_martial_arts</span>
+              <Icon name="sports_martial_arts" className="text-[26px]" />
             </div>
             <div>
               <p className="text-sm font-semibold text-white/65">SKAIHUB</p>
@@ -102,7 +103,7 @@ export default function AcademyShell({ title, description, children }: AcademySh
                       isActive ? "bg-white text-primary" : "text-white/72 hover:bg-white/10 hover:text-white"
                     }`}
                   >
-                    <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
+                    <Icon name={item.icon} className="text-[20px]" />
                     {item.title}
                   </Link>
                 );
@@ -117,7 +118,7 @@ export default function AcademyShell({ title, description, children }: AcademySh
             onClick={handleLogout}
             className="flex h-11 w-full items-center gap-3 rounded-md px-3 text-sm font-semibold text-white/72 transition hover:bg-secondary hover:text-white"
           >
-            <span className="material-symbols-outlined text-[20px]">logout</span>
+            <Icon name="logout" className="text-[20px]" />
             Logout
           </button>
         </div>
@@ -141,7 +142,7 @@ export default function AcademyShell({ title, description, children }: AcademySh
               className="inline-flex size-10 shrink-0 items-center justify-center rounded-md border border-border bg-white text-primary transition hover:bg-secondary/10 hover:text-secondary"
               aria-label="Logout"
             >
-              <span className="material-symbols-outlined text-[20px]">logout</span>
+              <Icon name="logout" className="text-[20px]" />
             </button>
           </div>
 
@@ -157,7 +158,7 @@ export default function AcademyShell({ title, description, children }: AcademySh
               className="inline-flex size-10 items-center justify-center rounded-md border border-border bg-white text-primary transition hover:bg-secondary/10 hover:text-secondary"
               aria-label="Logout"
             >
-              <span className="material-symbols-outlined text-[20px]">logout</span>
+              <Icon name="logout" className="text-[20px]" />
             </button>
           </div>
         </header>

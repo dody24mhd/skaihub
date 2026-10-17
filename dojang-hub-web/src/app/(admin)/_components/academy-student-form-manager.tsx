@@ -24,6 +24,7 @@ import {
   validateStudentForm,
 } from "./students/student-form-model";
 import { StudentContactSection, StudentMainSection, StudentTrainingSection } from "./students/student-form-sections";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -138,7 +139,7 @@ export default function AcademyStudentFormManager({ studentId }: { studentId?: n
     return (
       <div className="space-y-4">
         <Link className="inline-flex min-h-11 items-center gap-2 border border-border bg-white px-3 text-sm font-bold text-primary" href="/academy/students">
-          <span className="material-symbols-outlined text-[18px]">arrow_back</span>
+          <Icon name="arrow_back" className="text-[18px]" />
           Daftar Siswa
         </Link>
         <p className="border border-secondary/20 bg-secondary/5 p-4 text-sm font-semibold text-secondary">{loadError}</p>
@@ -152,11 +153,11 @@ export default function AcademyStudentFormManager({ studentId }: { studentId?: n
     <form className="space-y-5" onSubmit={handleSubmit}>
       <div className="flex items-center justify-between gap-3">
         <Link className="inline-flex min-h-11 w-fit items-center gap-2 border border-border bg-white px-3 text-sm font-bold text-primary" href={backHref}>
-          <span className="material-symbols-outlined text-[18px]">arrow_back</span>
+          <Icon name="arrow_back" className="text-[18px]" />
           {studentId ? "Detail Siswa" : "Daftar Siswa"}
         </Link>
         <button className="hidden min-h-11 items-center justify-center gap-2 bg-primary px-4 text-sm font-bold text-white disabled:bg-muted sm:inline-flex" disabled={isSaving} type="submit">
-          <span className="material-symbols-outlined text-[18px]">save</span>
+          <Icon name="save" className="text-[18px]" />
           {isSaving ? "Menyimpan..." : "Simpan"}
         </button>
       </div>
@@ -179,7 +180,7 @@ export default function AcademyStudentFormManager({ studentId }: { studentId?: n
           Batal
         </Link>
         <button className="inline-flex min-h-11 items-center justify-center gap-2 bg-primary px-5 text-sm font-bold text-white disabled:bg-muted" disabled={isSaving} type="submit">
-          <span className="material-symbols-outlined text-[18px]">save</span>
+          <Icon name="save" className="text-[18px]" />
           {isSaving ? "Menyimpan..." : "Simpan Siswa"}
         </button>
       </div>

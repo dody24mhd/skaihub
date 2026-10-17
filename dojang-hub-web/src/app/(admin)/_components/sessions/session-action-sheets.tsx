@@ -11,6 +11,7 @@ import {
 } from "../../_lib/admin-api";
 import { FormField, SheetModal } from "../ui";
 import { resolveSlotSessionId } from "./today-utils";
+import Icon from "../ui/icon";
 
 export type SessionAction = "menu" | "reschedule" | "cancel" | "coach";
 
@@ -99,15 +100,15 @@ export default function SessionActionSheets({ token, slot, action, onActionChang
       <SheetModal isOpen={action === "menu"} onClose={close} title="Aksi Sesi" description={title}>
         <div className="space-y-2">
           <button type="button" className={menuButtonClass} onClick={() => onActionChange("reschedule")}>
-            <span className="material-symbols-outlined text-[20px]" aria-hidden="true">event_repeat</span>
+            <Icon name="event_repeat" className="text-[20px]" />
             Pindah Jadwal
           </button>
           <button type="button" className={menuButtonClass} onClick={() => onActionChange("cancel")}>
-            <span className="material-symbols-outlined text-[20px]" aria-hidden="true">event_busy</span>
+            <Icon name="event_busy" className="text-[20px]" />
             Batalkan
           </button>
           <button type="button" className={menuButtonClass} onClick={() => onActionChange("coach")}>
-            <span className="material-symbols-outlined text-[20px]" aria-hidden="true">sports</span>
+            <Icon name="sports" className="text-[20px]" />
             Ganti Pelatih
           </button>
         </div>

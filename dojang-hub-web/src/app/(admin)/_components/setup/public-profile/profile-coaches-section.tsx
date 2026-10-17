@@ -2,6 +2,7 @@
 "use client";
 
 import { PublicProfileCoach } from "../../../_lib/admin-api";
+import Icon from "../../ui/icon";
 
 type ProfileCoachesSectionProps = {
   coaches: PublicProfileCoach[];
@@ -42,7 +43,7 @@ export default function ProfileCoachesSection({
                     />
                   ) : (
                     <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-surface-container border border-border">
-                      <span className="material-symbols-outlined text-[20px] text-muted">person</span>
+                      <Icon name="person" className="text-[20px] text-muted" />
                     </div>
                   )}
                   <div>

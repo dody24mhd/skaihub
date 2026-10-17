@@ -19,6 +19,7 @@ import {
   ProfileOfficialsSection,
 } from "./setup/public-profile";
 import { PageHeader } from "./ui";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -152,7 +153,7 @@ export default function AcademyPublicProfileManager() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-16">
-        <span className="material-symbols-outlined animate-spin text-secondary">refresh</span>
+        <Icon name="refresh" className="animate-spin text-secondary" />
         <span className="ml-2 text-sm text-muted">Memuat profil publik...</span>
       </div>
     );
@@ -190,7 +191,7 @@ export default function AcademyPublicProfileManager() {
                 : "border-transparent text-muted hover:text-primary"
             }`}
           >
-            <span className="material-symbols-outlined text-[18px]">{t.icon}</span>
+            <Icon name={t.icon} className="text-[18px]" />
             <span>{t.label}</span>
           </button>
         ))}

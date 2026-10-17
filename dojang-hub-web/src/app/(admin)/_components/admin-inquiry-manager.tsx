@@ -7,6 +7,7 @@ import {
   getAdminInquiries,
   updateAdminInquiry,
 } from "../_lib/admin-api";
+import Icon from "./ui/icon";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -149,7 +150,7 @@ export default function AdminInquiryManager() {
                 <p className="text-sm font-semibold text-muted">{item.label}</p>
                 <p className="mt-2 font-heading text-2xl font-bold text-primary">{item.value}</p>
               </div>
-              <span className="material-symbols-outlined text-[26px] text-secondary">{item.icon}</span>
+              <Icon name={item.icon} className="text-[26px] text-secondary" />
             </div>
           </article>
         ))}
@@ -175,9 +176,7 @@ export default function AdminInquiryManager() {
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
               <div className="relative">
-                <span className="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-muted">
-                  search
-                </span>
+                <Icon name="search" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-muted" />
                 <input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
@@ -199,7 +198,7 @@ export default function AdminInquiryManager() {
                 onClick={refreshData}
                 className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-semibold text-primary transition hover:bg-surface-container-low"
               >
-                <span className="material-symbols-outlined text-[20px]">refresh</span>
+                <Icon name="refresh" className="text-[20px]" />
                 Refresh
               </button>
             </div>
@@ -250,7 +249,7 @@ export default function AdminInquiryManager() {
                       rel="noreferrer"
                       className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-white transition hover:bg-primary-container"
                     >
-                      <span className="material-symbols-outlined text-[20px]">chat</span>
+                      <Icon name="chat" className="text-[20px]" />
                       WhatsApp
                     </a>
                     <button
@@ -258,9 +257,7 @@ export default function AdminInquiryManager() {
                       onClick={() => toggleFollowUp(item)}
                       className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-semibold text-primary transition hover:bg-surface-container-low"
                     >
-                      <span className="material-symbols-outlined text-[20px]">
-                        {item.is_followed_up ? "undo" : "task_alt"}
-                      </span>
+                      <Icon name={item.is_followed_up ? "undo" : "task_alt"} className="text-[20px]" />
                       {item.is_followed_up ? "Undo" : "Selesai"}
                     </button>
                     <button
@@ -269,7 +266,7 @@ export default function AdminInquiryManager() {
                       className="inline-flex size-10 items-center justify-center rounded-md text-muted transition hover:bg-secondary/10 hover:text-secondary"
                       aria-label={`Hapus pesan ${item.person_name}`}
                     >
-                      <span className="material-symbols-outlined text-[20px]">delete</span>
+                      <Icon name="delete" className="text-[20px]" />
                     </button>
                   </div>
                 </div>
@@ -285,7 +282,7 @@ export default function AdminInquiryManager() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-primary/35 px-5 backdrop-blur-sm">
           <section className="card-soft w-full max-w-[420px] rounded-lg bg-white p-5">
             <div className="mb-4 flex size-12 items-center justify-center rounded-md bg-secondary/10 text-secondary">
-              <span className="material-symbols-outlined text-[26px]">warning</span>
+              <Icon name="warning" className="text-[26px]" />
             </div>
             <h2 className="text-xl font-bold text-primary">Hapus pesan?</h2>
             <p className="mt-2 text-sm leading-6 text-muted">

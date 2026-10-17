@@ -3,6 +3,7 @@ import { Student, StudentDetailSummary } from "../../_lib/admin-api";
 import AcademyRankBeltBadge from "../academy-rank-belt-badge";
 import { physicalSummary, shortDate } from "./format";
 import { studentStatusLabels, studentStatusStyles } from "./student-status";
+import Icon from "../ui/icon";
 
 function ProfileItem({ label, children }: { label: string; children: ReactNode }) {
   return (
@@ -46,7 +47,7 @@ export default function StudentProfileCard({ student, summary }: { student: Stud
               <img src={student.photo_url} alt="" className="size-20 shrink-0 object-cover sm:size-24" />
             ) : (
               <div className="flex size-20 shrink-0 items-center justify-center bg-primary/10 text-primary sm:size-24">
-                <span className="material-symbols-outlined text-[44px]">person</span>
+                <Icon name="person" className="text-[44px]" />
               </div>
             )}
             <div className="min-w-0">
