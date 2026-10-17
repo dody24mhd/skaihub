@@ -31,6 +31,7 @@ class SppBillEventTest extends TestCase
             'status' => 'active',
             'plan' => 'pro',
         ]);
+        $this->giveActiveSubscription($this->akademi);
         $this->admin = User::factory()->akademiAdmin($this->akademi->id)->create();
         $this->student = $this->akademi->siswa()->create([
             'member_number' => 'HRM-001',
@@ -154,6 +155,7 @@ class SppBillEventTest extends TestCase
             'status' => 'active',
             'plan' => 'pro',
         ]);
+        $this->giveActiveSubscription($other);
         Sanctum::actingAs(User::factory()->akademiAdmin($other->id)->create());
 
         $this->patchJson("/api/akademi/spp-bills/{$bill->id}/waive", [])->assertNotFound();

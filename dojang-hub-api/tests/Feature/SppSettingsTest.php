@@ -28,13 +28,16 @@ class SppSettingsTest extends TestCase
 
     private function makeAkademi(string $slug): Akademi
     {
-        return Akademi::create([
+        $akademi = Akademi::create([
             'name' => 'Akademi '.$slug,
             'slug' => $slug,
             'sport_type' => 'taekwondo',
             'status' => 'active',
             'plan' => 'pro',
         ]);
+        $this->giveActiveSubscription($akademi);
+
+        return $akademi;
     }
 
     private function makeStudent(Akademi $akademi, string $name, ?int $classId = null): void

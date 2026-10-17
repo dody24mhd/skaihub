@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor, within } from "@testing-library/rea
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import * as api from "../../../_lib/admin-api";
 import AcademySppManager from "../../academy-spp-manager";
+import { resetSubscriptionStatus } from "../../ui/subscription-status";
 
 vi.mock("../../../_lib/admin-api", () => ({
   getAkademiMe: vi.fn(),
@@ -14,6 +15,7 @@ vi.mock("../../../_lib/admin-api", () => ({
   generateAkademiSppBills: vi.fn(),
   payAkademiSppBill: vi.fn(),
   uploadAkademiFile: vi.fn(),
+  getAkademiSubscriptionStatus: vi.fn(),
 }));
 
 const mockedApi = vi.mocked(api);
@@ -36,6 +38,22 @@ describe("AcademySppManager", () => {
     mockedApi.getAkademiClasses.mockResolvedValue({ data: [] });
     mockedApi.getAkademiSppSettings.mockResolvedValue({ spp_settings: { default_monthly_amount: "120000.00", due_day: 10 } });
     mockedApi.getAkademiSppArrears.mockResolvedValue({ data: [] });
+    resetSubscriptionStatus();
+    mockedApi.getAkademiSubscriptionStatus.mockResolvedValue({
+      subscription_state: "active",
+    } as Awaited<ReturnType<typeof api.getAkademiSubscriptionStatus>>);
+  });
+
+  it("mode baca-saja menyembunyikan pengaturan dan buat tagihan (L4-D)", async () => {
+    mockedApi.getAkademiSubscriptionStatus.mockResolvedValue({
+      subscription_state: "read_only",
+    } as Awaited<ReturnType<typeof api.getAkademiSubscriptionStatus>>);
+    render(<AcademySppManager />);
+
+    expect(await screen.findByRole("heading", { name: "Rekap SPP" })).toBeInTheDocument();
+    await waitFor(() => expect(mockedApi.getAkademiSubscriptionStatus).toHaveBeenCalled());
+    await waitFor(() => expect(screen.queryByRole("button", { name: "Pengaturan SPP" })).not.toBeInTheDocument());
+    expect(screen.queryByRole("button", { name: /buat tagihan bulan ini/i })).not.toBeInTheDocument();
   });
 
   it("tombol pengaturan membuka SheetModal berisi pengaturan akademi lalu menyimpannya", async () => {
