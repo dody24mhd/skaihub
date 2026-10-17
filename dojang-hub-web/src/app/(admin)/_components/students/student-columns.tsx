@@ -76,7 +76,7 @@ export function buildStudentColumns({
       className: "text-right",
       headerClassName: "text-right",
       render: (item) => (
-        <div className="flex flex-wrap items-center justify-end gap-2">
+        <div className="flex flex-wrap items-center justify-end gap-2 md:flex-nowrap">
           <Link className={actionClass} href={`/academy/students/${item.id}`}>Detail</Link>
           {canManage ? <Link className={actionClass} href={`/academy/students/${item.id}/edit`}>Edit</Link> : null}
           {canManage ? (
