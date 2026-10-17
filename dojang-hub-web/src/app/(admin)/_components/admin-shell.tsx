@@ -24,11 +24,13 @@ const navSections = [
         title: "Akademi",
         href: "/internal/akademi",
         icon: "domain",
+        superAdminOnly: true,
       },
       {
         title: "Subscription",
         href: "/internal/subscription",
         icon: "payments",
+        superAdminOnly: true,
       },
       {
         title: "Staf Platform",

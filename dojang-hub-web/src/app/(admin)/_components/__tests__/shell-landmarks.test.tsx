@@ -100,3 +100,28 @@ describe("active navigation links", () => {
     mockPathname = "/academy";
   });
 });
+
+describe("AdminShell internal menu visibility", () => {
+  it.each([
+    ["super_admin", true],
+    ["admin", false],
+  ])("shows Akademi and Subscription only to super_admin (%s)", async (role, isVisible) => {
+    localStorage.setItem("skaihub_admin_role", role);
+    mockPathname = "/internal";
+    render(
+      <AdminShell title="Dashboard">
+        <p>Isi</p>
+      </AdminShell>
+    );
+
+    await screen.findByRole("link", { name: "Dashboard CMS" });
+    for (const name of ["Akademi", "Subscription", "Staf Platform"]) {
+      if (isVisible) {
+        expect(await screen.findByRole("link", { name })).toBeInTheDocument();
+      } else {
+        expect(screen.queryByRole("link", { name })).toBeNull();
+      }
+    }
+    mockPathname = "/academy";
+  });
+});
