@@ -10,7 +10,7 @@ import {
 } from "./student-form-model";
 
 const controlClass =
-  "min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 sm:text-sm";
+  "min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary sm:text-sm";
 
 type SectionProps = {
   form: StudentFormState;

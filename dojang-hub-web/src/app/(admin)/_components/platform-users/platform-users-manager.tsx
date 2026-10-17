@@ -171,7 +171,7 @@ export default function PlatformUsersManager() {
               onClick={() => openModal(item)}
               disabled={isSaving}
               aria-label={`Edit ${item.name}`}
-              className="inline-flex min-h-11 items-center justify-center border border-border px-3 py-1.5 text-xs font-bold text-primary transition hover:bg-surface-container-low focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="inline-flex min-h-11 items-center justify-center border border-border px-3 py-1.5 text-xs font-bold text-primary transition hover:bg-surface-container-low focus:outline-hidden focus:ring-2 focus:ring-primary"
             >
               Edit
             </button>
@@ -181,7 +181,7 @@ export default function PlatformUsersManager() {
                 onClick={() => handleDeactivate(item)}
                 disabled={isSaving}
                 aria-label={`Nonaktifkan ${item.name}`}
-                className="inline-flex min-h-11 items-center justify-center border border-secondary/30 px-3 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary/10 focus:outline-hidden focus:ring-2 focus:ring-secondary/20"
+                className="inline-flex min-h-11 items-center justify-center border border-secondary/30 px-3 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary/10 focus:outline-hidden focus:ring-2 focus:ring-secondary"
               >
                 Nonaktifkan
               </button>
@@ -220,7 +220,7 @@ export default function PlatformUsersManager() {
           <button
             type="button"
             onClick={() => openModal(null)}
-            className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-secondary-dark focus:outline-hidden focus:ring-2 focus:ring-secondary/50 sm:w-auto"
+            className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-secondary-dark focus:outline-hidden focus:ring-2 focus:ring-secondary sm:w-auto"
           >
             <Icon name="person_add" className="text-[20px]" />
             Tambah Staf

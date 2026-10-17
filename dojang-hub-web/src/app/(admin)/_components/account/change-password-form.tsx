@@ -115,7 +115,7 @@ export default function ChangePasswordForm() {
       <button
         type="submit"
         disabled={isSaving}
-        className="inline-flex min-h-11 w-full items-center justify-center bg-primary px-6 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-primary-container focus:outline-hidden focus:ring-2 focus:ring-primary/20 disabled:bg-muted sm:w-auto"
+        className="inline-flex min-h-11 w-full items-center justify-center bg-primary px-6 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-primary-container focus:outline-hidden focus:ring-2 focus:ring-primary disabled:bg-muted sm:w-auto"
       >
         {isSaving ? "Menyimpan..." : "Simpan Password"}
       </button>

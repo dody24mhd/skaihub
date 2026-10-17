@@ -170,7 +170,7 @@ export default function AdminFaqManager() {
                 <input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  className="h-10 w-full rounded-md border border-border bg-white pl-10 pr-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 sm:w-64"
+                  className="h-10 w-full rounded-md border border-border bg-white pl-10 pr-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary sm:w-64"
                   placeholder="Cari FAQ..."
                 />
               </div>
@@ -180,7 +180,7 @@ export default function AdminFaqManager() {
                 onChange={(event) =>
                   setStatusFilter(event.target.value as "all" | "active" | "inactive")
                 }
-                className="h-10 rounded-md border border-border bg-white px-3 text-sm font-semibold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-10 rounded-md border border-border bg-white px-3 text-sm font-semibold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary"
               >
                 <option value="all">Semua</option>
                 <option value="active">Ditampilkan</option>
@@ -321,14 +321,14 @@ export default function AdminFaqManager() {
               <input
                 value={form.question}
                 onChange={(event) => setForm({ ...form, question: event.target.value })}
-                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 placeholder="Pertanyaan (Q)"
               />
               
               <textarea
                 value={form.answer}
                 onChange={(event) => setForm({ ...form, answer: event.target.value })}
-                className="min-h-32 w-full rounded-md border border-border px-3 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="min-h-32 w-full rounded-md border border-border px-3 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 placeholder="Jawaban (A)"
               />
               
@@ -337,7 +337,7 @@ export default function AdminFaqManager() {
                   type="number"
                   value={form.sort_order}
                   onChange={(event) => setForm({ ...form, sort_order: parseInt(event.target.value) || 0 })}
-                  className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                  className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   placeholder="Urutan Tampil (contoh: 1)"
                 />
                 <label className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-3 text-sm font-semibold text-primary">

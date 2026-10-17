@@ -86,7 +86,7 @@ function PlatformUserForm({ editing, isSaving, error, onClose, onSubmit }: Omit<
       <label className="flex items-center gap-3 text-sm font-semibold text-primary">
         <input
           type="checkbox"
-          className="size-4 rounded-xs border-border text-primary focus:ring-2 focus:ring-primary/20"
+          className="size-4 rounded-xs border-border text-primary focus:ring-2 focus:ring-primary"
           checked={form.is_active}
           onChange={(event) => setForm((current) => ({ ...current, is_active: event.target.checked }))}
         />
@@ -96,7 +96,7 @@ function PlatformUserForm({ editing, isSaving, error, onClose, onSubmit }: Omit<
       <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         <button
           type="button"
-          className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-surface-container-low focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+          className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-surface-container-low focus:outline-hidden focus:ring-2 focus:ring-primary"
           onClick={onClose}
           disabled={isSaving}
         >
@@ -104,7 +104,7 @@ function PlatformUserForm({ editing, isSaving, error, onClose, onSubmit }: Omit<
         </button>
         <button
           type="submit"
-          className="inline-flex min-h-11 items-center justify-center bg-primary px-6 text-sm font-bold text-white transition hover:bg-primary-container focus:outline-hidden focus:ring-2 focus:ring-primary/20 disabled:bg-muted"
+          className="inline-flex min-h-11 items-center justify-center bg-primary px-6 text-sm font-bold text-white transition hover:bg-primary-container focus:outline-hidden focus:ring-2 focus:ring-primary disabled:bg-muted"
           disabled={isSaving}
         >
           {isSaving ? "Menyimpan..." : "Simpan"}

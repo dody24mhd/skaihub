@@ -261,13 +261,13 @@ export default function AcademySchedulesManager() {
         {/* Filter Bar */}
         <div className="mb-5 grid gap-2.5 sm:grid-cols-3">
           <input
-            className="min-h-11 w-full border border-border bg-white px-3.5 text-sm text-primary placeholder:text-muted/60 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border bg-white px-3.5 text-sm text-primary placeholder:text-muted/60 focus:outline-hidden focus:ring-2 focus:ring-primary"
             placeholder="Cari jadwal"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
           <select
-            className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             value={dayFilter}
             onChange={(e) => setDayFilter(e.target.value)}
           >
@@ -279,7 +279,7 @@ export default function AcademySchedulesManager() {
             ))}
           </select>
           <select
-            className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             value={classFilter}
             onChange={(e) => setClassFilter(e.target.value)}
           >

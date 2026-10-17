@@ -144,7 +144,7 @@ export default function ProfileOfficialsSection({
           <button
             type="button"
             onClick={openCreateModal}
-            className="inline-flex min-h-11 items-center justify-center gap-2 bg-secondary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-secondary-dark focus:outline-hidden focus:ring-2 focus:ring-secondary/50 sm:w-auto"
+            className="inline-flex min-h-11 items-center justify-center gap-2 bg-secondary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-secondary-dark focus:outline-hidden focus:ring-2 focus:ring-secondary sm:w-auto"
           >
             <Icon name="person_add" className="text-[20px]" />
             Tambah Pengurus
@@ -200,14 +200,14 @@ export default function ProfileOfficialsSection({
                   <button
                     type="button"
                     onClick={() => startEdit(official)}
-                    className="inline-flex min-h-11 items-center justify-center border border-border px-3.5 py-1.5 text-xs font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+                    className="inline-flex min-h-11 items-center justify-center border border-border px-3.5 py-1.5 text-xs font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary"
                   >
                     Edit
                   </button>
                   <button
                     type="button"
                     onClick={() => handleDelete(official)}
-                    className="inline-flex min-h-11 items-center justify-center border border-secondary/30 px-3.5 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary/10 focus:outline-hidden focus:ring-2 focus:ring-secondary/20"
+                    className="inline-flex min-h-11 items-center justify-center border border-secondary/30 px-3.5 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary/10 focus:outline-hidden focus:ring-2 focus:ring-secondary"
                   >
                     Hapus
                   </button>
@@ -274,7 +274,7 @@ export default function ProfileOfficialsSection({
               value={form.description}
               onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
               placeholder="Profil singkat, latar belakang, atau peran pengurus..."
-              className="w-full border border-border bg-white p-3.5 text-base text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:text-sm"
+              className="w-full border border-border bg-white p-3.5 text-base text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
             />
           </div>
 
@@ -283,14 +283,14 @@ export default function ProfileOfficialsSection({
               type="button"
               onClick={closeModal}
               disabled={saving}
-              className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="inline-flex min-h-11 items-center justify-center bg-primary px-6 text-sm font-bold text-white transition hover:bg-primary-container disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="inline-flex min-h-11 items-center justify-center bg-primary px-6 text-sm font-bold text-white transition hover:bg-primary-container disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-primary"
             >
               {saving ? "Menyimpan..." : "Simpan"}
             </button>

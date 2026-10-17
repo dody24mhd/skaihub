@@ -42,8 +42,8 @@ export default function FormField({
           aria-describedby={describedBy}
           className={`min-h-11 w-full border bg-white px-3.5 py-2.5 text-base text-primary placeholder:text-muted/60 transition focus:outline-hidden focus:ring-2 sm:text-sm ${
             error
-              ? "border-secondary focus:border-secondary focus:ring-secondary/20"
-              : "border-border focus:border-primary focus:ring-primary/20"
+              ? "border-secondary focus:border-secondary focus:ring-secondary"
+              : "border-border focus:border-primary focus:ring-primary"
           }`}
           {...inputProps}
         />

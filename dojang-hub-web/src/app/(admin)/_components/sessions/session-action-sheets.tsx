@@ -24,7 +24,7 @@ export type SessionActionSheetsProps = {
 };
 
 const inputClass =
-  "min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:text-sm";
+  "min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-base text-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm";
 const primaryButtonClass =
   "inline-flex min-h-11 w-full items-center justify-center border-2 border-primary bg-primary px-4 text-sm font-bold text-white transition hover:bg-primary-container disabled:cursor-not-allowed disabled:bg-surface-container disabled:text-muted";
 const menuButtonClass =

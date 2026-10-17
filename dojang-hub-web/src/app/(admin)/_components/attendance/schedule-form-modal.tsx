@@ -79,7 +79,7 @@ export default function ScheduleFormModal({
             required
             value={form.class_id}
             onChange={(e) => setForm((cur) => ({ ...cur, class_id: e.target.value }))}
-            className="min-h-11 w-full border border-border bg-white px-3.5 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border bg-white px-3.5 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
           >
             <option value="">Pilih kelas</option>
             {classes.map((c) => (
@@ -95,7 +95,7 @@ export default function ScheduleFormModal({
             id="schedule-day"
             value={form.day_of_week}
             onChange={(e) => setForm((cur) => ({ ...cur, day_of_week: e.target.value }))}
-            className="min-h-11 w-full border border-border bg-white px-3.5 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border bg-white px-3.5 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
           >
             {Object.entries(dayLabels).map(([val, label]) => (
               <option key={val} value={val}>
@@ -113,7 +113,7 @@ export default function ScheduleFormModal({
               required
               value={form.starts_at}
               onChange={(e) => setForm((cur) => ({ ...cur, starts_at: e.target.value }))}
-              className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             />
           </FormField>
           <FormField id="schedule-end" label="Selesai" required>
@@ -123,7 +123,7 @@ export default function ScheduleFormModal({
               required
               value={form.ends_at}
               onChange={(e) => setForm((cur) => ({ ...cur, ends_at: e.target.value }))}
-              className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             />
           </FormField>
         </div>
@@ -135,7 +135,7 @@ export default function ScheduleFormModal({
             onChange={(e) =>
               setForm((cur) => ({ ...cur, training_place_id: e.target.value }))
             }
-            className="min-h-11 w-full border border-border bg-white px-3.5 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border bg-white px-3.5 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
           >
             <option value="">Ikuti tempat kelas</option>
             {places.map((p) => (
@@ -178,7 +178,7 @@ export default function ScheduleFormModal({
             value={form.notes}
             onChange={(e) => setForm((cur) => ({ ...cur, notes: e.target.value }))}
             placeholder="Catatan perlengkapan, lokasi khusus, dll."
-            className="min-h-20 w-full border border-border bg-white p-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-20 w-full border border-border bg-white p-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
           />
         </FormField>
 

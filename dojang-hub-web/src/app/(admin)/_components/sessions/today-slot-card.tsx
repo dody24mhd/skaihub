@@ -72,7 +72,7 @@ export default function TodaySlotCard({ slot, isBusy, onOpen, onMenu, canWrite =
               type="button"
               onClick={() => onMenu(slot)}
               aria-label={`Aksi sesi ${slot.class_name || "kelas"} ${slot.starts_at}`}
-              className="inline-flex size-11 items-center justify-center border border-border bg-white text-primary transition hover:bg-surface-container-low focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="inline-flex size-11 items-center justify-center border border-border bg-white text-primary transition hover:bg-surface-container-low focus:outline-hidden focus:ring-2 focus:ring-primary"
             >
               <Icon name="more_horiz" className="text-[20px]" />
             </button>

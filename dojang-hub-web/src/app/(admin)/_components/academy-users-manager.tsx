@@ -217,7 +217,7 @@ export default function AcademyUsersManager() {
           <button
             type="button"
             onClick={() => startEdit(item)}
-            className="inline-flex min-h-11 items-center justify-center border border-border px-3 py-1.5 text-xs font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="inline-flex min-h-11 items-center justify-center border border-border px-3 py-1.5 text-xs font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary"
           >
             Edit
           </button>
@@ -225,7 +225,7 @@ export default function AcademyUsersManager() {
             <button
               type="button"
               onClick={() => handleDeactivate(item)}
-              className="inline-flex min-h-11 items-center justify-center border border-secondary/30 px-3 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary/10 focus:outline-hidden focus:ring-2 focus:ring-secondary/20"
+              className="inline-flex min-h-11 items-center justify-center border border-secondary/30 px-3 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary/10 focus:outline-hidden focus:ring-2 focus:ring-secondary"
             >
               Nonaktifkan
             </button>
@@ -247,7 +247,7 @@ export default function AcademyUsersManager() {
           <button
             type="button"
             onClick={openCreateModal}
-            className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white shadow-xs transition hover:bg-secondary-dark focus:outline-hidden focus:ring-2 focus:ring-secondary/50 sm:w-auto"
+            className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white shadow-xs transition hover:bg-secondary-dark focus:outline-hidden focus:ring-2 focus:ring-secondary sm:w-auto"
           >
             <Icon name="person_add" className="text-[20px]" />
             Tambah Akun
@@ -266,7 +266,7 @@ export default function AcademyUsersManager() {
             </label>
             <input
               id="users-search"
-              className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-sm text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-sm text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
               placeholder="Cari nama atau email..."
               value={query}
               onChange={(event) => setQuery(event.target.value)}
@@ -278,7 +278,7 @@ export default function AcademyUsersManager() {
             </label>
             <select
               id="users-role-filter"
-              className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-sm text-primary transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-sm text-primary transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
               value={roleFilter}
               onChange={(event) => setRoleFilter(event.target.value)}
             >

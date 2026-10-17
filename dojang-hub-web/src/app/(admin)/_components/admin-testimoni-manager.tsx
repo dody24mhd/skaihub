@@ -202,7 +202,7 @@ export default function AdminTestimoniManager() {
                 <input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  className="h-10 w-full rounded-md border border-border bg-white pl-10 pr-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 sm:w-64"
+                  className="h-10 w-full rounded-md border border-border bg-white pl-10 pr-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary sm:w-64"
                   placeholder="Cari ulasan..."
                 />
               </div>
@@ -212,7 +212,7 @@ export default function AdminTestimoniManager() {
                 onChange={(event) =>
                   setStatusFilter(event.target.value as "all" | "active" | "inactive")
                 }
-                className="h-10 rounded-md border border-border bg-white px-3 text-sm font-semibold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-10 rounded-md border border-border bg-white px-3 text-sm font-semibold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary"
               >
                 <option value="all">Semua</option>
                 <option value="active">Ditampilkan</option>
@@ -367,13 +367,13 @@ export default function AdminTestimoniManager() {
                 <input
                   value={form.person_name}
                   onChange={(event) => setForm({ ...form, person_name: event.target.value })}
-                  className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                  className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   placeholder="Nama Pengulas"
                 />
                 <input
                   value={form.akademi_name}
                   onChange={(event) => setForm({ ...form, akademi_name: event.target.value })}
-                  className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                  className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   placeholder="Nama Akademi"
                 />
               </div>
@@ -381,14 +381,14 @@ export default function AdminTestimoniManager() {
               <input
                 value={form.city}
                 onChange={(event) => setForm({ ...form, city: event.target.value })}
-                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 placeholder="Kota Asal (Opsional)"
               />
               
               <textarea
                 value={form.quote}
                 onChange={(event) => setForm({ ...form, quote: event.target.value })}
-                className="min-h-32 w-full rounded-md border border-border px-3 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="min-h-32 w-full rounded-md border border-border px-3 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 placeholder="Kutipan Testimoni..."
               />
               
@@ -427,7 +427,7 @@ export default function AdminTestimoniManager() {
                   type="number"
                   value={form.sort_order}
                   onChange={(event) => setForm({ ...form, sort_order: parseInt(event.target.value) || 0 })}
-                  className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                  className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   placeholder="Urutan Tampil (contoh: 1)"
                 />
                 <label className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-3 text-sm font-semibold text-primary">

@@ -95,7 +95,7 @@ export default function ProfileGallerySection({
           <button
             type="button"
             onClick={() => setShowModal(true)}
-            className="inline-flex min-h-11 items-center justify-center gap-2 bg-secondary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-secondary-dark focus:outline-hidden focus:ring-2 focus:ring-secondary/50 sm:w-auto"
+            className="inline-flex min-h-11 items-center justify-center gap-2 bg-secondary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-secondary-dark focus:outline-hidden focus:ring-2 focus:ring-secondary sm:w-auto"
           >
             <Icon name="add_photo_alternate" className="text-[20px]" />
             Tambah Foto
@@ -183,14 +183,14 @@ export default function ProfileGallerySection({
               type="button"
               onClick={closeModal}
               disabled={uploading}
-              className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={uploading || !galleryFile}
-              className="inline-flex min-h-11 items-center justify-center gap-2 bg-secondary px-6 text-sm font-bold text-white transition hover:bg-secondary-dark disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-secondary/50"
+              className="inline-flex min-h-11 items-center justify-center gap-2 bg-secondary px-6 text-sm font-bold text-white transition hover:bg-secondary-dark disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-secondary"
             >
               {uploading && <Icon name="refresh" className="animate-spin text-[18px]" />}
               {uploading ? "Mengunggah..." : "Simpan Foto"}

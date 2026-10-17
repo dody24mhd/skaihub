@@ -128,7 +128,7 @@ export default function AttendanceSessionInfo({
               value={material}
               onChange={(e) => onMaterialChange(e.target.value)}
               placeholder="Contoh: Poomsae Taegeuk 1"
-              className="mt-1.5 min-h-11 w-full border border-border bg-white px-3.5 py-2 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="mt-1.5 min-h-11 w-full border border-border bg-white px-3.5 py-2 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             />
           </div>
           <div>
@@ -140,7 +140,7 @@ export default function AttendanceSessionInfo({
               value={extraName}
               onChange={(e) => onExtraNameChange(e.target.value)}
               placeholder="Nama peserta trial / pengganti"
-              className="mt-1.5 min-h-11 w-full border border-border bg-white px-3.5 py-2 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="mt-1.5 min-h-11 w-full border border-border bg-white px-3.5 py-2 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             />
           </div>
         </div>
@@ -154,7 +154,7 @@ export default function AttendanceSessionInfo({
             value={notes}
             onChange={(e) => onNotesChange(e.target.value)}
             placeholder="Catatan perkembangan atau kejadian saat latihan..."
-            className="mt-1.5 min-h-24 w-full border border-border bg-white p-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="mt-1.5 min-h-24 w-full border border-border bg-white p-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
           />
         </div>
 

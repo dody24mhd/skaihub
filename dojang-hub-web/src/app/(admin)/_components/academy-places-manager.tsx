@@ -190,14 +190,14 @@ export default function AcademyPlacesManager() {
                 <button
                   type="button"
                   onClick={() => startEdit(item)}
-                  className="inline-flex min-h-11 items-center justify-center border border-border px-3 py-1.5 text-xs font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+                  className="inline-flex min-h-11 items-center justify-center border border-border px-3 py-1.5 text-xs font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary"
                 >
                   Edit
                 </button>
                 <button
                   type="button"
                   onClick={() => handleDelete(item)}
-                  className="inline-flex min-h-11 items-center justify-center border border-secondary/30 px-3 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary/10 focus:outline-hidden focus:ring-2 focus:ring-secondary/20"
+                  className="inline-flex min-h-11 items-center justify-center border border-secondary/30 px-3 py-1.5 text-xs font-bold text-secondary transition hover:bg-secondary/10 focus:outline-hidden focus:ring-2 focus:ring-secondary"
                 >
                   Hapus
                 </button>
@@ -221,7 +221,7 @@ export default function AcademyPlacesManager() {
             <button
               type="button"
               onClick={openCreateModal}
-              className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white shadow-xs transition hover:bg-secondary-dark focus:outline-hidden focus:ring-2 focus:ring-secondary/50 sm:w-auto"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-secondary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white shadow-xs transition hover:bg-secondary-dark focus:outline-hidden focus:ring-2 focus:ring-secondary sm:w-auto"
             >
               <Icon name="add" className="text-[20px]" />
               Tambah Tempat
@@ -240,7 +240,7 @@ export default function AcademyPlacesManager() {
           </label>
           <input
             id="places-search"
-            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-sm text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-sm text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             placeholder="Cari tempat atau alamat..."
             value={query}
             onChange={(event) => setQuery(event.target.value)}
@@ -283,7 +283,7 @@ export default function AcademyPlacesManager() {
             <textarea
               id="place-address"
               rows={3}
-              className="w-full border border-border bg-white p-3 text-base text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:text-sm"
+              className="w-full border border-border bg-white p-3 text-base text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
               value={form.address}
               onChange={(event) => setForm((current) => ({ ...current, address: event.target.value }))}
               placeholder="Alamat lengkap tempat latihan..."
@@ -293,7 +293,7 @@ export default function AcademyPlacesManager() {
           <label className="flex items-center gap-3 text-sm font-semibold text-primary">
             <input
               type="checkbox"
-              className="size-4 rounded-xs border-border text-primary focus:ring-2 focus:ring-primary/20"
+              className="size-4 rounded-xs border-border text-primary focus:ring-2 focus:ring-primary"
               checked={form.is_active}
               onChange={(event) => setForm((current) => ({ ...current, is_active: event.target.checked }))}
             />
@@ -303,7 +303,7 @@ export default function AcademyPlacesManager() {
           <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
             <button
               type="button"
-              className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary"
               onClick={resetForm}
               disabled={isSaving}
             >
@@ -311,7 +311,7 @@ export default function AcademyPlacesManager() {
             </button>
             <button
               type="submit"
-              className="inline-flex min-h-11 items-center justify-center bg-primary px-6 text-sm font-bold text-white transition hover:bg-primary-container disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="inline-flex min-h-11 items-center justify-center bg-primary px-6 text-sm font-bold text-white transition hover:bg-primary-container disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-primary"
               disabled={isSaving}
             >
               {isSaving ? "Menyimpan..." : "Simpan"}

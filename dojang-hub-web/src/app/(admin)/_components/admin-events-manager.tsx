@@ -282,7 +282,7 @@ export default function AdminEventsManager() {
                 <input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  className="h-10 w-full rounded-md border border-border bg-white pl-10 pr-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 sm:w-64"
+                  className="h-10 w-full rounded-md border border-border bg-white pl-10 pr-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary sm:w-64"
                   placeholder="Cari event"
                 />
               </div>
@@ -292,7 +292,7 @@ export default function AdminEventsManager() {
                 onChange={(event) =>
                   setStatusFilter(event.target.value as "all" | AdminEvent["status"])
                 }
-                className="h-10 rounded-md border border-border bg-white px-3 text-sm font-semibold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-10 rounded-md border border-border bg-white px-3 text-sm font-semibold text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary"
               >
                 <option value="all">Semua status</option>
                 <option value="published">Published</option>
@@ -457,13 +457,13 @@ export default function AdminEventsManager() {
               <input
                 value={form.title}
                 onChange={(event) => setForm({ ...form, title: event.target.value })}
-                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 placeholder="Judul event"
               />
               <input
                 value={form.excerpt}
                 onChange={(event) => setForm({ ...form, excerpt: event.target.value })}
-                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 placeholder="Label / Ringkasan Singkat"
               />
               <div className="grid gap-3 sm:grid-cols-2">
@@ -473,7 +473,7 @@ export default function AdminEventsManager() {
                     type="date"
                     value={form.starts_at}
                     onChange={(event) => setForm({ ...form, starts_at: event.target.value })}
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   />
                 </div>
                 <div>
@@ -482,26 +482,26 @@ export default function AdminEventsManager() {
                     type="date"
                     value={form.ends_at}
                     onChange={(event) => setForm({ ...form, ends_at: event.target.value })}
-                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   />
                 </div>
               </div>
               <input
                 value={form.location}
                 onChange={(event) => setForm({ ...form, location: event.target.value })}
-                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 placeholder="Lokasi"
               />
               <input
                 value={form.organizer_name}
                 onChange={(event) => setForm({ ...form, organizer_name: event.target.value })}
-                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 placeholder="Penyelenggara"
               />
               <input
                 value={form.registration_url}
                 onChange={(event) => setForm({ ...form, registration_url: event.target.value })}
-                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                className="h-11 w-full rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                 placeholder="Link pendaftaran / proposal (opsional)"
               />
               <div className="rounded-md border border-border p-3">
@@ -533,7 +533,7 @@ export default function AdminEventsManager() {
                   {isUploading && <span className="text-sm text-muted">Mengunggah...</span>}
                 </div>
               </div>
-              <div className="w-full overflow-hidden rounded-md border border-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10">
+              <div className="w-full overflow-hidden rounded-md border border-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary">
                 <RichTextEditor
                   value={form.description}
                   onChange={(val) => setForm({ ...form, description: val })}
@@ -545,7 +545,7 @@ export default function AdminEventsManager() {
                   <select
                     value={form.category}
                     onChange={(event) => setForm({ ...form, category: event.target.value })}
-                    className="h-11 rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    className="h-11 rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   >
                     <option value="Umum">Umum</option>
                     <option value="Taekwondo">Taekwondo</option>
@@ -556,7 +556,7 @@ export default function AdminEventsManager() {
                     onChange={(event) =>
                       setForm({ ...form, status: event.target.value as EventPayload["status"] })
                     }
-                    className="h-11 rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                    className="h-11 rounded-md border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary"
                   >
                     <option value="draft">Draft</option>
                     <option value="published">Published</option>

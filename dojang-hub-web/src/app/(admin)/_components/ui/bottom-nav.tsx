@@ -59,7 +59,7 @@ export default function BottomNav({
                   key={item.title}
                   type="button"
                   onClick={() => setIsMoreOpen(true)}
-                  className="flex min-h-[56px] flex-col items-center justify-center gap-1 py-1 text-center text-muted transition hover:text-primary active:bg-surface-container-low focus:outline-hidden"
+                  className="flex min-h-[56px] flex-col items-center justify-center gap-1 py-1 text-center text-muted transition hover:text-primary active:bg-surface-container-low focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
                   aria-label="Lainnya"
                 >
                   <Icon name={item.icon} className="text-[22px]" />
@@ -80,7 +80,7 @@ export default function BottomNav({
                 key={item.title}
                 href={item.href}
                 aria-current={isActive ? "page" : undefined}
-                className={`flex min-h-[56px] flex-col items-center justify-center gap-1 py-1 text-center transition active:bg-surface-container-low focus:outline-hidden ${
+                className={`flex min-h-[56px] flex-col items-center justify-center gap-1 py-1 text-center transition active:bg-surface-container-low focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary ${
                   isActive
                     ? "text-secondary font-bold"
                     : "text-muted hover:text-primary"

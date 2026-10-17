@@ -151,7 +151,7 @@ export default function AdminSettingsManager() {
                               if (e.key === "Enter") handleSave();
                               if (e.key === "Escape") setEditing(null);
                             }}
-                            className="h-10 flex-1 rounded-md border border-primary px-3 text-sm outline-none ring-2 ring-primary/10"
+                            className="h-10 flex-1 rounded-md border border-primary px-3 text-sm outline-none focus:ring-2 focus:ring-primary"
                             placeholder={`Masukkan ${item.label.toLowerCase()}`}
                           />
                           <button

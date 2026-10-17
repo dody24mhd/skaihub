@@ -185,7 +185,7 @@ export default function AcademyCoachesManager() {
                 <button
                   type="button"
                   onClick={() => startEdit(item)}
-                  className="inline-flex min-h-11 items-center justify-center border border-border px-3.5 py-1.5 text-xs font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+                  className="inline-flex min-h-11 items-center justify-center border border-border px-3.5 py-1.5 text-xs font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary"
                 >
                   Edit Profil
                 </button>
@@ -216,7 +216,7 @@ export default function AcademyCoachesManager() {
           </label>
           <input
             id="coaches-search"
-            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-sm text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border bg-white px-3.5 py-2.5 text-sm text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             placeholder="Cari pelatih..."
             value={query}
             onChange={(event) => setQuery(event.target.value)}
@@ -298,7 +298,7 @@ export default function AcademyCoachesManager() {
             <textarea
               id="coach-address"
               rows={3}
-              className="w-full border border-border bg-white p-3 text-base text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:text-sm"
+              className="w-full border border-border bg-white p-3 text-base text-primary placeholder:text-muted/60 transition focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:text-sm"
               value={form.address}
               onChange={(event) => setForm((current) => ({ ...current, address: event.target.value }))}
               placeholder="Alamat domisili..."
@@ -308,7 +308,7 @@ export default function AcademyCoachesManager() {
           <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
             <button
               type="button"
-              className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary"
               onClick={resetForm}
               disabled={isSaving}
             >
@@ -316,7 +316,7 @@ export default function AcademyCoachesManager() {
             </button>
             <button
               type="submit"
-              className="inline-flex min-h-11 items-center justify-center bg-primary px-6 text-sm font-bold text-white transition hover:bg-primary-container disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="inline-flex min-h-11 items-center justify-center bg-primary px-6 text-sm font-bold text-white transition hover:bg-primary-container disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-primary"
               disabled={isSaving}
             >
               {isSaving ? "Menyimpan..." : "Simpan"}

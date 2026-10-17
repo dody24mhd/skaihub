@@ -87,7 +87,7 @@ export default function TodayClasses() {
           min={bounds.min}
           max={bounds.max}
           onChange={(event) => changeDate(event.target.value)}
-          className="min-h-11 min-w-0 flex-1 border-2 border-border bg-white px-3 text-base text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20 sm:max-w-56 sm:text-sm"
+          className="min-h-11 min-w-0 flex-1 border-2 border-border bg-white px-3 text-base text-primary focus:outline-hidden focus:ring-2 focus:ring-primary sm:max-w-56 sm:text-sm"
         />
         <button type="button" aria-label="Hari berikutnya" disabled={!canGoForward} onClick={() => changeDate(addDays(date, 1))} className={navButtonClass}>
           <Icon name="chevron_right" className="text-[20px]" />

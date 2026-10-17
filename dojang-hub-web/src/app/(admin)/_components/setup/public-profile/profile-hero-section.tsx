@@ -193,7 +193,7 @@ export default function ProfileHeroSection({
             type="button"
             onClick={() => openModal()}
             disabled={heroImages.length >= 3}
-            className={`inline-flex min-h-11 items-center justify-center gap-2 px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white transition focus:outline-hidden focus:ring-2 focus:ring-secondary/50 sm:w-auto ${
+            className={`inline-flex min-h-11 items-center justify-center gap-2 px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-white transition focus:outline-hidden focus:ring-2 focus:ring-secondary sm:w-auto ${
               heroImages.length >= 3
                 ? "cursor-not-allowed bg-muted/60"
                 : "bg-secondary hover:bg-secondary-dark"
@@ -414,7 +414,7 @@ export default function ProfileHeroSection({
               type="button"
               onClick={closeModal}
               disabled={uploading}
-              className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+              className="inline-flex min-h-11 items-center justify-center border border-border bg-white px-5 text-sm font-bold text-primary transition hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-primary"
             >
               Batal
             </button>
@@ -422,7 +422,7 @@ export default function ProfileHeroSection({
               type="button"
               onClick={handleSave}
               disabled={uploading || (!editingHero && !heroFile)}
-              className="inline-flex min-h-11 items-center justify-center gap-2 bg-secondary px-6 text-sm font-bold text-white transition hover:bg-secondary-dark disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-secondary/50"
+              className="inline-flex min-h-11 items-center justify-center gap-2 bg-secondary px-6 text-sm font-bold text-white transition hover:bg-secondary-dark disabled:bg-muted focus:outline-hidden focus:ring-2 focus:ring-secondary"
             >
               {uploading && <Icon name="refresh" className="animate-spin text-[18px]" />}
               {uploading ? "Menyimpan..." : "Simpan Hero"}

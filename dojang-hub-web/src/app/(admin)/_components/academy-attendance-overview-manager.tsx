@@ -287,13 +287,13 @@ export default function AcademyAttendanceOverviewManager() {
         {/* Filter Input */}
         <div className="mt-5 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
           <input
-            className="min-h-11 w-full border border-border bg-white px-3.5 text-sm text-primary placeholder:text-muted/60 focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border bg-white px-3.5 text-sm text-primary placeholder:text-muted/60 focus:outline-hidden focus:ring-2 focus:ring-primary"
             placeholder="Cari absensi"
             value={query}
             onChange={(e) => updateTableFilter(() => setQuery(e.target.value))}
           />
           <select
-            className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             value={classFilter}
             onChange={(e) => updateTableFilter(() => setClassFilter(e.target.value))}
           >
@@ -305,7 +305,7 @@ export default function AcademyAttendanceOverviewManager() {
             ))}
           </select>
           <select
-            className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             value={typeFilter}
             onChange={(e) => updateTableFilter(() => setTypeFilter(e.target.value))}
           >
@@ -315,7 +315,7 @@ export default function AcademyAttendanceOverviewManager() {
             <option value="extra">Tambahan</option>
           </select>
           <select
-            className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+            className="min-h-11 w-full border border-border bg-white px-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-primary"
             value={statusFilter}
             onChange={(e) => updateTableFilter(() => setStatusFilter(e.target.value))}
           >
