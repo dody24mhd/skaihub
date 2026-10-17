@@ -60,8 +60,10 @@ export default function ProfileCoachesSection({
                   </span>
                   <button
                     type="button"
+                    role="switch"
+                    aria-checked={coach.show_on_public}
                     onClick={() => onToggleCoach(coach)}
-                    aria-label={`Ubah status tampilkan ${coach.name}`}
+                    aria-label={`Tampilkan ${coach.name} di website`}
                     className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full transition-colors focus:outline-hidden focus:ring-2 focus:ring-secondary ${
                       coach.show_on_public ? "bg-secondary" : "bg-border-strong"
                     }`}

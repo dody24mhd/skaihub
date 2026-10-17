@@ -1,11 +1,12 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import AcademyShell from "../academy-shell";
 import AdminShell from "../admin-shell";
 
+let mockPathname = "/academy";
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
-  usePathname: () => "/academy",
+  usePathname: () => mockPathname,
 }));
 
 const shells = [
@@ -66,5 +67,36 @@ describe.each(shells)("$name landmarks", ({ Shell, role }) => {
     const headings = screen.getAllByRole("heading", { level: 1 });
     expect(headings).toHaveLength(1);
     expect(headings[0]).toHaveTextContent("Kelas / Unit");
+  });
+});
+
+describe("active navigation links", () => {
+  it("marks the active academy sidebar link with aria-current", () => {
+    localStorage.setItem("skaihub_admin_role", "pelatih");
+    render(
+      <AcademyShell title="Dashboard">
+        <p>Isi</p>
+      </AcademyShell>
+    );
+
+    expect(screen.getByRole("link", { name: "Dashboard" })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("link", { name: "Kelas" })).not.toHaveAttribute("aria-current");
+  });
+
+  it("marks the active admin drawer link with aria-current", () => {
+    localStorage.setItem("skaihub_admin_role", "super_admin");
+    mockPathname = "/internal/event";
+    render(
+      <AdminShell title="Event">
+        <p>Isi</p>
+      </AdminShell>
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Buka menu" }));
+    const drawer = screen.getByRole("dialog", { name: "Menu Admin" });
+
+    expect(within(drawer).getByRole("link", { name: "Event" })).toHaveAttribute("aria-current", "page");
+    expect(within(drawer).getByRole("link", { name: "Berita" })).not.toHaveAttribute("aria-current");
+    mockPathname = "/academy";
   });
 });

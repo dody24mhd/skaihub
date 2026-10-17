@@ -108,6 +108,7 @@ export default function AcademyShell({ title, description, hasPageHeader = false
                   <Link
                     key={item.title}
                     href={item.href}
+                    aria-current={isActive ? "page" : undefined}
                     className={`flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold transition ${
                       isActive ? "bg-white text-primary" : "text-white/72 hover:bg-white/10 hover:text-white"
                     }`}

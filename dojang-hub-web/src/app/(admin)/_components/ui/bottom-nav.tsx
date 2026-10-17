@@ -122,6 +122,7 @@ export default function BottomNav({
                     <Link
                       key={item.title}
                       href={item.href}
+                      aria-current={isActive ? "page" : undefined}
                       onClick={() => setIsMoreOpen(false)}
                       className={`flex min-h-11 items-center gap-3 px-2 py-2 text-sm font-semibold transition ${
                         isActive

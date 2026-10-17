@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { KeyboardEvent, useCallback, useEffect, useState } from "react";
 import {
   AcademyPublicProfile,
   PublicProfileCoach,
@@ -44,6 +44,18 @@ export default function AcademyPublicProfileManager() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  function handleTabKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    const index = tabs.findIndex((t) => t.key === tab);
+    const step = event.key === "ArrowRight" ? 1 : -1;
+    const nextIndex =
+      event.key === "Home" ? 0 : event.key === "End" ? tabs.length - 1 : (index + step + tabs.length) % tabs.length;
+    const next = tabs[nextIndex].key;
+    setTab(next);
+    document.getElementById(`public-profile-tab-${next}`)?.focus();
+  }
   const [success, setSuccess] = useState<string | null>(null);
 
   const [profile, setProfile] = useState<AcademyPublicProfile | null>(null);
@@ -172,11 +184,16 @@ export default function AcademyPublicProfileManager() {
       <StatusMessage tone="success" message={success} />
 
       {/* Tab navigation yang ramah mobile (bisa scroll horizontal jika layar sempit) */}
-      <div className="flex gap-2 overflow-x-auto border-b border-border pb-1">
+      <div role="tablist" aria-label="Bagian halaman publik" className="flex gap-2 overflow-x-auto border-b border-border pb-1" onKeyDown={handleTabKeyDown}>
         {tabs.map((t) => (
           <button
             key={t.key}
+            id={`public-profile-tab-${t.key}`}
             type="button"
+            role="tab"
+            aria-selected={tab === t.key}
+            aria-controls="public-profile-panel"
+            tabIndex={tab === t.key ? 0 : -1}
             onClick={() => setTab(t.key)}
             className={`flex min-h-11 shrink-0 items-center gap-2 border-b-2 px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition ${
               tab === t.key
@@ -190,6 +207,7 @@ export default function AcademyPublicProfileManager() {
         ))}
       </div>
 
+      <div role="tabpanel" id="public-profile-panel" aria-labelledby={`public-profile-tab-${tab}`}>
       {tab === "profil" && (
         <ProfileInfoSection
           profile={profile}
@@ -250,6 +268,7 @@ export default function AcademyPublicProfileManager() {
           onError={(msg) => setError(msg)}
         />
       )}
+      </div>
     </div>
   );
 }

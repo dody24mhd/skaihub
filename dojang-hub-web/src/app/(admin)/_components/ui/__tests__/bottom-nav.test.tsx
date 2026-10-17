@@ -3,8 +3,9 @@ import { describe, expect, it, vi } from "vitest";
 import BottomNav from "../bottom-nav";
 
 const pushMock = vi.fn();
+let mockPathname = "/academy/students";
 vi.mock("next/navigation", () => ({
-  usePathname: () => "/academy/students",
+  usePathname: () => mockPathname,
   useRouter: () => ({
     push: pushMock,
   }),
@@ -72,5 +73,16 @@ describe("BottomNav", () => {
     const logoutBtn = screen.getByRole("button", { name: /keluar/i });
     fireEvent.click(logoutBtn);
     expect(handleLogout).toHaveBeenCalledTimes(1);
+  });
+
+  it("marks the active item inside the Lainnya sheet with aria-current", () => {
+    mockPathname = "/academy/places";
+    render(<BottomNav role="ketua_akademi" plan="pro" onLogout={vi.fn()} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /lainnya/i }));
+
+    expect(screen.getByRole("link", { name: "Tempat Latihan" })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("link", { name: "Pelatih" })).not.toHaveAttribute("aria-current");
+    mockPathname = "/academy/students";
   });
 });

@@ -167,6 +167,7 @@ export default function AdminShell({
                     <Link
                       key={item.title}
                       href={item.href}
+                      aria-current={isActive ? "page" : undefined}
                       className={`flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold transition ${
                         isActive
                           ? "bg-white text-primary"
@@ -186,6 +187,7 @@ export default function AdminShell({
         <div className="space-y-3 border-t border-white/10 p-4">
           <Link
             href="/internal/account"
+            aria-current={pathname === "/internal/account" ? "page" : undefined}
             className={`flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold transition ${
               pathname === "/internal/account"
                 ? "bg-white text-primary"
@@ -282,6 +284,7 @@ export default function AdminShell({
                     <Link
                       key={item.title}
                       href={item.href}
+                      aria-current={isActive ? "page" : undefined}
                       onClick={() => setIsDrawerOpen(false)}
                       className={`flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold transition ${
                         isActive
@@ -301,6 +304,7 @@ export default function AdminShell({
           <div className="space-y-2 border-t border-border pt-4">
             <Link
               href="/internal/account"
+              aria-current={pathname === "/internal/account" ? "page" : undefined}
               onClick={() => setIsDrawerOpen(false)}
               className="flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold text-primary hover:bg-surface-container-low"
             >

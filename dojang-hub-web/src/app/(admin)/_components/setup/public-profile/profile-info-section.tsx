@@ -58,20 +58,23 @@ export default function ProfileInfoSection({
               hasPublicWebsite ? "cursor-pointer" : "cursor-not-allowed opacity-60"
             }`}
           >
-            <div
-              className={`relative h-6 w-11 rounded-full transition ${
+            <button
+              type="button"
+              role="switch"
+              aria-checked={isPublished}
+              aria-label="Publikasikan halaman publik"
+              disabled={!hasPublicWebsite}
+              className={`relative h-6 w-11 shrink-0 rounded-full transition focus:outline-hidden focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 disabled:cursor-not-allowed ${
                 isPublished ? "bg-secondary" : "bg-border-strong"
               }`}
-              onClick={() => {
-                if (hasPublicWebsite) setIsPublished((v) => !v);
-              }}
+              onClick={() => setIsPublished((v) => !v)}
             >
               <span
                 className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow-xs transition-all ${
                   isPublished ? "left-5" : "left-0.5"
                 }`}
               />
-            </div>
+            </button>
             <span className="text-sm font-semibold text-primary">
               {isPublished ? "Dipublikasikan" : "Disembunyikan"}
             </span>
