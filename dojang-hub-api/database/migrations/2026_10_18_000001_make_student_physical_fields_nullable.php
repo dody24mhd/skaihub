@@ -16,9 +16,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('students', function (Blueprint $table) {
-            $table->unsignedSmallInteger('height_cm')->nullable(false)->change();
-            $table->decimal('weight_kg', 5, 2)->nullable(false)->change();
-        });
+        // Tightening back to NOT NULL would fail (or require inventing data) once students
+        // without height/weight exist, so rollback intentionally keeps the columns nullable.
     }
 };
