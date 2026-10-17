@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getPublicEventBySlug } from "../../_lib/compro-data";
 import { createWhatsAppUrl } from "../../_lib/whatsapp";
 import { ViewTracker } from "../../_components/view-tracker";
+import { sanitizeHtml } from "@/lib/sanitize-html";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -94,7 +95,7 @@ export default async function EventDetailPage({ params }: Props) {
               <article className="prose prose-slate max-w-none prose-headings:font-heading prose-headings:uppercase prose-headings:text-primary prose-a:text-secondary hover:prose-a:text-primary break-words">
                 <div
                   className="font-sans text-base leading-relaxed text-muted"
-                  dangerouslySetInnerHTML={{ __html: event.description || "" }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(event.description || "") }}
                 />
               </article>
             </div>
