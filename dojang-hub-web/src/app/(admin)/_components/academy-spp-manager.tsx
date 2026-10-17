@@ -11,6 +11,7 @@ import {
   uploadAkademiFile,
   waiveAkademiSppBill,
 } from "../_lib/admin-api";
+import { useCanWrite } from "./ui/subscription-status";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -81,6 +82,7 @@ export default function AcademySppManager() {
   const [proofUrl, setProofUrl] = useState("");
   const [payNotes, setPayNotes] = useState("");
   const [canManage, setCanManage] = useState(false);
+  const canWrite = useCanWrite();
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -378,10 +380,10 @@ export default function AcademySppManager() {
                         {canManage ? (
                           <td className="py-3 text-right">
                             {item.status !== "paid" && item.status !== "waived" ? (
-                              <button className="mr-2 rounded-md border border-border px-3 py-1 text-xs font-bold text-primary" onClick={() => openPayment(item)} type="button">Bayar</button>
+                              <button className="mr-2 rounded-md border border-border px-3 py-1 text-xs font-bold text-primary disabled:opacity-50" disabled={!canWrite} onClick={() => openPayment(item)} type="button">Bayar</button>
                             ) : null}
                             {item.status !== "paid" && item.status !== "waived" ? (
-                              <button className="rounded-md border border-secondary/30 px-3 py-1 text-xs font-bold text-secondary" onClick={() => handleWaive(item)} type="button">Bebaskan</button>
+                              <button className="rounded-md border border-secondary/30 px-3 py-1 text-xs font-bold text-secondary disabled:opacity-50" disabled={!canWrite} onClick={() => handleWaive(item)} type="button">Bebaskan</button>
                             ) : null}
                           </td>
                         ) : null}
@@ -448,7 +450,7 @@ export default function AcademySppManager() {
                 <textarea className="mt-2 min-h-20 w-full rounded-md border border-border p-3 text-sm" value={payNotes} onChange={(event) => setPayNotes(event.target.value)} />
               </label>
               <div className="flex flex-col gap-2 sm:flex-row">
-                <button className="h-11 flex-1 rounded-md bg-primary px-4 text-sm font-bold text-white disabled:bg-muted" disabled={isSaving || isUploading} type="submit">Simpan Pembayaran</button>
+                <button className="h-11 flex-1 rounded-md bg-primary px-4 text-sm font-bold text-white disabled:bg-muted" disabled={isSaving || isUploading || !canWrite} type="submit">Simpan Pembayaran</button>
                 <button className="h-11 rounded-md border border-border px-4 text-sm font-bold text-primary" onClick={() => setPayTarget(null)} type="button">Batal</button>
               </div>
             </form>

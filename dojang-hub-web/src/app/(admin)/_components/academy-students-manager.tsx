@@ -12,6 +12,7 @@ import {
   getAkademiStudents,
 } from "../_lib/admin-api";
 import AcademyRankBeltBadge from "./academy-rank-belt-badge";
+import { useCanWrite } from "./ui/subscription-status";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -42,6 +43,7 @@ export default function AcademyStudentsManager() {
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [canManage, setCanManage] = useState(false);
+  const canWrite = useCanWrite();
   const [isLoading, setIsLoading] = useState(true);
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -183,7 +185,7 @@ export default function AcademyStudentsManager() {
               <option value="all">Semua kelas</option>
               {classes.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
             </select>
-            {canManage ? (
+            {canManage && canWrite ? (
               <Link
                 className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-3 text-sm font-bold text-white transition hover:bg-primary-container"
                 href="/academy/students/new"
@@ -246,8 +248,8 @@ export default function AcademyStudentsManager() {
                   </td>
                   <td className="py-3 text-right">
                     <Link className="mr-2 rounded-md border border-border px-3 py-1 text-xs font-bold text-primary" href={`/academy/students/${item.id}`}>Detail</Link>
-                    {canManage ? <Link className="mr-2 rounded-md border border-border px-3 py-1 text-xs font-bold text-primary" href={`/academy/students/${item.id}/edit`}>Edit</Link> : null}
-                    {canManage ? <button className="rounded-md border border-secondary/30 px-3 py-1 text-xs font-bold text-secondary" onClick={() => handleDelete(item)} type="button">Hapus</button> : null}
+                    {canManage && canWrite ? <Link className="mr-2 rounded-md border border-border px-3 py-1 text-xs font-bold text-primary" href={`/academy/students/${item.id}/edit`}>Edit</Link> : null}
+                    {canManage && canWrite ? <button className="rounded-md border border-secondary/30 px-3 py-1 text-xs font-bold text-secondary" onClick={() => handleDelete(item)} type="button">Hapus</button> : null}
                   </td>
                 </tr>
               ))}

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import {
   TrainingClass,
   TrainingSession,
@@ -11,6 +11,7 @@ import {
 import AttendanceCalendarMobile from "./attendance/attendance-calendar-mobile";
 import AttendanceCalendarDesktop from "./attendance/attendance-calendar-desktop";
 import AttendanceHistoryList from "./attendance/attendance-history-list";
+import { useCanWrite } from "./ui/subscription-status";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -70,7 +71,30 @@ function shortTime(value: string) {
   return value?.slice(0, 5) || "";
 }
 
+type OpenAttendanceLinkProps = {
+  canWrite: boolean;
+  className: string;
+  children: ReactNode;
+};
+
+function OpenAttendanceLink({ canWrite, className, children }: OpenAttendanceLinkProps) {
+  if (!canWrite) {
+    return (
+      <button type="button" disabled className={`${className} cursor-not-allowed opacity-50`}>
+        {children}
+      </button>
+    );
+  }
+
+  return (
+    <Link href={`/academy/attendance/new?date=${formatLocalDate(new Date())}`} className={className}>
+      {children}
+    </Link>
+  );
+}
+
 export default function AcademyAttendanceOverviewManager() {
+  const canWrite = useCanWrite();
   const tokenRef = useRef("");
   const [sessions, setSessions] = useState<TrainingSession[]>([]);
   const [classes, setClasses] = useState<TrainingClass[]>([]);
@@ -225,12 +249,12 @@ export default function AcademyAttendanceOverviewManager() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <Link
-              href={`/academy/attendance/new?date=${formatLocalDate(new Date())}`}
+            <OpenAttendanceLink
+              canWrite={canWrite}
               className="min-h-11 inline-flex items-center justify-center border-2 border-primary bg-primary px-4 py-2 text-sm font-bold text-white transition hover:bg-primary-container active:bg-primary-container/90"
             >
               + Buka Absensi
-            </Link>
+            </OpenAttendanceLink>
 
             <div className="flex items-center border-2 border-border">
               <button
@@ -339,12 +363,12 @@ export default function AcademyAttendanceOverviewManager() {
               Tabel Absensi {monthTitle(calendarMonth)}
             </h2>
           </div>
-          <Link
-            href={`/academy/attendance/new?date=${formatLocalDate(new Date())}`}
+          <OpenAttendanceLink
+            canWrite={canWrite}
             className="min-h-11 inline-flex items-center justify-center border-2 border-border bg-white px-4 text-sm font-bold text-primary transition hover:border-primary hover:bg-surface-container-low"
           >
             Buka Absensi Baru
-          </Link>
+          </OpenAttendanceLink>
         </div>
 
         <AttendanceHistoryList
