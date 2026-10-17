@@ -35,10 +35,13 @@ class DashboardController extends Controller
             ->whereBetween('session_date', [$monthStart, $monthEnd]);
 
         if ($user->role === 'pelatih') {
-            $sessionQuery->where('coach_id', $user->id);
+            $sessionQuery->where(fn ($query) => $query
+                ->where('coach_id', $user->id)
+                ->orWhereHas('coaches', fn ($coaches) => $coaches->where('users.id', $user->id)));
         }
 
-        $sessionIds = (clone $sessionQuery)->pluck('id');
+        $countedSessionQuery = (clone $sessionQuery)->whereNotIn('status', TrainingSession::UNCOUNTED_STATUSES);
+        $sessionIds = (clone $countedSessionQuery)->pluck('id');
         $attendanceTotal = $sessionIds->isEmpty()
             ? 0
             : (int) TrainingAttendance::query()
@@ -139,8 +142,8 @@ class DashboardController extends Controller
             'setup' => $setupSummary,
             'spp' => $sppSummary,
             'sessions' => [
-                'month_count' => (clone $sessionQuery)->count(),
-                'completed_count' => (clone $sessionQuery)->where('status', 'completed')->count(),
+                'month_count' => (clone $countedSessionQuery)->count(),
+                'completed_count' => (clone $countedSessionQuery)->where('status', 'completed')->count(),
                 'attendance_total' => $attendanceTotal,
                 'attendance_present' => $attendancePresent,
                 'attendance_rate' => $attendanceTotal > 0 ? round(($attendancePresent / $attendanceTotal) * 100) : 0,

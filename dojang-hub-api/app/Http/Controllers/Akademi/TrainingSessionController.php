@@ -3,19 +3,22 @@
 namespace App\Http\Controllers\Akademi;
 
 use App\Http\Controllers\Controller;
-use App\Models\Student;
 use App\Models\TrainingClass;
 use App\Models\TrainingPlace;
 use App\Models\TrainingSchedule;
 use App\Models\TrainingSession;
 use App\Models\User;
+use App\Services\TrainingSessionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class TrainingSessionController extends Controller
 {
+    public function __construct(private readonly TrainingSessionService $sessions) {}
+
     public function index(Request $request): JsonResponse
     {
         $query = TrainingSession::query()
@@ -70,6 +73,18 @@ class TrainingSessionController extends Controller
                 'session_type' => $data['session_type'] ?? 'regular',
                 'source_schedule_date' => $data['source_schedule_date'] ?? $data['session_date'],
             ];
+
+            $isDuplicate = TrainingSession::query()
+                ->where('akademi_id', $akademiId)
+                ->where('training_schedule_id', $schedule->id)
+                ->whereDate('source_schedule_date', $data['source_schedule_date'])
+                ->exists();
+
+            if ($isDuplicate) {
+                throw ValidationException::withMessages([
+                    'training_schedule_id' => 'Sesi untuk jadwal dan tanggal ini sudah ada.',
+                ]);
+            }
         }
 
         if ($request->user()->role === 'pelatih' && empty($data['coach_ids']) && empty($data['coach_id'])) {
@@ -89,16 +104,7 @@ class TrainingSessionController extends Controller
 
             $session->coaches()->sync($coachIds);
 
-            Student::query()
-                ->where('akademi_id', $akademiId)
-                ->where('primary_class_id', $session->class_id)
-                ->where('status', 'active')
-                ->orderBy('name')
-                ->get()
-                ->each(fn (Student $student) => $session->attendances()->create([
-                    'student_id' => $student->id,
-                    'status' => 'present',
-                ]));
+            $this->sessions->syncRoster($session);
 
             return $session->load($this->relations());
         });
@@ -109,6 +115,7 @@ class TrainingSessionController extends Controller
     public function show(Request $request, TrainingSession $trainingSession): JsonResponse
     {
         $this->ensureBelongsToCurrentAkademi($request, $trainingSession);
+        $this->sessions->syncDraftRoster($trainingSession);
 
         return response()->json([
             'training_session' => $trainingSession->load($this->relations()),
@@ -123,9 +130,15 @@ class TrainingSessionController extends Controller
         if ($request->user()->role === 'pelatih') {
             abort_if($request->has('class_id') && (int) $request->class_id !== (int) $trainingSession->class_id, 403, 'Akses ditolak. Pelatih tidak bisa mengubah kelas sesi latihan.');
             abort_if($request->has('training_schedule_id') && (int) $request->training_schedule_id !== (int) $trainingSession->training_schedule_id, 403, 'Akses ditolak. Pelatih tidak bisa mengubah jadwal sesi latihan.');
+            abort_if($request->has('coach_ids') || $request->has('coach_id'), 403, 'Akses ditolak. Hanya ketua atau admin akademi yang bisa mengganti pelatih sesi.');
         }
 
+        $this->sessions->ensureWithinCoachWindow($request->user(), $trainingSession->session_date);
         $data = $request->validate($this->rules($request->user()->akademi_id, true));
+
+        if (isset($data['session_date'])) {
+            $this->sessions->ensureWithinCoachWindow($request->user(), $data['session_date']);
+        }
         $coachIds = array_key_exists('coach_ids', $data) ? $this->normalizedCoachIds($data) : null;
         $trainingSession->update([
             ...collect($data)->except('coach_ids')->all(),
@@ -146,6 +159,14 @@ class TrainingSessionController extends Controller
         $this->ensureCanManageSessions($request, $trainingSession);
         $this->ensureBelongsToCurrentAkademi($request, $trainingSession);
 
+        $this->sessions->ensureWithinCoachWindow($request->user(), $trainingSession->session_date);
+
+        if ($trainingSession->status === 'rescheduled') {
+            throw ValidationException::withMessages([
+                'status' => 'Sesi ini sudah dipindah. Isi absensi pada sesi pengganti.',
+            ]);
+        }
+
         $data = $request->validate([
             'material' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string'],
@@ -165,6 +186,8 @@ class TrainingSessionController extends Controller
         ]);
 
         DB::transaction(function () use ($data, $trainingSession) {
+            $this->sessions->syncDraftRoster($trainingSession);
+
             if (request()->user()->role === 'pelatih') {
                 $trainingSession->coaches()->syncWithoutDetaching([request()->user()->id]);
                 if (! $trainingSession->coach_id) {
@@ -265,17 +288,15 @@ class TrainingSessionController extends Controller
 
     private function ensureCanCreateSession(Request $request, array $data): void
     {
-        $role = $request->user()->role;
-        $isAdminRole = in_array($role, ['ketua_akademi', 'admin_akademi'], true);
-        $isTodayCoach = $role === 'pelatih'
-            && isset($data['session_date'])
-            && now()->toDateString() === $data['session_date'];
+        $user = $request->user();
 
         abort_unless(
-            $isAdminRole || $isTodayCoach,
+            $this->sessions->isAdminRole($user) || $user->role === 'pelatih',
             403,
-            'Akses ditolak. Hanya admin akademi atau pelatih hari ini yang bisa membuat sesi latihan.'
+            'Akses ditolak. Hanya admin akademi atau pelatih yang bisa membuat sesi latihan.'
         );
+
+        $this->sessions->ensureWithinCoachWindow($user, $data['session_date']);
     }
 
     private function ensureBelongsToCurrentAkademi(Request $request, TrainingSession $trainingSession): void
@@ -289,15 +310,7 @@ class TrainingSessionController extends Controller
 
     private function relations(): array
     {
-        return [
-            'schedule',
-            'schedule.coaches',
-            'class.trainingPlace',
-            'trainingPlace',
-            'coach.coachProfile',
-            'coaches',
-            'attendances.student.currentRank',
-        ];
+        return $this->sessions->relations();
     }
 
     private function normalizedCoachIds(array $data): array

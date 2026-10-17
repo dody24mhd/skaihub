@@ -7,6 +7,7 @@ use App\Models\Akademi;
 use App\Models\SportRank;
 use App\Models\Student;
 use App\Models\TrainingClass;
+use App\Models\TrainingSession;
 use App\Services\SubscriptionService;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\JsonResponse;
@@ -132,11 +133,11 @@ class StudentController extends Controller
             'student' => $student->load(['currentRank', 'primaryClass.trainingPlace']),
             'summary' => [
                 'attendance_total' => $student->attendances()
-                    ->whereHas('session', fn ($query) => $query->where('akademi_id', $request->user()->akademi_id))
+                    ->whereHas('session', fn ($query) => $query->where('akademi_id', $request->user()->akademi_id)->whereNotIn('status', TrainingSession::UNCOUNTED_STATUSES))
                     ->count(),
                 'attendance_present' => $student->attendances()
                     ->where('status', 'present')
-                    ->whereHas('session', fn ($query) => $query->where('akademi_id', $request->user()->akademi_id))
+                    ->whereHas('session', fn ($query) => $query->where('akademi_id', $request->user()->akademi_id)->whereNotIn('status', TrainingSession::UNCOUNTED_STATUSES))
                     ->count(),
                 'spp_unpaid_count' => $canViewSpp
                     ? $student->sppBills()

@@ -27,7 +27,13 @@ class TrainingSession extends Model
         'photo_urls',
         'session_type',
         'status',
+        'reschedule_reason',
+        'cancel_reason',
+        'rescheduled_to_id',
+        'rescheduled_from_id',
     ];
+
+    public const UNCOUNTED_STATUSES = ['rescheduled', 'cancelled'];
 
     protected function casts(): array
     {
@@ -68,6 +74,16 @@ class TrainingSession extends Model
         return $this->belongsToMany(User::class, 'training_session_coaches', 'training_session_id', 'coach_id')
             ->with('coachProfile')
             ->withTimestamps();
+    }
+
+    public function rescheduledTo(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'rescheduled_to_id');
+    }
+
+    public function rescheduledFrom(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'rescheduled_from_id');
     }
 
     public function attendances(): HasMany

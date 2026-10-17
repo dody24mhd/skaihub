@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   AttendanceStatus,
@@ -31,6 +32,7 @@ const statusLabels: Record<TrainingSession["status"], string> = {
   draft: "Draft",
   completed: "Selesai",
   cancelled: "Batal",
+  rescheduled: "Dipindah",
 };
 
 function formatLocalDate(date: Date) {
@@ -67,7 +69,7 @@ export default function AcademyAttendanceManager({
   const [isCreateFormOpen, setIsCreateFormOpen] = useState(true);
   const [activeDate, setActiveDate] = useState(initialDate || formatLocalDate(new Date()));
   const [role, setRole] = useState("");
-  const [draftSessionType, setDraftSessionType] = useState<TrainingSession["session_type"]>("regular");
+  const [draftSessionType, setDraftSessionType] = useState<TrainingSession["session_type"]>("extra");
   const [draftClassId, setDraftClassId] = useState("");
   const [draftStartsAt, setDraftStartsAt] = useState("");
   const [draftEndsAt, setDraftEndsAt] = useState("");
@@ -304,7 +306,7 @@ export default function AcademyAttendanceManager({
               {selected
                 ? selected.class?.name || "Sesi Latihan"
                 : isCreateFormOpen
-                ? "Buka Absensi"
+                ? "Sesi Tambahan"
                 : "Pilih sesi latihan"}
             </h2>
             {selected ? (
@@ -334,6 +336,14 @@ export default function AcademyAttendanceManager({
         {!selected && !isCreateFormOpen ? (
           <p className="mt-8 text-sm text-muted">
             Buka absensi baru atau pilih sesi dari kalender absensi untuk melanjutkan.
+          </p>
+        ) : !selected && !canCreate ? (
+          <p className="mt-6 text-sm text-muted">
+            Buka absensi dari{" "}
+            <Link href="/academy/attendance" className="font-bold text-secondary hover:underline">
+              Kelas Hari Ini
+            </Link>{" "}
+            untuk jadwal yang Anda ampu.
           </p>
         ) : !selected ? (
           <AttendanceSessionCreate

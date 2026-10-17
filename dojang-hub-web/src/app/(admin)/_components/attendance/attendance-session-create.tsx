@@ -47,10 +47,10 @@ export default function AttendanceSessionCreate({
           </span>
         </div>
         <h3 className="font-heading text-lg font-bold text-primary">
-          Buka Absensi
+          Sesi Tambahan
         </h3>
         <p className="mt-1 text-sm leading-relaxed text-muted">
-          Pilih tipe absensi, kelas, dan jam latihan. Setelah berita acara dibuka, daftar hadir siswa akan dibuat otomatis dari kelas.
+          Untuk latihan di luar jadwal rutin. Sesi dari jadwal dibuka lewat Kelas Hari Ini. Daftar hadir siswa dibuat otomatis dari kelas.
         </p>
       </div>
 

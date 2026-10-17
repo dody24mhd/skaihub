@@ -160,13 +160,26 @@ describe("AcademyAttendanceManager", () => {
     vi.mocked(adminApi.getAkademiTrainingSession).mockResolvedValue({ training_session: mockSession });
   });
 
-  it("memuat dan menampilkan form buka absensi jika tidak ada session id", async () => {
+  it("memuat dan menampilkan form sesi tambahan jika tidak ada session id", async () => {
     render(<AcademyAttendanceManager />);
 
-    const titles = await screen.findAllByText("Buka Absensi");
+    const titles = await screen.findAllByText("Sesi Tambahan");
     expect(titles.length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText("Tipe Absensi")).toBeInTheDocument();
     expect(screen.getByText("Kelas Absensi")).toBeInTheDocument();
+    expect(screen.getByLabelText(/tipe absensi/i)).toHaveValue("extra");
+  });
+
+  it("pelatih tanpa session id diarahkan ke Kelas Hari Ini", async () => {
+    vi.mocked(adminApi.getAkademiMe).mockResolvedValueOnce({
+      ...mockMe,
+      user: { ...mockMe.user, role: "pelatih" },
+    });
+    render(<AcademyAttendanceManager />);
+
+    const link = await screen.findByRole("link", { name: /kelas hari ini/i });
+    expect(link).toHaveAttribute("href", "/academy/attendance");
+    expect(screen.queryByText("Tipe Absensi")).not.toBeInTheDocument();
   });
 
   it("memuat sesi dan menampilkan kartu peserta dengan opsi status Hadir, Izin, Sakit, Alpa", async () => {

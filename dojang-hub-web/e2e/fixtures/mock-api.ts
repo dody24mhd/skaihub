@@ -519,6 +519,32 @@ export const MOCK_PUBLIC_PROFILE = {
   ],
 };
 
+// L4-A mock data
+export const MOCK_TODAY_SLOTS = [
+  {
+    key: "schedule-1-today",
+    date: "2026-10-19",
+    training_schedule_id: 1,
+    session_id: null,
+    class_id: 1,
+    class_name: "Reguler Sore",
+    place_name: "Dojang Utama",
+    starts_at: "16:00",
+    ends_at: "18:00",
+    coach_ids: [1],
+    coach_names: ["Sabeum Nim"],
+    status: "not_opened" as const,
+    session_type: "regular" as const,
+    attendances_count: 0,
+    present_count: 0,
+    reschedule_reason: null,
+    cancel_reason: null,
+    rescheduled_to: null,
+    rescheduled_from: null,
+  },
+];
+// end L4-A
+
 export async function setupMockApi(page: Page) {
   // Tangkap semua request ke API (baik localhost:8000 maupun URL kustom)
   await page.route("**/api/**", async (route: Route) => {
@@ -743,6 +769,16 @@ export async function setupMockApi(page: Page) {
         body: JSON.stringify({ data: MOCK_RANK_PROMOTION_EVENTS }),
       });
     }
+
+    // L4-A
+    if (url.includes("/akademi/sessions/today")) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ date: "2026-10-19", coach_backfill_days: 7, data: MOCK_TODAY_SLOTS }),
+      });
+    }
+    // end L4-A
 
     // Fallback data kosong untuk rute akademi lainnya
     return route.fulfill({

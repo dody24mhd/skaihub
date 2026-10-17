@@ -231,5 +231,52 @@ if (isVitest) {
       await playwrightExpect(dialog).toBeHidden();
     });
   });
+
+  // L4-A
+  playwrightTest.describe("Kelas Hari Ini (L4-A)", () => {
+    playwrightTest(
+      "buka Kelas Hari Ini, tap slot, tandai Sakit, lalu simpan pada mobile",
+      async ({ page }, testInfo) => {
+        if (testInfo.project.name !== "mobile") return;
+
+        let fromSchedulePayload: { training_schedule_id?: number; date?: string } | null = null;
+        let attendancePayload: { attendances?: Array<{ id: number; status: string }> } | null = null;
+
+        await setAdminSession(page);
+        await setupMockApi(page);
+        await page.route("**/api/akademi/training-sessions/from-schedule", async (route) => {
+          fromSchedulePayload = route.request().postDataJSON() as { training_schedule_id?: number; date?: string };
+          await route.fallback();
+        });
+        await page.route("**/api/akademi/training-sessions/1/attendance", async (route) => {
+          if (route.request().method() === "PATCH") {
+            attendancePayload = route.request().postDataJSON() as { attendances?: Array<{ id: number; status: string }> };
+          }
+          await route.fallback();
+        });
+
+        await page.goto("/academy/attendance");
+        await playwrightExpect(page.getByRole("tab", { name: "Kelas Hari Ini" })).toHaveAttribute("aria-selected", "true");
+
+        const slotCard = page.locator('[data-testid="today-slot-schedule-1-today"]');
+        await playwrightExpect(slotCard).toContainText("Belum dibuka");
+        await slotCard.getByRole("button", { name: "Buka Absensi" }).click();
+
+        await page.waitForURL(/\/academy\/attendance\/new\?session=1/);
+        playwrightExpect(fromSchedulePayload).toEqual({ training_schedule_id: 1, date: "2026-10-19" });
+
+        const studentCard = page.locator('[data-testid="attendance-card-1"]');
+        const sickBtn = studentCard.getByRole("button", { name: /^sakit/i });
+        await sickBtn.click();
+        await playwrightExpect(sickBtn).toHaveAttribute("aria-pressed", "true");
+        await page.getByRole("button", { name: /simpan draft/i }).click();
+
+        await playwrightExpect(page.getByText(/absensi disimpan/i)).toBeVisible();
+        const saved = attendancePayload as { attendances?: Array<{ id: number; status: string }> } | null;
+        playwrightExpect(saved?.attendances?.find((item) => item.id === 1)?.status).toBe("sick");
+      }
+    );
+  });
+  // end L4-A
 }
 
