@@ -173,18 +173,24 @@ class RankPromotionController extends Controller
             $student->update(['current_rank_id' => $participant->to_rank_id]);
 
             $participant->loadMissing('event');
-            $student->rankHistories()->create([
-                'akademi_id' => $student->akademi_id,
-                'sport_rank_id' => $participant->to_rank_id,
-                'achieved_on' => optional($participant->event?->event_date)->toDateString() ?? now()->toDateString(),
-                'source_type' => 'promotion_event',
-                'rank_promotion_participant_id' => $participant->id,
-                'notes' => $participant->notes ?? 'Lulus ujian kenaikan tingkat',
-                'changed_by' => $participant->assessed_by,
-            ]);
+            $student->rankHistories()->updateOrCreate(
+                ['rank_promotion_participant_id' => $participant->id],
+                [
+                    'akademi_id' => $student->akademi_id,
+                    'sport_rank_id' => $participant->to_rank_id,
+                    'achieved_on' => optional($participant->event?->event_date)->toDateString() ?? now()->toDateString(),
+                    'source_type' => 'promotion_event',
+                    'notes' => $participant->notes ?? 'Lulus ujian kenaikan tingkat',
+                    'changed_by' => $participant->assessed_by,
+                ]
+            );
 
             return;
         }
+
+        $student->rankHistories()
+            ->where('rank_promotion_participant_id', $participant->id)
+            ->delete();
 
         if ($student->current_rank_id === $participant->to_rank_id) {
             $student->update(['current_rank_id' => $participant->from_rank_id]);

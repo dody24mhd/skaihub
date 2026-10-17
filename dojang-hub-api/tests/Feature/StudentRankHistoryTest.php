@@ -175,6 +175,70 @@ class StudentRankHistoryTest extends TestCase
         $this->assertSame($this->rankGreen->id, $student->fresh()->current_rank_id);
     }
 
+    public function test_ukt_participant_rank_history_is_idempotent_and_can_be_reverted(): void
+    {
+        Sanctum::actingAs($this->adminA);
+
+        $student = $this->akademiA->siswa()->create([
+            'member_number' => 'NGA-IDEMP',
+            'name' => 'Siswa Idempoten',
+            'gender' => 'male',
+            'birth_date' => '2014-01-01',
+            'joined_date' => '2026-01-01',
+            'height_cm' => 145,
+            'weight_kg' => 40,
+            'status' => 'active',
+            'current_rank_id' => $this->rankYellow->id,
+        ]);
+
+        $event = RankPromotionEvent::create([
+            'akademi_id' => $this->akademiA->id,
+            'name' => 'UKT Semester Idempoten',
+            'event_date' => '2026-06-20',
+            'status' => 'draft',
+        ]);
+
+        $participant = $event->participants()->create([
+            'akademi_id' => $this->akademiA->id,
+            'student_id' => $student->id,
+            'from_rank_id' => $this->rankYellow->id,
+            'to_rank_id' => $this->rankGreen->id,
+            'result' => 'registered',
+        ]);
+
+        // PATCH 1: passed
+        $this->patchJson("/api/akademi/rank-promotions/{$event->id}/participants/{$participant->id}", [
+            'result' => 'passed',
+            'score' => 85,
+        ])->assertOk();
+
+        // PATCH 2: passed lagi
+        $this->patchJson("/api/akademi/rank-promotions/{$event->id}/participants/{$participant->id}", [
+            'result' => 'passed',
+            'score' => 90,
+        ])->assertOk();
+
+        // Harus tetap 1 baris riwayat
+        $this->assertSame(
+            1,
+            \App\Models\StudentRankHistory::where('rank_promotion_participant_id', $participant->id)->count()
+        );
+        $this->assertSame($this->rankGreen->id, $student->fresh()->current_rank_id);
+
+        // Revert ke failed
+        $this->patchJson("/api/akademi/rank-promotions/{$event->id}/participants/{$participant->id}", [
+            'result' => 'failed',
+            'score' => 50,
+        ])->assertOk();
+
+        // Riwayat UKT harus 0 baris dan rank kembali ke from_rank_id (rankYellow)
+        $this->assertSame(
+            0,
+            \App\Models\StudentRankHistory::where('rank_promotion_participant_id', $participant->id)->count()
+        );
+        $this->assertSame($this->rankYellow->id, $student->fresh()->current_rank_id);
+    }
+
     public function test_tenant_isolation_on_rank_histories(): void
     {
         $studentA = $this->akademiA->siswa()->create([
