@@ -8,6 +8,7 @@ RUN apk add --no-cache nginx libpq \
     && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS libpq-dev \
     && docker-php-ext-install -j"$(nproc)" pdo_pgsql opcache \
     && apk del .build-deps \
+    && mkdir -p /run/nginx \
     && ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
