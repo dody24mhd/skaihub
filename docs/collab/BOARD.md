@@ -15,22 +15,19 @@ Status: `TODO` → `IN_PROGRESS` → `REVIEW` → `CHANGES_REQUESTED` → `DONE`
 
 ## Tugas
 
-> Status per 2026-10-17 siang (lead). Gemini: kuota 5 jam habis → jalur dikerjakan agent Claude.
+> Status 2026-10-17 (lead): **semua fase 0–5 + L3-F selesai dan di-merge ke `main`.**
 
-| Jalur | Pelaksana | Worktree / branch | Status |
-|---|---|---|---|
-| Fase 0–2, L1-*, L2-* | Gemini + lead | — | DONE (merged) |
-| L3-A…E (Fase 3) | Gemini + Claude agents | fase3-* | DONE (merged) — E2E 61 lulus / 0 gagal |
-| L3-F aksesibilitas (8 fix prioritas dari review WCAG) | Claude agent | (nanti) | TODO — setelah Fase 4 merge |
-| L4-A sesi & Kelas Hari Ini | Claude agent | fase4-a / fase-4-sessions | DONE (merged) |
-| L4-B SPP lanjutan | Claude agent | fase4-b / fase-4-spp | DONE (merged) |
-| L4-C sistem tingkatan | Claude agent | fase4-c / fase-4-ranks | DONE (merged) |
-| L4-D langganan & operator | Claude agent | fase4-d / fase-4-subscription | DONE (merged) |
-| L4-E data siswa & penilaian | Claude agent | fase4-e / fase-4-students | DONE (merged) |
-| L5-D ops & polish | Claude agent | fase5-d / fase-5-ops | IN_PROGRESS |
-| L5-B akun platform & password | Claude agent | fase5-b / fase-5-accounts | DONE (merged) |
-| L5-C rapor & sertifikat | Claude agent | — | TODO |
-| L5-A E2E integrasi backend asli | Claude agent | — | TODO (terakhir) |
+| Fase / jalur | Status | Bukti |
+|---|---|---|
+| Fase 0 fondasi | DONE | |
+| Fase 1 audit + backend (L1-A/B/C) | DONE | `docs/AUDIT-2026-10.md` |
+| Fase 2 PWA + web (L2-A/B) | DONE | |
+| Fase 3 responsive (L3-A…E) + aksesibilitas (L3-F) | DONE | E2E mock 87 lulus |
+| Fase 4 penyesuaian alur (L4-A…E) | DONE | |
+| Fase 5 kelengkapan (L5-A/B/C/D) | DONE | Integrasi backend asli 26/26 lulus |
+| Deploy | TODO | menunggu keputusan hosting, domain, izin push GitHub |
+
+Tindak lanjut kecil (pasca-rilis): tampilkan `public_schedule` di landing page; redirect pelatih dari `/academy/spp`; pesan wali di form siswa tertutup validasi `required` browser; pesan status di manager internal/CMS belum memakai `StatusMessage`; event audit SPP belum ada tampilannya; urutan sabuk perlu konfirmasi pemilik (`docs/RANK-SYSTEMS.md`).
 
 ## Permintaan lintas wilayah
 
