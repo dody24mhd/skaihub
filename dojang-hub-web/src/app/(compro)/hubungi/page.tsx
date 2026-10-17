@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import ContactForm from "../_components/contact-form";
 import { getHomeFaqs, getSiteSettings } from "../_lib/compro-data";
+import { DEFAULT_FAQS } from "../_lib/default-faqs";
 import { createWhatsAppUrl, formatWhatsAppDisplay, OFFICE_HOURS, WHATSAPP_DISPLAY, WHATSAPP_NUMBER } from "../_lib/whatsapp";
 
 export const metadata: Metadata = {
@@ -20,7 +21,8 @@ export const metadata: Metadata = {
 };
 
 export default async function HubungiPage() {
-  const [faqs, settings] = await Promise.all([getHomeFaqs(), getSiteSettings()]);
+  const [cmsFaqs, settings] = await Promise.all([getHomeFaqs(), getSiteSettings()]);
+  const faqs = cmsFaqs.length > 0 ? cmsFaqs : DEFAULT_FAQS;
 
   const waNumber = settings.whatsapp_number ?? WHATSAPP_NUMBER;
   const waDisplay = settings.whatsapp_number

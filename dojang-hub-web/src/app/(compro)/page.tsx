@@ -314,7 +314,8 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* -- TESTIMONIALS --------------------------------------- */}
+      {/* -- TESTIMONIALS (only real ones from the CMS) ------- */}
+      {testimonials.length > 0 && (
       <section className="relative overflow-hidden bg-slate-50 py-24">
         {/* Diagonal accent top-right */}
         <div className="absolute right-0 top-0 h-48 w-48 bg-secondary/5 [clip-path:polygon(100%_0,0_0,100%_100%)]" />
@@ -382,14 +383,11 @@ export default async function Home() {
                   </div>
                 </article>
               ))
-            ) : (
-              <div className="md:col-span-3 py-12 text-center text-sm text-muted italic">
-                Belum ada testimoni yang diterbitkan saat ini.
-              </div>
-            )}
+            ) : null}
           </div>
         </div>
       </section>
+      )}
 
       {/* -- CTA FINAL ------------------------------------------ */}
       <section className="relative overflow-hidden bg-primary py-24 text-white">

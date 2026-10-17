@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { createWhatsAppUrl, OFFICE_HOURS } from "../_lib/whatsapp";
 import { getHomeFaqs, getSiteSettings } from "../_lib/compro-data";
+import { DEFAULT_FAQS } from "../_lib/default-faqs";
 import PlanCardView from "../_components/plan-card";
 import { MODULE_COUNT, PLAN_CARDS, PRODUCT_MODULES, planIncludesModule } from "../_lib/product";
 import { EXTRA_BLOCK_SIZE, formatPlanPrice, PLAN_RULES, quotaNote } from "@/lib/plan-pricing";
@@ -45,7 +46,8 @@ const billingInfo = [
 ];
 
 export default async function HargaPage() {
-  const [faqs, settings] = await Promise.all([getHomeFaqs(), getSiteSettings()]);
+  const [cmsFaqs, settings] = await Promise.all([getHomeFaqs(), getSiteSettings()]);
+  const faqs = cmsFaqs.length > 0 ? cmsFaqs : DEFAULT_FAQS;
   const waNumber = settings.whatsapp_number;
   const whatsappUrl = createWhatsAppUrl(
     "Halo SKAIHUB, saya ingin bertanya tentang paket dan harga SKAIHUB.",
