@@ -149,7 +149,7 @@ export default async function FiturPage() {
           </div>
           <h1 className="font-heading text-5xl font-black uppercase leading-none tracking-tight text-white md:text-7xl">
             Semua yang Akademi<br />
-            <span className="text-secondary">Kamu Butuhkan</span>
+            <span className="text-secondary">Anda Butuhkan</span>
           </h1>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-white/60">
             {MODULE_COUNT} modul yang saling terhubung, dari absensi harian sampai website publik akademi. Untuk Taekwondo dan Karate.

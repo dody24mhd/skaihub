@@ -52,20 +52,20 @@ export default async function Home() {
 
       {/* -- STATS BAR ------------------------------------------ */}
       {/* Diagonal cut top, dark bg, bold numbers */}
-      <section className="relative bg-primary py-12 [clip-path:polygon(0_0,100%_0,100%_80%,0_100%)]">
+      <section className="relative bg-primary pb-20 pt-12 sm:pb-14 [clip-path:polygon(0_0,100%_0,100%_85%,0_100%)]">
         <div className="container-app">
           <div className="flex flex-wrap items-center justify-between gap-8">
             {/* Stats */}
-            <div className="flex flex-wrap items-center gap-10">
+            <div className="grid w-full grid-cols-3 gap-4 sm:flex sm:w-auto sm:flex-wrap sm:items-center sm:gap-10">
               {[
                 { num: String(MODULE_COUNT), label: "Modul Utama" },
                 { num: String(PLAN_KEYS.length), label: "Pilihan Paket" },
                 { num: "Gratis", label: "Konsultasi Awal" },
               ].map((s, i) => (
                 <div key={s.label} className="flex items-center gap-10">
-                  {i > 0 && <div className="h-8 w-px bg-white/10" />}
+                  {i > 0 && <div className="hidden h-8 w-px bg-white/10 sm:block" />}
                   <div>
-                    <p className="font-heading text-4xl font-black text-white">{s.num}</p>
+                    <p className="font-heading text-2xl font-black text-white sm:text-4xl">{s.num}</p>
                     <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.15em] text-white/40">{s.label}</p>
                   </div>
                 </div>
@@ -74,7 +74,7 @@ export default async function Home() {
             {/* Trusted by */}
             <div className="flex flex-col gap-3">
               <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/30">Dirancang untuk</p>
-              <div className="flex flex-wrap items-center gap-6">
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
                 {["AKADEMI BARU", "AKADEMI AKTIF", "KETUA & ADMIN AKADEMI", "PELATIH"].map((name) => (
                   <span key={name} className="font-heading text-sm font-black tracking-tight text-white/20 transition hover:text-white/60">{name}</span>
                 ))}

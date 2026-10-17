@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { createWhatsAppUrl } from "../_lib/whatsapp";
@@ -84,7 +85,15 @@ export default async function TentangPage() {
               <h2 className="font-heading text-4xl font-black uppercase leading-none tracking-tight text-primary md:text-5xl">
                 Kenapa<br />SKAIHUB<br />Dibuat?
               </h2>
-
+              <div className="relative mt-10 aspect-[4/3] w-full overflow-hidden border-l-4 border-secondary">
+                <Image
+                  src="/images/photos/taekwondo-latihan-tendangan-2.webp"
+                  alt="Pelatih memegang target tendangan saat latihan Taekwondo"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 40vw"
+                />
+              </div>
             </div>
 
             {/* Kanan: narasi */}

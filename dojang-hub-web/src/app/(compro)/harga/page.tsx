@@ -110,7 +110,7 @@ export default async function HargaPage() {
                 <span className="text-xs font-black uppercase tracking-[0.2em] text-secondary">Perbandingan</span>
               </div>
               <h2 className="font-heading text-4xl font-black uppercase leading-none tracking-tight text-primary md:text-5xl">
-                Apa yang Kamu<br />Dapatkan
+                Apa yang Anda<br />Dapatkan
               </h2>
             </div>
             <p className="max-w-sm text-base leading-relaxed text-muted md:text-right">

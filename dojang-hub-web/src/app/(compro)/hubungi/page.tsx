@@ -95,7 +95,7 @@ export default async function HubungiPage() {
                 <span className="text-xs font-black uppercase tracking-[0.2em] text-secondary">Hubungi Kami</span>
               </div>
               <h2 className="font-heading text-4xl font-black uppercase leading-none tracking-tight text-primary md:text-5xl">
-                Pilih Cara<br />Terbaik untuk Kamu
+                Pilih Cara<br />Terbaik untuk Anda
               </h2>
             </div>
             <p className="max-w-sm text-base leading-relaxed text-muted md:text-right">
