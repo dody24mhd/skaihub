@@ -85,6 +85,37 @@ describe("AcademySppManager", () => {
     expect(screen.queryByLabelText("Status tagihan")).not.toBeInTheDocument();
   });
 
+  it("setelah bayar menampilkan tautan ke kwitansi pembayaran terbaru", async () => {
+    const bill: api.SppBill = {
+      id: 9,
+      akademi_id: 1,
+      student_id: 1,
+      class_id: 1,
+      billing_year: 2026,
+      billing_month: 10,
+      amount: "150000.00",
+      paid_amount: "0.00",
+      due_date: "2026-10-10",
+      status: "unpaid",
+      notes: null,
+      student: { name: "Arya Pratama", primary_class_id: 1 } as api.SppBill["student"],
+    };
+    mockedApi.getAkademiClasses.mockResolvedValue({
+      data: [{ id: 1, akademi_id: 1, training_place_id: null, name: "Reguler", spp_amount_override: null, target_sessions_per_month: 4, is_active: true, created_at: "", updated_at: "" }],
+    });
+    mockedApi.getAkademiSppBills.mockResolvedValue({ data: { data: [bill], current_page: 1, last_page: 1, total: 1 } });
+    const payment = { id: 44, spp_bill_id: 9, receipt_number: "KW-202610-0002", amount: "150000.00", paid_at: "2026-10-05", method: "cash", proof_url: null, notes: null, created_by: 1 };
+    mockedApi.payAkademiSppBill.mockResolvedValue({ spp_bill: { ...bill, status: "paid", paid_amount: "150000.00", payments: [payment] } });
+    render(<AcademySppManager />);
+
+    fireEvent.click(await screen.findByRole("button", { name: "Lihat Tagihan" }));
+    fireEvent.click(screen.getAllByRole("button", { name: "Bayar" })[0]);
+    fireEvent.click(within(await screen.findByRole("dialog")).getByRole("button", { name: /simpan pembayaran/i }));
+
+    const link = await screen.findByRole("link", { name: "Lihat kwitansi" });
+    expect(link).toHaveAttribute("href", "/academy/spp/receipts/44");
+  });
+
   it("pelatih tidak melihat tombol pengaturan dan tidak memuat pengaturan", async () => {
     mockedApi.getAkademiMe.mockResolvedValue(meResponse("pelatih"));
     render(<AcademySppManager />);

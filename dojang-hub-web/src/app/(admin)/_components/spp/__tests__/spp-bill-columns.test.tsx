@@ -71,6 +71,20 @@ describe("buildSppBillColumns", () => {
     expect(within(onTimeCard).queryByText("Terlambat")).not.toBeInTheDocument();
   });
 
+  it("menautkan setiap pembayaran ke halaman kwitansi", () => {
+    const payment = { id: 31, spp_bill_id: 1, receipt_number: "KW-202610-0001", amount: "50000.00", paid_at: "2026-10-05", method: "cash", proof_url: null, notes: null, created_by: 1 };
+    render(
+      <ResponsiveList
+        columns={buildSppBillColumns({ canManage: true, onPay: vi.fn(), onWaive: vi.fn() })}
+        rows={[bill({ payments: [payment] })]}
+        getRowKey={(row) => row.id}
+      />,
+    );
+
+    const card = screen.getByTestId("responsive-list-card");
+    expect(within(card).getByRole("link", { name: "KW-202610-0001" })).toHaveAttribute("href", "/academy/spp/receipts/31");
+  });
+
   it("tanpa hak kelola tidak ada kolom aksi", () => {
     renderBills(false);
 

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { SppBill } from "../../_lib/admin-api";
 import { money } from "../students/format";
 import { ResponsiveColumn } from "../ui";
@@ -52,6 +53,22 @@ export function buildSppBillColumns({
           ) : null}
         </span>
       ),
+    },
+    {
+      key: "receipts",
+      header: "Kwitansi",
+      render: (item) =>
+        item.payments?.length ? (
+          <span className="flex flex-col items-end gap-1 md:items-start">
+            {item.payments.map((payment) => (
+              <Link key={payment.id} className="text-xs font-bold text-secondary underline-offset-2 hover:underline" href={`/academy/spp/receipts/${payment.id}`}>
+                {payment.receipt_number || "Kwitansi"}
+              </Link>
+            ))}
+          </span>
+        ) : (
+          <span className="text-xs text-muted">-</span>
+        ),
     },
   ];
 

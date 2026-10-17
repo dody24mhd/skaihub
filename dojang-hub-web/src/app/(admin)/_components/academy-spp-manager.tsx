@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import {
   SppBill,
@@ -80,6 +81,7 @@ export default function AcademySppManager() {
   const [canManage, setCanManage] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState("");
+  const [receiptPaymentId, setReceiptPaymentId] = useState<number | null>(null);
   const [error, setError] = useState("");
 
   const summary = useMemo(() => summarizeBills(items), [items]);
@@ -137,18 +139,22 @@ export default function AcademySppManager() {
     setPayTarget(item);
     setError("");
     setMessage("");
+    setReceiptPaymentId(null);
   }
 
-  async function handlePaid() {
+  async function handlePaid(paidBill: SppBill) {
     await loadData(token);
     setPayTarget(null);
     setMessage("Pembayaran SPP tersimpan.");
+    const latestPayment = (paidBill.payments ?? []).reduce<number | null>((latest, payment) => Math.max(latest ?? 0, payment.id), null);
+    setReceiptPaymentId(latestPayment);
   }
 
   function openWaive(item: SppBill) {
     setWaiveTarget(item);
     setError("");
     setMessage("");
+    setReceiptPaymentId(null);
   }
 
   async function handleWaived() {
@@ -253,7 +259,16 @@ export default function AcademySppManager() {
             </div>
           ) : null}
 
-          {message ? <p className="mt-4 border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">{message}</p> : null}
+          {message ? (
+            <p className="mt-4 flex flex-wrap items-center justify-between gap-2 border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">
+              {message}
+              {receiptPaymentId ? (
+                <Link className="inline-flex min-h-11 items-center font-bold text-primary underline underline-offset-2" href={`/academy/spp/receipts/${receiptPaymentId}`}>
+                  Lihat kwitansi
+                </Link>
+              ) : null}
+            </p>
+          ) : null}
           {error ? <p className="mt-4 border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">{error}</p> : null}
 
           {view === "arrears" ? (
@@ -284,6 +299,7 @@ export default function AcademySppManager() {
           onSaved={(saved) => {
             setSettings(saved);
             setIsSettingsOpen(false);
+            setReceiptPaymentId(null);
             setMessage("Pengaturan SPP tersimpan.");
           }}
         />

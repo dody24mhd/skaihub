@@ -22,7 +22,7 @@ export default function SppPaymentModal({
   token: string;
   bill: SppBill;
   onClose: () => void;
-  onPaid: () => Promise<void> | void;
+  onPaid: (bill: SppBill) => Promise<void> | void;
 }) {
   const [amount, setAmount] = useState(String(remainingAmount(bill)));
   const [paidAt, setPaidAt] = useState(today());
@@ -59,14 +59,14 @@ export default function SppPaymentModal({
     setMessage("");
 
     try {
-      await payAkademiSppBill(token, bill.id, {
+      const result = await payAkademiSppBill(token, bill.id, {
         amount: Number(amount),
         paid_at: paidAt,
         method: method || null,
         proof_url: proofUrl || null,
         notes: notes || null,
       });
-      await onPaid();
+      await onPaid(result.spp_bill);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Gagal menyimpan pembayaran.");
     } finally {
