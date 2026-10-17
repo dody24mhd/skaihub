@@ -159,6 +159,7 @@ class SppBillController extends Controller
 
             $bill->payments()->create([
                 ...$data,
+                'akademi_id' => $request->user()->akademi_id,
                 'created_by' => $request->user()->id,
             ]);
 

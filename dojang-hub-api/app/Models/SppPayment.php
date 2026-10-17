@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class SppPayment extends Model
 {
     protected $fillable = [
+        'akademi_id',
         'spp_bill_id',
         'amount',
         'paid_at',
@@ -23,6 +24,11 @@ class SppPayment extends Model
             'amount' => 'decimal:2',
             'paid_at' => 'date',
         ];
+    }
+
+    public function akademi(): BelongsTo
+    {
+        return $this->belongsTo(Akademi::class);
     }
 
     public function bill(): BelongsTo
