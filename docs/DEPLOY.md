@@ -25,9 +25,9 @@ Contoh domain di bawah: `skaihub.com`. Ganti dengan domain asli.
 | Komponen | Rekomendasi | Alasan |
 |---|---|---|
 | Web (Next.js 16) | **Vercel Pro** | Paket Hobby hanya untuk penggunaan **non-komersial pribadi**. SKAIHUB menjual langganan → wajib Pro/Enterprise (lihat §1.1). |
-| API (Laravel 13) | **VPS** (mis. region Jakarta/Singapura, 2 vCPU / 2–4 GB RAM) dengan Nginx + PHP-FPM 8.3; alternatif: Laravel Cloud atau Railway | Upload saat ini **ditulis ke disk `public` lokal** (`UploadController` memakai `->store(..., 'public')` secara hardcode). Platform dengan filesystem efemeral (Railway tanpa volume, kontainer tanpa disk) akan **menghapus foto siswa & bukti SPP** saat redeploy. VPS dengan disk persisten adalah pilihan paling sederhana tanpa ubah kode. Di Railway/Laravel Cloud wajib pasang volume persisten di `storage/app/public`. |
+| API (Laravel 13) | **VPS** (mis. region Jakarta/Singapura, 2 vCPU / 2–4 GB RAM) dengan Nginx + PHP-FPM 8.3; alternatif: Laravel Cloud atau Railway | Upload default **ditulis ke disk `public` lokal** (`FILESYSTEM_UPLOAD_DISK=public`; bisa diganti `s3`/R2, lihat `DEPLOY-DEMO.md` §7). Platform dengan filesystem efemeral (Railway tanpa volume, kontainer tanpa disk) akan **menghapus foto siswa & bukti SPP** saat redeploy. VPS dengan disk persisten adalah pilihan paling sederhana. Di Railway/Laravel Cloud wajib pasang volume persisten di `storage/app/public`. |
 | Database | **PostgreSQL terkelola** (versi ≥ 15) dengan backup harian otomatis + point-in-time recovery | Data anak & keuangan; jangan self-host DB di VPS yang sama tanpa backup terotomasi. |
-| File upload | Disk lokal VPS `storage/app/public`, di-backup harian ke object storage (S3-kompatibel) | Lihat catatan di baris API. Pindah ke S3/R2 = perubahan kode (disk `public` hardcode) → tugas terpisah. |
+| File upload | Disk lokal VPS `storage/app/public`, di-backup harian ke object storage (S3-kompatibel) | Lihat catatan di baris API. Alternatif: `FILESYSTEM_UPLOAD_DISK=s3` + `AWS_*` (S3/R2) tanpa ubah kode. |
 | DNS | Nameserver di Vercel **atau** delegasi `_acme-challenge` (lihat §4) | Wildcard SSL `*.skaihub.com` butuh DNS challenge. |
 
 ### 1.1 Catatan paket Vercel (diverifikasi 2026-10-17)
@@ -65,7 +65,9 @@ Jangan pernah commit nilai asli. Simpan di panel hosting / secret manager. Refer
 | `SESSION_SECURE_COOKIE` | `true` | |
 | `CACHE_STORE` | `database` (atau `redis` bila tersedia) | Rate limiter memakai cache. |
 | `QUEUE_CONNECTION` | `database` | Saat ini tidak ada job antrean; worker belum diperlukan. |
-| `FILESYSTEM_DISK` | `local` | Upload tetap ke disk `public` (hardcode). |
+| `FILESYSTEM_DISK` | `local` | Disk default framework (bukan upload). |
+| `FILESYSTEM_UPLOAD_DISK` | `public` (atau `s3`) | Disk upload; `s3` butuh `AWS_*` + `AWS_URL` publik. |
+| `TRUSTED_PROXIES` | `*` bila di belakang load balancer/proxy TLS | Agar skema https & IP klien (rate limit) benar. Kosongkan bila Nginx langsung menerima trafik. |
 | `MAIL_*` | kredensial SMTP/penyedia email | Belum ada fitur email wajib (notifikasi ditunda); boleh `log` sementara. |
 | `ADMIN_API_TOKEN` | string acak ≥ 40 karakter **atau** kosong | Nilai contoh `change-me-local-admin-token` **dilarang** di produksi (audit F11). |
 | `BCRYPT_ROUNDS` | `12` | |
