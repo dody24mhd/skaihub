@@ -14,6 +14,8 @@ export type TodaySlotCardProps = {
   isBusy: boolean;
   onOpen: (slot: TodaySlot) => void;
   onMenu?: (slot: TodaySlot) => void;
+  /** Mode baca-saja (L4-D): slot yang belum dibuka tidak boleh membuat sesi baru. */
+  canWrite?: boolean;
 };
 
 function slotNote(slot: TodaySlot): string | null {
@@ -36,7 +38,7 @@ function actionLabel(slot: TodaySlot, isBusy: boolean): string {
   return "Lanjutkan Absensi";
 }
 
-export default function TodaySlotCard({ slot, isBusy, onOpen, onMenu }: TodaySlotCardProps) {
+export default function TodaySlotCard({ slot, isBusy, onOpen, onMenu, canWrite = true }: TodaySlotCardProps) {
   const note = slotNote(slot);
   const showCounts = Boolean(slot.session_id) && slot.status !== "rescheduled" && slot.status !== "cancelled";
 
@@ -86,7 +88,7 @@ export default function TodaySlotCard({ slot, isBusy, onOpen, onMenu }: TodaySlo
 
       <button
         type="button"
-        disabled={!canOpenSlot(slot) || isBusy}
+        disabled={!canOpenSlot(slot) || isBusy || (!canWrite && slot.status === "not_opened")}
         onClick={() => onOpen(slot)}
         className="mt-3 inline-flex min-h-11 w-full items-center justify-center border-2 border-primary bg-primary px-4 text-sm font-bold text-white transition hover:bg-primary-container disabled:cursor-not-allowed disabled:border-border disabled:bg-surface-container disabled:text-muted"
       >

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useCanWrite } from "../ui/subscription-status";
 import TodaySlotCard from "./today-slot-card";
 import { formatLocalDate } from "./today-utils";
 import { useAdminSession, useOpenSlot, useTodaySlots } from "./use-today-slots";
@@ -10,6 +11,7 @@ const DASHBOARD_SLOT_LIMIT = 3;
 
 export default function TodayClassesCard() {
   const { token, isReady } = useAdminSession();
+  const canWrite = useCanWrite();
   const [todayKey] = useState(() => formatLocalDate(new Date()));
   const { slots, isLoading, error, reload } = useTodaySlots(token, todayKey, isReady);
   const { busyKey, openError, openSlot } = useOpenSlot(token);
@@ -51,7 +53,7 @@ export default function TodayClassesCard() {
       ) : (
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {slots.slice(0, DASHBOARD_SLOT_LIMIT).map((slot) => (
-            <TodaySlotCard key={slot.key} slot={slot} isBusy={busyKey === slot.key} onOpen={openSlot} />
+            <TodaySlotCard key={slot.key} slot={slot} isBusy={busyKey === slot.key} onOpen={openSlot} canWrite={canWrite} />
           ))}
         </div>
       )}

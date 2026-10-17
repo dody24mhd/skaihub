@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { TodaySlot } from "../../_lib/admin-api";
 import SessionActionSheets, { SessionAction } from "./session-action-sheets";
+import { useCanWrite } from "../ui/subscription-status";
 import TodaySlotCard from "./today-slot-card";
 import { addDays, canManageSlot, dateBounds, dateLabel, formatLocalDate, isAdminRole } from "./today-utils";
 import { useAdminSession, useOpenSlot, useTodaySlots } from "./use-today-slots";
@@ -13,6 +14,7 @@ const navButtonClass =
 
 export default function TodayClasses() {
   const { token, role, isReady } = useAdminSession();
+  const canWrite = useCanWrite();
   const [todayKey] = useState(() => formatLocalDate(new Date()));
   const [date, setDate] = useState(todayKey);
   const { slots, backfillDays, isLoading, error, reload } = useTodaySlots(token, date, isReady);
@@ -61,7 +63,7 @@ export default function TodayClasses() {
             Kelas Hari Ini
           </h2>
         </div>
-        {isAdmin ? (
+        {isAdmin && canWrite ? (
           <Link
             href={`/academy/attendance/new?date=${date}`}
             className="inline-flex min-h-11 items-center justify-center border-2 border-primary bg-primary px-4 text-sm font-bold text-white transition hover:bg-primary-container"
@@ -126,7 +128,8 @@ export default function TodayClasses() {
               slot={slot}
               isBusy={busyKey === slot.key}
               onOpen={openSlot}
-              onMenu={isAdmin && canManageSlot(slot) ? openMenu : undefined}
+              onMenu={canWrite && isAdmin && canManageSlot(slot) ? openMenu : undefined}
+              canWrite={canWrite}
             />
           ))}
         </div>

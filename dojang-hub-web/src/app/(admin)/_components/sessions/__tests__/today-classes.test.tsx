@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import * as adminApi from "../../../_lib/admin-api";
+import { resetSubscriptionStatus } from "../../ui/subscription-status";
 import TodayClasses from "../today-classes";
 import { makeSlot } from "./slot-fixture";
 
@@ -18,6 +19,7 @@ vi.mock("../../../_lib/admin-api", async (importOriginal) => {
     openAkademiSessionFromSchedule: vi.fn(),
     cancelAkademiTrainingSession: vi.fn(),
     rescheduleAkademiTrainingSession: vi.fn(),
+    getAkademiSubscriptionStatus: vi.fn(),
   };
 });
 
@@ -49,6 +51,11 @@ describe("TodayClasses", () => {
     vi.mocked(adminApi.openAkademiSessionFromSchedule).mockResolvedValue({
       training_session: { id: 55 } as adminApi.TrainingSession,
     });
+    resetSubscriptionStatus();
+    vi.mocked(adminApi.getAkademiSubscriptionStatus).mockReset();
+    vi.mocked(adminApi.getAkademiSubscriptionStatus).mockResolvedValue({
+      subscription_state: "active",
+    } as Awaited<ReturnType<typeof adminApi.getAkademiSubscriptionStatus>>);
     vi.mocked(adminApi.cancelAkademiTrainingSession).mockResolvedValue({
       training_session: { id: 55 } as adminApi.TrainingSession,
     });
@@ -75,6 +82,19 @@ describe("TodayClasses", () => {
 
     await waitFor(() => expect(pushMock).toHaveBeenCalledWith("/academy/attendance/new?session=55"));
     expect(adminApi.openAkademiSessionFromSchedule).toHaveBeenCalledWith("fake-token", 7, "2026-10-19");
+  });
+
+  it("mode baca-saja menyembunyikan aksi tulis dan tidak membuka slot baru", async () => {
+    vi.mocked(adminApi.getAkademiSubscriptionStatus).mockResolvedValue({
+      subscription_state: "read_only",
+    } as Awaited<ReturnType<typeof adminApi.getAkademiSubscriptionStatus>>);
+    setRole("ketua_akademi");
+    render(<TodayClasses />);
+
+    await screen.findByText("Reguler Sore");
+    await waitFor(() => expect(screen.getByRole("button", { name: "Buka Absensi" })).toBeDisabled());
+    expect(screen.queryByRole("button", { name: /aksi sesi/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /sesi tambahan/i })).not.toBeInTheDocument();
   });
 
   it("pelatih tidak melihat menu aksi, sesi tambahan, atau tanggal mendatang", async () => {
