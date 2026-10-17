@@ -223,6 +223,15 @@ describe("AcademyPublicProfileManager", () => {
     expect(coachSwitch).toHaveAttribute("aria-checked", String(mockCoaches[0].show_on_public));
   });
 
+  it("memberi nama unik pada tombol hapus gambar hero dan foto galeri", async () => {
+    render(<AcademyPublicProfileManager />);
+
+    fireEvent.click(await screen.findByRole("tab", { name: "Hero & Galeri" }));
+
+    expect(screen.getByRole("button", { name: "Hapus gambar hero 1 (Latihan Poomsae)" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Hapus foto galeri 1 (Ujian Kenaikan Tingkat)" })).toBeInTheDocument();
+  });
+
   it("dapat membuka modal atur posisi hero dan modal tambah galeri", async () => {
     render(<AcademyPublicProfileManager />);
 

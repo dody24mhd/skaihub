@@ -109,7 +109,7 @@ export default function ProfileGallerySection({
           </div>
         ) : (
           <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-            {galleryItems.map((item) => (
+            {galleryItems.map((item, index) => (
               <div key={item.id} className="border border-border bg-white overflow-hidden flex flex-col justify-between">
                 <div className="relative aspect-square bg-surface-container">
                   <img
@@ -120,7 +120,7 @@ export default function ProfileGallerySection({
                   <button
                     type="button"
                     onClick={() => handleDelete(item)}
-                    aria-label="Hapus foto"
+                    aria-label={`Hapus foto galeri ${index + 1}${item.caption ? ` (${item.caption})` : ""}`}
                     className="absolute right-2 top-2 flex size-11 items-center justify-center rounded-xs bg-primary/80 text-white transition hover:bg-secondary"
                   >
                     <Icon name="delete" className="text-[18px]" />
