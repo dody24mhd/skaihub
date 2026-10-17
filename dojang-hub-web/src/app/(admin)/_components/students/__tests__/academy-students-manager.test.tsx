@@ -10,6 +10,7 @@ vi.mock("../../../_lib/admin-api", () => ({
   getAkademiStudents: vi.fn(),
   deleteAkademiStudent: vi.fn(),
   downloadAkademiStudentsExport: vi.fn(),
+  getAkademiSubscriptionStatus: vi.fn(() => new Promise(() => {})),
 }));
 
 const mockedApi = vi.mocked(api);

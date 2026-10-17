@@ -35,6 +35,7 @@ class RankPromotionSequenceTest extends TestCase
             'status' => 'active',
             'plan' => 'pro',
         ]);
+        $this->giveActiveSubscription($this->akademi);
         $this->admin = User::factory()->akademiAdmin($this->akademi->id)->create();
         $this->event = RankPromotionEvent::create([
             'akademi_id' => $this->akademi->id,
