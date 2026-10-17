@@ -33,6 +33,7 @@ use App\Http\Controllers\Compro\SiteSettingController;
 use App\Http\Controllers\Compro\TestimonialController;
 use App\Http\Controllers\Public\AcademyProfileController as PublicAcademyProfileController;
 use App\Http\Controllers\SuperAdmin\AkademiController as SuperAdminAkademiController;
+use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\SubscriptionAlertController as SuperAdminSubscriptionAlertController;
 use App\Http\Controllers\SuperAdmin\SubscriptionController as SuperAdminSubscriptionController;
 use Illuminate\Support\Facades\Route;
@@ -64,6 +65,9 @@ Route::prefix('super-admin')
         Route::post('akademi/{akademi}/subscriptions', [SuperAdminSubscriptionController::class, 'store']);
         Route::patch('akademi/{akademi}/subscriptions/{subscription}/payment', [SuperAdminSubscriptionController::class, 'updatePayment']);
         Route::get('subscriptions/alerts', [SuperAdminSubscriptionAlertController::class, 'alerts']);
+
+        // L4-D
+        Route::get('dashboard', [SuperAdminDashboardController::class, 'index']);
     });
 
 Route::prefix('public')->group(function () {

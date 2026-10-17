@@ -6,12 +6,15 @@ use App\Models\Akademi;
 use App\Models\Student;
 use App\Models\Subscription;
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class SubscriptionService
 {
-    private const COUNTED_STATUSES = ['trialing', 'active', 'past_due', 'expired'];
+    private const LIVE_STATUSES = ['trialing', 'active', 'past_due'];
+
+    private const COUNTED_STATUSES = [...self::LIVE_STATUSES, 'expired'];
 
     public function __construct(private readonly PlanPricingService $pricing) {}
 
@@ -111,29 +114,39 @@ class SubscriptionService
     /**
      * active → expiring (≤ renewal_warning_days) → grace (habis ≤ grace_days) → read_only.
      *
-     * @return array{state: string, days_left: int, ends_at: ?CarbonImmutable}
+     * @return array{state: string, days_left: int, ends_at: ?CarbonImmutable, current: ?Subscription}
      */
     public function lifecycle(Akademi $akademi): array
     {
-        $today = CarbonImmutable::now()->startOfDay();
-        $current = $this->activeForAkademi($akademi);
+        return $this->lifecycleFromSubscriptions(
+            Subscription::where('akademi_id', $akademi->id)->whereIn('status', self::COUNTED_STATUSES)->get(),
+        );
+    }
+
+    /**
+     * @param  Collection<int, Subscription>  $subscriptions  langganan satu akademi
+     * @return array{state: string, days_left: int, ends_at: ?CarbonImmutable, current: ?Subscription}
+     */
+    public function lifecycleFromSubscriptions(Collection $subscriptions): array
+    {
+        $now = CarbonImmutable::now();
+        $today = $now->startOfDay();
+        $counted = $subscriptions->whereIn('status', self::COUNTED_STATUSES);
+        $live = $counted->whereIn('status', self::LIVE_STATUSES);
+        $current = $live->first(fn (Subscription $s) => $s->starts_at <= $now && $s->ends_at >= $now);
 
         if ($current) {
-            $lastDay = $this->lastCoveredDay($akademi, $current);
+            $lastDay = $this->lastCoveredDay($live, $current);
             $daysLeft = (int) $today->diffInDays($lastDay);
             $state = $daysLeft <= (int) config('skaihub.renewal_warning_days') ? 'expiring' : 'active';
 
-            return ['state' => $state, 'days_left' => $daysLeft, 'ends_at' => $lastDay->endOfDay()];
+            return ['state' => $state, 'days_left' => $daysLeft, 'ends_at' => $lastDay->endOfDay(), 'current' => $current];
         }
 
-        $previous = Subscription::where('akademi_id', $akademi->id)
-            ->whereIn('status', self::COUNTED_STATUSES)
-            ->where('ends_at', '<', now())
-            ->latest('ends_at')
-            ->first();
+        $previous = $counted->filter(fn (Subscription $s) => $s->ends_at < $now)->sortByDesc('ends_at')->first();
 
         if (! $previous) {
-            return ['state' => 'read_only', 'days_left' => 0, 'ends_at' => null];
+            return ['state' => 'read_only', 'days_left' => 0, 'ends_at' => null, 'current' => null];
         }
 
         $lastDay = $this->lastDayOf($previous);
@@ -143,7 +156,16 @@ class SubscriptionService
             'state' => $graceLeft >= 0 ? 'grace' : 'read_only',
             'days_left' => max(0, $graceLeft),
             'ends_at' => $lastDay->endOfDay(),
+            'current' => null,
         ];
+    }
+
+    public function monthlyRevenue(Subscription $subscription): float
+    {
+        $months = $subscription->duration_months
+            ?? max(1, (int) round(CarbonImmutable::parse($subscription->starts_at)->diffInMonths($subscription->ends_at)));
+
+        return (float) $subscription->amount / $months;
     }
 
     public function lifecycleState(Akademi $akademi): string
@@ -240,25 +262,21 @@ class SubscriptionService
         return [$durationMonths, $startsAt, $endsAt];
     }
 
-    private function lastCoveredDay(Akademi $akademi, Subscription $current): CarbonImmutable
+    /**
+     * Ikuti perpanjangan yang sudah dicatat dan menyambung tanpa jeda.
+     *
+     * @param  Collection<int, Subscription>  $live
+     */
+    private function lastCoveredDay(Collection $live, Subscription $current): CarbonImmutable
     {
         $lastDay = $this->lastDayOf($current);
 
-        while ($next = $this->continuation($akademi, $lastDay)) {
+        while ($next = $live->first(fn (Subscription $s) => $s->starts_at <= $lastDay->addDay()->endOfDay()
+            && $s->ends_at > $lastDay->addDay()->startOfDay())) {
             $lastDay = $this->lastDayOf($next);
         }
 
         return $lastDay;
-    }
-
-    private function continuation(Akademi $akademi, CarbonImmutable $lastDay): ?Subscription
-    {
-        return Subscription::where('akademi_id', $akademi->id)
-            ->whereIn('status', ['trialing', 'active', 'past_due'])
-            ->where('starts_at', '<=', $lastDay->addDay()->endOfDay())
-            ->where('ends_at', '>', $lastDay->addDay()->startOfDay())
-            ->latest('ends_at')
-            ->first();
     }
 
     private function lastDayOf(Subscription $subscription): CarbonImmutable
