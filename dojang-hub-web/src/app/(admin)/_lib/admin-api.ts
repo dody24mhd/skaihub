@@ -1039,12 +1039,12 @@ export function updateAkademiTrainingSessionAttendance(
     status?: TrainingSession["status"];
     attendances?: Array<{
       id: number;
-      status: TrainingAttendance["status"];
+      status: TrainingAttendance["status"] | AttendanceStatus;
       notes?: string | null;
     }>;
     extra_participants?: Array<{
       participant_name: string;
-      status: TrainingAttendance["status"];
+      status: TrainingAttendance["status"] | AttendanceStatus;
       notes?: string | null;
     }>;
   },
@@ -1981,3 +1981,6 @@ export function updateAkademiCoachVisibility(
     body: JSON.stringify({ coach_profile_id: coachProfileId, show_on_public: showOnPublic }),
   });
 }
+
+// L3-B
+export type AttendanceStatus = "present" | "excused" | "sick" | "absent";
