@@ -11,8 +11,8 @@ vi.mock("../../_lib/admin-api", () => ({
 }));
 
 const mockRanks = [
-  { id: 1, akademi_id: 1, code: "white", label: "Putih", sequence: 1 },
-  { id: 2, akademi_id: 1, code: "yellow", label: "Kuning", sequence: 2 },
+  { id: 1, akademi_id: 1, sport_type: "taekwondo" as const, code: "white", label: "Putih", sequence: 1 },
+  { id: 2, akademi_id: 1, sport_type: "taekwondo" as const, code: "yellow", label: "Kuning", sequence: 2 },
 ];
 
 describe("AcademyRanksManager", () => {

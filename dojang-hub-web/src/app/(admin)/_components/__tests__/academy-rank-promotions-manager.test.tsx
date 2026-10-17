@@ -21,11 +21,15 @@ const mockEvent = {
   name: "UKT Periode 1",
   event_date: "2026-10-20",
   status: "draft" as const,
+  notes: null,
+  created_by: 1,
   participants_count: 1,
   participants: [
     {
       id: 1,
       rank_promotion_event_id: 1,
+      akademi_id: 1,
+      assessed_by: null,
       student_id: 1,
       from_rank_id: 1,
       to_rank_id: 2,
@@ -54,13 +58,13 @@ describe("AcademyRankPromotionsManager", () => {
       entitlements: { student_limit: 100, has_public_website: true, has_subdomain: true, has_rapor: true, has_exam_events: true, has_parent_portal: false },
     });
     vi.mocked(adminApi.getAkademiRankPromotionEvents).mockResolvedValue({
-      data: [mockEvent],
+      data: [mockEvent as unknown as adminApi.RankPromotionEvent],
     });
     vi.mocked(adminApi.getAkademiRankPromotionEvent).mockResolvedValue({
       rank_promotion_event: mockEvent as unknown as adminApi.RankPromotionEvent,
     });
     vi.mocked(adminApi.getAkademiStudents).mockResolvedValue({
-      data: { data: [], current_page: 1, last_page: 1, per_page: 10, total: 0 },
+      data: { data: [], current_page: 1, last_page: 1, total: 0 },
     });
     vi.mocked(adminApi.getAkademiSportRanks).mockResolvedValue({
       data: [],

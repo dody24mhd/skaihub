@@ -9,6 +9,7 @@ import {
   getAkademiMe,
   getAkademiSppBills,
 } from "../_lib/admin-api";
+import { ResponsiveColumn, ResponsiveList } from "./ui";
 
 const TOKEN_KEY = "skaihub_admin_token";
 
@@ -44,7 +45,7 @@ function money(value: string | number) {
 
 async function fetchFinanceData(
   activeToken: string,
-  filters: { year: number; month: number; statusFilter: string },
+  filters: { year: number; month: number; statusFilter: string }
 ) {
   const [profileData, billData, classData] = await Promise.all([
     getAkademiMe(activeToken),
@@ -76,7 +77,10 @@ export default function AcademyFinanceManager() {
 
   const visibleItems = useMemo(() => {
     if (classFilter === "all") return items;
-    return items.filter((item) => String(item.class_id || item.student?.primary_class_id || "") === classFilter);
+    return items.filter(
+      (item) =>
+        String(item.class_id || item.student?.primary_class_id || "") === classFilter
+    );
   }, [classFilter, items]);
 
   const summary = useMemo(() => {
@@ -89,7 +93,7 @@ export default function AcademyFinanceManager() {
         if (item.status === "waived") total.waivedCount++;
         return total;
       },
-      { bill: 0, paid: 0, paidCount: 0, unpaidCount: 0, waivedCount: 0 },
+      { bill: 0, paid: 0, paidCount: 0, unpaidCount: 0, waivedCount: 0 }
     );
   }, [visibleItems]);
 
@@ -113,7 +117,11 @@ export default function AcademyFinanceManager() {
           setItems(allowed ? billData.data.data : []);
           setClasses(classData.data);
         })
-        .catch((caught) => setError(caught instanceof Error ? caught.message : "Gagal memuat laporan keuangan."))
+        .catch((caught) =>
+          setError(
+            caught instanceof Error ? caught.message : "Gagal memuat laporan keuangan."
+          )
+        )
         .finally(() => setIsLoading(false));
     });
   }, [month, statusFilter, year]);
@@ -132,11 +140,76 @@ export default function AcademyFinanceManager() {
       });
       setMessage("Export laporan keuangan diproses.");
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Gagal export laporan keuangan.");
+      setError(
+        caught instanceof Error ? caught.message : "Gagal export laporan keuangan."
+      );
     } finally {
       setIsSaving(false);
     }
   }
+
+  const columns: ResponsiveColumn<SppBill>[] = [
+    {
+      key: "student",
+      header: "Siswa",
+      primary: true,
+      render: (item) => (
+        <div>
+          <p className="font-bold text-primary">{item.student?.name || "-"}</p>
+          <span className="block text-xs font-medium text-muted">
+            {monthLabels[item.billing_month - 1]} {item.billing_year}
+          </span>
+        </div>
+      ),
+    },
+    {
+      key: "class",
+      header: "Kelas",
+      render: (item) => (
+        <span className="text-muted">
+          {item.class?.name || item.student?.primary_class?.name || "-"}
+        </span>
+      ),
+    },
+    {
+      key: "amount",
+      header: "Tagihan",
+      render: (item) => (
+        <span className="font-semibold text-primary">{money(item.amount)}</span>
+      ),
+    },
+    {
+      key: "paid",
+      header: "Terbayar",
+      render: (item) => (
+        <span className="font-semibold text-success">{money(item.paid_amount)}</span>
+      ),
+    },
+    {
+      key: "remaining",
+      header: "Sisa",
+      render: (item) => (
+        <span className="font-semibold text-secondary">
+          {money(Math.max(Number(item.amount) - Number(item.paid_amount), 0))}
+        </span>
+      ),
+    },
+    {
+      key: "status",
+      header: "Status",
+      render: (item) => (
+        <span
+          className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-bold ${
+            item.status === "paid"
+              ? "bg-success/10 text-success"
+              : "bg-secondary/10 text-secondary"
+          }`}
+        >
+          {statusLabels[item.status]}
+        </span>
+      ),
+    },
+  ];
 
   if (isLoading) return <p className="text-sm text-muted">Memuat laporan keuangan...</p>;
 
@@ -150,6 +223,7 @@ export default function AcademyFinanceManager() {
 
   return (
     <section className="space-y-6">
+      {/* Stat Cards */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <article className="card-soft rounded-lg bg-white p-5">
           <p className="label-caps text-secondary">Total Tagihan</p>
@@ -179,66 +253,85 @@ export default function AcademyFinanceManager() {
             <p className="label-caps text-secondary">Laporan Keuangan</p>
             <h2 className="font-heading text-xl font-bold text-primary">Rekap SPP</h2>
           </div>
-          <div className="grid gap-2 sm:grid-cols-5">
-            <input className="h-10 rounded-md border border-border px-3 text-sm" type="number" value={year} onChange={(event) => setYear(Number(event.target.value))} />
-            <select className="h-10 rounded-md border border-border px-3 text-sm" value={month} onChange={(event) => setMonth(Number(event.target.value))}>
-              {monthLabels.map((label, index) => <option key={label} value={index + 1}>{label}</option>)}
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+            <input
+              className="min-h-11 rounded-md border border-border bg-white px-3 text-base text-primary sm:text-sm"
+              type="number"
+              value={year}
+              onChange={(event) => setYear(Number(event.target.value))}
+              aria-label="Tahun"
+            />
+            <select
+              className="min-h-11 rounded-md border border-border bg-white px-3 text-base text-primary sm:text-sm"
+              value={month}
+              onChange={(event) => setMonth(Number(event.target.value))}
+              aria-label="Bulan"
+            >
+              {monthLabels.map((label, index) => (
+                <option key={label} value={index + 1}>
+                  {label}
+                </option>
+              ))}
             </select>
-            <select className="h-10 rounded-md border border-border px-3 text-sm" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
+            <select
+              className="min-h-11 rounded-md border border-border bg-white px-3 text-base text-primary sm:text-sm"
+              value={statusFilter}
+              onChange={(event) => setStatusFilter(event.target.value)}
+              aria-label="Status Tagihan"
+            >
               <option value="all">Semua status</option>
               <option value="unpaid">Belum lunas</option>
               <option value="partial">Sebagian</option>
               <option value="paid">Lunas</option>
               <option value="waived">Dibebaskan</option>
             </select>
-            <select className="h-10 rounded-md border border-border px-3 text-sm" value={classFilter} onChange={(event) => setClassFilter(event.target.value)}>
+            <select
+              className="min-h-11 rounded-md border border-border bg-white px-3 text-base text-primary sm:text-sm"
+              value={classFilter}
+              onChange={(event) => setClassFilter(event.target.value)}
+              aria-label="Filter Kelas"
+            >
               <option value="all">Semua kelas</option>
-              {classes.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
+              {classes.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
             </select>
-            <button className="h-10 rounded-md border border-border px-3 text-sm font-bold text-primary" onClick={handleExport} type="button" disabled={isSaving}>Export</button>
+            <button
+              className="col-span-2 inline-flex min-h-11 items-center justify-center rounded-md border border-border px-4 text-sm font-bold text-primary transition hover:bg-surface-container sm:col-span-1"
+              onClick={handleExport}
+              type="button"
+              disabled={isSaving}
+            >
+              Export
+            </button>
           </div>
         </div>
 
-        {message ? <p className="mt-4 rounded-md border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">{message}</p> : null}
-        {error ? <p className="mt-4 rounded-md border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">{error}</p> : null}
+        {message ? (
+          <p className="mt-4 rounded-md border border-success/20 bg-success/5 p-3 text-sm font-semibold text-success">
+            {message}
+          </p>
+        ) : null}
+        {error ? (
+          <p className="mt-4 rounded-md border border-secondary/20 bg-secondary/5 p-3 text-sm font-semibold text-secondary">
+            {error}
+          </p>
+        ) : null}
 
-        <div className="mt-5 overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b border-border text-xs font-bold uppercase text-muted">
-                <th className="pb-3">Siswa</th>
-                <th className="pb-3">Kelas</th>
-                <th className="pb-3">Tagihan</th>
-                <th className="pb-3">Terbayar</th>
-                <th className="pb-3">Sisa</th>
-                <th className="pb-3">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {visibleItems.map((item) => (
-                <tr key={item.id}>
-                  <td className="py-3 font-bold text-primary">
-                    {item.student?.name || "-"}
-                    <span className="block text-xs font-medium text-muted">{monthLabels[item.billing_month - 1]} {item.billing_year}</span>
-                  </td>
-                  <td className="py-3 text-muted">{item.class?.name || item.student?.primary_class?.name || "-"}</td>
-                  <td className="py-3 text-muted">{money(item.amount)}</td>
-                  <td className="py-3 text-success">{money(item.paid_amount)}</td>
-                  <td className="py-3 text-secondary">{money(Math.max(Number(item.amount) - Number(item.paid_amount), 0))}</td>
-                  <td className="py-3">
-                    <span className={`rounded-full px-2 py-1 text-xs font-bold ${item.status === "paid" ? "bg-success/10 text-success" : "bg-secondary/10 text-secondary"}`}>
-                      {statusLabels[item.status]}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-              {!visibleItems.length ? (
-                <tr>
-                  <td className="py-8 text-sm text-muted" colSpan={6}>Belum ada data SPP pada filter ini.</td>
-                </tr>
-              ) : null}
-            </tbody>
-          </table>
+        <div className="mt-5">
+          <ResponsiveList
+            columns={columns}
+            rows={visibleItems}
+            getRowKey={(item) => item.id}
+            ariaLabel="Rekap Laporan SPP"
+            emptyState={
+              <div className="border-2 border-dashed border-border bg-white p-8 text-center text-sm font-medium text-muted">
+                Belum ada data SPP pada filter ini.
+              </div>
+            }
+          />
         </div>
       </section>
     </section>
